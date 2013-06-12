@@ -1,0 +1,12 @@
+                     |-----handy-ruler------------------------------------------------------|
+user-settings-console: user-settings-console (default configuration for the console)
+user-settings-console:
+user-settings-console: This package defines some nifty defaults for the shell:
+user-settings-console:   - coloured login prompt and handy aliases for all users
+user-settings-console:   - the same for root, but with a different colour
+user-settings-console:   - handy default options for Vim
+user-settings-console:   - preconfigured locales in lang.sh, only to be commented out
+user-settings-console:   - console font defaults to lat9w-16 for english, french and german
+user-settings-console: 
+user-settings-console:  
+user-settings-console: Package created by Niki Kovacs <info@microlinux.fr>

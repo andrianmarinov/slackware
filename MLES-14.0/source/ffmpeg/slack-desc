@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+ffmpeg: FFmpeg (Software to record, convert and stream audio and video)
+ffmpeg:
+ffmpeg: FFmpeg is a complete solution to record, convert and stream audio
+ffmpeg: and video. It includes libavcodec, the leading audio/video codec
+ffmpeg: library. FFmpeg is developed under Linux, but it can compiled
+ffmpeg: under most operating systems, including Windows.
+ffmpeg:
+ffmpeg: 
+ffmpeg:
+ffmpeg:
+ffmpeg: Package created by Niki Kovacs <info@microlinux.fr>

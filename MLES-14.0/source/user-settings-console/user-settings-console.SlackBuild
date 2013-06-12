@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# Slackware build script for user-settings-console
+
+# Written by Niki Kovacs <info@microlinux.fr>
+
+set -x
+
+PRGNAM=user-settings-console
+VERSION=${VERSION:-1.0}	
+BUILD=${BUILD:-2}
+TAG=${TAG:-"_microlinux"}
+
+ARCH=noarch
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}	
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+
+mkdir -p $PKG/root
+cat $CWD/bashrc-root  > $PKG/root/.bashrc
+cat $CWD/bash_profile > $PKG/root/.bash_profile
+cat $CWD/bash_logout  > $PKG/root/.bash_logout
+chmod 0644 $PKG/root/{.bashrc,.bash_profile,.bash_logout}
+
+mkdir -p $PKG/etc/skel
+cat $CWD/bashrc-users > $PKG/etc/skel/.bashrc
+cat $CWD/bash_profile > $PKG/etc/skel/.bash_profile
+cat $CWD/bash_logout  > $PKG/etc/skel/.bash_logout 
+chmod 0644 $PKG/etc/skel/{.bashrc,.bash_profile,.bash_logout}
+
+mkdir -p $PKG/usr/share/vim
+cat $CWD/vimrc > $PKG/usr/share/vim/vimrc
+chmod 0644 $PKG/usr/share/vim/vimrc
+
+mkdir -p $PKG/etc/profile.d
+cat $CWD/lang.sh > $PKG/etc/profile.d/lang.sh
+chmod 0755 $PKG/etc/profile.d/lang.sh
+
+mkdir -p $PKG/etc/rc.d
+cat $CWD/rc.font > $PKG/etc/rc.d/rc.font
+chmod 0755 $PKG/etc/rc.d/rc.font
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+rm -rf $PKG

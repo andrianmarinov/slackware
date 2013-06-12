@@ -1,0 +1,25 @@
+#! /bin/sh -e
+# description: MPD-daemon
+# 
+# 
+
+# See how we were called.
+case "$1" in
+  start)
+	echo "Starting MPD daemon ..."
+	/usr/bin/mpd 
+	;;
+  create-db)
+	echo "Create the MPD database ..."
+	/usr/bin/mpd --create-db
+	;; 
+ stop)
+	echo "Stopping MPD daemon ..."
+	killall mpd
+	;;
+  *)
+	echo "*** Usage: mpd {start|create-db|stop}"
+	exit 1
+esac
+
+exit 0

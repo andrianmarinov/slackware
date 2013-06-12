@@ -1,0 +1,20 @@
+# Third party packages for MLES. 
+user-settings-console
+sbopkg
+recode
+unrar
+p7zip
+faad2
+lame
+libcuefile
+libmms
+libmp4v2
+libreplaygain
+speex
+twolame
+faac
+ffmpeg
+musepack-tools
+libshout
+mpd
+
