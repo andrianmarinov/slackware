@@ -1,0 +1,230 @@
+====================
+Kernel Upgrade HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+====================
+
+Dernière révision : 24 mai 2013
+
+Ce HOWTO décrit la mise à jour du kernel sous Slackware Linux.
+
+
+  · Introduction
+  · Préparatifs
+  · Installer la mise à jour
+  · Construire l'Initrd pour le nouveau kernel
+  · Configurer LILO
+  · Premier redémarrage
+  · Mettre à jour le driver NVidia
+  · Mettre à jour les modules pour VirtualBox
+  · Finalisation
+
+
+Introduction
+------------
+
+Il peut arriver qu'une mise à jour de sécurité concerne le kernel :
+
+--8<---------- ChangeLog.txt -------------------------------------------------
+Mon May 20 21:01:33 UTC 2013
+patches/packages/linux-3.2.45/*:  Upgraded.
+  Upgraded to new kernels that fix CVE-2013-2094, a bug that can allow local
+  users to gain a root shell.  Be sure to upgrade your initrd and reinstall
+  LILO after upgrading the kernel packages.
+  For more information, see:
+    http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-2094
+  (* Security fix *)
+...
+--8<--------------------------------------------------------------------------
+
+La mise à jour du noyau n'est pas une opération triviale. Ce HOWTO propose donc
+un petit guide de survie pour que tout se passe bien.
+
+
+Préparatifs
+-----------
+
+Passer en init 3 :
+
+--8<---------- /etc/inittab --------------------------------------------------
+...
+# Default runlevel. (Do not set to 0 or 6)
+id:3:initdefault:
+...
+--8<--------------------------------------------------------------------------
+
+  # init 3
+
+
+Installer la mise à jour
+------------------------
+
+Une mise à jour de sécurité pour le kernel remplace tous les paquets
+'kernel-*', concrètement :
+
+  kernel-firmware
+  kernel-generic
+  kernel-headers
+  kernel-huge
+  kernel-modules
+  kernel-source
+  
+Effectuer la mise à jour :
+
+  # slackpkg upgrade-all
+
+
+Construire l'Initrd pour le nouveau kernel
+------------------------------------------
+
+Lors de la mise à jour, on tourne encore sous l'ancien kernel :
+
+  # uname -r
+  3.2.29
+
+Éditer '/etc/mkinitrd.conf' et coder "en dur" la version du nouveau kernel :
+
+--8<---------- /etc/mkinitrd.conf --------------------------------------------
+...
+#KERNEL_VERSION="$(uname -r)"
+KERNEL_VERSION="3.2.45"
+...
+--8<--------------------------------------------------------------------------
+
+  /!\ Si VirtualBox est installé, il faut impérativement supprimer les modules
+  correspondants avant de construire l'Initrd, sous peine de se retrouver avec
+  des erreurs mystérieuses du genre 'VBoxCreateUSBNode.sh not found' au
+  démarrage :
+
+  # removepkg virtualbox-kernel
+
+Construire l'Initrd :
+
+  # mkinitrd -F
+  OK: /lib/modules/3.2.45/kernel/fs/mbcache.ko added.
+  OK: /lib/modules/3.2.45/kernel/fs/jbd2/jbd2.ko added.
+  OK: /lib/modules/3.2.45/kernel/fs/ext4/ext4.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/usb/storage/usb-storage.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/usb/host/ehci-hcd.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/pcmcia/pcmcia_core.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/pcmcia/pcmcia.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/mmc/core/mmc_core.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/ssb/ssb.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/usb/host/ohci-hcd.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/hid/hid.ko added.
+  OK: /lib/modules/3.2.45/kernel/drivers/hid/usbhid/usbhid.ko added.
+  32350 blocs
+  /boot/initrd.gz created.
+
+
+Configurer LILO
+---------------
+
+Editer '/etc/lilo.conf' pour démarrer sur le nouveau kernel :
+
+--8<--------------------------------------------------------------------------
+...
+image = /boot/vmlinuz-generic-3.2.45
+  initrd = /boot/initrd.gz
+  root = /dev/sda3
+  label = MLED-14.0-64bit
+  read-only
+--8<--------------------------------------------------------------------------
+
+Prendre en compte les changements :
+
+  # lilo
+  Added MLED-14.0-64bit  +  *
+
+Croiser les doigts et redémarrer ;o)
+
+  # reboot
+
+
+Premier redémarrage
+-------------------
+
+Si tout s'est bien passé, on tourne sur le nouveau kernel :
+
+  # uname -r 
+  3.2.45
+
+Il faudra recompiler tous les modules tiers présents dans l'ancien kernel.
+Voyons déjà ce qu'il y a :
+
+  # find /lib/modules/3.2.29 -name '*.ko'
+  /lib/modules/3.2.29/kernel/drivers/video/nvidia.ko
+  /lib/modules/3.2.29/misc/vboxpci.ko
+  /lib/modules/3.2.29/misc/vboxnetflt.ko
+  /lib/modules/3.2.29/misc/vboxnetadp.ko
+  /lib/modules/3.2.29/misc/vboxdrv.ko
+
+  /!\ Étant donné que le paquet 'kernel-modules' a été mis à jour, le
+  répertoire '/lib/modules/3.2.29' ne contient plus que les modules tiers,
+  c'est-à-dire ne faisant pas partie du paquet initial.
+
+
+Mettre à jour le driver NVidia
+------------------------------
+
+Il suffit de le désinstaller et de le réinstaller. Pour ce faire, se placer
+dans le répertoire de l'archive compressée :
+
+  # sh NVIDIA-Linux-x86_64-304.88.run --uninstall
+
+Püis :
+
+  # sh NVIDIA-Linux-x86_64-304.88.run 
+
+Vérifier :
+
+  # find /lib/modules/3.2.45 -name 'nvidia.ko'
+  /lib/modules/3.2.45/kernel/drivers/video/nvidia.ko
+
+
+Mettre à jour les modules pour VirtualBox
+-----------------------------------------
+
+Aller dans le répertoire source du paquet 'virtualbox-kernel'. 
+
+  # sh virtualbox-kernel-mksrctarball.sh
+  --> Copying sourcecode from /usr/src/virtualbox-kernel-4.1.24
+  --> Making the sourcecode tarball: ./virtualbox-kernel-4.1.24.tar.xz
+  --> Erasing the sourcecode directory: ./virtualbox-kernel-4.1.24/
+  --> Sourcecode tarball for virtualbox-kernel: virtualbox-kernel-4.1.24.tar.xz
+
+Construire le paquet :
+
+  # ./virtualbox-kernel.SlackBuild
+
+Installer la mise à jour :
+
+  # upgradepkg /tmp/virtualbox-kernel-4.1.24_3.2.45-x86_64-1_microlinux.tgz
+
+Réinstaller le "VirtualBox Extension Pack" :
+
+  # VBoxManage extpack install --replace
+  # Oracle_VM_VirtualBox_Extension_Pack-4.1.24-82872.vbox-extpack 
+  0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+  Successfully installed "Oracle VM VirtualBox Extension Pack".
+
+  /!\ Au redémarrage, on peut se retrouver avec le message d'erreur suivant :
+  'udevd: failed to execute /usr/share/virtualbox/VBoxCreateUSBNode.sh: No such
+  file or directory.' Le message est apparamment bénin, étant donné que
+  VirtualBox fonctionne correctement. 
+
+
+Finalisation
+------------
+
+Une fois que tous les modules sont correctement mis à jour, on peut repasser en
+init 4 :
+
+--8<---------- /etc/inittab --------------------------------------------------
+...
+# Default runlevel. (Do not set to 0 or 6)
+id:4:initdefault:
+...
+--8<--------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

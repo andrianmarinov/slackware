@@ -1,0 +1,758 @@
+=============
+Desktop HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=============
+
+Dernière révision : 9 mai 2013
+
+Ce HOWTO décrit l'installation d'un poste de travail Microlinux Entreprise basé
+sur Slackware 14.0.
+
+
+  · Démarrage et choix du clavier
+  · Récupérer les tagfiles
+  · Partitionner le disque dur
+  · Formater le disque dur
+  · Choisir ce qu'on va installer
+  · Configurer LILO
+  · Configurer la souris
+  · Configurer le réseau et les services au démarrage
+  · Configurer l'horloge et le fuseau horaire
+  · Choisir un gestionnaire de fenêtres
+  · Avant de redémarrer
+  · Peaufiner la configuration réseau
+  · Récupérer les scripts Microlinux
+  · Configurer 'slackpkg'
+  · Élaguer le système de base
+  · Mise en garde pour les cartes NVidia
+  · Récupérer JDK manuellement 
+  · Lancer la compilation
+  · Nettoyer le menu des applications
+  · Configurations diverses
+  · Configuration initiale de Xfce
+  · Création du profil
+  · Multilib
+  · Supprimer les partitions du bureau
+  · Configurer les cartes son récalcitrantes
+  · Nettoyer une installation existante
+  · Installation rapide
+
+
+Démarrage et choix du clavier
+-----------------------------
+ 
+Options de démarrage :
+
+  · 'hugesmp.s' -> 32bit
+  · 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
+  · 'vga=788'   -> écran normal
+  · 'vga=791'   -> grand écran
+
+Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY français.
+
+
+Récupérer les tagfiles
+----------------------
+
+Les tagfiles sont une série de fichiers texte qui définissent le statut d'un
+paquet. Un paquet marqué 'ADD' sera installé, un paquet marqué 'SKP' ne le sera
+pas. Cette procédure permet d'éviter la sélection manuelle des paquets.
+
+Activer le réseau, par exemple :
+
+  root@slackware:/# dhcpcd eth0
+
+L'environnement d'installation de Slackware contient déjà un répertoire '/tag',
+censé recevoir l'arborescence des tagfiles :
+
+  root@slackware:/# cd /tag
+
+Récupérer les tagfiles du serveur de Microlinux :
+
+  root@slackware:/tag# wget http://www.microlinux.fr/tagfiles/MLED-14.0.tar.gz
+
+Décompresser l'archive :
+
+  root@slackware:/tag# tar xvzf MLED-14.0.tar.gz
+
+Éventuellement, faire un brin de ménage :
+
+  root@slackware:/tag# rm -f MLED-14.0.tar.gz README
+
+Si tout s'est bien passé, le répertoire '/tag' contient une série de
+répertoires correspondant aux groupes de paquets Slackware :
+
+  root@slackware:/tag# ls
+  a/ ap/ d/ e/ f/ k/ kde/ kdei/ l/ n/ t/ tcl/ x/ xap/ xfce/ y/
+
+À présent, on peut lancer l'installateur :
+
+  root@slackware:/tag# setup
+
+
+Partitionner le disque dur
+--------------------------
+
+Remettre les tables de partitions à zéro :
+
+  # dd if=/dev/zero of=/dev/sda bs=512 count=64
+
+Partitionner le disque :
+
+  # cfdisk /dev/sda
+
+Schéma de partitionnement :
+
+  · une partition pour /boot, de 100 Mo, formaté en ext2
+  · une partition swap, égale à la quantité de RAM disponible
+  · une partition principale, formatée en ext4
+
+  > Si l'on dispose de moins de 512 Mo de RAM, la swap sera égale à deux fois
+    la quantité de RAM.
+
+  > Si l'on a au moins 512 Mo de RAM, la swap sera égale à la quantité de RAM.
+
+  > La partition swap sera de type 'Linux swap' (code 82).
+
+  > Toutes les autres partitions seront de type 'Linux' (code 83).
+
+
+Formater le disque dur
+----------------------
+
+Toutes les opérations de formatage s'effectuent sans la recherche méticuleuse
+de secteurs défectueux.
+
+  /!\ L'installateur Slackware requiert de partitionner la partition principale
+  en premier !
+
+Consignes pour le formatage :
+
+  > système de fichiers ext2 pour '/boot'
+
+  > système de fichiers ext4 pour les autres : '/', '/home', ...
+
+
+Choisir ce qu'on va installer
+-----------------------------
+
+Installer à partir du CD-Rom ou du DVD Slackware.
+
+Rechercher le lecteur CD-Rom ou DVD.
+
+PACKAGE SERIES SELECTION: accepter la sélection par défaut, puisque le profil
+de l'installation sera défini par les tagfiles.
+
+SELECT PROMPTING MODE: 'tagpath', puis indiquer le chemin vers les tagfiles.
+
+  /!\ Si l'on ne peut pas utiliser les tagfiles pour une raison ou pour une
+  autre, on peut toujours désélectionner les groupes E, KDE et XAP, installer
+  les groupes A, AP, D, F, K, L, N, T, TCL, X, XFCE et Y et peaufiner
+  l'installation de base après coup.
+
+
+Configurer LILO
+---------------
+
+MAKE USB FLASH BOOT : 'Skip making a USB boot stick'
+
+INSTALL LILO : 'Try to install LILO automatically'
+
+CONFIGURE LILO TO USE FRAME BUFFER CONSOLE : 'standard - Use the standard Linux
+console (the safe choice). 
+
+OPTIONAL LILO append="<kernel parameters>" LINE : 
+
+  · 'nomodeset quiet ipv6.disable=1' 
+  · 'quiet ipv6.disable=1 video=1366x768' (carte Intel)
+  · résolutions courantes : 800x600, 1024x768, 1366x768
+
+USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problèmes
+avec certains utilitaires en mode console, il n'empêche qu'il est dorénavant
+établi comme standard un peu partout. Le choix par défaut 'No' s'explique
+uniquement par un excès de prudence de la part du distributeur.
+
+SELECT LILO DESTINATION : 'MBR - Install to Master Boot Record'
+
+
+Configurer la souris
+--------------------
+
+MOUSE CONFIGURATION : 'imps2- Microsoft PS/2 Intellimouse'
+
+  > La configuration de la souris ne concerne que son utilisation en mode
+    console, avec GPM. On peut simplement accepter le choix par défaut, qui
+    correspond à toutes les souris modernes.
+
+GPM CONFIGURATION : 'No'. Le service GPM permet de copier/coller du texte avec
+la souris en mode console. Étant donné que nous nous servons de Vim pour cela,
+nous décidons de ne pas le démarrer.
+
+
+Configurer le réseau et les services au démarrage
+-------------------------------------------------
+
+CONFIGURE NETWORK: 'Yes'
+
+ENTER HOSTNAME : il s'agit de choisir un nom d'hôte pour la machine.
+Choisissez-en un à votre convenance et écrivez-le en minuscules, comme ceci :
+  
+  · 'slackbox'
+  · 'alphamule'
+  · 'grossebertha'
+  · 'raymonde'
+  · 'poste10'
+  ·  etc.
+
+ENTER DOMAINNAME FOR '<machine>' : choisissez un nom de domaine pour la
+machine, comme par exemple :
+
+  · 'local'
+  · 'microlinux.montpezat'
+  · 'crpconsulting.montpellier'
+  ·  etc.
+
+  /!\ Sur un poste de travail dont le nom d'hôte est géré de façon centralisée
+  par le serveur DHCP, on choisira 'localhost' et 'localdomain'. 
+
+CONFIGURATION TYPE FOR '<machine.domaine>' : selon le contexte, on choisira
+'static IP' ou 'DHCP' pour une connexion cablée sur un serveur ou un poste de
+travail. Sur un ordinateur portable qui fonctionne alternativement avec une
+connexion wifi ou cablée ou en mode "nomade", on préférera 'NetworkManager',
+une application qui gère la connexion "automagique" du réseau. 
+
+SET DHCP HOSTNAME : nom d'hôte DHCP à envoyer au FAI pour une connexion.
+Laisser vide tout simplement.
+
+CONFIRM STARTUP SERVICES TO RUN :
+
+  [*] rc.fuse       -> laisser la sélection telle quelle
+  [*] rc.inetd
+  [*] rc.messagebus
+  [*] rc.syslog
+  [*] rc.sshd
+
+
+Configurer l'horloge et le fuseau horaire
+-----------------------------------------
+
+HARDWARE CLOCK SET TO UTC ? 'YES - Hardware clock is set to UTC'
+
+  /!\ Le seul cas de figure où l'on optera pour 'local time', c'est dans un
+  scénario de double boot avec Windows, pour éviter que ce dernier ne dérègle
+  l'horloge à chaque redémarrage.
+
+TIMEZONE CONFIGURATION : 'Europe/Paris'
+
+
+Choisir un gestionnaire de fenêtres
+-----------------------------------
+
+SELECT DEFAULT WINDOW MANAGER FOR X : 'xinitrc.twm'
+
+  /!\ Peu importe ce que l'on sélectionne ici. Un peu plus loin, on installera
+  Fluxbox pour configurer le serveur graphique plus aisément qu'avec cette
+  immonde bouse TWM.
+
+
+Avant de redémarrer
+-------------------
+
+Quitter l'installateur ('EXIT') et construire un Initrd avant le premier
+redémarrage.
+
+  # chroot /mnt
+
+Voir le Generic-Kernel-HOWTO et le LILO-HOWTO pour les détails.
+
+Quitter l'environnement chrooté et redémarrer :
+
+  # exit
+  # reboot
+
+
+Peaufiner la configuration réseau
+---------------------------------
+
+Après le premier redémarrage, corriger la configuration de l'installateur dans
+'/etc/hosts' si l'on gère les noms d'hôte de façon centralisée :
+
+--8<---------- /etc/hosts ----------------------------------------------------
+127.0.0.1     localhost.localdomain localhost
+--8<--------------------------------------------------------------------------
+
+Si l'on vient d'installer Slackware sur un portable avec le wifi mais sans
+cable Ethernet, on peut éditer '/etc/rc.d/rc.inet1.conf' pour une connexion
+provisoire. Une connexion WEP ressemblera à ceci, par exemple :
+
+--8<---------- /etc/rc.d/rc.inet1.conf ---------------------------------------
+# Config information for eth1:
+IPADDR[1]=""
+NETMASK[1]=""
+USE_DHCP[1]="yes"
+DHCP_HOSTNAME[1]=""
+WLAN_ESSID[1]="monessid"
+WLAN_KEY[1]="d5ad1f04acf048ec2d0b1c80c7"
+--8<--------------------------------------------------------------------------
+
+  /!\ Éditer la configuration avec l'option ':set nobackup' dans Vim, pour
+  éviter de se retrouver avec une série de fichiers de sauvegarde '*.conf~'.
+
+
+Récupérer les scripts Microlinux
+--------------------------------
+
+Les scripts, SlackBuilds et fichiers de configuration Microlinux se trouvent
+sur Github.
+
+Récupérer ces fichiers :
+  
+  # cd
+  # git clone https://github.com/kikinovak/desktop
+
+
+Configurer 'slackpkg'
+---------------------
+
+Selon le contexte, on utilisera par ordre de préférence :
+
+  1. un dépôt local
+  2. le DVD 
+  3. un miroir sur Internet
+  
+  * Dépôt local :
+
+--8<---------- /etc/slackpkg/mirrors -----------------------------------------
+...
+http://mirror.nestor/slackware/slackware-14.0/
+...
+--8<--------------------------------------------------------------------------
+
+  * DVD :
+
+--8<---------- /etc/slackpkg/mirrors -----------------------------------------
+...
+cdrom://mnt/cdrom/
+...
+--8<--------------------------------------------------------------------------
+
+  /!\ Ne pas oublier de monter le DVD avant d'invoquer 'slackpkg' ;o)
+
+  * Miroir sur Internet :
+
+--8<---------- /etc/slackpkg/mirrors -----------------------------------------
+...
+ftp://ftp.slackware.at/slackware-14.0
+...
+--8<--------------------------------------------------------------------------
+
+  > Évidemment, on fera les ajustements nécessaires pour Slackware64.
+
+Blacklister tous les paquets marqués "microlinux" pour éviter qu'ils se fassent
+écraser par une mise à jour :
+
+--8<---------- /etc/slackpkg/blacklist ---------------------------------------
+...
+[0-9]+_microlinux
+--8<--------------------------------------------------------------------------
+
+Sur Slackware64, il faudra également songer à blacklister les paquets multilib
+fournis par Eric Hameleers :
+
+--8<---------- /etc/slackpkg/blacklist ---------------------------------------
+...
+[0-9]+_microlinux
+[0-9]+alien
+--8<--------------------------------------------------------------------------
+
+Effectuer la mise à jour initiale du système :
+
+  # slackpkg update
+  # slackpkg upgrade-all
+
+Installer le plug-in MPlayer du groupe 'extra' :
+
+  # slackpkg install mplayerplug-in
+
+
+Élaguer le système de base
+--------------------------
+
+Si l'on n'a pas utilisé les tagfiles pour l'installation du système de base, on
+peut le peaufiner comme ceci :
+
+  # cd /root/desktop/14.0/tools
+  # ./trim-desktop-base.sh
+
+  /!\ Cette dernière commande installe une série de paquets, notamment une
+  poignée d'applications du groupe XAP. Elle en supprime aussi quelques-uns,
+  comme par exemple les polices de caractères inutiles du groupe X. Pour plus
+  de détails, jeter un oeil sur les fichiers 'desktop-base-add' et
+  'desktop-base-remove' dans le répertoire 'tools/pkglists'.
+
+
+Mise en garde pour les cartes NVidia
+------------------------------------
+
+La compilation de certains paquets comme wxGTK, Firefox ou Thunderbird échoue
+lorsqu'on utilise le driver propriétaire NVidia. Avant de lancer la
+compilation, il faut donc le désinstaller :
+
+  # ./NVIDIA-Linux-x86-XXX.YY.run --uninstall
+
+Ensuite, réinstaller le paquet 'mesa' :
+
+  # slackpkg reinstall mesa
+
+
+Récupérer JDK manuellement 
+--------------------------
+
+Slackware ne peut plus redistribuer JDK (le Java Development Kit) sous forme
+binaire, pour des raisons de licence. En revanche, le répertoire 'extra/' des
+fichiers Slackware contient un SlackBuild qui permet facilement de construire
+le paquet en question. J'ai rapatrié ce SlackBuild vers le répertoire
+'14.0/build/jdk'.
+
+Au préalable, aller sur le site d'Oracle :
+
+  * http://www.oracle.com
+
+Suivre le lien 'Downloads' > 'Java for Developers' > 'Java Platform (JDK)'
+
+Accepter les termes de la licence :
+
+  [*] Accept Licence Agreement
+  
+Puis, télécharger un des deux fichiers suivants :
+
+  · jdk-7uXX-linux-i586.tar.gz (32-bits)
+  · jdk-7uXX-linux-x64.tar.gz  (64-bits)
+
+Ranger l'archive téléchargée dans le répertoire 'source/d/jdk'. 
+
+
+Lancer la compilation
+---------------------
+
+Démarrer la compilation en tant que root :
+
+  # ./MLED.SlackBuild
+
+Ce script maître se charge de plusieurs choses :
+
+  1. télécharger automatiquement les sources ;
+
+  2. compiler les paquets dans l'ordre approprié ;
+
+  3. installer les paquets au fur et à mesure ;
+
+  4. les ranger dans un endroit approprié.
+
+Compter quelques heures pour la procédure. La durée totale sera fonction de la
+puissance du matériel et de la bande passante.
+
+
+Nettoyer le menu des applications
+---------------------------------
+
+Le répertoire 'tools/' contient entre autres choses un script 'cleanmenu'. Son
+rôle est de nettoyer et de simplifier les entrées du menu des applications,
+afin que Mme Michu s'y retrouve. Lancer ce script :
+
+  # cd tools/
+  # ./cleanmenu
+
+  /!\ Le script remplace une bonne partie des fichiers '*.desktop' situés dans
+  '/usr/share/applications' et autres emplacements par des entrées de menu
+  "maison". Pour l'instant, ces fichiers ont été traduits en anglais, en
+  français et en allemand. Évitez de lancer 'cleanmenu' si vous utilisez une
+  autre langue pour votre environnement de bureau.
+
+
+Configurations diverses
+-----------------------
+
+Éventuellement, synchroniser le poste avec le serveur NTP local (NTP-HOWTO).
+
+Configurer le serveur graphique.
+
+Définir le ou les utilisateurs du système. Si l'on utilise l'authentification
+centralisée, c'est le moment de la configurer.
+
+  # adduser
+
+Passer en init 4.
+
+
+Configuration initiale de Xfce
+------------------------------
+
+Créer un utilisateur 'template' pour le modèle de configuration.
+
+Premier démarrage : Utiliser les paramètres par défaut.
+
+Déplacer la zone de notifications à gauche du sélecteur de bureaux virtuels.
+
+Ajouter deux applets entre la zone de notifications et le sélecteur de bureaux
+virtuels :
+
+  · un bouton 'Clipman'
+  · un bouton 'Mixer'
+
+  > Apparence
+  · Style > Clearlooks-Phenix
+  · Icônes > Faenza-Xfce
+  · Polices > Police par défaut : Droid Sans Regular 11
+
+  > Applications favorites
+  · Navigateur Web : Mozilla Firefox
+  · Client de messagerie : Mozilla Thunderbird
+  · Gestionnaire de fichiers : Thunar
+  · Émulateur de Terminal : Terminal Xfce
+
+  > Bureau
+  · Arrière-plan : opensuse-1600x1200.jpg
+  · Icônes > Icônes par défaut :
+  · [ ] Répertoire personnel
+  · [ ] Système de fichiers
+  · [ ] Corbeille
+  · [*] Périphériques amovibles
+
+  > Économiseur d'écran
+  · Mode : Seulement un économiseur d'écran : GLMatrix
+
+  > Espaces de travail
+  · Nombre d'espaces de travail : 2
+
+  > Gestionnaire de fenêtres
+  · Style > Thème : Axe Rounded
+
+  > Gestionnaire de fichiers
+  · Affichage > Voir un nouveau dossier en utilisant : Liste détaillée
+
+  > Peaufinage des fenêtres
+  · Compositeur > [*] Activer le compositeur d'affichage
+  · [*] Affichage direct des fenêtres plein écran
+  · [*] Afficher l'ombre sous les fenêtres normales
+  · [*] Afficher l'ombre sous les fenêtres contextuelles
+  · [*] Afficher l'ombre sous les fenêtres du dock
+  · Opacité des décorations des fenêtres : laisser tel quel
+  · Opacité des fenêtres inactives : réduire d'un cran
+  · Opacité des fenêtres durant leur déplacement : réduire de deux crans
+  · Opacité des fenêtres durant leur redimensionnement : réduire d'un cran
+  · Opacité des fenêtres contextuelles : laisser tel quel
+
+  > Souris
+  Thème : Défaut ( = Aero Large Drop)
+
+  > Tableau de bord > Panneau 2
+  · Dans un premier temps, maximiser la largeur du panneau pour pouvoir ajouter
+    les applications plus confortablement.
+  · Supprimer tous les lanceurs prédéfinis.
+  · Ajouter la sélection d'applications, une par une.
+  · Affichage > Dimensions > Taille : 40 - 48 pixels selon le nombre
+    d'applications
+  · Largeur : 1 %
+  · Apparence > Opacité : 1 %
+  · Apparence > Arrière-plan > Opacité : 0 %
+  · Pour chacune des entrées qu'on vient d'ajouter :
+    [ ] Désactiver les bulles d'aide
+ 
+Peaufiner Xfce Terminal.
+
+Bouton du menu d'applications : remplacer le logo de Xfce par celui de
+Slackware. 
+
+  · Icônes des emplacements > 'start-here-slackware'
+
+Agrandir la taille des icônes. Lancer l'éditeur de paramètres
+'xfce4-settings-editor' et définir les paramètres xsettings > Gtk > IconSizes :
+
+  · gtk-menu=16,16
+  · gtk-button=20,20
+  · panel-applications-menu=24,24
+  · panel-directory-menu=24,24
+
+Écrire tous ces paramètres dans une seule ligne, séparés par ':' sans espace.
+
+
+Création du profil
+------------------
+
+  # cp -Rv /home/template/.config /etc/skel/
+  # cd /etc/skel/.config
+
+Garder les répertoires suivants :
+
+  · Thunar
+  · xfce4
+
+Supprimer tout le reste.
+
+Empaqueter la configuration :
+
+  # cd ..
+  # tar cvjf config.tar.bz2 .config/
+
+
+Multilib
+--------
+
+Si l'on utilise des applications comme VirtualBox, Skype ou Wine sous
+Slackware64, il faudra installer une couche de compatibilité 32-bit :
+
+  # cd multilib/
+  # ./get-multilib.sh
+  # cd 14.0
+  # upgradepkg --reinstall --install-new *.t?z
+  # cd slackware64-compat32
+  # upgradepkg --install-new *.compat32/*.t?z
+
+
+Supprimer les partitions du bureau
+----------------------------------
+
+Si le bureau affiche les partitions système comme points de montage sur une
+installation multiboot, on peut s'en débarrasser en éditant '/etc/fstab' comme
+ceci :
+
+--8<---------- /etc/fstab ----------------------------------------------------
+...
+/dev/sda5        /mnt/sda5        ext4        defaults,noauto  0   0
+/dev/sda6        /mnt/sda6        ext4        defaults,noauto  0   0
+/dev/sda7        /mnt/sda7        ext4        defaults,noauto  0   0
+/dev/sda8        /mnt/sda8        ext4        defaults,noauto  0   0
+/dev/sda9        /mnt/sda9        ext4        defaults,noauto  0   0
+/dev/sda10       /mnt/sda10       ext4        defaults,noauto  0   0
+--8<--------------------------------------------------------------------------
+
+
+Configurer les cartes son récalcitrantes
+----------------------------------------
+
+Sur les machines équipées de deux cartes son, il se peut que l'on veuille en
+désactiver une. Exemple :
+
+  # lspci | grep -i audio
+  00:10.1 Audio device: nVidia Corporation MCP51 High Definition Audio 
+  04:01.0 Multimedia audio controller: C-Media Electronics Inc CM8738 
+
+Dans ce cas, il faut identifier le module de la carte que l'on souhaite
+désactiver, puis blacklister la carte en question comme ceci :
+
+  # echo "blacklist snd_hda_intel" > /lib/modprobe.d/onboard-sound.conf
+
+Sur un portable HP Pavilion DM-1, j'ai dû configurer le son comme ceci :
+
+--8<---------- /etc/modprobe.d/snd-hda-intel.conf ----------------------------
+options snd-hda-intel model=auto
+--8<--------------------------------------------------------------------------
+
+Et pour qu'ALSA ne se trompe pas de carte :
+
+--8<---------- /etc/asound.conf ----------------------------------------------
+pcm.!default {
+  type hw
+  card SB
+}
+ctl.!default {
+  type hw
+  card SB
+}
+--8<--------------------------------------------------------------------------
+
+  > Curieusement, 'aplay' ne marche pas, et les boutons de réglage du volume
+    non plus.
+
+
+Nettoyer une installation existante
+-----------------------------------
+
+S'il ne s'agit pas d'une installation fraîche de Slackware 14.0, mais d'un
+système existant, ce n'est pas la peine de tout réinstaller. Il suffit de
+nettoyer le système existant pour partir du bon pied.
+
+Passer en init 3.
+
+Nettoyer '/tmp'.
+
+Sur un système Slackware64, supprimer les paquets multilib. Commenter la ligne
+correspondante dans '/etc/slackpkg/blacklist' :
+
+--8<---------- /etc/slackpkg/blacklist ---------------------------------------
+...
+#[0-9]+alien
+--8<--------------------------------------------------------------------------
+
+Ensuite, "mettre à jour" tous les paquets gcc-* et glibc-*, ce qui les remplace
+par les versions 64-bit pures.
+
+  # slackpkg upgrade-all
+
+Commenter tout ce qui reste dans '/etc/slackpkg/blacklist' :
+
+--8<---------- /etc/slackpkg/blacklist ---------------------------------------
+...
+#[0-9]_SBo
+#[0-9]_microlinux
+--8<--------------------------------------------------------------------------
+
+Supprimer les paquets multilib restants :
+
+  # removepkg compat32-tools
+  # cd /var/log/packages
+  # removepkg *compat32*
+
+Supprimer tous les paquets tiers :
+
+  # slackpkg clean-system
+
+Le cas échéant, supprimer les paquets qui remplacent des paquets officiels :
+
+  # cd /var/log/packages
+  # removepkg *microlinux*       
+
+Supprimer les groupes de paquets inutiles :
+
+  # slackpkg remove e kde kdei xap
+
+Installer les groupes de paquets requis :
+
+  # slackpkg install a ap d f k l n t tcl x xfce y
+
+Peaufiner le profil du système de base :
+
+  # cd tools/
+  # ./trim-desktop-base.sh
+
+
+Installation rapide
+-------------------
+
+1.  Installer le système de base.
+
+2.  Récupérer les scripts Microlinux sur Github.
+
+3.  Configurer 'slackpkg'.
+
+4.  Élaguer le système de base si l'on n'a pas utilisé les tagfiles.
+
+5.  Récupérer les paquets MLED du support d'installation.
+
+6.  Installer les paquets MLED.
+
+7.  Peaufiner la configuration réseau.
+
+8.  Mettre à jour le système.
+
+9.  Synchroniser la machine avec NTP.
+
+10. Configurer X11.
+
+11. Définir le ou les utilisateurs.
+
+12. Passer en init 4 et lancer le bureau.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

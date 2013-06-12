@@ -1,0 +1,487 @@
+=============
+Dedibox HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=============
+
+Dernière révision : 7 février 2013
+
+Ce HOWTO décrit l'installation et la configuration de Slackware64 14.0 sur un
+serveur dédié Dedibox SC de chez Online. Slackware ne figure pas parmi les
+distributions proposées par Online, mais on peut quand-même l'installer à
+l'aide de la console de secours, avec un peu de patience.
+
+
+Installation
+------------
+
+Ouvrir la console Online : 
+
+  * http://console.online.net.
+  
+Serveur > Liste de vos serveurs > Serveur Dedibox SC (sd-XXXXX) > Installer
+
+Choix du type d'utilisation du système d'exploitation : Serveur
+
+Choix du système d'exploitation : Debian, Ubuntu, peu importe...
+
+Partitionnement : peu importe, vu qu'on le refera à la main
+
+Noter l'adresse IP du serveur, l'IP de la passerelle et les DNS
+
+Une fois que le système est installé, passer en 'Mode secours' et choisir
+'Ubuntu 12.04 LTS 64bits' comme système de secours.
+
+La console affiche un identifiant et un mot de passe qui permettent de se
+connecter en SSH au système de secours.
+
+Attendre une ou deux minutes, puis lancer la connexion :
+
+  $ ssh kikinovak@88.191.137.75
+  kikinovak@88.191.137.75's password: 
+  Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-27-generic x86_64)
+
+   * Documentation:  https://help.ubuntu.com/
+
+   System information disabled due to load higher than 1.0
+
+     _     _                ____
+    | |   (_)__   __ ___   |  _ \  ___  ____ ___  _  _  ___
+    | |   | |\ \ / // _ \  | |_| |/ _ \/ ___/ __\| || |/ _ \
+    | |__ | | \ V /|  __/  |  _ /   __/\__ \ (__ | || |  __/
+    |____||_|  \_/  \___|  |_| \_\\___|____/\___/`.__.'\___|
+
+  Aide et documentation : http://documentation.dedibox.fr
+  Console de gestion    : http://console.dedibox.fr
+
+  Serveur : 88-191-137-75
+  Adr IP  : 88.191.137.75
+  Adr MAC : 60:eb:69:8f:14:7c
+  Système : Ubuntu 12.04 LTS (precise) x86_64
+  Démarré : mercredi 6 février 2013, 06:20:57 (UTC+0100)
+
+  kikinovak@88-191-137-75:~$
+
+Remettre à zéro la table de partitions :
+
+  $ sudo dd if=/dev/zero of=/dev/sda bs=512 count=64
+
+Le changement de la table de partitions n'est pas pris en compte par la console
+de secours. Il faut donc la quitter et en relancer une autre, c'est-à-dire :
+
+  1. Repasser en mode normal ;
+  2. Secours ;
+  4. Éditer '~/.ssh/known_hosts' sur la machine locale et effacer la ligne avec
+     l'IP de la Dedibox ;
+  3. Se reconnecter en SSH avec un nouvel identifiant/mot de passe.
+
+Une fois qu'on s'est reconnecté au système de secours, on va activer le compte
+root :
+
+  $ sudo passwd root
+
+Devenir root :
+
+  $ su -
+
+Définir la variable d'environnement LANG :
+
+  # LANG=C
+  # export LANG
+
+Partitionner le disque :
+
+  # cfdisk /dev/sda
+
+Schéma :
+
+  # fdisk -l
+  ...
+     Device Boot      Start         End      Blocks   Id  System
+  /dev/sda1   *           1          12       96358+  83  Linux
+  /dev/sda2              13         255     1951897+  82  Linux swap / Solaris
+  /dev/sda3             256       19457   154240065   83  Linux
+
+Formater le disque :
+
+  # mkfs.ext2 -v /dev/sda1
+  # mkswap /dev/sda2
+  # swapon /dev/sda2
+  # mkfs.ext4 -v /dev/sda3
+
+Monter la partition principale :
+
+  # mount /dev/sda3 /mnt
+
+Créer et monter la partition '/boot' :
+
+  # mkdir /mnt/boot
+  # mount /dev/sda1 /mnt/boot
+
+La console de secours comporte déjà le client FTP 'lftp'. Pour plus de confort,
+on va installer NcFTP :
+
+  # apt-get update
+  # apt-get install ncftp 
+
+Créer un répertoire 'slackware64' et télécharger les groupes de paquets
+essentiels (c'est-à-dire A, AP, D, L et N) dans ce répertoire. Étant donné que
+l'espace est limité dans notre console de secours, nous allons nous y prendre à
+deux reprises :
+
+  # mkdir slackware64
+  # cd slackware64/
+  # ncftp ftp.slackware.at
+  ncftp > cd slackware64-14.0/slackware64/
+  ncftp > get -R a ap d n
+  ncftp > bye
+
+  > Alternativement, on peut se connecter à ftp://mirror.ovh.net.
+
+Installer 'a/pkgtools' dans l'environnement de secours :
+
+  # cp a/pkgtools-14.0-noarch-2.tgz /
+  # cd /
+  # tar xvzf pkgtools-14.0-noarch-2.tgz 
+  ./
+  var/
+  var/log/
+  var/log/setup/
+  var/log/setup/setup.htmlview
+  var/log/setup/setup.80.make-bootdisk
+  var/log/setup/setup.70.install-kernel
+  var/log/setup/tmp/
+  var/log/setup/setup.services
+  install/
+  install/slack-desc
+  sbin/
+  sbin/removepkg
+  sbin/explodepkg
+  sbin/pkgtool
+  sbin/upgradepkg
+  sbin/makepkg
+  sbin/makebootdisk
+  sbin/installpkg
+  usr/
+  usr/man/
+  usr/man/man8/
+  usr/man/man8/pkgtool.8.gz
+  usr/man/man8/upgradepkg.8.gz
+  usr/man/man8/makepkg.8.gz
+  usr/man/man8/installpkg.8.gz
+  usr/man/man8/explodepkg.8.gz
+  usr/man/man8/removepkg.8.gz
+
+Créer un lien symbolique vers 'du' pour que 'pkgtools' fonctionne correctement
+sous Ubuntu :
+
+  # ln -s /usr/bin/du /bin/du
+
+Installer les paquets téléchargés vers l'environnement chrooté. On pourra
+sereinement ignorer l'avertissement (WARNING) concernant 'pkgtool' et la
+version de 'tar' :
+
+  # cd /root/slackware64
+  # installpkg --root /mnt */*.t?z
+
+Supprimer les groupes de paquets téléchargés pour faire de la place, puis
+télécharger et installer le groupe L :
+
+  # rm -rf a/ ap/ d/ n/
+  # ncftp ftp.slackware.at
+  ncftp > cd slackware64-14.0/slackware64/
+  ncftp > get -R l
+  ncftp > bye
+  # installpkg --root /mnt l/*.t?z
+  # rm -rf l/
+
+Lier les systèmes '/proc' et '/dev' à ceux de la console de secours :
+
+  # mount -t proc /proc /mnt/proc
+  # mount --bind /dev /mnt/dev
+
+Changer dans l'environnement chrooté en spécifiant l'interpréteur de commandes
+Bash :
+
+  # chroot /mnt /bin/bash
+
+Maintenant qu'on est dans l'environnement Slackware, lancer l'utilitaire de
+configuration :
+
+  # pkgtool
+
+  > Setup - Choose Slackware installation scripts to run again
+
+  [*] liloconfig
+
+L'installation de LILO produit quelques messages d'erreur sans conséquence. Il
+suffit d'éditer '/etc/lilo.conf' manuellement et de corriger quelques entrées,
+notamment la partition principale qui n'est pas détectée automatiquement.
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+append="vt.default_utf8=1"
+boot=/dev/sda
+compact
+lba32
+...
+timeout = 10
+...
+image = /boot/vmlinuz
+  root = /dev/sda3
+  label = Linux
+  read-only
+--8<--------------------------------------------------------------------------
+
+Ne pas oublier :
+
+  # lilo
+  Added Linux *
+
+Configurer le réseau :
+
+  [*] netconfig
+
+  · Nom d'hôte : sd-25854
+  · Nom de domaine : dedibox.fr
+  · Renseigner l'adresse IP, la passerelle et le DNS primaire.
+
+Configurer les services au démarrage :
+
+  [ ] rc.fuse -> désélectionner
+  [ ] rc.inetd -> désélectionner
+  [ ] rc.messagebus -> désélectionner
+  [*] rc.syslog
+  [*] rc.sshd
+
+Lancer les autres scripts de configuration :
+
+  [*] cacerts - Rebuilt SSL certificate database
+
+Générer les certificats SSL (se fait automatiquement).
+
+  [*] timeconfig - Select your timezone
+
+Fuseau horaire : Europe/Paris
+
+Le fichier '/etc/fstab' devra être créé manuellement comme ceci :
+
+--8<---------- /etc/fstab ----------------------------------------------------
+/dev/sda1        /boot            ext2        defaults         1   2
+/dev/sda2        swap             swap        defaults         0   0
+/dev/sda3        /                ext4        defaults         1   1
+devpts           /dev/pts         devpts      gid=5,mode=620   0   0
+proc             /proc            proc        defaults         0   0
+tmpfs            /dev/shm         tmpfs       defaults         0   0
+--8<--------------------------------------------------------------------------
+
+Définir un mot de passe pour root :
+
+  # passwd root
+
+Quitter l'environnement chrooté :
+
+  # exit
+
+Démonter les partitions :
+
+  # umount /mnt/proc
+  # umount /mnt/dev
+  # umount /mnt/boot
+  # umount /mnt
+
+Revenir dans l'interface web de la console Online, repasser en mode normal
+et croiser les doigts. 
+
+
+Premier redémarrage
+-------------------
+
+Récupérer ma doc, mes scripts et mes fichiers de configuration :
+
+  # cd 
+  # git clone https://github.com/kikinovak/server
+
+Construire et installer le paquet 'user-settings-console'.
+
+  # source ~/.bashrc
+
+En passant, vérifier les variables d'environnement dans
+'/etc/profile.d/lang.sh'.
+
+Construire un initrd :
+
+  · Generic-Kernel-HOWTO.txt
+  · LILO-HOWTO.txt
+
+Croiser les doigts et redémarrer :
+
+  # reboot && exit
+
+
+Sécurité
+--------
+
+On commence par configurer les encapsuleurs TCP ("TCP wrappers") :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+ALL  : localhost                    : ALLOW
+ALL  : sd-25854                     : ALLOW
+ALL  : sd-25854.dedibox.fr          : ALLOW
+sshd : ALL                          : ALLOW
+--8<--------------------------------------------------------------------------
+
+--8<---------- /etc/hosts.deny -----------------------------------------------
+ALL : ALL : spawn (echo +++ $(date) +++ Attempt from %a to %d >> /var/log/deny.log)
+--8<--------------------------------------------------------------------------
+
+Un exemple de pare-feu simple avec 'iptables' :
+
+--8<---------- /etc/rc.d/rc.firewall -----------------------------------------
+#!/bin/sh
+#
+# /etc/rc.d/rc.firewall
+
+IPT=$(which iptables)
+MOD=$(which modprobe)
+IFACE_INET=eth0
+
+function start {
+  
+  # Les connexions entrantes sont bloquées par défaut.
+  $IPT -P INPUT DROP
+
+  # Les connexions destinées à être routées sont acceptées par défaut.
+  $IPT -P FORWARD ACCEPT
+
+  # Les connexions sortantes sont acceptées par défaut.
+  $IPT -P OUTPUT ACCEPT
+
+  # Pas de filtrage sur la boucle locale.
+  $IPT -A INPUT -i lo -j ACCEPT
+
+  # Accepter les messages ICMP importants.
+  $IPT -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+  $IPT -A INPUT -p icmp --icmp-type time-exceeded -j ACCEPT
+  $IPT -A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
+
+  # Accepter les paquets entrants relatifs à des connexions déjà établies. Cela
+  # va plus vite que de devoir réexaminer toutes les règles pour chaque paquet.
+  $IPT -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+  # FTP 
+  # $MOD ip_conntrack_ftp
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 21 -j ACCEPT
+
+  # SSH
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 22 -j ACCEPT
+
+  # Accepter SSH avec une limite d'une tentative de connexion par minute
+  $IPT -A INPUT -p tcp -i $IFACE_INET --dport 22 -m state --state NEW \
+   -m recent --set --name SSH
+  $IPT -A INPUT -p tcp -i $IFACE_INET --dport 22 -m state --state NEW \
+   -m recent --update --seconds 60 --hitcount 2 --rttl --name SSH -j DROP
+  $IPT -A INPUT -p tcp -i $IFACE_INET --dport 22 -j ACCEPT
+
+  # Accepter les requêtes SMTP 
+  #$IPT -A INPUT -p tcp -i $IFACE_INET --dport 25 -j ACCEPT
+
+  # Accepter les requêtes DNS
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 53 -j ACCEPT
+  # $IPT -A INPUT -p udp -i $IFACE_INET --dport 53 -j ACCEPT
+
+  # Autoriser le serveur HTTP 
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 80 -j ACCEPT
+
+  # Accepter les requêtes POP
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 110 -j ACCEPT
+
+  # Accepter les requêtes IMAP
+  #$IPT -A INPUT -p tcp -i $IFACE_INET --dport 143 -j ACCEPT
+
+  # Accepter les requêtes IMAPS
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 993 -j ACCEPT
+
+  # Accepter les requêtes POPS
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 995 -j ACCEPT
+
+  # Autoriser le serveur Icecast 
+  # $IPT -A INPUT -p tcp -i $IFACE_INET --dport 8000 -j ACCEPT
+
+  # Enregistrer la trace des paquets rejetés
+  $IPT -A INPUT -j LOG --log-prefix "+++ IPv4 packet rejected +++"
+  $IPT -A INPUT -j REJECT
+  
+}
+
+function stop {
+  $IPT -t filter -P INPUT ACCEPT
+  $IPT -t filter -P OUTPUT ACCEPT
+  $IPT -t filter -P FORWARD ACCEPT
+  $IPT -t nat -P POSTROUTING ACCEPT
+  $IPT -t nat -P PREROUTING ACCEPT
+  $IPT -t nat -P OUTPUT ACCEPT
+  $IPT -t filter -F
+  $IPT -t nat -F
+  $IPT -X
+}
+
+# Commandes : rc.firewall { start | restart | stop | status }
+case $1 in 
+  start)
+          echo "Starting firewall."
+          stop
+          start
+  ;;
+  stop)
+          echo "Stopping firewall."
+          stop
+  ;;
+  restart)
+          echo "Stopping firewall."
+          stop
+          echo "Starting firewall."
+          start
+  ;;
+  status)
+          $IPT -L -v -n
+  ;;
+  *)
+  echo "Usage: $0 {start|stop|restart|status}"
+esac
+--8<--------------------------------------------------------------------------
+
+Activer et lancer le pare-feu :
+
+  # chmod 0755 /etc/rc.d/rc.firewall
+  # /etc/rc.d/rc.firewall start
+
+
+Finalisation
+------------
+
+Mettre le serveur à l'heure :
+
+  · NTP-HOWTO.txt
+
+Installer les groupes de paquets manquants :
+
+  # cd
+  # mkdir slackware64
+  # cd slackware64/
+  # ncftp ftp.slackware.at
+  ncftp > cd slackware64-14.0/slackware64
+  ncftp > get -R e f k tcl x y
+  ncftp > bye
+  # installpkg */*.t?z
+  # cd ..
+  # rm -rf slackware64/
+
+Éditer '/etc/slackpkg/mirrors' et décommenter un miroir au hasard tout en
+choisissant bien.
+
+Effectuer les mises à jour de sécurité :
+
+  # slackpkg update
+  # slackpkg upgrade-all
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

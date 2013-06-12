@@ -1,0 +1,64 @@
+=========
+X11 HOWTO
+=========
+
+
+Carte graphique ATI
+-------------------
+
+# lspci | grep VGA
+00:01.0 VGA compatible controller: Advanced Micro Devices [AMD] nee ATI
+Wrestler [Radeon HD 6320]
+
+
+# unzip amd-driver-installer-catalyst-13.1-linux-x86.x86_64.zip
+Archive:  amd-driver-installer-catalyst-13.1-linux-x86.x86_64.zip
+  inflating: amd-driver-installer-catalyst-13.1-linux-x86.x86_64.run
+# rm -f amd-driver-installer-catalyst-13.1-linux-x86.x86_64.zip
+# sh amd-driver-installer-catalyst-13.1-linux-x86.x86_64.run 
+
+  ======================================================
+  AMD Catalyst(TM) Proprietary Drvier 9.012 Installation
+
+      You are running a x86_64 machine with libc5
+      Operating System: Slackware 14.0
+
+                          < OK >                                               
+  ======================================================
+
+Ne pas installer le driver directement, mais constuire un paquet :
+
+  [X] Generate Distribution Specific Driver Package
+
+Accepter la licence et générer le paquet :
+
+  [X] Build package for detected OS: Slackware
+
+Le paquet résultant sera rangé dans le même répertoire à partir duquel on a
+invoqué le script d'installation. Il suffit de l'installer :
+
+# installpkg fglrx-9.012-x86_64-1.tgz
+
+Éditer le fichier '/etc/modprobe.d/blacklist.conf' et bloquer les modules
+'radeon' et 'radeonhd'. Si le fichier n'existe pas, on va le créer :
+
+--8<---------- /etc/modprobe.d/blacklist.conf --------------------------------
+blacklist radeon
+blacklist radeonhd
+--8<--------------------------------------------------------------------------
+
+Redémarrer la machine, puis créer le fichier de configuration initial :
+
+  # aticonfig --initial -f
+
+Démarrer X11 :
+
+  $ startx
+
+Tester la configuration dans un terminal graphique :
+
+  $ fgl_glxgears
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

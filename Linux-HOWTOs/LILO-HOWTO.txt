@@ -1,0 +1,358 @@
+==========
+LILO HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==========
+
+Dernière révision : 12 janvier 2013
+
+Ce HOWTO décrit la configuration du chargeur de démarrage LILO sous Slackware.
+
+  · Généralités
+  · Configuration
+  · Options globales
+  · Options pour les systèmes Linux et Windows à charger
+  · Slackware simple avec un noyau HUGE
+  · Slackware simple avec un noyau GENERIC
+  · Slackware vs. Slackware en double boot
+  · Slackware vs. Windows en double boot
+  · Documentation
+
+
+Généralités
+-----------
+
+LILO a été le principal chargeur de démarrage des distributions Linux pendant
+quelques années. Il a été progressivement remplacé par GRUB, et on ne le trouve
+plus que sur une minorité de distributions.
+
+Au démarrage, LILO affiche un menu et se charge de démarrer le système
+d'exploitation sélectionné. Il doit être installé dans le secteur de démarrage
+d'un disque dur pour fonctionner correctement. 
+
+LILO n'est pas capable de lire des fichiers dans un système de fichiers. Lors
+de l'installation, il crée une liste avec les blocs et les secteurs du disque
+qui contiennent les fichiers importants, à savoir :
+
+  · le noyau (ou kernel)
+  · l'initrd (s'il y en a un)
+
+Autrement dit, LILO "lit" ces données en mémoire sans vraiment "comprendre" le
+système de fichiers sous-jacent. C'est la commande 'lilo' qui se charge
+d'identifier les blocs de données. Elle doit être invoquée à partir d'un
+système Linux fonctionnel :
+
+  # lilo
+
+Il s'ensuit une conséquence d'une importance cruciale. La commande doit être
+invoquée à chaque modification du kernel ou de l'initrd, c'est-à-dire que LILO
+doit être réinstallé à chaque fois dans le secteur d'amorçage, MÊME SI LES NOMS
+DES FICHIERS NE CHANGENT PAS !!!
+
+Pour éviter de "travailler sans filet", vous pouvez ajouter une ou plusieurs
+nouvelles entrées (ou "stances") pour démarrer sur d'autres kernels/initrd tout
+en maintenant les stances existantes, ce qui vous évitera de rendre votre
+système inutilisable en cas d'erreur. 
+
+
+Configuration
+-------------
+
+La configuration de LILO se fait en deux temps :
+
+  1. Création ou modification du fichier '/etc/lilo.conf'
+  2. Invocation de la commande 'lilo'
+
+Notons que le fichier initial '/etc/lilo.conf' est créé par le programme
+d'installation. La commande 'lilo' utilise les paramètres contenus dans
+'/etc/lilo.conf' pour produire un nouveau secteur d'amorçage et écrire ce
+dernier vers une destination également définie dans '/etc/lilo.conf'. 
+
+Le fichier 'lilo.conf' est organisé en deux parties :
+
+  1. Comportement général du chargeur de démarrage
+  2. Une liste des OS démarrés par LILO (mots clés 'image' ou 'other')
+
+
+Options globales
+----------------
+
+  > 'append="<liste de paramètres>"' - Une liste de paramètres à passer au
+    kernel lors du démarrage. 
+
+  > 'boot = /dev/sda' - L'endroit où LILO doit être installé. Dans l'exemple,
+    ce sera le MBR du premier disque dur.
+
+  > 'timeout = 1200' - Indique le temps d'attente en 1/10èmes de secondes avant
+    le démarrage du système par défaut. Dans l'exemple, c'est deux minutes.
+
+  > 'prompt' - Une sélection manuelle de l'OS est possible avant l'expiration
+    du délai.
+
+  > 'lba32' - Évite la limitation de 1024 cylindres. Ajouter cette option pour
+    se débarrasser de l'avertissement lors de l'invocation de 'lilo'.
+
+  > 'compact' - Accélère le chargement du noyau et de l'initrd.
+
+  > 'vga = normal' - Résolution standard de la console. 
+
+
+Options pour les systèmes Linux et Windows à charger
+----------------------------------------------------
+
+  > 'image = /boot/vmlinuz' - Introduit une stance pour démarrer un système
+    Linux. Le paramètre indique l'emplacement du kernel.
+  
+  > 'other = /dev/sda1' - Introduit une stance pour démarrer Windows. Le
+    paramètre indique la partition sur laquelle se trouve Windows, c'est-à-dire
+    le chargeur de démarrage de celui-ci.
+
+  > 'label = XXXXXXX' - Définit le texte de l'entrée de menu. Éviter les
+    espaces et les caractères spéciaux, et ne pas dépasser 15 caractères.
+
+  > 'root = /dev/sdXY' - Définit l'emplacement de la racine du système Linux.
+
+
+Slackware simple avec un noyau HUGE
+-----------------------------------
+
+Voici à quoi peut ressembler l'unique stance de 'lilo.conf' après une
+installation fraîche de Slackware :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /boot/vmlinuz
+  root = /dev/sda3
+  label = Linux
+  read-only
+--8<--------------------------------------------------------------------------
+
+Notons qu'ici, '/boot/vmlinuz' est un lien symbolique :
+
+  # ls -l /boot/vmlinuz
+  lrwxrwxrwx 1 root root 27 ...  /boot/vmlinuz -> vmlinuz-huge-smp-3.2.29-smp
+
+On peut donc éditer la stance pour savoir explicitement sur quel noyau on va
+démarrer. Techniquement, cela ne change rien, mais c'est un peu plus clair :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /boot/vmlinuz-huge-smp-3.2.29-smp
+  root = /dev/sda3
+  label = SlackHuge
+  read-only
+--8<--------------------------------------------------------------------------
+
+Sur une machine Slackware64 :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /boot/vmlinuz-huge-3.2.29
+  root = /dev/sda3
+  label = Slack64Huge
+  read-only
+--8<--------------------------------------------------------------------------
+
+Prendre en compte les modifications :
+
+  # lilo
+
+
+Slackware simple avec un noyau GENERIC
+--------------------------------------
+
+Une fois qu'on a construit l'initrd (cf. le Generic-Kernel-HOWTO), on peut
+ajouter une stance correspondante dans '/etc/lilo.conf' :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /boot/vmlinuz-huge-smp-3.2.29-smp
+  root = /dev/sda3
+  label = SlackHuge
+  read-only
+image = /boot/vmlinuz-generic-smp-3.2.29-smp
+  initrd = /boot/initrd.gz
+  root = /dev/sda3
+  label = SlackGeneric
+  read-only
+--8<--------------------------------------------------------------------------
+
+Sur Slackware64 :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /boot/vmlinuz-huge-3.2.29
+  root = /dev/sda3
+  label = Slack64Huge
+  read-only
+image = /boot/vmlinuz-generic-3.2.29
+  initrd = /boot/initrd.gz
+  root = /dev/sda3
+  label = Slack64Generic
+  read-only
+--8<--------------------------------------------------------------------------
+
+  > On pourrait très bien se passer de la première stance. On la garde
+    uniquement pour ne pas travailler sans filet au cas où la deuxième stance
+    ne démarre pas (pour cause de faute de frappe :oD).
+
+
+Slackware vs. Slackware en double boot
+--------------------------------------
+
+Préparer le disque dur comme ceci :
+
+  · /dev/sda1 : 4 Go swap         -> système A + B
+  · /dev/sda2 : 100 Mo /boot ext2 -> système A
+  · /dev/sda3 : 160 Go / ext4     -> système A
+  · /dev/sda5 : 100 Mo /boot ext2 -> système B
+  · /dev/sda6 : 160 Go / ext4     -> système B
+
+  > Le nombre de partitions primaires est limité à 4.
+
+  > Les partitions logiques sont toujours numérotées à partir de 5.
+
+Installer Slackware (système A) normalement sur sda1 (swap), sda3 (racine) et
+sda2 (/boot). Au moment du formatage, ignorer les partitions sda5 et sda6 et
+opter simplement pour 'Continue'. Procéder comme pour une installation simple.
+
+Installer Slackware (système B) sur sda1 (swap), sda6 (racine) et sda5 (/boot).
+Lorsqu'on arrive à l'écran INSTALL LILO, il faut impérativement choisir 'skip -
+Do not install LILO' sous peine d'écraser la configuration existante.
+Redémarrer sur le système A.
+
+Créer un point de montage pour la partition '/dev/sda5', monter la partition et
+vérifier son contenu :
+
+  # mkdir /mnt/sda5
+  # mount /dev/sda5 /mnt/sda5
+  # ls -l /mnt/sda5
+
+  > Repérer le noyau HUGE du système B.
+
+Ajouter une stance pour le noyau HUGE du système B :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /mnt/sda5/vmlinuz-huge-smp-3.2.29-smp 
+  root = /dev/sda6 
+  label = HugeB
+  read-only
+--8<--------------------------------------------------------------------------
+
+Si le système B est une Slackware64 :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /mnt/sda5/vmlinuz-huge-3.2.29 
+  root = /dev/sda6 
+  label = HugeB
+  read-only
+--8<--------------------------------------------------------------------------
+
+Ne pas oublier :
+
+  # lilo
+
+Redémarrer sur le système B.
+
+Construire un initrd sur le système B.
+
+Redémarrer sur le système A.
+
+Monter la partition '/boot' du système B comme on l'a fait plus haut :
+
+  # mkdir /mnt/sda5
+  # mount /dev/sda5 /mnt/sda5
+  # ls -l /mnt/sda5
+
+  > Repérer le kernel GENERIC et l'initrd.
+
+Ajouter une stance pour le noyau GENERIC à partir du système A :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /mnt/sda5/vmlinuz-generic-smp-3.2.29-smp 
+  initrd = /mnt/sda5/initrd.gz
+  root = /dev/sda6 
+  label = GenericB
+  read-only
+--8<--------------------------------------------------------------------------
+
+Si le système B est une Slackware64 :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /mnt/sda5/vmlinuz-generic-3.2.29
+  initrd = /mnt/sda5/initrd.gz
+  root = /dev/sda6 
+  label = GenericB
+  read-only
+--8<--------------------------------------------------------------------------
+
+
+Slackware vs. Windows en double boot
+------------------------------------
+
+Installer Microsoft Windows en premier.
+
+Éventuellement, rétrécir la partition Windows existante en utilisant
+PartedMagic. Au terme de l'opération, on peut se retrouver avec un disque qui
+ressemble à ceci :
+
+  · une partition '/dev/sda1' contenant Windows
+  · une partie inutilisée du disque
+
+Lancer 'cfdisk' et formater cette partie inutilisée pour obtenir quelque chose
+comme ceci :
+
+  # fdisk -l
+
+  Disk /dev/sda: 80.0 GB, 80000000000 bytes
+  255 heads, 63 sectors/track, 9726 cylinders, total 156250000 sectors
+  Units = sectors of 1 * 512 = 512 bytes
+  Sector size (logical/physical): 512 bytes / 512 bytes
+  I/O size (minimum/optimal): 512 bytes / 512 bytes
+  Disk identifier: 0x43a9fdfc
+
+     Device Boot      Start         End      Blocks   Id  System
+  /dev/sda1   *          63    77823999    38911968+   7  HPFS/NTFS/exFAT
+  /dev/sda2   *    77824000    78016779       96390   83  Linux
+  /dev/sda3        78016780    82016964     2000092+  82  Linux swap
+  /dev/sda4        82016965   156249999    37116517+  83  Linux
+
+Installer Slackware normalement comme on le ferait pour une installation
+simple. Installer LILO dans le MBR, et explicitement inclure la partition
+Windows (FAT/NTFS). 
+
+Voici à quoi ressemble LILO :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+# Windows bootable partition config begins
+other = /dev/sda1
+  label = Windows
+  table = /dev/sda
+# Windows bootable partition config ends
+# Linux bootable partition config begins
+image = /boot/vmlinuz
+  root = /dev/sda4
+  label = Linux
+  read-only
+# Linux bootable partition config ends
+--8<--------------------------------------------------------------------------
+
+
+Documentation
+-------------
+
+RTFM :
+
+  · lilo(8)
+  · lilo.conf(5)
+ 
+Livre :
+
+  · Linux 2011, Michael Kofler, LILO, 728-733 [en allemand]
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

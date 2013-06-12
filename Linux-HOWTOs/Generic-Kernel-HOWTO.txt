@@ -1,0 +1,166 @@
+====================
+Generic Kernel HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+====================
+
+Dernière révision : 7 janvier 2013
+
+Ce HOWTO décrit la procédure de remplacement du kernel "huge" par le kernel
+"generic" sur une installation Slackware 14.0.
+
+  · Généralités
+  · Identifier les modules nécessaires
+  · Construire l'initrd
+  · Démarrer sur le kernel générique avec l'initrd 
+  · Le cas spécifique des cartes graphiques Intel
+  · RTFM
+
+
+Généralités
+-----------
+
+Le noyau "huge" qui vient avec une installation standard de Slackware contient
+tous les drivers compilés "en dur". Une des premières choses à faire sur une
+installation fraîche de Slackware, c'est de remplacer ce noyau "huge" par un
+noyau "generic". Ce dernier contient tous les drivers en tant que modules, mais
+nécessite l'utilisation d'un initrd ("initial ramdisk") au démarrage.
+
+
+Identifier les modules nécessaires
+----------------------------------
+
+Dans un premier temps, il faut savoir quels sont les modules nécessaires pour
+le démarrage de la machine. Pour ce faire, on peut lancer le script
+'/usr/share/mkinitrd/mkinitrd_command_generator.sh', comme ceci :
+
+  # /usr/share/mkinitrd/mkinitrd_command_generator.sh
+
+On obtient un résultat de la sorte :
+
+  mkinitrd -c -k 3.2.29-smp -f ext4 -r /dev/sda3 -m mbcache:jbd2:ext4 -u -o
+    /boot/initrd.gz
+
+  > Attention, ce résultat pourra varier en fonction du matériel que vous
+    utilisez.
+
+Ce qui m'intéresse ici, c'est l'option '-m mbcache:jbd2:ext4'. En langage
+tam-tam, cela signifie que mon kernel "generic" a besoin des modules 'mbcache',
+'jbd2' et 'ext4' pour démarrer correctement. 
+
+
+Construire l'initrd
+-------------------
+ 
+Je vais pouvoir fournir les informations ci-dessus à '/etc/mkinitrd.conf'.
+Copier le fichier modèle comme ceci :
+
+  # cd /etc
+  # cp mkinitrd.conf.sample mkinitrd.conf
+
+Décommenter toutes les options et éditer '/etc/mkinitrd.conf' comme ceci :
+
+--8<--------- /etc/mkinitrd.conf ---------------------------------------------
+SOURCE_TREE="/boot/initrd-tree"
+CLEAR_TREE="1" 
+OUTPUT_IMAGE="/boot/initrd.gz"
+KERNEL_VERSION="$(uname -r)"
+KEYMAP="fr-latin1"
+MODULE_LIST="ext4:usbhid:ehci-hcd:uhci-hcd"
+ROOTDEV="/dev/sda3"
+ROOTFS="ext4"
+RESUMEDEV="/dev/sda2"
+RAID="0"
+LVM="0"
+UDEV="1"
+MODCONF="0"
+WAIT="1"
+--8<--------------------------------------------------------------------------
+
+  > CLEAR_TREE passe de "0" à "1".
+
+  > KEYMAP correspond à la disposition de votre clavier.
+
+  > MODULE_LIST est la liste explicite de modules à intégrer dans l'initrd,
+    séparés par ':' et sans espace.
+    
+  > ROOTDEV, c'est l'emplacement de la partition principale.
+
+  > ROOTFS, c'est le système de fichiers utilisé sur la partition principale.
+
+  > RESUMEDEV, c'est la partition swap.
+
+  > Les options LUKS* concernent les partitions encryptées. Supprimez les
+    lignes correspondantes. 
+
+  > Laissez les autres options telles quelles pour l'instant.
+
+À présent, on peut construire l'initrd avec les informations contenues dans
+'/etc/mkinitrd.conf' :
+
+  # mkinitrd -F
+
+
+Démarrer sur le kernel générique avec l'initrd
+----------------------------------------------
+
+Dans '/etc/lilo.conf', il faut créer une nouvelle stance pour le kernel
+"generic" :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+image = /boot/vmlinuz
+  root = /dev/sda3
+  label = Huge 
+  read-only
+image = /boot/vmlinuz-generic-smp-3.2.29-smp
+  initrd = /boot/initrd.gz
+  root = /dev/sda3
+  label = Generic
+  read-only
+--8<--------------------------------------------------------------------------
+
+Prendre en compte la nouvelle configuration de LILO :
+
+  # lilo
+
+Croiser les doigts et redémarrer. 
+
+
+Le cas spécifique des cartes Intel
+----------------------------------
+
+Vérifier si l'on dispose d'une carte graphique Intel :
+
+  # lspci | grep -i vga
+  00:02.0 VGA compatible controller: Intel Corporation 82865G Integrated
+  Graphics Controller (rev 02)
+
+Les cartes graphiques Intel nécessitent l'intégration des modules
+correspondants ('intel_agp' et 'i915') dans l'initrd pour fonctionner
+correctement. Éditer '/etc/mkinitrd.conf' et ajouter les deux modules en
+question, comme ceci par exemple :
+
+--8<--------- /etc/mkinitrd.conf ---------------------------------------------
+...
+MODULE_LIST="ext4:usbhid:ehci-hcd:uhci-hcd:intel_agp:i915"
+...
+--8<--------------------------------------------------------------------------
+
+Reconstruire l'initrd :
+
+  # mkinitrd -F
+
+Ne pas oublier de réinvoquer LILO :
+
+  # lilo
+
+
+RTFM
+----
+
+  · mkinitrd(8)
+  · mkinitrd.conf(5)
+  · lilo.conf(5)
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

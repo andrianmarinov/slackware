@@ -1,0 +1,107 @@
+=================
+Ghost4Linux HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=================
+
+Dernière révision : 1er février 2012
+
+Ce HOWTO décrit l'utilisation de Ghost4Linux.
+
+  · Introduction
+  · Obtenir G4L
+  · Utiliser G4L
+  · Réduire la taille de l'image
+
+
+Introduction
+------------
+
+G4L (Ghost4Linux) est un outil de clonage de disques et de partitions. Les
+images disque peuvent être compressées et transférées sur un serveur FTP local
+ou clonées localement.
+
+
+Obtenir G4L
+-----------
+
+Aller sur la page du projet :
+
+  * http://sourceforge.net/projects/g4l/
+
+Télécharger l'image ISO de G4L :
+
+  · g4l-v0.43.iso
+
+Graver cette image sur un CD-Rom.
+
+
+Utiliser G4L
+------------
+
+Au démarrage, booter sur le kernel par défaut en appuyant sur la touche
+[Entrée].
+
+Confirmer simplement la série de messages de démarrage.
+
+Choisir une disposition clavier : fr/fr-latin1.bmap pour un clavier AZERTY.
+
+Dans l'écran d'accueil, lancer G4L :
+
+  > g4l
+
+Options :
+
+  RAW Mode - Any filesystem
+
+  Network use - Backup/restore to/from network (FTP)
+
+On arrive à l'écran principal de G4L.
+
+  > Vérifier si l'adresse IP est correctement définie.
+
+  > Renseigner le nom d'hôte ou l'adresse IP du serveur FTP local.
+
+  > Renseigner le nom d'utilisateur et le mot de passe pour se connecter au
+    serveur FTP : 'utilisateur:mot_de_passe'.
+
+  > Sélectionner un nom suffisamment parlant pour l'image disque, par exemple
+    'windows-xp-ibm-thinkcentre' ou 'slackware64-14.0-portable-vostro'.
+
+  > Garder la compression par défaut.
+
+
+Envoyer l'image disque sur le serveur FTP :
+
+  > 'Backup drive to FTP server
+
+  L'écran subséquent affiche l'ensemble des disques et des partitions.
+  Sélectionner le disque en entier que l'on souhaite cloner, par exemple 'hda',
+  et confirmer le récapitulatif.
+
+Récupérer une image depuis le serveur FTP :
+
+  > Restore drive from FTP server
+
+  Là aussi, sélectionner un disque en entier.
+
+Remarque : G4L se charge entièrement dans la RAM. On peut donc enlever le
+CD-Rom pendant le déroulement des opérations.
+
+
+Réduire la taille de l'image
+----------------------------
+
+Pour réduire au maximum la taille de l'image disque, on peut écrire des zéros
+sur la partie non utilisée par le système :
+
+  # dd if=/dev/zero of=/0bits bs=20M ; rm -f /0bits
+
+  > L'option 'bs' signifie 'blocksize' et désigne la taille des blocs écrits
+    sur le disque.
+
+Sur un système Windows, c'est l'utilitaire 'nullfile.exe' qui permet de réduire
+l'image du disque.
+
+  * http://www.feyrer.de/g4u/nullfile-1.02.exe
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

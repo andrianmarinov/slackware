@@ -1,0 +1,123 @@
+============
+Compiz HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+============
+
+Dernière révision : 7 janvier 2013
+
+Ce HOWTO décrit l'installation et la configuration de Compiz sur un poste de
+travail Slackware.
+
+  · Installation
+  · Configuration de base
+  · Gestion des bureaux virtuels
+  · Gestion des fenêtres
+
+
+Installation
+------------
+
+Construire et installer dans l'ordre :
+
+  1.  compiz-bcop
+  2.  protobuf
+  3.  libcompizconfig
+  4.  compizconfig-python
+  5.  ccsm
+  6.  compiz-plugins-main
+  7.  compiz-plugins-extra
+  8.  emerald
+  9.  emerald-themes
+  10. fusion-icon
+
+
+Configuration de base
+---------------------
+
+Pour que Compiz fonctionne sous Xfce, il faut impérativement activer les trois
+plug-ins suivants :
+
+  [X] Décoration de la fenêtre
+  [X] Déplacer la fenêtre
+  [X] Redimensionner la fenêtre
+  
+Gestionnaire de paramètres Xfce > Session et démarrage :
+
+  Dans l'onglet 'Démarrage automatique', cliquer sur 'Ajouter' :
+
+  Nom         : Compiz Fusion Icon
+  Description : Configurer et lancer le bureau 3D
+  Commande    : /usr/bin/fusion-icon
+
+
+Gestion des bureaux virtuels
+----------------------------
+
+Options Générales > Onglet 'Taille du bureau' : définir la taille virtuelle
+horizontale et verticale du bureau.
+
+Bureaux "à plat" :
+
+  [X] Bureaux sur un Plan (version améliorée)
+
+Essayer avec 2x1, 3x1, 4x1 et 2x2 bureaux virtuels.
+
+Passer d'un bureau à l'autre en utilisant [Ctrl]+[Alt] et les touches fléchées.
+
+Bureaux "en cube" :
+
+  [ ] Bureaux sur un Plan (version améliorée) -> désactiver
+  [X] Cube du Bureau
+  [X] Rotation du Cube
+
+Essayer avec 2x1, 3x1 et 4x1 bureaux virtuels.
+
+Exposé des bureaux :
+
+  [X] Exposé
+
+Pour activer l'exposé, déplacer le pointeur de la souris dans le coin supérieur
+gauche du bureau. Ensuite, double-cliquer sur un bureau pour le sélectionner.
+
+Combinaison sympathique avec 2 ou 4 bureaux virtuels en horizontale :
+
+  [X] Bureaux sur un Plan (version améliorée)
+  [X] Exposé
+  
+
+Gestion des fenêtres
+--------------------
+
+Animations diverses et variées :
+
+  [X] Animations
+
+Fenêtres "élastiques" lors du déplacement :
+
+  [X] Déformer les fenêtres
+
+Basculer entre les applications :
+
+  [X] Sélecteur d'Application
+
+Utiliser les touches [Alt]+[Tab] et [Maj]+[Alt]+[Tab] pour basculer entre les
+applications.
+
+Alternativement :
+
+  [ ] Sélecteur d'Application
+  [X] Sélecteur en Anneau
+
+Ici, il faut réassigner les touches [Alt]+[Tab] et [Maj]+[Alt]+[Tab].
+
+
+Désactiver l'ombre portée de Conky
+----------------------------------
+
+Le moniteur système Conky présente une bordure ombrée avec Compiz. On peut s'en
+débarrasser de la façon suivante :
+
+Décoration de la fenêtre > Ombrer les fenêtres : 'any -conky'
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

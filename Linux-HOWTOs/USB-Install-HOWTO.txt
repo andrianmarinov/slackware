@@ -1,0 +1,98 @@
+=================
+USB Install HOWTO (c) Nicolas Kovacs, <info@microlinux.fr>
+=================
+
+Dernière révision : 7 janvier 2013
+
+Ce HOWTO décrit l'installation de Slackware sur une machine dépourvue de
+lecteur optique, par le biais d'une clé USB.
+
+  · Confectionner la clé USB
+  · Utiliser la clé USB
+
+
+Confectionner la clé USB
+------------------------
+
+Guetter les messages système pour identifier le fichier de périphérique
+correspondant à la clé USB :
+
+  # tail -f /var/log/messages
+
+Remettre à zéro la table de partitions :
+
+  # dd if=/dev/zero of=/dev/sdX bs=512 count=64
+
+Monter le DVD d'installation de Slackware.
+
+  # cd /mnt/cdrom/usb-and-pxe-installers
+  # sh usbimg2disk.sh -f -i usbboot.img -o /dev/sdb -L SLACK32
+
+Si c'est un système Slackware 64 :
+
+  # sh usbimg2disk.sh -f -i usbboot.img -o /dev/sdb -L SLACK64
+
+  We are going to format and use this device - '/dev/sdb':
+  # Vendor :         
+  # Model  : USB Flash Memory
+  # Size   : 7643 MB
+  # 
+  # FDISK OUTPUT:
+  Le disque /dev/sdb ne contient pas une table de partitions valable
+  
+  Disque /dev/sdb : 8015 Mo, 8015282176 octets
+  247 têtes, 62 secteurs/piste, 1022 cylindres, total 15654848 secteurs
+  Unités = secteurs de 1 * 512 = 512 octets
+  Taille de secteur (logique / physique) : 512 octets / 512 octets
+  taille d'E/S (minimale / optimale) : 512 octets / 512 octets
+  Identifiant de disque : 0x00000000
+  ***                                                       ***
+  *** If this is the wrong drive, then press CONTROL-C now! ***
+  ***                                                       ***
+  Or press ENTER to continue: 
+  --- Formatting /dev/sdb with VFAT partition label 'SLACK32'...
+  --- Last chance! Press CTRL-C to abort!
+  Or press ENTER to continue: 
+  --- Available free space on the the USB drive is 7811116 KB
+  --- Required free space for installer: 31377 KB
+  --- Copying boot files to the USB drive...
+  --- Cleaning up the staging area...
+  --- Making the USB drive '/dev/sdb' bootable...
+
+Explication des options :
+
+  · '-f' formatte la clé USB
+  · '-i' spécifie le fichier 'usbboot.img'
+  · '-o' désigne le fichier de périphérique de la clé USB
+  · '-L' définit le label de la clé (SLACK32 ou SLACK64)
+
+Enlever et réinsérer la clé. En utilisant un gestionnaire de fichiers
+graphique, copier le contenu du DVD d'installation sur la clé. Pour gagner du
+temps et de la place, on peut faire l'impasse sur les répertoires 'extra/',
+'pasture/', 'slackbook/', 'source/' et 'testing/'. Si Thunar ou Dolphin
+affichent un message d'erreur concernant la création de liens symboliques, il
+suffit de les "Ignorer toujours".
+
+  > En passant, si l'on dispose d'un répertoire 'tagfiles/', c'est le moment de
+    le copier à la racine de la clé.
+
+
+Utiliser la clé USB
+-------------------
+
+Pour l'installation, on pourra créer un répertoire 'disk/' et monter la clé
+dessus. Par exemple :
+
+  # mkdir /disk
+  # mount /dev/sdb1 /disk
+
+Dans l'installateur, il faudra sélectionner l'option 'Install from a
+pre-mounted directory' et fournir '/disk/slackware' ou '/disk/slackware64'
+comme répertoire source.
+
+Si l'on a copié 'tagfiles/' à la racine de la clé, le chemin vers les tagfiles
+sera donc '/disk/tagfiles'.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

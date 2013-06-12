@@ -1,0 +1,141 @@
+=================
+TCP Wrapper HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=================
+
+Dernière révision : 8 janvier 2013
+
+Ce HOWTO décrit la sécurisation d'un serveur Slackware avec l'encapsuleur TCP.
+
+  · Généralités et limites
+  · Autoriser les services sur un serveur de réseau local
+  · Autoriser les services sur un serveur dédié
+  · Restreindre l'accès
+
+
+Généralités et limites
+----------------------
+
+Certains services réseau, notamment SSH, NFS et VSFTPD, peuvent être sécurisés
+sommairement grâce aux encapsuleurs TCP ("TCP Wrappers"). Les fichiers
+'/etc/hosts.allow' et '/etc/hosts.deny' autorisent ou interdisent l'accès de
+certaines machines à une série de services. Ces deux fichiers sont vides par
+défaut.
+
+L'encapsuleur TCP vérifie d'abord les règles définies dans '/etc/hosts.allow'.
+Si l'accès est explicitement autorisé, le contrôle s’arrête là. Dans le cas
+contraire, les règles dans '/etc/hosts.deny' sont également passées au crible.
+Si l'accès y est refusé, le client reçoit un message d'erreur. Si l’accès à un
+service n'est concerné par aucune règle 'allow' ou 'deny', il est autorisé.
+
+La plupart des "grands" services réseau n'utilisent pas l'encapsuleur TCP. En
+effet, le serveur web Apache, le serveur de bases de données MySQL, le serveur
+de fichiers Samba ou le serveur d'impression CUPS doivent être sécurisés à
+l'aide de leurs propres fichiers de configuration respectifs, en respectant
+bien évidemment la syntaxe propre à chacun des services.
+
+
+Autoriser les services sur un serveur de réseau local
+-----------------------------------------------------
+
+Spécifier les services explicitement autorisés en éditant '/etc/hosts.allow' : 
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+ALL     : localhost nestor nestor.microlinux.montpezat     : ALLOW 
+sshd    : ALL                                              : ALLOW 
+portmap : 192.168.2.0/255.255.255.0 *.microlinux.montpezat : ALLOW 
+mountd  : 192.168.2.0/255.255.255.0 *.microlinux.montpezat : ALLOW 
+vsftpd  : 127.0.0.1                                        : ALLOW
+vsftpd  : 192.168.2.0/255.255.255.0 *.microlinux.montpezat : ALLOW
+--8<--------------------------------------------------------------------------
+
+  > La machine locale ('localhost', 'nestor') peut accéder à l'ensemble des
+    services.
+
+  > SSH est ouvert pour n'importe quelle machine, ce qui permet de se connecter
+    de l'extérieur.
+
+  > Quant à NFS ('portmap' et 'mountd'), on peut y accéder à partir de
+    n'importe quelle machine du réseau local.
+
+La syntaxe de la configuration est compacte. On aurait très bien pu la
+présenter sur plusieurs lignes pour plus de lisibilité, comme ceci :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+ALL     : localhost                   : ALLOW 
+ALL     : nestor                      : ALLOW 
+ALL     : nestor.microlinux.montpezat : ALLOW 
+sshd    : ALL                         : ALLOW 
+portmap : 192.168.2.0/255.255.255.0   : ALLOW 
+portmap : *.microlinux.montpezat      : ALLOW 
+mountd  : 192.168.2.0/255.255.255.0   : ALLOW 
+mountd  : *.microlinux.montpezat      : ALLOW 
+vsftpd  : 127.0.0.1                   : ALLOW
+vsftpd  : 192.168.2.0/255.255.255.0   : ALLOW
+vsftpd  : *.microlinux.montpezat      : ALLOW
+--8<--------------------------------------------------------------------------
+
+Si l'on souhaite restreindre SSH au réseau local, on peut écrire ceci :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+...
+sshd : 192.168.2.0/255.255.255.0 *.microlinux.montpezat : ALLOW 
+...
+--8<--------------------------------------------------------------------------
+
+Ou alors, en présentation ”aérée“ :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+...
+sshd : 192.168.2.0/255.255.255.0 : ALLOW 
+sshd : *.microlinux.montpezat    : ALLOW
+...
+--8<--------------------------------------------------------------------------
+
+
+Autoriser les services sur un serveur dédié
+-------------------------------------------
+
+Ici, il est impératif de commencer par '/etc/hosts.allow', sous peine de se
+tirer dans le pied :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+ALL  : localhost           : ALLOW 
+ALL  : sd-25854            : ALLOW 
+ALL  : sd-25854.dedibox.fr : ALLOW 
+sshd : ALL                 : ALLOW
+--8<--------------------------------------------------------------------------
+
+Pour SSH, on pourrait aller jusqu'à restreindre l'accès à une seule adresse IP
+de l’extérieur :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+...
+sshd : 213.41.141.252      : ALLOW
+...
+--8<--------------------------------------------------------------------------
+
+
+Restreindre l'accès
+-------------------
+
+Dans un deuxième temps, sur un serveur local tout comme sur une machine
+publique, on refuse l'accès à l'ensemble des services réseau dans
+'/etc/hosts.deny'. La directive 'spawn' se charge de journaliser l'ensemble des
+tentatives de connexion qui se sont soldées par un échec.
+
+--8<---------- /etc/hosts.deny -----------------------------------------------
+ALL : ALL : spawn (echo +++ $(date) +++ Attempt from %a to %d >> /var/log/deny.log) 
+--8<--------------------------------------------------------------------------
+
+À partir de là, les tentatives de connexion refusées se présenteront comme
+ceci :
+
+  # cat /var/log/deny.log 
+  +++ Wed Apr 6 11:24:07 CEST 2011 +++ Attempt from 192.168.1.1 to sshd 
+  +++ Wed Apr 6 12:02:46 CEST 2011 +++ Attempt from 213.41.141.252 to sshd 
+  +++ Wed Apr 6 12:05:40 CEST 2011 +++ Attempt from 109.129.205.167 to sshd 
+  ...
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

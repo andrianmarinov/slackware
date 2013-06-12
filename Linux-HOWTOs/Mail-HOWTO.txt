@@ -1,0 +1,839 @@
+==========
+Mail HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==========
+
+Dernière révision : 11 février 2013
+
+Ce HOWTO décrit la mise en place d'un serveur mail IMAP avec Postfix et Dovecot
+sous Slackware Linux.
+
+
+  · Le MTA Postfix
+  · Prérequis
+  · Installation de Postfix
+  · Configuration initiale de Postfix
+  · Gérer les mails en ligne de commande avec Mutt
+  · Créer les comptes Linux pour la messagerie
+  · Les alias
+  · Définir les destinataires autorisés
+  · Faire correspondre les comptes Linux aux adresses de messagerie
+  · Domaines virtuels avec des utilisateurs distincts
+  · Le serveur IMAP Dovecot
+  · Prérequis
+  · Installation de Dovecot
+  · Générer le certificat
+  · Configuration initiale de Dovecot
+  · Ajouter l'authentification SMTP à Postfix
+  · Supprimer Dovecot
+  · Supprimer Postfix
+
+
+Le MTA Postfix
+--------------
+
+Postfix est un serveur mail, et plus exactement un MTA ("Mail Transfer Agent").
+Il gère l'envoi et la réception de mails par Internet en utilisant le protocole
+SMTP.
+
+Le monde de l'Open Source offre toute une panoplie de MTA, parmi lesquels on
+trouve Postfix, Exim, Qmail et Sendmail. La distribution Slackware comprend
+Sendmail comme MTA par défaut. Nous allons lui préférer Postfix, qui est
+beaucoup plus facile à configurer.
+
+
+Prérequis
+---------
+
+Dans le pare-feu, il faudra ouvrir le port 25 en TCP. 
+
+Vérifier si le serveur n'est pas blacklisté quelque part :
+
+  * http://www.mxtoolbox.com/blacklists.aspx
+
+Il faut impérativement disposer d'un ou de plusieurs noms de domaines
+enregistrés et valides, comme par exemple :
+
+  · radionovak.com
+  · zorglub.net
+  · yatahongaga.org
+
+Sur une machine externe, vérifier la configuration DNS des domaines pour
+lesquels on souhaite gérer le courrier, comme ceci :
+
+  $ host -t MX radionovak.com
+  radionovak.com mail is handled by 10 mail.radionovak.com.
+  $ host mail.radionovak.com
+  mail.radionovak.com has address 88.191.137.75
+  $ host radionovak.com
+  radionovak.com has address 88.191.137.75
+  radionovak.com mail is handled by 10 mail.radionovak.com.
+  $ host 88.191.137.75
+  75.137.191.88.in-addr.arpa domain name pointer sd-25854.dedibox.fr.
+
+
+Installation de Postfix
+-----------------------
+
+Postfix ne fait pas partie d'une installation standard de Slackware. On va
+donc le compiler à partir des sources, en utilisant le script de
+SlackBuilds.org. 
+
+Au préalable, créer quelques utilisateurs et groupes système pour Postfix :
+
+  # groupadd -g 200 postfix
+  # useradd -u 200 -d /dev/null -s /bin/false -g postfix postfix
+  # groupadd -g 201 postdrop
+
+Au final, on doit avoir quelque chose comme ceci :
+
+  # grep post /etc/passwd
+  postfix:x:200:200::/dev/null:/bin/false
+  # grep post /etc/group
+  postfix:x:200:
+  postdrop:x:201:
+
+Lancer la compilation de Postfix (3m30 sur une Dedibox SC) et installer le
+paquet résultant.
+
+
+Configuration initiale de Postfix
+---------------------------------
+
+Le fichier de configuration principal de Postfix, c'est '/etc/postfix/main.cf'.
+Supprimer les commentaires du fichier pour ne garder que les directives :
+
+  # cd /etc/postfix
+  # mv main.cf main.cf.orig
+  # grep -h -v '^[[:space:]]*\#' main.cf.orig | \
+      grep -v '^[[:space:]]*$' > main.cf
+
+On obtient ceci :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+unknown_local_recipient_reject_code = 550
+debug_peer_level = 2
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
+sendmail_path = /usr/sbin/sendmail
+newaliases_path = /usr/bin/newaliases
+mailq_path = /usr/bin/mailq
+setgid_group = postdrop
+html_directory = /usr/doc/postfix-2.9.4/html
+manpage_directory = /usr/man
+sample_directory = /etc/postfix
+readme_directory = /usr/doc/postfix-2.9.4/README_FILES
+inet_protocols = ipv4
+--8<--------------------------------------------------------------------------
+
+Ajouter quelques directives de base :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+...
+myhostname     = sd-25854.dedibox.fr
+myorigin       = $myhostname
+mydomain       = dedibox.fr
+mydestination  = sd-25854.dedibox.fr, localhost.localdomain, localhost
+mynetworks     = 127.0.0.0/8
+relayhost      =
+home_mailbox   = Maildir/
+alias_maps     = hash:/etc/postfix/aliases 
+alias_database = hash:/etc/postfix/aliases 
+--8<--------------------------------------------------------------------------
+
+  > 'myhostname' est censé contenir le nom d'hôte pleinement qualifié du
+    serveur, c'est-à-dire le résultat de la commande 'hostname --fqdn'.
+
+  > 'myorigin' définit le domaine auquel sont associés des mails envoyés
+    localement. Par défaut, 'myorigin' a la même valeur que 'myhostname'. 
+
+  > 'mydestination' fournit la liste des domaines pour lesquels les messages
+    reçus doivent être stockés dans une boîte mail locale. Attention : même si
+    Postfix gère plusieurs domaines, 'mydestination' ne doit spécifier que le
+    domaine principal. Les domaines virtuels seront gérés par la directive
+    'virtual_alias_domains', que nous verrons plus loin.
+
+  > 'mynetworks' définit les adresses depuis lesquelles Postfix accepte les
+    mails sans authentification via SMTP. Les plages d'adresses fournies ici
+    désignent donc toutes les machines auxquelles Postfix fait confiance, si
+    l'on peut dire. Sur un serveur dédié public, il est impératif de définir
+    uniquement l'hôte local pour 'mynetworks', sous peine de se retrouver avec
+    une "pompe à merde", le terme communément utilisé pour les serveurs mails
+    mal configurés qui sont utilisés par des tiers malintentionnés pour l'envoi
+    massif de spams sans authentification. Attention : les spammeurs du monde
+    entier adorent ce genre de machines.
+
+  > 'relayhost' définit le MTA auquel on est censé transférer les mails qui ne
+    doivent pas être acheminés localement. Dans notre configuration, cette
+    directive doit rester vide. On l'utilisera sur un serveur de réseau local
+    pour transférer les mails à un MTA public sur Internet.
+
+  > Le format de stockage par défaut de Postfix, c'est mbox. On préférera le
+    format Maildir, bien plus adapté pour une configuration IMAP.
+
+Aérer le fichier contenant les alias :
+
+  # mv aliases aliases.orig
+  # grep -h -v '^[[:space:]]*\#' aliases.orig | \ 
+      grep -v '^[[:space:]]*$' > aliases
+
+Voilà ce qu'on obtient :
+
+--8<---------- /etc/postfix/aliases ------------------------------------------
+MAILER-DAEMON:	postmaster
+postmaster:	root
+bin:		root
+daemon:		root
+named:		root
+nobody:		root
+uucp:		root
+www:		root
+ftp-bugs:	root
+postfix:	root
+manager:	root
+dumper:		root
+operator:	root
+abuse:		postmaster
+decode:		root
+--8<--------------------------------------------------------------------------
+
+Créer un utilisateur normal sur le serveur, si ce n'est déjà fait :
+
+  # adduser kikinovak
+
+Ajouter cet utilisateur dans '/etc/postfix/aliases', comme ceci :
+
+--8<---------- /etc/postfix/aliases ------------------------------------------
+...
+kikinovak: kikinovak
+--8<--------------------------------------------------------------------------
+
+Prendre en compte cet ajout :
+
+  # newaliases 
+
+Démarrer Postfix :
+
+  # /etc/rc.d/rc.postfix start
+
+Envoyer un mail vers un compte Webmail externe :
+
+  # su - kikinovak
+  $ mail kikinovak@free.fr
+  Subject: Test Postfix
+  Ceci est un test.
+  .
+  EOT
+
+Se connecter au compte Webmail et vérifier si le message a bien été envoyé,
+puis répondre à ce message. Si tout se passe bien, le répertoire utilisateur
+contient un nouveau répertoire ~/Maildir, qui ressemble à ceci :
+
+  $ tree Maildir/
+  Maildir/
+  |-- cur
+  |-- new
+  |   `-- 1360401556.V803I70000bM517366.sd-25854
+  `-- tmp
+
+  3 directories, 1 file
+
+C'est un simple fichier texte, qu'on peut afficher avec 'less' :
+
+  $ less Maildir/new/1360401556.V803I70000bM517366.sd-25854 
+  Return-Path: <kikinovak@free.fr>
+  X-Original-To: kikinovak@sd-25854.dedibox.fr
+  Delivered-To: kikinovak@sd-25854.dedibox.fr
+  Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+          by sd-25854.dedibox.fr (Postfix) with ESMTP id 426C2780A06
+          for <kikinovak@sd-25854.dedibox.fr>; Sun, 10 Feb 2013 12:30:38 +0100
+  (CET)
+  Received: from zimbra21-e3.priv.proxad.net (unknown [172.20.243.171])
+          by smtp5-g21.free.fr (Postfix) with ESMTP id 93489D4813B
+          for <kikinovak@sd-25854.dedibox.fr>; Sun, 10 Feb 2013 12:30:34 +0100
+  (CET)
+  Date: Sun, 10 Feb 2013 12:30:33 +0100 (CET)
+  From: kikinovak@free.fr
+  To: Niki Kovacs <kikinovak@sd-25854.dedibox.fr>
+  Message-ID:
+  <943841863.56394345.1360495833441.JavaMail.root@zimbra21-e3.priv.proxad.net>
+  In-Reply-To: <20130210112926.2670C780A07@sd-25854.dedibox.fr>
+  Subject: Re: Test Postfix
+  MIME-Version: 1.0
+  Content-Type: text/plain; charset=utf-8
+  Content-Transfer-Encoding: quoted-printable
+  X-Originating-IP: [213.41.141.252]
+  X-Mailer: Zimbra 7.2.0-GA2598 (ZimbraWebClient - FF3.0 (Linux)/7.2.0-GA2598)
+  X-Authenticated-User: kikinovak@free.fr
+
+  Et voici la r=C3=A9ponse.
+
+
+Gérer les mails en ligne de commande avec Mutt
+----------------------------------------------
+
+Mutt est un MUA ("Mail User Agent") en ligne de commande. On peut l'utiliser
+sur des machines dépourvues d'interface graphique.
+
+Avant de lancer Mutt, éditer le fichier de configuration '~/.muttrc' :
+
+--8<---------- ~/.muttrc -----------------------------------------------------
+set mbox_type=Maildir
+set folder="~/Maildir"
+set spoolfile="~/Maildir"
+set mbox="+Mailbox"
+
+my_hdr From: kikinovak@sd-25854.dedibox.fr (Niki Kovacs)
+my_hdr Reply-To: kikinovak@sd-25854.dedibox.fr (Niki Kovacs)
+--8<--------------------------------------------------------------------------
+
+Lancer Mutt :
+
+  $ mutt
+
+La fenêtre principale de Mutt affiche la boite de réception. Les nouveaux mails
+sont marqués par un 'N'. Une barre d'état en haut de l'écran affiche les
+principaux raccourcis. En règle générale, Mutt fonctionne avec les mêmes
+raccourcis que Vim. 
+
+Pour lire un message, il suffit de le sélectionner et d'appuyer sur [Entrée].
+
+
+Créer les comptes Linux pour la messagerie
+------------------------------------------
+
+Bien sûr, c'est plus élégant de créer des comptes virtuels gérés par une base
+de données et tout le bling bling. Le Web regorge d'ailleurs de tutoriaux de ce
+genre, rivalisant de complexité. Pour commencer, nous allons rester fidèles au
+principe KISS et passer par des comptes Linux traditionnels. 
+
+Admettons que nous ayons à gérer le courrier des deux domaines (fictifs)
+'journaldespirou.fr' et 'gaffophone.org', avec les adresses mail suivantes :
+
+  · fantasio@journaldespirou.fr
+  · gaston.lagaffe@journaldespirou.fr
+  · jeanne.dupont@journaldespirou.fr
+  · gaston.lagaffe@gaffophone.org
+  · bertrand.labevue@gaffophone.org
+
+Dans un premier temps, nous allons créer des comptes Linux traditionnels, un
+par compte mail, en respectant - plus ou moins - les conventions de nommage
+classiques. Notons que les utilisateurs n'ont pas de shell de connexion,
+c'est-à-dire qu'ils ne pourront pas se connecter directement au serveur.
+
+  # useradd -m -g users -s /bin/false -c "Fantasio" fantasio
+  # useradd -m -g users -s /bin/false -c "Gaston Lagaffe" glagaffe
+  # useradd -m -g users -s /bin/false -c "Gaston Lagaffe" glagaffe2
+  # useradd -m -g users -s /bin/false -c "Jeanne Dupont" jdupont
+  # useradd -m -g users -s /bin/false -c "Bertrand Labévue" blabevue
+
+Pour ne pas avoir à inventer des mots de passe raisonnablement compliqués pour
+chaque utilisateur, on peut utiliser l'outil 'pwgen', disponible sur
+SlackBuilds.org.
+
+On va créer notre propre "base de données" sous forme de simple fichier texte
+'touslesmails.txt' :
+
+--8<---------- touslesmails.txt ----------------------------------------------
+Nom              Mail                              Login     Pass
+=====================================================================
+Fantasio         fantasio@journaldespirou.fr       fantasio  LjaLScHa
+Gaston Lagaffe   gaston.lagaffe@journaldespirou.fr glagaffe  4qe0PsXY
+                 gaston.lagaffe@gaffophone.org     glagaffe2 ug8u8Uvf
+Jeanne Dupont    jeanne.dupont@journaldespirou.org jdupont   juRqqXsi
+Bertrand Labévue bertrand.labevue@gaffophone.org   blabevue  01WedFcV
+...
+--8<--------------------------------------------------------------------------
+
+Étant donné qu'il contient des informations sensibles, on va le stocker dans un
+endroit approprié, à l'abri des regards curieux.
+
+  # ls -l /root/touslesmails.txt
+  -rw------- 1 root root 494 19 mars  06:53 /root/touslesmails.txt
+
+
+Les alias
+---------
+
+Un alias est un nom supplémentaire pour recevoir du courrier électronique. En
+réalité, les mails sont acheminés vers un compte qui existe déjà. Les alias
+sont définis dans le fichier '/etc/postfix/aliases'. Exemple :
+
+--8<---------- /etc/postfix/aliases ------------------------------------------
+...
+# Utilisateurs
+gaston.lagaffe  : glagaffe, glagaffe2 
+jeanne.dupont   : jdupont
+bertrand.labevue: blabevue
+...
+--8<--------------------------------------------------------------------------
+
+Utilisons ce fichier pour créer l'alias suivant :
+
+--8<---------- /etc/postfix/aliases ------------------------------------------
+...
+kikinovak: kikinovak
+webmaster: kikinovak
+--8<--------------------------------------------------------------------------
+
+À chaque modification de ce fichier, il faut reconstruire 'aliases.db', la base
+de données des alias :
+
+  # newaliases
+
+À présent, on peut envoyer un mail à webmaster@sd-25854.dedibox.fr, et il
+atterrira chez kikinovak@sd-25854.dedibox.fr.
+
+Notons que pour des raisons de sécurité, Postfix n'achemine pas de mails vers
+root. Dans ce cas, il suffit de définir un alias vers un utilisateur
+judicieusement choisi qui les recevra à la place de root. Au total, on pourra
+avoir quelque chose comme ceci :
+
+--8<---------- /etc/postfix/aliases ------------------------------------------
+root         : kikinovak
+MAILER-DAEMON: postmaster
+postmaster   : root
+bin          : root
+daemon       : root
+named        : root
+nobody       : root
+uucp         : root
+www          : root
+ftp-bugs     : root
+postfix      : root
+manager      : root
+dumper       : root
+operator     : root
+abuse        : postmaster
+decode       : root
+kikinovak    : kikinovak
+webmaster    : kikinovak
+--8<--------------------------------------------------------------------------
+
+Là encore, ne pas oublier de prendre en compte les nouveaux alias :
+
+  # newaliases
+
+
+Définir les destinataires autorisés
+-----------------------------------
+
+Dans la configuration par défaut, tous les comptes Linux peuvent recevoir
+du courrier, y compris les comptes système comme root, named, nobody, etc. Pour
+tester ce comportement, on peut créer un utilisateur 'bidon' avec 'adduser' et
+lui envoyer un mail à l'adresse 'bidon@sd-25854.dedibox.fr'. 
+
+On va donc instaurer quelques restrictions pour éviter de spammer tout ce petit
+monde. Pour ce faire, on va créer un fichier '/etc/postfix/local-recips' avec
+la liste de tous les destinataires autorisés, en suivant la syntaxe suivante :
+
+--8<---------- /etc/postfix/local-recips -------------------------------------
+fantasio   x
+glagaffe   x
+glagaffe2  x
+jdupont    x
+blabevue   x
+--8<--------------------------------------------------------------------------
+
+À partir de ce fichier, on va générer une base de données dans un format
+lisible pour Postfix :
+
+  # cd /etc/postfix
+  # postmap local-recips
+
+Nous pouvons vérifier si le fichier a été généré correctement :
+
+  # postmap -s hash:local-recips
+  blabevue  x
+  jdupont   x
+  fantasio  x
+  glagffe   x
+  glagaffe2 x
+
+  > À chaque modification de 'local-recips', il faudra réinvoquer 'postmap'
+    pour reconstruire le fichier de base de données 'local-recips.db'.
+
+Pour prendre en compte les nouvelles restrictions, éditer
+'/etc/postfix/main.cf' et ajouter le paramètre suivant :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+...
+local_recipient_maps = hash:/etc/postfix/local-recips $alias_maps
+--8<--------------------------------------------------------------------------
+
+Prendre en compte les modifications :
+
+  # /etc/rc.d/rc.postfix reload
+
+À partir de là, seuls les utilisateurs explicitement définis dans
+'local-recips' pourront recevoir du courrier.
+
+
+Faire correspondre les comptes Linux aux adresses de messagerie
+---------------------------------------------------------------
+
+Créer un fichier '/etc/postfix/canonical' comme ceci :
+
+--8<---------- /etc/postfix/canonical ----------------------------------------
+blabevue    bertrand.labevue@gaffophone.org
+fantasio    fantasio@journaldespirou.fr
+glagaffe    gaston.lagaffe@journaldespirou.fr
+glagaffe2   gaston.lagaffe@gaffophone.org
+jdupont     jeanne.dupont@journaldespirou.org
+--8<--------------------------------------------------------------------------
+
+Convertir le tableau en un format lisible pour Postfix :
+
+  # cd /etc/postfix
+  # postmap canonical
+
+Définir le paramètre correspondant dans '/etc/postfix/main.cf' :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+canonical_maps = hash:/etc/postfix/canonical
+--8<--------------------------------------------------------------------------
+
+
+Domaines virtuels avec des utilisateurs distincts
+-------------------------------------------------
+
+Les domaines virtuels ("Hosted Domains") sont tous les domaines qui ne
+correspondent pas au nom d'hôte du serveur.
+
+Créer un fichier '/etc/postfix/virtual' avec un tableau qui fait correspondre
+chaque adresse mail d'un domaine virtuel à un compte Linux, comme ceci :
+
+--8<---------- /etc/postfix/virtual ------------------------------------------
+bertrand.labevue@gaffophone.org    blabevue
+fantasio@journaldespirou.fr        fantasio
+gaston.lagaffe@journaldespirou.fr  glagaffe
+gaston.lagaffe@gaffophone.org      glagaffe2
+jeanne.dupont@journaldespirou.org  jdupont
+--8<--------------------------------------------------------------------------
+
+Là aussi, rendre ce fichier lisible pour Postfix :
+
+  # postmap virtual
+
+Adapter '/etc/postfix/main.cf' pour prendre en compte les domaines virtuels :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+...
+mydestination  = sd-25854.dedibox.fr, localhost.localdomain, localhost
+virtual_alias_domains = journaldespirou.fr,
+                        gaffophone.org
+virtual_alias_maps    = hash:/etc/postfix/virtual                        
+...
+--8<--------------------------------------------------------------------------
+
+Il ne reste qu'à recharger Postfix pour prendre en compte la nouvelle
+configuration.
+
+
+Le serveur IMAP Dovecot
+-----------------------
+
+Dovecot est un serveur IMAP et POP3 pour les systèmes d'exploitation UNIX et
+dérivés. Nous le configurons ici pour le seul protocole IMAP.
+
+
+Prérequis
+---------
+
+Dans le pare-feu, il faudra ouvrir le port 993 (IMAPS = IMAP over SSL) en TCP.
+
+
+Installation de Dovecot
+-----------------------
+
+Dovecot ne fait pas partie d'une installation standard de Slackware.  On va
+donc le compiler à partir des sources, en utilisant le script de
+SlackBuilds.org. 
+
+Créer quelques utilisateurs et groupes système pour Dovecot :
+
+  # groupadd -g 202 dovecot
+  # useradd -d /dev/null -s /bin/false -u 202 -g dovecot dovecot
+  # useradd -d /dev/null -s /bin/false -u 203 -g dovecot dovenull
+
+Lancer la compilation de Dovecot (6m50) et installer le paquet résultant.
+
+
+Générer le certificat
+---------------------
+
+Éditer '/usr/doc/dovecot-2.x.y/dovecot-openssl.cnf' en fournissant des
+données qui vous correspondent, comme ceci :
+
+--8<---------- /usr/share/dovecot-2.x.y/dovecot-openssl.cnf ------------------
+[ req ]
+default_bits = 1024
+encrypt_key = yes
+distinguished_name = req_dn
+x509_extensions = cert_type
+prompt = no
+
+[ req_dn ]
+# country (2 letter code)
+C=FR
+
+# State or Province Name (full name)
+ST=Gard
+
+# Locality Name (eg. city)
+L=Montpezat
+
+# Organization (eg. company)
+O=Microlinux
+
+# Organizational Unit Name (eg. section)
+OU=Serveur IMAP 
+
+# Common Name (*.example.com is also possible)
+CN=sd-25854.dedibox.fr
+
+# E-mail contact
+emailAddress=info@microlinux.fr
+
+[ cert_type ]
+nsCertType = server
+--8<--------------------------------------------------------------------------
+
+Dans le même répertoire, éditer 'mkcert.sh' et passer la durée du certificat de
+un à dix ans, en ajoutant tout simplement un zéro à l'option '-days' :
+
+--8<---------- /usr/share/dovecot-2.x.y/mkcert.sh ----------------------------
+...
+$OPENSSL req -new -x509 -nodes -config $OPENSSLCONFIG -out $CERTFILE \ 
+  -keyout $KEYFILE -days 3650 || exit 2
+...
+--8<--------------------------------------------------------------------------
+
+Générer le certificat :
+
+  # sh mkcert.sh
+  Generating a 1024 bit RSA private key
+  ....++++++
+  ......++++++
+  writing new private key to '/etc/ssl/private/dovecot.pem'
+  -----
+  ...
+
+On doit se retrouver avec deux nouveaux fichiers 'dovecot.pem' dans
+'/etc/ssl/private' et '/etc/ssl/certs'. Vérifier :
+
+  # find /etc/ssl -name 'dovecot.pem'
+  /etc/ssl/private/dovecot.pem
+  /etc/ssl/certs/dovecot.pem
+
+
+Configuration initiale de Dovecot
+---------------------------------
+
+Éditer '/etc/dovecot/dovecot.conf' :
+
+--8<---------- /etc/dovecot/dovecot.conf -------------------------------------
+# /etc/dovecot/dovecot.conf
+protocols = imap 
+listen = *
+ssl_cert = </etc/ssl/certs/dovecot.pem
+ssl_key = </etc/ssl/private/dovecot.pem
+mail_location = maildir:~/Maildir
+auth_mechanisms = plain
+passdb {
+  driver = shadow
+  args   =
+}
+passdb {
+  driver = passwd
+  args   =
+}
+userdb {
+  driver = passwd
+  args   =
+}
+--8<--------------------------------------------------------------------------
+
+Démarrer Dovecot :
+
+  # /etc/rc.d/rc.dovecot start
+
+Se connecter en local :
+
+  $ mutt -f imaps://kikinovak@localhost
+
+Se connecter à distance :
+
+  $ mutt -f imaps://kikinovak@sd-25854.dedibox.fr
+
+Avec Thunderbird :
+
+  Adresse électronique : kikinovak@sd-25854.dedibox.fr
+  Nom du serveur       : sd-25854.dedibox.fr
+  Port                 : 993
+  Nom d'utilisateur    : kikinovak
+  Sécurité connexion   : SSL/TLS
+  Authentification     : Mot de passe normal
+
+
+Ajouter l'authentification SMTP à Postfix
+-----------------------------------------
+
+Postfix supporte certes le protocole SASL (Simple Authentication and Security
+Layer), mais ne peut pas gérer l'authentification par lui-même. En revanche,
+Dovecot peut le faire pour lui. 
+
+Dans un premier temps, on va ajouter la stance suivante à
+'/etc/dovecot/dovecot.conf', qui concerne l'authentification par le biais du
+fichier socket '/var/spool/postfix/private/auth' :
+
+--8<---------- /etc/dovecot/dovecot.conf -------------------------------------
+...
+service auth {
+  unix_listener auth-userdb {
+    mode = 0600
+    user = postfix
+    group = postfix
+  }
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+  }
+  user = $default_internal_user
+}
+--8<--------------------------------------------------------------------------
+
+Ensuite, il faut ajouter le mécanisme d'authentification 'login' comme ceci :
+
+--8<---------- /etc/dovecot/dovecot.conf -------------------------------------
+...
+auth_mechanisms = plain login
+...
+--8<--------------------------------------------------------------------------
+
+  > Ce mécanisme supplémentaire est nécessaire pour que l'authentification
+    fonctionne avec Outlook Express.
+
+Au total, notre fichier '/etc/dovecot/dovecot.conf' ressemble donc à ceci :
+
+--8<---------- /etc/dovecot/dovecot.conf -------------------------------------
+protocols = imap 
+listen = *
+ssl_cert = </etc/ssl/certs/dovecot.pem
+ssl_key = </etc/ssl/private/dovecot.pem
+mail_location = maildir:~/Maildir
+auth_mechanisms = plain login
+passdb {
+  driver = shadow
+  args   =
+}
+passdb {
+  driver = passwd
+  args   =
+}
+userdb {
+  driver = passwd
+  args   =
+}
+service auth {
+  unix_listener auth-userdb {
+    mode = 0600
+    user = postfix
+    group = postfix
+  }
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+  }
+  user = $default_internal_user
+}
+--8<--------------------------------------------------------------------------
+
+Ensuite, il faut ajouter quelques lignes à la fin du fichier de configuration
+de Postfix :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+smtpd_tls_cert_file             = /etc/ssl/certs/dovecot.pem
+smtpd_tls_key_file              = /etc/ssl/private/dovecot.pem
+smtpd_tls_security_level        = may
+smtpd_sasl_auth_enable          = yes
+broken_sasl_auth_clients        = yes
+smtpd_sasl_tls_security_options = $smtp_sasl_security_options
+smtpd_sasl_type                 = dovecot
+smtpd_sasl_path                 = /var/spool/postfix/private/auth
+smtpd_recipient_restrictions    = permit_mynetworks,
+                                  permit_sasl_authenticated,
+                                  reject_unauth_destination
+--8<--------------------------------------------------------------------------
+
+Et pour finir, prendre en compte la nouvelle configuration :
+
+  # /etc/rc.d/rc.dovecot restart
+  # /etc/rc.d/rc.postfix reload
+
+
+Exemple de configuration SMTP de Thunderbird :
+
+  Description                : SMTP Radio Novak (par exemple)
+  Nom du serveur             : mail.radionovak.com
+  Port                       : 25
+  Sécurité de la connexion   : STARTTLS
+  Méthode d'authentification : Mot de passe normal
+  Nom d'utilisateur          : kikinovak
+
+
+Supprimer Dovecot
+-----------------
+
+Arrêter le service :
+
+  # /etc/rc.d/rc.dovecot stop
+
+Supprimer le paquet :
+
+  # removepkg dovecot
+
+Supprimer les fichiers de configuration :
+
+  # rm -rf /etc/dovecot/
+
+Supprimer les certificats :
+
+  # find /etc/ssl/ -name '*dovecot*'
+  /etc/ssl/private/dovecot.pem
+  /etc/ssl/certs/dovecot.pem
+  # find /etc/ssl/ -name '*dovecot*' | xargs rm -f
+
+Supprimer les utilisateurs et les groupes système correspondants :
+
+  # userdel dovecot
+  # userdel dovenull
+  # groupdel dovecot
+
+
+Supprimer Postfix
+-----------------
+
+Arrêter le service :
+
+  # /etc/rc.d/rc.postfix stop
+
+Supprimer le paquet :
+
+  # removepkg postfix 
+
+Supprimer les fichiers de configuration :
+
+  # rm -rf /etc/postfix/ 
+
+Supprimer les utilisateurs et les groupes système correspondants :
+
+  # userdel postfix --> supprime également le groupe 'postfix'
+  # groupdel postdrop
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

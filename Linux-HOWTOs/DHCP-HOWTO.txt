@@ -1,0 +1,209 @@
+==========
+DHCP HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==========
+
+Dernière révision : 8 janvier 2013
+
+Ce HOWTO décrit la mise en place d'un serveur DHCP sur un serveur de réseau
+local Slackware.
+
+  · Prérequis
+  · Configuration
+  · Démarrage et utilisation
+
+
+Prérequis
+---------
+
+Pare-feu : ouvrir le port 67 en UDP.
+
+
+Configuration
+-------------
+
+Configurer le serveur DHCP comme ceci, par exemple :
+
+--8<---------- /etc/dhcpd.conf -----------------------------------------------
+# /etc/dhcpd.conf
+authoritative;
+default-lease-time 86400;
+max-lease-time 86400;
+option broadcast-address 192.168.2.255;
+option subnet-mask 255.255.255.0;
+option routers 192.168.2.1;
+option domain-name-servers 192.168.2.1;
+option domain-name "microlinux.montpezat";
+option domain-search "microlinux.montpezat";
+
+subnet 192.168.2.0 netmask 255.255.255.0 {
+  range 192.168.2.100 192.168.2.200;
+}
+
+host alphamule {
+  hardware ethernet 00:1D:92:B2:F3:9E;
+  fixed-address 192.168.2.2;
+  option host-name "alphamule";
+}
+
+host bernadette {
+  hardware ethernet 00:0d:61:a6:e7:1e;
+  fixed-address 192.168.2.3;
+  option host-name "bernadette";
+}
+
+host raymonde {
+  hardware ethernet 00:20:ed:b8:e8:ec;
+  fixed-address 192.168.2.4;
+  option host-name "raymonde";
+}
+--8<--------------------------------------------------------------------------
+
+  > L'option 'authoritative' indique qu'il s'agit du serveur DHCP "officiel" du
+    réseau local.
+
+  > Les options 'default-lease-time' et 'max-lease-time' définissent la période
+    de validité des adresses IP. Dans l'exemple, c'est un jour, c'est-à-dire
+    86.400 secondes. Passé ce délai, les clients devront envoyer une nouvelle
+    requête pour leurs paramètres, ce qui se fait automatiquement.
+
+  > Les options 'broadcast-address' et 'subnet-mask' décrivent le segment de
+    réseau auquel le serveur DHCP fournit des données.
+
+  > L'option 'routers' indique l'adresse de la machine devant servir de
+    passerelle pour le réseau local.
+
+  > L'option 'domain-name-servers' fournit une liste de serveurs DNS. Il peut y
+    en avoir trois au maximum, séparés par des virgules. Ces adresses seront
+    transmises aux postes clients.
+
+  > L'option 'domain-name' fournit le nom de domaine qui sera écrit dans le
+    fichier '/etc/resolv.conf' du client, à la ligne 'domain'. Cela permet
+    d'utiliser les formes brèves des noms d'hôtes.
+
+  > L'option 'domain-search' fournit le nom de domaine qui sera écrit dans le
+    fichier '/etc/resolv.conf' du client, à la ligne 'search'. 
+
+Si l'on utilise les DNS du FAI, la ligne correspondante ressemblera à ceci :
+
+--8<---------- /etc/dhcpd.conf -----------------------------------------------
+...
+option domain-name-servers 195.5.209.150, 194.79.128.150;
+...
+--8<--------------------------------------------------------------------------
+
+Si l'on souhaite attribuer une adresse IP et un nom d'hôte fixe à un portable
+que l'on connecte aussi bien par le wifi que par une connexion filaire, on peut
+utiliser l'astuce suivante :
+
+--8<---------- /etc/dhcpd.conf -----------------------------------------------
+...
+host buzz-wired { 
+  hardware ethernet 00:0B:97:96:3C:E1; 
+  fixed-address 192.168.2.6; 
+  option host-name "buzz"; 
+}
+
+host buzz-wireless { 
+  hardware ethernet 00:13:CE:EE:20:3A; 
+  fixed-address 192.168.2.6; 
+  option host-name "buzz"; 
+}
+...
+--8<--------------------------------------------------------------------------
+
+
+Démarrage et utilisation
+------------------------
+
+Créer un script de démarrage :
+
+--8<---------- /etc/rc.d/rc.dhcpd --------------------------------------------
+#!/bin/sh
+
+# Put the command line options here that you want to pass to dhcpd:
+DHCPD_OPTIONS="-q eth1"
+
+[ -x /usr/sbin/dhcpd ] || exit 0
+
+[ -f /etc/dhcpd.conf ] || exit 0
+
+start() {
+      # Start daemons.
+      echo -n "Starting DHCP server."
+      /usr/sbin/dhcpd $DHCPD_OPTIONS
+      echo
+}
+stop() {
+      # Stop daemons.
+      echo -n "Shutting down DHCP server."
+      killall -TERM dhcpd
+      echo
+}
+status() {
+  PIDS=$(pidof dhcpd)
+  if [ "$PIDS" == "" ]; then
+    echo "DHCP server is not running."
+  else
+    echo "DHCP server is running at pid(s) ${PIDS}."
+  fi
+}
+restart() {
+      stop
+      start
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        start
+        ;;
+  status)
+        status
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|status|restart}"
+        ;;
+esac
+exit 0
+--8<--------------------------------------------------------------------------
+
+  > Au début du script, il faudra songer à spécifier l'interface réseau que
+    l'on souhaite utiliser : eth0, eth1, etc.
+
+Rendre le script exécutable :
+
+  # chmod 0755 /etc/rc.d/rc.dhcpd
+
+Définir le lancement automatique du serveur au démarrage :
+
+--8<---------- /etc/rc.d/rc.local --------------------------------------------
+...
+# Start DHCP server
+if [ -x /etc/rc.d/rc.dhcpd ]; then
+  /etc/rc.d/rc.dhcpd start
+fi
+--8<--------------------------------------------------------------------------
+
+On peut aussi définir un arrêt plus propre, tant qu'à faire :
+
+--8<---------- /etc/rc.d/rc.local_shutdown -----------------------------------
+# /etc/rc.d/rc.local_shutdown
+#
+# Stop DHCP server
+if [ -x /etc/rc.d/rc.dhcpd ]; then
+  /etc/rc.d/rc.dhcpd stop
+fi
+--8<--------------------------------------------------------------------------
+
+  # chmod 0755 /etc/rc.d/rc.local_shutdown
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

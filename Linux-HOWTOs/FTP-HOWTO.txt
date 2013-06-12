@@ -1,0 +1,118 @@
+=========
+FTP HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=========
+
+Dernière révision : 12 janvier 2013
+
+Ce HOWTO décrit l'installation et la configuration d'un serveur FTP sous
+Slackware.
+
+  · Prérequis
+  · Création des utilisateurs
+  · Configuration
+  · Mise en service
+
+
+Prérequis
+---------
+
+Pare-feu : ouvrir le port 21 en TCP et charger le module 'ip_conntrack_ftp'.
+
+Si l'on utilise les encapsuleurs TCP, il faut éditer '/etc/hosts.allow' comme
+ceci :
+
+--8<---------- /etc/hosts.allow ----------------------------------------------
+vsftpd  : 127.0.0.1                 : ALLOW
+vsftpd  : 192.168.2.0/255.255.255.0 : ALLOW
+vsftpd  : *.microlinux.montpezat    : ALLOW
+--8<--------------------------------------------------------------------------
+
+
+Création des utilisateurs
+-------------------------
+
+Les utilisateurs FTP ne sont pas censés se connecter au système. Sur un serveur
+local d'images Ghost, on pourra par exemple créer l'utilisateur 'install' comme
+ceci :
+
+  # mkdir -pv -m 0700 /srv/ftp/install
+  # useradd -c "Ghost4Linux User" -d /srv/ftp/install -g users -s /bin/false \
+    install
+  # chown -R install:users /srv/ftp/install
+  # passwd install
+
+Un autre exemple pour un serveur dédié, où l'utilisteur 'radionovak' pourra
+accéder aux pages Web de www.radionovak.com hébergées en-dessous de
+l'arborescence '/var/www/radionovak' :
+
+  # useradd -c "Radio Novak" -d /var/www/radionovak -g users -s /bin/false \
+    radionovak
+  # chown -R radionovak:users /var/www/radionovak
+  # passwd radionovak 
+
+
+Configuration
+-------------
+
+Éditer '/etc/vsftpd.conf' en modifiant ou en ajoutant quelques directives :
+
+--8<---------- /etc/vsftpd.conf ----------------------------------------------
+anonymous_enable=NO
+...
+local_enable=YES
+...
+write_enable=YES
+...
+chroot_local_user=YES
+userlist_enable=YES
+userlist_deny=NO
+check_shell=NO
+userlist_file=/etc/vsftpd.user_list
+allow_writeable_chroot=YES
+--8<--------------------------------------------------------------------------
+
+Créer le fichier '/etc/vsftpd.user_list', censé contenir la liste des
+utilisateurs autorisés à se connecter à VsFTPd :
+
+--8<---------- /etc/vsftpd.user_list -----------------------------------------
+install
+--8<--------------------------------------------------------------------------
+
+
+Mise en service
+---------------
+
+Décommenter la ligne suivante dans '/etc/inetd.conf' pour que VsFTPd soit lancé
+par le super-serveur Inetd : 
+
+--8<---------- /etc/inetd.conf -----------------------------------------------
+# Very Secure File Transfer Protocol (FTP) server.
+ftp  stream  tcp  nowait  root  /usr/sbin/tcpd  vsftpd
+--8<--------------------------------------------------------------------------
+
+Activer et lancer le démon correspondant :
+
+  # chmod 0755 /etc/rc.d/rc.inetd
+  # /etc/rc.d/rc.inetd start
+
+Tester le serveur :
+
+  # echo Ceci est un test FTP > /srv/ftp/install/test
+  # chown install:users /srv/ftp/install/test
+  # lftp localhost
+  > user install
+  Mot de passe : 
+  > ls
+  -rw-r--r--    1 1002     100            21 Jul 19 08:14 test
+  > cat test 
+  Ceci est un test FTP
+  21 octets transférés
+  > bye
+
+Alternativement :
+
+  # ncftp -u install localhost
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

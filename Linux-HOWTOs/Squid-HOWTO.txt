@@ -1,0 +1,268 @@
+===========
+Squid HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+===========
+
+Dernière révision : 8 janvier 2013
+
+Ce HOWTO décrit la mise en place d'un proxy Squid sur un serveur Slackware.
+
+  · Généralités et prérequis
+  · Installation
+  · Configuration
+  · Utilisation
+  · Configuration manuelle des navigateurs
+  · Vérifier si Squid fonctionne correctement
+  · Configurer Squid comme proxy transparent
+
+
+Généralités et prérequis
+------------------------
+
+Squid est un serveur mandataire ("proxy" en anglais). Il est utilisé dans les
+réseaux locaux pour des fonctions de filtrage d'URL ou en tant que cache. Les
+pages Internet sont stockées localement, ce qui évite d'aller les recharger
+plusieurs fois et permet d'économiser de la bande passante Internet.
+
+Pare-feu : ouvrir le port 3128 en TCP et en UDP.
+
+
+Installation
+------------
+
+Construire et installer le paquet 'squid' à partir du SlackBuild de
+SlackBuilds.org.
+
+
+Configuration
+-------------
+
+Squid se configure par le biais du fichier '/etc/squid/squid.conf'. Le fichier
+installé par défaut est amplement documenté, mais il fait 6000 lignes de long !
+On va donc commencer par aérer tout cela :
+
+  # cd /etc/squid
+  # mv squid.conf squid.conf.orig
+  # grep -v '^#' squid.conf.orig | cat -s > squid.conf
+
+Éditer '/etc/squid/squid.conf' ou bien adapter la configuration suivante :
+
+--8<---------- /etc/squid/squid.conf -----------------------------------------
+# /etc/squid/squid.conf
+
+# Nom d'hôte du serveur Squid
+visible_hostname nestor.microlinux.montpezat
+
+# Définitions
+acl manager proto cache_object
+acl localhost src 127.0.0.1/32 ::1
+acl localnet src 192.168.2.0/24
+acl SSL_ports port 443
+acl Safe_ports port 80		# http
+acl Safe_ports port 21		# ftp
+acl Safe_ports port 443		# https
+acl Safe_ports port 70		# gopher
+acl Safe_ports port 210		# wais
+acl Safe_ports port 1025-65535	# unregistered ports
+acl Safe_ports port 280		# http-mgmt
+acl Safe_ports port 488		# gss-http
+acl Safe_ports port 591		# filemaker
+acl Safe_ports port 777		# multiling http
+acl CONNECT method CONNECT
+
+# Règles d'accès
+http_access allow manager localhost
+http_access deny manager
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localnet
+http_access allow localhost
+http_access deny all
+icp_access allow localnet
+icp_access deny all
+htcp_access allow localnet
+htcp_access deny all
+
+# Port du proxy
+http_port 3128
+
+# Taille du cache dans la RAM
+cache_mem 256 MB
+
+# Emplacement et taille du cache sur le disque
+# cache_dir ufs /var/cache/squid/ 5000 16 256
+
+# Désactiver les logs
+# cache_store_log /var/log/squid/store.log
+# logfile_rotate 0
+# access_log /var/log/squid/access.log squid
+# cache_log /var/log/squid/cache.log
+access_log none
+
+# Durée de vie de fichiers sans date d'expiration
+refresh_pattern ^ftp:		1440	20%	10080
+refresh_pattern ^gopher:	1440	0%	1440
+refresh_pattern -i (/cgi-bin/|\?) 0	0%	0
+refresh_pattern .		0	20%	4320
+
+# Misc
+pid_filename /var/run/squid/squid.pid
+coredump_dir /var/log/squid/cache
+cache_effective_user nobody
+cache_effective_group nobody
+--8<--------------------------------------------------------------------------
+
+  > Squid peut être utilisé par toutes les machines du réseau local. La
+    directive 'acl localnet' définit une variable 'localnet' qui indique
+    l'étendue du réseau local. 
+
+  > Cette directive fonctionne de pair avec 'http_access localnet', qui
+    autorise toutes les machines du réseau local à utiliser le cache. Le nom
+    'localnet' est une convention, et on est libre d'en utiliser un autre.
+
+  > Si l'on utilise Squid principalement pour le filtrage - et non la
+    surveillance du réseau - on peut très bien désactiver les logs. 
+
+  > Dans l'exemple ci-dessus, le cache est uniquement écrit dans la RAM du
+    serveur. La directive 'cache_mem' permet de définir la taille du cache. Si
+    l'on ne souhaite pas utiliser le disque dur pour le cache, il faut
+    s'assurer de n'utiliser aucune directive 'cache_dir'.
+
+
+Utilisation
+-----------
+
+  # chmod 0755 /etc/rc.d/rc.squid
+  # /etc/rc.d/rc.squid start|stop|restart|reload
+
+Pour que Squid se lance automatiquement au démarrage de la machine, il faudra
+ajouter une stance dans '/etc/rc.d/rc.local' :
+
+--8<---------- /etc/rc.d/rc.local --------------------------------------------
+...
+# Start Squid server
+if [ -x /etc/rc.d/rc.squid ]; then
+	/etc/rc.d/rc.squid start
+fi
+...
+--8<--------------------------------------------------------------------------
+
+Tant qu'à faire, on va l'arrêter proprement :
+
+--8<---------- /etc/rc.d/rc.local_shutdown  ----------------------------------
+...
+# Stop Squid server
+if [ -x /etc/rc.d/rc.squid ]; then
+	/etc/rc.d/rc.squid stop
+fi
+...
+--8<--------------------------------------------------------------------------
+
+
+Configuration manuelle des navigateurs
+--------------------------------------
+
+Lorsque Squid n'est pas utilisé comme proxy transparent, il faudra procéder à
+une configuration individuelle des navigateurs Web.
+
+  1. Firefox :
+
+Édition > Préférences > Avancé > Réseau > Paramètres :
+
+  [X] Configuration manuelle du proxy
+  Proxy HTTP        : [nom d'hôte ou adresse IP du serveur]
+  Port              : 3128
+  [X] Utiliser ce serveur proxy pour tous les protocoles
+  Pas de proxy pour : localhost, 127.0.0.1
+
+  2. Internet Explorer :
+
+Outils > Options Internet > Connexions > Paramètres réseau :
+
+  [X] Utiliser un serveur proxy pour votre réseau local
+  Adresse           : [nom d'hôte ou adresse IP du serveur]
+  Port              : 3128
+  [X] Ne pas utiliser de serveur proxy pour les adresses locales
+
+
+Vérifier si Squid fonctionne correctement
+-----------------------------------------
+
+Pour voir si les postes clients utilisent effectivement le proxy, on peut
+activer provisoirement les logs :
+
+--8<---------- /etc/squid/squid.conf -----------------------------------------
+...
+access_log /var/log/squid/access.log squid
+...
+--8<--------------------------------------------------------------------------
+
+Relancer Squid :
+
+  # /etc/rc.d/rc.squid restart
+
+Visiter des sites Web au hasard sur un poste client et afficher le résultat en
+direct :
+
+  # tail -f /var/log/squid/access.log
+
+
+Configurer Squid comme proxy transparent
+----------------------------------------
+
+Jusqu'ici, l'utilisation du proxy cache s'effectue de manière volontaire,
+c'est-à-dire que Squid est utilisé si les postes clients ont configuré leurs
+navigateurs Web en conséquence. Si cette configuration n'est pas effectuée, les
+utilisateurs vont simplement contourner le cache. 
+
+Pour éviter cela, on va tout simplement rediriger toutes les requêtes HTTP
+(port 80) vers le port 3128 pour obtenir un proxy "transparent". Ce qui
+signifie que le cache est utilisé automatiquement, sans la moindre
+configuration de la part de l'utilisateur. Évidemment, cela suppose que Squid
+tourne sur la machine qui fait office de passerelle dans le réseau local. 
+
+Dans le fichier '/etc/squid/squid.conf', il faudra modifier une seule ligne :
+
+--8<---------- /etc/squid/squid.conf -----------------------------------------
+...
+# Port du proxy
+http_port 3128 transparent
+...
+--8<--------------------------------------------------------------------------
+
+On va partir du principe que le relais des paquets est déjà activé. Il ne reste
+plus qu'à rediriger les paquets IP:
+
+--8<---------- /etc/rc.d/rc.firewall -----------------------------------------
+...
+# Autoriser le serveur Squid pour le réseau local
+$IPT -A INPUT -p tcp -i $IFACE_LAN --dport 3128 -j ACCEPT
+$IPT -A INPUT -p udp -i $IFACE_LAN --dport 3128 -j ACCEPT
+
+# Rediriger les requêtes HTTP vers le proxy Squid
+$IPT -t nat -A PREROUTING -i $IFACE_LAN -p tcp \
+	--dport 80 -j REDIRECT --to-port 3128
+...
+--8<--------------------------------------------------------------------------
+
+Éventuellement, il faudra faire une exception pour les requêtes HTTP à
+destination du serveur lui-même. Au total, on aura donc :
+
+--8<---------- /etc/rc.d/rc.firewall -----------------------------------------
+...
+# Autoriser le serveur Squid pour le réseau local
+$IPT -A INPUT -p tcp -i $IFACE_LAN --dport 3128 -j ACCEPT
+$IPT -A INPUT -p udp -i $IFACE_LAN --dport 3128 -j ACCEPT
+
+# Rediriger les requêtes HTTP vers le proxy Squid, sauf celles pour le
+# serveur lui-même :
+$IPT -t nat -A PREROUTING -i $IFACE_LAN -p tcp \
+	! -d 192.168.2.1 --dport 80 -j REDIRECT --to-port 3128
+...
+--8<--------------------------------------------------------------------------
+
+Là aussi, afficher les logs pour voir si le proxy transparent est effectivement
+utilisé par les postes clients.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

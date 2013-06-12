@@ -1,0 +1,228 @@
+==========
+CUPS HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==========
+
+Dernière révision : 27 février 2013
+
+Ce HOWTO décrit la gestion de l'impression sous Slackware Linux.
+
+  · Configuration du serveur
+  · Imprimante Brother HL-2030
+  · Imprimante HP PSC 2350
+  · Configuration des postes clients Linux
+  · Serveur d'impression pour réseau hétérogène
+  · Configurer les imprimantes sur les clients Windows
+
+
+Généralités
+-----------
+
+Sous Linux, c'est le système CUPS ("Common Unix Printing System") qui gère les
+travaux d'impression. En 2007, CUPS a été acheté par Apple, qui supporte
+désormais officiellement son développement. Michael Sweet, le développeur
+principal de CUPS, est salarié chez Apple et continue à publier le code source
+de CUPS sous licence libre GPL.
+
+
+Prérequis
+---------
+
+CUPS utilise le port 631 en TCP et en UDP. Il faut donc ouvrir ce port dans le
+pare-feu pour ouvrir l'accès à CUPS aux autres machines du réseau local.
+
+
+Configuration du serveur
+------------------------
+
+Le fichier de configuration principal de CUPS, c'est '/etc/cups/cupsd.conf'.
+Nous allons éditer ce fichier pour partager une imprimante locale avec toutes
+les machines du réseau local :
+
+--8<---------- /etc/cups/cupsd.conf ------------------------------------------
+# /etc/cups/cupsd.conf
+
+LogLevel info
+
+Port 631
+
+BrowseAddress @LOCAL
+BrowseAllow 192.168.2.*
+
+<Location />
+  Order Deny,Allow
+  Deny From All
+  Allow From 127.0.0.1
+  Allow From 192.168.2.*
+</Location>
+
+<Location /admin>
+  AuthType Basic
+  AuthClass System
+  Order Deny,Allow
+  Deny From All
+  Allow From 127.0.0.1
+  Allow From 192.168.2.*
+</Location>
+--8<--------------------------------------------------------------------------
+
+  > 'Port 631' signifie que CUPS communique via le port réseau 631. 
+
+  > 'BrowseAddress @LOCAL' provoque l'envoi des informations de CUPS à toutes
+    les interfaces réseau locales (broadcast), mais pas aux interfaces côté
+    Internet.
+
+  > 'BrowseAllow 192.168.2.*' définit les machines qui ont le droit de recevoir
+    les informations de CUPS. Ici, ce sont toutes les machines du réseau local
+    qui ont le droit d'utiliser les imprimantes proposées par CUPS.
+
+
+Gestion et utilisation
+----------------------
+
+Activer et démarrer le serveur :
+
+  # chmod +x /etc/rc.d/rc.cups
+  # /etc/rc.d/rc.cups start
+
+
+Imprimante Brother HL-2030
+--------------------------
+
+Télécharger les deux drivers au format RPM sur le site de Brother.
+
+Convertir les paquets avec 'rpm2tgz' et les installer avec 'installpkg'.
+
+Si c'est un serveur Slackware64, il faut installer le jeu de paquets multilib
+essentiels. Vérifier :
+
+  # cd /usr/local/Brother/cupswrapper
+  # ldd brcupsconfig3
+    linux-gate.so.1 =>  (0xffffe000)                                                                                  
+    libc.so.6 => /lib/libc.so.6 (0xf75dc000)                                                                          
+    /lib/ld-linux.so.2 (0xf7759000) 
+
+Le script de configuration cherche le démon CUPS au mauvais endroit. Il faut
+donc faire ceci :
+
+ # ln -s /etc/rc.d/rc.cups /etc/init.d/cups
+
+Lancer la configuration :
+
+  # cd /usr/local/Brother/cupswrapper
+  # ./cupswrapperHL2030-2.0.1
+
+Vérifier si l'imprimante apparaît bien :
+
+  # lpstat -t
+
+Il ne reste plus qu'à définir l'imprimante par défaut dans l'interface de CUPS.
+
+
+Imprimante HP PSC 2350
+----------------------
+
+Dans l'interface de CUPS, sélectionner l'imprimante avec le driver 'HPLIP'. 
+
+
+Configuration des postes clients Linux
+--------------------------------------
+
+Si le serveur CUPS est configuré correctement, il suffit d'activer CUPS et de
+le lancer :
+
+  # chmod +x /etc/rc.d/rc.cups
+  # /etc/rc.d/rc.cups start
+  # lpstat -t
+
+
+Serveur d'impression pour réseau hétérogène
+-------------------------------------------
+
+Si l'on dispose déjà d'un serveur Samba fonctionnel, il suffit d'ajouter la
+stance suivante à '/etc/samba'smb.conf' :
+
+--8<---------- /etc/samba/smb.conf -------------------------------------------
+...
+[printers]
+comment = All Printers
+browseable = no
+path = /var/spool/samba
+public = yes
+read only = yes
+printable = yes
+--8<--------------------------------------------------------------------------
+
+Dans le cas contraire, il faudra installer le minimum syndical. Le fichier
+'smb.conf' ressemblera alors à ceci :
+
+--8<---------- /etc/samba/smb.conf -------------------------------------------
+[global]
+workgroup = WORKGROUP
+netbios name = %h
+domain master = no                    --> éventuellement ajouter cette option
+server string = Serveur d'impression %h
+dns proxy = yes
+log file = /var/log/samba/log.%m
+max log size = 1000
+syslog = 0
+bind interfaces only = yes
+interfaces = 192.168.2.0/24 localhost
+hosts allow = 192.168.2. 127.
+security = user
+passdb backend = tdbsam
+unix password sync = no
+invalid users = root
+encrypt passwords = yes
+guest account = smbguest
+map to guest = bad user
+force group = users
+create mode = 0660
+directory mode = 0770
+
+[printers]
+comment = Imprimantes
+browseable = no
+path = /var/spool/samba
+public = yes
+read only = yes
+printable = yes
+--8<--------------------------------------------------------------------------
+
+Il faudra également créer un utilisateur public 'smbguest' pour Samba :
+
+  # useradd -c "Utilisateur Public Samba" -g users -s /bin/false smbguest
+  # passwd -l smbguest
+  # smbpasswd -a smbguest -d
+  
+Activer et démarrer Samba :
+
+  # chmod +x /etc/rc.d/rc.samba
+  # /etc/rc.d/rc.samba start
+
+
+Configurer les imprimantes sur les clients Windows
+--------------------------------------------------
+
+Certaines imprimantes peuvent se montrer récalcitrantes à la configuration en
+réseau. Dans ce cas, il faut :
+
+  1. Brancher l'imprimante directement sur le poste client avec un cable USB.
+
+  2. Configurer l'imprimante comme n'importe quelle imprimante locale.
+
+  3. Débrancher l'imprimante et la rebrancher sur le serveur Linux.
+
+  4. Configurer une imprimante réseau dans le groupe de travail WORKGROUP.
+
+  5. Dans la sélection des modèles, choisir un modèle qui ressemble à peu près,
+    par exemple 'HP PSC 950' pour une HP PSC 2350.
+
+  6. Une fois que l'imprimante est configurée, sélectionner le pilote approprié,
+    c'est-à-dire celui qu'on vient de définir localement, dans le menu 
+    déroulant.
+
+  7. Il ne reste plus qu'à supprimer l'imprimante locale.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

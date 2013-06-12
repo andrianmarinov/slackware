@@ -1,0 +1,683 @@
+=========
+SQL HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=========
+
+Dernière révision : 21 janvier 2013
+
+Ce HOWTO contient un atelier pratique pour apprendre le SQL.
+
+  · Apprendre le SQL par la pratique avec SQLCourse
+  · Rapatrier les données de SQLCourse
+
+  · La commande SELECT 
+  · La commande CREATE 
+  · La commande INSERT
+  · La commande UPDATE
+  · La commande DELETE
+  · La commande DROP
+
+  · La commande SELECT revisitée
+  
+
+Apprendre le SQL par la pratique avec SQLCourse
+-----------------------------------------------
+
+Le site SQLCourse propose un excellent tutorial pour se familiariser avec le
+SQL ("Structured Query Language"). Le site propose d'exécuter les requêtes sur
+le serveur. Au lieu de cela, nous allons rapatrier les données sur notre
+installation locale de MySQL. 
+
+  * http://www.sqlcourse.com
+
+
+Rapatrier les données de SQLCourse
+----------------------------------
+
+Créer un fichier vide '~/sql/empinfo.txt'. Ouvrir ce fichier et invoquer les
+commandes suivantes dans Vim:
+
+  :set tabstop=12
+  :set noexpandtab
+
+  > La première directive augmente les tabulations et permet d'avoir un tableau
+    plus lisible.
+
+  > La deuxième directive assure que les tabulations qui servent de séparateurs
+    entre les éléments du tableau ne soient pas convertis en espaces par Vim.
+
+Sur le site de SQLCourse, sélectionner les données de la table 'empinfo', sans
+les en-têtes de table. Il suffit de mettre les données en surbrillance, sans
+effectuer un quelconque 'Copier'.
+
+Ensuite, dans 'empinfo.txt' ouvert dans Vim, se mettre en mode Insertion, puis
+coller le texte. On peut s'y prendre de trois manières différentes :
+
+  1. utiliser les touches [Maj]+[Inser] ;
+  2. appuyer sur la mollette de la souris ;
+  3. appuyer simultanément sur les boutons droite et gauche de la souris.
+
+Voilà à quoi cela ressemble :
+
+--8<--------- ~/sql/empinfo.txt ----------------------------------------------
+John        Jones       99980       45          Payson      Arizona
+Mary        Jones       99982       25          Payson      Arizona
+Eric        Edwards     88232       32          San Diego   California
+Mary Ann    Edwards     88233       32          Phoenix     Arizona
+Ginger      Howell      98002       42          Cottonwood  Arizona
+Sebastian   Smith       92001       23          Gila Bend   Arizona
+Gus         Gray        22322       35          Bagdad      Arizona
+Mary Ann    May         32326       52          Tucson      Arizona
+Erica       Williams    32327       60          Show Low    Arizona
+Leroy       Brown       32380       22          Pinetop     Arizona
+Elroy       Cleaver     32382       22          Globe       Arizona
+--8<--------------------------------------------------------------------------
+
+En utilisant la fonction de substitution de Vim, on va se débarrasser de tous
+les espaces pour ne garder que les tabulations :
+
+  :1,$s/\ //g
+
+Veiller également à ne pas avoir de ligne vide à la fin.
+
+Ouvrir une connexion à la console MySQL :
+
+  # mysql -u root -p
+  Enter password: 
+  Welcome to the MySQL monitor.
+
+Créer la base de données 'sqlcourse' :
+
+  mysql> create database sqlcourse;
+  Query OK, 1 row affected (0.00 sec)
+
+Créer un utilisateur différent de root, et qui aura tous les droits sur la base
+de données nouvellement créée :
+
+  mysql> grant all on sqlcourse.* to kikinovak@localhost
+      -> identified by 'XXXXXXXXX';
+  Query OK, 0 rows affected (0.00 sec)
+
+Quitter la console MySQL :
+
+  mysql> quit;
+  Bye
+
+Se reconnecter en tant qu'utilisateur "commun mortel" à la console MySQL :
+
+  $ mysql -u kikinovak -p
+  Enter password: 
+  Welcome to the MySQL monitor.
+
+  > Si le nom d'utilisateur est identique à l'utilisateur Linux courant, on
+    peut invoquer directement 'mysql -p'.
+
+Afficher les bases de données :
+
+  mysql> show databases;
+  +--------------------+
+  | Database           |
+  +--------------------+
+  | information_schema |
+  | sqlcourse          |
+  +--------------------+
+  2 rows in set (0.00 sec)
+
+Utiliser la base de données 'sqlcourse' :
+
+  mysql> use sqlcourse;
+  Database changed
+
+Créer la table 'empinfo' :
+
+  mysql> create table empinfo (
+      -> first varchar(20),
+      -> last varchar(20),
+      -> id mediumint,
+      -> age smallint,
+      -> city varchar(20),
+      -> state varchar(20));
+  Query OK, 0 rows affected (0.07 sec)
+
+Vérifier la table que l'on vient de créer :
+
+  mysql> describe empinfo;
+  +-------+--------------+------+-----+---------+-------+
+  | Field | Type         | Null | Key | Default | Extra |
+  +-------+--------------+------+-----+---------+-------+
+  | first | varchar(20)  | YES  |     | NULL    |       |
+  | last  | varchar(20)  | YES  |     | NULL    |       |
+  | id    | mediumint(9) | YES  |     | NULL    |       |
+  | age   | smallint(6)  | YES  |     | NULL    |       |
+  | city  | varchar(20)  | YES  |     | NULL    |       |
+  | state | varchar(20)  | YES  |     | NULL    |       |
+  +-------+--------------+------+-----+---------+-------+
+  6 rows in set (0.00 sec)
+
+Si tout est correct, on va pouvoir remplir la table avec les données
+recueillies dans notre fichier texte 'empinfo.txt' :
+
+  mysql> load data local infile '/home/kikinovak/sql/empinfo.txt'
+      -> into table empinfo;
+  Query OK, 11 rows affected (0.02 sec)
+  Records: 11  Deleted: 0  Skipped: 0  Warnings: 0
+
+Vérifier si l'importation des données s'est correctement effectuée :
+
+  mysql> select * from empinfo;
+  +------------+-----------+-------+------+-------------+------------+
+  | first      | last      | id    | age  | city        | state      |
+  +------------+-----------+-------+------+-------------+------------+
+  | John       | Jones     | 99980 |   45 | Payson      | Arizona    |
+  | Mary       | Jones     | 99982 |   25 | Payson      | Arizona    |
+  | Eric       | Edwards   | 88232 |   32 | San Diego   | California |
+  | Mary Ann   | Edwards   | 88233 |   32 | Phoenix     | Arizona    |
+  | Ginger     | Howell    | 98002 |   42 | Cottonwood  | Arizona    |
+  | Sebastian  | Smith     | 92001 |   23 | Gila Bend   | Arizona    |
+  | Gus        | Gray      | 22322 |   35 | Bagdad      | Arizona    |
+  | Mary Ann   | May       | 32326 |   52 | Tucson      | Arizona    |
+  | Erica      | Williams  | 32327 |   60 | Show Low    | Arizona    |
+  | Leroy      | Brown     | 32380 |   22 | Pinetop     | Arizona    |
+  | Elroy      | Cleaver   | 32382 |   22 | Globe       | Arizona    |
+  +------------+-----------+-------+------+-------------+------------+
+  11 rows in set (0.00 sec)
+
+À présent, on peut attaquer le tutorial.
+
+
+La commande SELECT
+------------------
+
+	* http://sqlcourse.com/select.html
+
+Quelques exemples. Afficher :
+
+a) le prénom, le nom et la ville des employés dont le prénom commence par "Er" :
+
+  mysql> select first, last, city 
+      -> from empinfo 
+      -> where first like 'Er%';
+  +--------+-----------+------------+
+  | first  | last      | city       |
+  +--------+-----------+------------+
+  | Eric   | Edwards   | San Diego  |
+  | Erica  | Williams  | Show Low   |
+  +--------+-----------+------------+
+  2 rows in set (0.00 sec)
+
+b) le prénom et le nom des employés dont le nom se termine en "s" :
+
+  mysql> select * from empinfo
+      -> where last like '%s';
+  +---------+----------+-------+------+----------+------------+
+  | first   | last     | id    | age  | city     | state      |
+  +---------+----------+-------+------+----------+------------+
+  | John    | Jones    | 99980 |   45 | Payson   | Arizona    |
+  | Mary    | Jones    | 99982 |   25 | Payson   | Arizona    |
+  | Eric    | Edwards  | 88232 |   32 | SanDiego | California |
+  | MaryAnn | Edwards  | 88233 |   32 | Phoenix  | Arizona    |
+  | Erica   | Williams | 32327 |   60 | ShowLow  | Arizona    |
+  +---------+----------+-------+------+----------+------------+
+  5 rows in set (0.00 sec)
+
+c) les données des employés dont le prénom est "Eric" :
+
+  mysql> select * from empinfo
+      -> where first = 'Eric';
+  +-------+---------+-------+------+----------+------------+
+  | first | last    | id    | age  | city     | state      |
+  +-------+---------+-------+------+----------+------------+
+  | Eric  | Edwards | 88232 |   32 | SanDiego | California |
+  +-------+---------+-------+------+----------+------------+
+  1 row in set (0.00 sec)
+
+d) le prénom, le nom et la ville pour tous les employés :
+
+  mysql> select first, last, city
+      -> from empinfo;
+  +-----------+----------+------------+
+  | first     | last     | city       |
+  +-----------+----------+------------+
+  | John      | Jones    | Payson     |
+  | Mary      | Jones    | Payson     |
+  | Eric      | Edwards  | SanDiego   |
+  | MaryAnn   | Edwards  | Phoenix    |
+  | Ginger    | Howell   | Cottonwood |
+  | Sebastian | Smith    | GilaBend   |
+  | Gus       | Gray     | Bagdad     |
+  | MaryAnn   | May      | Tucson     |
+  | Erica     | Williams | ShowLow    |
+  | Leroy     | Brown    | Pinetop    |
+  | Elroy     | Cleaver  | Globe      |
+  +-----------+----------+------------+
+  11 rows in set (0.00 sec)
+
+e) le nom, la ville et l'âge des employés âgés de plus de 30 ans :
+
+  mysql> select last, city, age
+      -> from empinfo
+      -> where age > 30;
+  +----------+------------+------+
+  | last     | city       | age  |
+  +----------+------------+------+
+  | Jones    | Payson     |   45 |
+  | Edwards  | SanDiego   |   32 |
+  | Edwards  | Phoenix    |   32 |
+  | Howell   | Cottonwood |   42 |
+  | Gray     | Bagdad     |   35 |
+  | May      | Tucson     |   52 |
+  | Williams | ShowLow    |   60 |
+  +----------+------------+------+
+  7 rows in set (0.00 sec)
+
+f) le prénom, le nom, la ville et l'état des employés dont le prénom commence
+par "J" :
+
+  mysql> select first, last, city, state
+      -> from empinfo
+      -> where first like 'J%';
+  +-------+-------+--------+---------+
+  | first | last  | city   | state   |
+  +-------+-------+--------+---------+
+  | John  | Jones | Payson | Arizona |
+  +-------+-------+--------+---------+
+  1 row in set (0.00 sec)
+
+g) le prénom, le nom et l'âge des employés dont le nom comporte la chaîne de
+caractères "illia" :
+
+  mysql> select first, last, age
+      -> from empinfo
+      -> where last like '%illia%';
+  +-------+----------+------+
+  | first | last     | age  |
+  +-------+----------+------+
+  | Erica | Williams |   60 |
+  +-------+----------+------+
+  1 row in set (0.00 sec)
+
+
+Exercice
+--------
+
+Afficher :
+
+a) le prénom et l'âge de tous les employés.
+
+b) le prénom, le nom et la ville de tous ceux qui n'habitent pas à Payson.
+
+c) les données de tous ceux qui ont plus de 40 ans.
+
+d) le prénom et le nom de tous ceux dont le nom de famille se termine en "ay".
+
+e) les données de toutes celles dont le prénom est "Mary".
+
+f) les données de toutes celles dont le prénom contient "Mary".
+
+
+Corrigé
+-------
+
+a. mysql> select first, age
+       -> from empinfo;
+  +-----------+------+
+  | first     | age  |
+  +-----------+------+
+  | John      |   45 |
+  | Mary      |   25 |
+  | Eric      |   32 |
+  | MaryAnn   |   32 |
+  | Ginger    |   42 |
+  | Sebastian |   23 |
+  | Gus       |   35 |
+  | MaryAnn   |   52 |
+  | Erica     |   60 |
+  | Leroy     |   22 |
+  | Elroy     |   22 |
+  +-----------+------+
+  11 rows in set (0.00 sec)
+
+b. mysql> select first, last, city
+       -> from empinfo 
+       -> where city != 'Payson';
+  +-----------+----------+------------+
+  | first     | last     | city       |
+  +-----------+----------+------------+
+  | Eric      | Edwards  | SanDiego   |
+  | MaryAnn   | Edwards  | Phoenix    |
+  | Ginger    | Howell   | Cottonwood |
+  | Sebastian | Smith    | GilaBend   |
+  | Gus       | Gray     | Bagdad     |
+  | MaryAnn   | May      | Tucson     |
+  | Erica     | Williams | ShowLow    |
+  | Leroy     | Brown    | Pinetop    |
+  | Elroy     | Cleaver  | Globe      |
+  +-----------+----------+------------+
+  9 rows in set (0.00 sec)
+
+c. mysql> select * from empinfo
+       -> where age > 40;
+  +---------+----------+-------+------+------------+---------+
+  | first   | last     | id    | age  | city       | state   |
+  +---------+----------+-------+------+------------+---------+
+  | John    | Jones    | 99980 |   45 | Payson     | Arizona |
+  | Ginger  | Howell   | 98002 |   42 | Cottonwood | Arizona |
+  | MaryAnn | May      | 32326 |   52 | Tucson     | Arizona |
+  | Erica   | Williams | 32327 |   60 | ShowLow    | Arizona |
+  +---------+----------+-------+------+------------+---------+
+  4 rows in set (0.00 sec)
+
+d. mysql> select first, last
+       -> from empinfo
+       -> where last like '%ay';
+  +---------+------+
+  | first   | last |
+  +---------+------+
+  | Gus     | Gray |
+  | MaryAnn | May  |
+  +---------+------+
+  2 rows in set (0.00 sec)
+
+e. mysql> select * from empinfo
+       -> where first = 'Mary';
+  +-------+-------+-------+------+--------+---------+
+  | first | last  | id    | age  | city   | state   |
+  +-------+-------+-------+------+--------+---------+
+  | Mary  | Jones | 99982 |   25 | Payson | Arizona |
+  +-------+-------+-------+------+--------+---------+
+  1 row in set (0.00 sec)
+
+f. mysql> select * from empinfo
+       -> where first like '%Mary%';
+  +---------+---------+-------+------+---------+---------+
+  | first   | last    | id    | age  | city    | state   |
+  +---------+---------+-------+------+---------+---------+
+  | Mary    | Jones   | 99982 |   25 | Payson  | Arizona |
+  | MaryAnn | Edwards | 88233 |   32 | Phoenix | Arizona |
+  | MaryAnn | May     | 32326 |   52 | Tucson  | Arizona |
+  +---------+---------+-------+------+---------+---------+
+  3 rows in set (0.00 sec)
+
+
+La commande CREATE
+------------------
+
+	* http://sqlcourse.com/create.html
+
+MySQL déclare les variables numériques différemment. On écrira donc :
+
+  mysql> create table employee (
+      -> first varchar(15),
+      -> last varchar(20),
+      -> age decimal(3),
+      -> address varchar(30),
+      -> city varchar(20),
+      -> state varchar(20));
+
+  mysql> describe employee;
+  +---------+--------------+------+-----+---------+-------+
+  | Field   | Type         | Null | Key | Default | Extra |
+  +---------+--------------+------+-----+---------+-------+
+  | first   | varchar(15)  | YES  |     | NULL    |       | 
+  | last    | varchar(20)  | YES  |     | NULL    |       | 
+  | age     | decimal(3,0) | YES  |     | NULL    |       | 
+  | address | varchar(30)  | YES  |     | NULL    |       | 
+  | city    | varchar(20)  | YES  |     | NULL    |       | 
+  | state   | varchar(20)  | YES  |     | NULL    |       | 
+  +---------+--------------+------+-----+---------+-------+
+
+
+Exercice
+--------
+
+Vous venez de créer une entreprise. C'est le moment d'embaucher du monde. Vous
+souhaitez saisir quelques infos dans un tableau, comme par exemple :
+
+	* le prénom (first)
+	* le nom (last)
+	* la fonction de l'employé (title)
+	* son âge (age)
+	* son salaire (salary)
+
+
+Corrigé
+-------
+
+  mysql> create table myemployees (
+      -> first varchar(15),
+      -> last varchar(20),
+      -> title varchar(15),
+      -> age decimal(3),
+      -> salary decimal(8,2));
+
+  mysql> describe myemployees;
+  +--------+--------------+------+-----+---------+-------+
+  | Field  | Type         | Null | Key | Default | Extra |
+  +--------+--------------+------+-----+---------+-------+
+  | first  | varchar(15)  | YES  |     | NULL    |       | 
+  | last   | varchar(20)  | YES  |     | NULL    |       | 
+  | title  | varchar(15)  | YES  |     | NULL    |       | 
+  | age    | decimal(3,0) | YES  |     | NULL    |       | 
+  | salary | decimal(8,2) | YES  |     | NULL    |       | 
+  +--------+--------------+------+-----+---------+-------+
+
+
+La commande INSERT
+------------------
+
+	* http://sqlcourse.com/insert.html
+
+Quelques exemples. Avec la syntaxe complète :
+
+  mysql> insert into employee
+      -> (first, last, age, address, city, state)
+      -> values
+      -> ('Luke', 'Duke', 45, '2130 Boars Nest', 'Hazard Co', 'Georgia');
+
+  mysql> select * from employee;
+  +-------+------+------+-----------------+-----------+---------+
+  | first | last | age  | address         | city      | state   |
+  +-------+------+------+-----------------+-----------+---------+
+  | Luke  | Duke |   45 | 2130 Boars Nest | Hazard Co | Georgia | 
+  +-------+------+------+-----------------+-----------+---------+
+
+Avec la syntaxe abrégée :
+
+  mysql> insert into employee
+      -> values
+      -> ('Luke', 'Duke', 45, '2130 Boars Nest', 'Hazard Co', 'Georgia');
+
+
+Exercice
+--------
+
+a) Saisir les données des trois employés suivants dans la table 'myemployees' :
+
+	· Jonie Weber, Secretary, 28, 19500.00
+	· Potsy Weber, Programmer, 32, 45300.00
+	· Dirk Smith, Programmer II, 45, 75020.00
+
+Afficher :
+
+b) toutes les infos pour tout le monde.
+
+c) toutes les infos de ceux qui ont un salaire supérieur à 30.000.
+
+d) le prénom et le nom de tous ceux qui ont moins de 30 ans.
+
+e) le prénom, le nom et le salaire de tous ceux dont le titre contient
+"Programmer".
+
+f) toutes les infos de ceux dont le nom contient "ebe".
+
+g) le prénom de tous ceux dont le prénom est "Potsy".
+
+h) toutes les infos de ceux qui ont plus de 80 ans.
+
+i) toutes les infos de ceux dont le nom se termine en "ith".
+
+
+Corrigé
+-------
+
+a) mysql> insert into myemployees
+       -> values
+       -> ('Jonie', 'Weber', 'Secretary', '28', 19500);
+
+   mysql> insert into myemployees
+       -> values
+       -> ('Potsy', 'Weber', 'Programmer', 32, 45300);
+
+   mysql> insert into myemployees
+       -> values
+       -> ('Dirk', 'Smith', 'Programmer II', 45, 75020);
+
+b) mysql> select * from myemployees;
+
+c) mysql> select * from myemployees
+       -> where salary > 30000;
+
+d) mysql> select first, last
+       -> from myemployees
+       -> where age < 30;
+
+e) mysql> select first, last, salary
+       -> from myemployees
+       -> where title like '%Programmer%';
+
+f) mysql> select * from myemployees
+       -> where last like '%ebe%';
+
+g) mysql> select first
+       -> from myemployees
+       -> where first = 'Potsy';
+
+h) mysql> select * from myemployees
+       -> where age > 80;
+
+i) mysql> select * from myemployees
+       -> where last like '%ith';
+
+
+La commande UPDATE
+------------------
+
+	* http://sqlcourse.com/update.html
+
+
+Exercice
+--------
+
+Ajouter une entrée à la table 'myemployees' :
+
+  mysql> insert into myemployees
+      -> values
+      -> ('Bob', 'Williams', 'Assistant', 48, 60300);
+
+a) Jonie Weber vient d'épouser Bob Williams. Elle a changé son nom en
+Weber-Williams.
+
+b) C'est l'anniversaire de Dirk Smith. Son âge a augmenté d'une année.
+
+c) Toutes les secrétaires sont dorénavant affublées du titre "Assistant".
+
+d) Tous les employés qui gagnent moins de 30.000 ont droit à une augmentation
+de 3.500.
+
+e) Tous les employés qui gagnent plus de 33.500 ont droit à une augmentation de
+4.500.
+
+f) Tous les employés "Programmer II" sont promus "Programmer III".
+
+g) Tous les employés "Programmer" sont promus "Programmer II".
+
+
+Corrigé
+-------
+
+a) mysql> update myemployees
+       -> set last = 'Weber-Williams'
+       -> where first = 'Jonie'
+       -> and
+       -> last = 'Weber';
+
+b) mysql> update myemployees
+       -> set age = age + 1
+       -> where first = 'Dirk'
+       -> and 
+       -> last = 'Smith';
+
+c) mysql> update myemployees
+       -> set title = 'Assistant'
+       -> where 
+       -> title = 'Secretary';
+
+d) mysql> update myemployees
+       -> set salary = salary + 3500
+       -> where 
+       -> salary < 30000;
+
+e) mysql> update myemployees
+       -> set salary = salary + 4500
+       -> where
+       -> salary > 33500;
+
+f) mysql> update myemployees
+       -> set title = 'Programmer III'
+       -> where
+       -> title = 'Programmer II';
+
+g) mysql> update myemployees
+       -> set title = 'Programmer II'
+       -> where
+       -> title = 'Programmer';
+
+
+La commande DELETE
+------------------
+
+	* http://sqlcourse.com/delete.html
+
+
+Exercice
+--------
+
+a) Jonie Weber-Williams vient de démissionner. Supprimer ses infos.
+
+b) L'entreprise doit serrer la ceinture. Supprimer tous les employés qui
+gagnent plus de 70.000 dollars.
+
+
+Corrigé
+-------
+
+a) mysql> delete from myemployees
+       -> where 
+       -> first = 'Jonie'
+       -> and
+       -> last = 'Weber-Williams';
+
+b) mysql> delete from myemployees
+       -> where
+       -> salary > 70000;
+
+
+La commande DROP
+----------------
+
+	* http://sqlcourse.com/drop.html
+
+
+Exercice
+--------
+
+Effacer la table 'myemployees'.
+
+
+Corrigé
+-------
+
+  mysql> drop table myemployees;
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

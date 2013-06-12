@@ -1,0 +1,732 @@
+==============
+Firewall HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==============
+
+Dernière révision : 14 janvier 2013
+
+Ce HOWTO décrit la configuration d'un pare-feu sous Slackware Linux.
+
+
+Généralités
+-----------
+
+Le terme de "pare-feu" (ou "firewall") peut désigner plusieurs choses :
+
+  · Tout type de matériel qui agit comme passerelle entre Internet et le réseau
+    local.
+
+  · Une application installée sur la machine et censée améliorer la sécurité.
+
+En ce qui nous concerne, il s'agira très précisément d'un filtre de paquets
+pour la sécurisation du traffic TCP/IP. Ce filtre devra analyser tous les
+paquets réseau qui entrent dans la machine et qui la quittent. Une série de
+tests décidera si les paquets ont le droit de passer ou s'ils doivent être
+bloqués.
+
+
+Netfilter
+---------
+
+Le système de gestion de paquets réseau du noyau Linux s'appelle Netfilter. La
+commande utilisée pour le configurer est 'iptables'.
+
+Voici un schéma simplifié du cheminement d'un paquet TCP/IP dans le kernel :
+
+Local net ---> Routing ---> Filter Forward ---> NAT Postrouting ---> Local net
+Internet          |                         ^                        Internet
+                  |                         |
+                  v                         |
+               Filter ---> Local ---> Filter Output
+               Input       Process
+
+  > Traditionnellement, les schémas de pare-feu montrent l'Internet "dangereux"
+    à gauche, puis le pare-feu, et enfin à droite le réseau local "sécurisé".
+    Ce n'est pas le cas dans ce schéma, où les paquets entrant dans la machine
+    depuis la gauche peuvent provenir aussi bien d'Internet que du réseau
+    local. Il en est de même pour les paquets qui sortent du pare-feu à droite.
+
+  > Routing : En fonction de l'adresse IP et du numéro de port du paquet, le
+    kernel décide si le paquet doit être traité localement ou s'il doit être
+    transmis vers une interface réseau et donc vers une autre machine du réseau
+    local ou même de l'Internet.
+
+  > Filter Input : Une série de tests basés sur un certain nombre de règles
+    décident si le paquet est accepté pour être traité par des applications
+    locales ou non.
+
+  > Local Process : Il s'agit là tout simplement de l'ensemble des applications
+    qui traitent - ou qui produisent - des paquets IP sur la machine locale,
+    c'est-à-dire tous les services réseau : vsftpd, httpd, etc.
+
+  > Filter Output : Une autre série de tests basés sur une autre série de
+    règles établit si le paquet a le droit de quitter le kernel.
+
+  > Filter Forward : Ce filtre effectue des tests sur les paquets qui sont
+    transmis sans être traités et décide s'ils ont le droit de continuer leur
+    chemin.
+
+  > NAT Postrouting : Au cas où la machine locale assure la connexion Internet
+    pour d'autres machines grâce au relais de paquets (Masquerading), cette
+    étape gère la manipulation nécessaire des paquets.
+
+  > Le filtre de paquets gèrera les étapes Filter Input, Filter Output, Filter
+    Forward et, le cas échéant, NAT Postrouting. 
+
+  > Les parties Routing et Local Process du schéma concernent les fonctions
+    réseau du kernel ou des services réseau communs et n'ont rien à voir avec
+    le filtre de paquets.
+
+
+Les différentes actions
+-----------------------
+
+C'est le kernel qui gère la transmission des paquets provenant d'une interface
+réseau ou générés par une application locale. À chacune des étapes du système
+de filtrage, il a respectivement trois alternatives :
+
+  > DENY : la transmission du paquet est tout bonnement refusée, sans message
+    d'erreur. Le paquet tombe à la trappe, dans le nirvana numérique. Il
+    n'existe plus.
+
+  > REJECT : la transmission du paquet est refusée, avec un message d'erreur.
+    Les conséquences pour le paquet sont les mêmes que pour un DENY. La
+    différence, c'est que le destinataire est informé (par un paquet ICMP) du
+    fait que son paquet a été refusé.
+
+  > ACCEPT : le paquet est transmis.
+
+
+Les tables
+----------
+
+L'idée de base d'un système Netfilter, c'est qu'un paquet IP traverse
+différents endroits dans le kernel, qui testent à partir d'une série de règles
+si le paquet est autorisé ou non. Si c'est le cas, le paquet est transmis. Si
+ce n'est pas le cas, le paquet est supprimé ou renvoyé au destinataire. Trois
+tables contrôlent le filtre Netfilter : 
+
+  > La table FILTER : cette table contient généralement l'ensemble des règles
+    pour le filtre de paquets à proprement parler.
+
+  > La table NAT : cette table est active uniquement si la fonction de relais
+    des paquets du kernel (IP Masquerading) a été activée. Elle permet de
+    modifier l'adresse des paquets qui entrent dans le kernel depuis
+    l'extérieur ou alors qui en sortent à nouveau ("Network Address
+    Translation").
+
+  > La table MANGLE : elle permet de procéder à diverses manipulations des
+    paquets IP. Cette table est réservée à une série d'opérations très
+    spécifiques, et nous ne la traiterons pas ici.
+
+
+Les chaînes
+-----------
+
+Chacune de ces trois tables prévoit à son tour une série de chaînes de règles :
+
+  > Table Filter : INPUT, FORWARD et OUTPUT
+
+  > Table NAT : PREROUTING, INPUT, OUTPUT et POSTROUTING
+
+  > Table Mangle : PREROUTING, INPUT, FORWARD, OUTPUT et POSTROUTING
+
+Ces chaînes de règles sont indépendantes les unes des autres. Il existe donc
+bien trois chaînes INPUT, deux chaînes FORWARD, deux chaînes PREROUTING, deux
+chaînes POSTROUTING et trois chaînes OUTPUT.
+
+Lorsqu'une documentation se réfère à "la chaîne OUTPUT" sans plus de précisions
+de la table à laquelle appartient la chaîne, il s'agit dans tous les cas de la
+table FILTER, qui est de loin la plus importante.
+
+  > La même chose vaut d'ailleurs pour la commande 'iptables'. L'option '-t'
+    permet d'indiquer la table pour laquelle on souhaite définir des règles. Si
+    l'on omet cette option, c'est automatiquement la table FILTER qui est
+    sélectionnée.
+
+
+Fonctionnement de base
+----------------------
+
+Lorsqu'un paquet IP rencontre une chaîne de règles dans son cheminement à
+travers le kernel, celui-ci vérifie les règles en question l'une après l'autre. 
+
+  > Dès qu'une règle s'applique à un paquet, l'action prévue dans la règle est
+    effectuée : transmettre le paquet, le supprimer ou le renvoyer au
+    destinataire.
+
+  > Lorsqu'aucune des règles ne peut s'appliquer pour le paquet, c'est la
+    politique par défaut qui entre en vigueur. Là encore, on peut se retrouver
+    avec les trois cas de figure : transmettre, supprimer, rejeter.
+
+La configuration d'un pare-feu consiste donc à définir la politique par défaut
+ainsi qu'une série de règles pour chacune des chaînes de filtres essentielles.
+
+
+Afficher l'état du pare-feu
+---------------------------
+
+Afficher toutes les chaînes de la table Filter :
+
+  # iptables -L
+  Chain INPUT (policy ACCEPT)
+  target     prot opt source               destination         
+  
+  Chain FORWARD (policy ACCEPT)
+  target     prot opt source               destination         
+  
+  Chain OUTPUT (policy ACCEPT)
+  target     prot opt source               destination         
+
+  > La forme brève de l'option '--list', c'est '-L'.
+
+L'option '-t' permet de sélectionner la table. Par défaut, c'est la table
+Filter qui est affichée. La commande précédente est donc identique à celle-ci :
+
+  # iptables -t filter -L
+
+Les chaînes des tables NAT et Mangle sont affichées comme ceci :
+
+  # iptables -t nat -L
+
+Ou :
+
+  # iptables -t mangle -L
+
+Pour afficher seulement les règles d'une certaine chaîne, on peut la fournir en
+argument. Par exemple :
+
+  # iptables -L INPUT
+  Chain INPUT (policy ACCEPT)
+  target     prot opt source               destination         
+
+Ou encore :
+
+  # iptables -L OUTPUT
+  Chain OUTPUT (policy ACCEPT)
+  target     prot opt source               destination         
+
+Ou encore :
+
+  # iptables -t nat -L POSTROUTING
+  Chain POSTROUTING (policy ACCEPT)
+  target     prot opt source               destination         
+
+  > L'option '-v' (ou '--verbose') permet d'afficher plus de détails :
+
+  > L'option '-n' (ou '--numeric') peut s'avérer pratique dans la mesure où
+    elle permet un formatage numérique de l'affichage pour les adresses IP et
+    les ports.
+
+  > Enfin, l'option '--line-numbers' ajoute des numéros de ligne au début de
+    chaque règle, ce qui permet d'identifier sa position dans la chaîne.
+
+Au total, on utilisera souvent cette combinaison d'options pour afficher l'état
+du pare-feu :
+
+  # iptables -L -v -n --line-numbers
+  Chain INPUT (policy ACCEPT 1195 packets, 213K bytes)
+  num   pkts bytes target     prot opt in     out     source     destination         
+
+  Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+  num   pkts bytes target     prot opt in     out     source     destination         
+
+  Chain OUTPUT (policy ACCEPT 1190 packets, 235K bytes)
+  num   pkts bytes target     prot opt in     out     source     destination 
+
+  > La forme brève c'est 'iptables -L -v -n --line-numbers'.
+
+Et pour afficher la table NAT :
+
+  # iptables -t nat -L -v -n --line-numbers
+  Chain PREROUTING (policy ACCEPT 364 packets, 47313 bytes)
+  num   pkts bytes target     prot opt in     out     source     destination         
+
+  Chain INPUT (policy ACCEPT 364 packets, 47313 bytes)
+  num   pkts bytes target     prot opt in     out     source     destination         
+
+  Chain OUTPUT (policy ACCEPT 236 packets, 40915 bytes)
+  num   pkts bytes target     prot opt in     out     source     destination         
+
+  Chain POSTROUTING (policy ACCEPT 236 packets, 40915 bytes)
+  num   pkts bytes target     prot opt in     out     source     destination  
+
+Slackware prévoit la gestion d'un script '/etc/rc.d/rc.firewall' au démarrage.
+Ce script n'existe pas dans la configuration par défaut, mais voici ce qu'on
+trouve dans '/etc/rc.d/rc.inet2' :
+
+--8<---------- /etc/rc.d/rc.inet2 --------------------------------------------
+...
+# If there is a firewall script, run it before enabling packet forwarding.
+# See the HOWTOs on http://www.netfilter.org/ for documentation on
+# setting up a firewall or NAT on Linux.  In some cases this might need to
+# be moved past the section below dealing with IP packet forwarding.
+if [ -x /etc/rc.d/rc.firewall ]; then
+  /etc/rc.d/rc.firewall start
+fi
+...
+--8<--------------------------------------------------------------------------
+
+On va donc créer ce fichier 'rc.firewall', pas à pas. Sa première fonction, ce
+sera justement d'afficher l'état du pare-feu. Voici à quoi il pourrait
+ressembler pour commencer :
+
+--8<---------- /etc/rc.d/rc.firewall -----------------------------------------
+#!/bin/sh
+# 
+# /etc/rc.d/rc.firewall
+
+IPT=$(which iptables)
+
+function status {
+  echo
+  echo "=== Filter table ==="
+  echo
+  $IPT -L -v -n
+  echo
+  echo "==== NAT table ===="
+  echo
+  $IPT -t nat -L -v -n
+  echo
+}
+
+case $1 in
+  status)
+    status
+  ;;
+  *)
+  echo "Usage: $0 {status}"
+  ;;
+esac
+--8<--------------------------------------------------------------------------
+
+Quelques explications :
+
+  > La valeur de la variable IPT, c'est le résultat de 'which iptables',
+    c'est-à-dire '/usr/sbin/iptables' sur un système Slackware. 
+
+  > L'instruction 'case' introduit une structure de contrôle qui se termine par
+    'esac'.
+
+  > La signification de '$1', c'est "la chaîne de caractères fournie en
+    argument à ce script".
+
+  > Si la chaîne équivaut à "status", alors le script va se charger d'afficher
+    le statut du pare-feu. Les commandes 'echo' se chargent de formatter
+    l'affichage en ajoutant des titres de section et des sauts de ligne.
+
+  > Si la chaîne équivaut à "n'importe quoi d'autre" ('*'), le script affiche
+    une ligne avec un petit rappel de syntaxe. Ici, '$0' équivaut au nom du
+    script lui-même.
+
+  > Nous ne tenons pas compte ici de la table Mangle.
+
+Rendre le script exécutable :
+
+  # chmod 0755 /etc/rc.d/rc.firewall
+
+Faire un premier test :
+
+  # /etc/rc.d/rc.firewall status
+
+
+Arrêter le pare-feu
+-------------------
+
+Avant de définir nos premières règles de filtrage, nous allons voir comment
+arrêter le pare-feu. Cela nous sera utile un peu plus loin. Iptables n'est pas
+un démon qu'on peut démarrer et arrêter. C'est donc un peu compliqué d'arrêter
+le filtrage des paquets.
+
+L'option '-P' (ou '--policy') se charge de définir la politique par défaut.
+Puisque nous souhaitons arrêter le pare-feu, cela équivaut à définir partout
+une politique par défaut ACCEPT.
+
+"Partout", c'est-à-dire... :
+
+... sur toutes les chaînes de la table Filter :
+
+  # iptables -P INPUT ACCEPT
+  # iptables -P FORWARD ACCEPT
+  # iptables -P OUTPUT ACCEPT
+
+  > L'option '-t filter' est sous-entendue ici, étant donné que la table Filter
+    est utilisée par défaut.
+
+... sur toutes les chaînes de la table NAT :
+
+  # iptables -t nat -P PREROUTING ACCEPT
+  # iptables -t nat -P INPUT ACCEPT
+  # iptables -t nat -P OUTPUT ACCEPT
+  # iptables -t nat -P POSTROUTING ACCEPT
+
+... et enfin sur toutes les chaînes de la table Mangle :
+
+  # iptables -t mangle -P PREROUTING ACCEPT
+  # iptables -t mangle -P INPUT ACCEPT
+  # iptables -t mangle -P FORWARD ACCEPT
+  # iptables -t mangle -P OUTPUT ACCEPT
+  # iptables -t mangle -P POSTROUTING ACCEPT
+
+Ensuite, il faut remettre à zéro tous les compteurs de paquets et d'octets dans
+toutes les chaînes. Pour ce faire, on utilise l'option '-Z' ou '--zero' :
+
+  # iptables -t filter -Z
+  # iptables -t nat -Z
+  # iptables -t mangle -Z
+
+Il ne reste plus qu'à supprimer toutes les règles et toutes les chaînes.
+
+  > L'option '-F' (ou '--flush') se charge de supprimer les chaînes d'une
+    table.
+
+  > L'option '-X' (ou '--delete-chain') supprime les chaînes personnalisées
+    définies par l'utilisateur.
+
+Pour supprimer tous les jeux de règles sur toutes les tables, on aura donc :
+
+  # iptables -t filter -F
+  # iptables -t filter -X
+  # iptables -t nat -F
+  # iptables -t nat -X
+  # iptables -t mangle -F
+  # iptables -t mangle -X
+
+Pour éviter la tâche fastidieuse de taper toutes ces commandes à la main, on va
+implémenter une fonction "stop" à notre script 'rc.firewall'. Voici à quoi cela
+pourra ressembler :
+
+--8<---------- /etc/rc.d/rc.firewall -----------------------------------------
+#!/bin/sh
+# 
+# /etc/rc.d/rc.firewall
+
+IPT=$(which iptables)
+
+function stop {
+
+  # Set default policies to ACCEPT everything
+  iptables -P INPUT ACCEPT
+  iptables -P FORWARD ACCEPT
+  iptables -P OUTPUT ACCEPT
+  iptables -t nat -P PREROUTING ACCEPT
+  iptables -t nat -P INPUT ACCEPT
+  iptables -t nat -P OUTPUT ACCEPT
+  iptables -t nat -P POSTROUTING ACCEPT
+  iptables -t mangle -P PREROUTING ACCEPT
+  iptables -t mangle -P INPUT ACCEPT
+  iptables -t mangle -P FORWARD ACCEPT
+  iptables -t mangle -P OUTPUT ACCEPT
+  iptables -t mangle -P POSTROUTING ACCEPT
+
+  # Zero out all counters
+  iptables -t filter -Z
+  iptables -t nat -Z
+  iptables -t mangle -Z
+
+  # Flush all active rules and delete all custom chains
+  iptables -t filter -F
+  iptables -t filter -X
+  iptables -t nat -F
+  iptables -t nat -X
+  iptables -t mangle -F
+  iptables -t mangle -X
+
+}
+
+function status {
+  echo
+  echo "=== Filter table ==="
+  echo
+  $IPT -L -v -n
+  echo
+  echo "==== NAT table ===="
+  echo
+  $IPT -t nat -L -v -n
+  echo
+}
+
+case $1 in
+  stop)
+    echo ":: Stopping firewall."
+    stop
+  ;;
+  status)
+    status
+  ;;
+  *)
+  echo "Usage: $0 {stop|status}"
+  ;;
+esac
+--8<--------------------------------------------------------------------------
+
+
+Définition manuelle des premières règles
+----------------------------------------
+
+Bloquer les connexions entrantes :
+
+  # iptables -P INPUT DROP
+
+Notre machine devient injoignable de l'extérieur :
+
+  $ ping <machine>
+  $ ssh <machine> 
+  ...
+
+Le problème, c'est qu'elle devient également injoignable pour elle-même :
+
+  $ ping localhost
+
+On va donc autoriser les paquets entrants sur la boucle locale :
+
+  # iptables -A INPUT -i lo -j ACCEPT
+
+  > L'option '-A' (ou '--append') permet d'ajouter une règle à la fin de la
+    chaîne sélectionnée.
+
+  > L'option '-i' (ou '--in-interface') permet de spécifier une interface
+    réseau par laquelle un paquet a été reçu.
+
+  > L'option '-j' (ou '--jump') spécifie la cible de règle, autrement dit, elle
+    indique ce qu'il faut faire si le paquet correspond à la règle.
+
+On obtient donc ceci :
+
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0
+
+Et la machine peut à nouveau se causer à elle-même :
+
+  $ ping localhost
+
+On peut décider d'autoriser les pings en provenance de l'extérieur. Pour ce
+faire, on pourrait par exemple autoriser le protocole ICMP :
+
+  # iptables -A INPUT -p icmp -j ACCEPT
+
+  > Vous l'aurez deviné : l'option '-p' (comme '--protocol') permet de
+    spécifier un protocole.
+
+Nous sommes peut-être allés un peu trop loin dans la définition de la règle
+précédente. En effet, le protocole ICMP comprend toute une série de types de
+paquets. La commande suivante permet de les afficher :
+
+  # iptables -p icmp -h
+  ...
+  Valid ICMP Types:
+  any
+  echo-reply (pong)
+  destination-unreachable
+     network-unreachable
+     host-unreachable
+     protocol-unreachable
+     port-unreachable
+     fragmentation-needed
+     source-route-failed
+     network-unknown
+     host-unknown
+     network-prohibited
+     host-prohibited
+     TOS-network-unreachable
+     TOS-host-unreachable
+     communication-prohibited
+     host-precedence-violation
+     precedence-cutoff
+  source-quench
+  redirect
+     network-redirect
+     host-redirect
+     TOS-network-redirect
+     TOS-host-redirect
+  echo-request (ping)
+  router-advertisement
+  router-solicitation
+  time-exceeded (ttl-exceeded)
+     ttl-zero-during-transit
+     ttl-zero-during-reassembly
+  parameter-problem
+     ip-header-bad
+     required-option-missing
+  timestamp-request
+  timestamp-reply
+  address-mask-request
+  address-mask-reply
+
+Au lieu d'accepter tout ce fatras "à la louche", nous allons uniquement
+autoriser ce qu'il faut pour que la machine soit "pingable". Avant d'aller plus
+loin, je vais d'abord supprimer la règle que je viens de définir. 
+
+Afficher les règles avec l'option '--line-numbers' :
+
+  # iptables -L --line-numbers
+  Chain INPUT (policy DROP)
+  num  target     prot opt source               destination         
+  1    ACCEPT     all  --  anywhere             anywhere            
+  2    ACCEPT     icmp --  anywhere             anywhere 
+
+Supprimer la règle n° 2 de la chaîne INPUT comme ceci :
+
+  # iptables --delete INPUT 2
+
+Il ne me reste qu'à autoriser les trois types de paquets nécessaires pour que
+le 'ping' fonctionne correctement :
+
+  · echo-request
+  · time-exceeded
+  · destination-unreachable
+
+En langage tam-tam, la commande pour autoriser ces trois types de paquets
+ressemblera à ceci :
+
+  # iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+  # iptables -A INPUT -p icmp --icmp-type time-exceeded -j ACCEPT
+  # iptables -A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
+
+Résultat des courses :
+
+  Chain INPUT (policy DROP 0 packets, 0 bytes)
+   pkts bytes target  prot opt in  out  source     destination         
+      8   672 ACCEPT  all  --  lo  *    0.0.0.0/0  0.0.0.0/0           
+      3   252 ACCEPT  icmp --  *   *    0.0.0.0/0  0.0.0.0/0    icmptype 8
+      0     0 ACCEPT  icmp --  *   *    0.0.0.0/0  0.0.0.0/0    icmptype 11
+      0     0 ACCEPT  icmp --  *   *    0.0.0.0/0  0.0.0.0/0    icmptype 3
+
+Nous pouvons d'ores et déjà intégrer cette première série de règles dans notre
+script '/etc/rc.d/rc.firewall'. Voici comment :
+
+--8<---------- /etc/rc.d/rc.firewall -----------------------------------------
+#!/bin/sh
+# 
+# /etc/rc.d/rc.firewall
+
+IPT=$(which iptables)
+
+function start {
+
+  # Set default policies
+  $IPT -P INPUT DROP
+
+  # This line is necessary for the loopback interface and internal socket-based
+  # services to work correctly
+  $IPT -A INPUT -i lo -j ACCEPT
+
+  # Accept important ICMP messages
+  $IPT -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+  $IPT -A INPUT -p icmp --icmp-type time-exceeded -j ACCEPT
+  $IPT -A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
+
+}
+
+function stop {
+
+  # Set default policies to ACCEPT everything
+  iptables -P INPUT ACCEPT
+  iptables -P FORWARD ACCEPT
+  iptables -P OUTPUT ACCEPT
+  iptables -t nat -P PREROUTING ACCEPT
+  iptables -t nat -P INPUT ACCEPT
+  iptables -t nat -P OUTPUT ACCEPT
+  iptables -t nat -P POSTROUTING ACCEPT
+  iptables -t mangle -P PREROUTING ACCEPT
+  iptables -t mangle -P INPUT ACCEPT
+  iptables -t mangle -P FORWARD ACCEPT
+  iptables -t mangle -P OUTPUT ACCEPT
+  iptables -t mangle -P POSTROUTING ACCEPT
+
+  # Zero out all counters
+  iptables -t filter -Z
+  iptables -t nat -Z
+  iptables -t mangle -Z
+
+  # Flush all active rules and delete all custom chains
+  iptables -t filter -F
+  iptables -t filter -X
+  iptables -t nat -F
+  iptables -t nat -X
+  iptables -t mangle -F
+  iptables -t mangle -X
+
+}
+
+function status {
+  echo
+  echo "=== Filter table ==="
+  echo
+  $IPT -L -v -n
+  echo
+  echo "==== NAT table ===="
+  echo
+  $IPT -t nat -L -v -n
+  echo
+}
+
+case $1 in
+  start)
+    echo ":: Starting firewall."
+    start
+  ;;
+  stop)
+    echo ":: Stopping firewall."
+    stop
+  ;;
+  restart)
+    echo ":: Stopping firewall."
+    stop
+    echo ":: Starting firewall."
+    start
+  ;;
+  status)
+    status
+  ;;
+  *)
+  echo "Usage: $0 {start|stop|restart|status}"
+  ;;
+esac
+--8<--------------------------------------------------------------------------
+
+
+Peaufinage du pare-feu
+----------------------
+
+À partir de là, on peut ajouter des règles au pare-feu pour une utilisation au
+quotidien.
+
+Définir les politiques par défaut pour les chaînes FORWARD et ACCEPT :
+
+  # iptables -P FORWARD ACCEPT
+  # iptables -P OUTPUT ACCEPT
+
+Accepter les paquets entrants provenant de connexions déjà établies :
+
+  # iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+  
+Accepter les connexions SSH sur le réseau local :
+
+  # iptables -A INPUT -p tcp -i eth0 --dport 22 -j ACCEPT
+
+  > Plus exactement, on autorise le protocole TCP sur le port 22 et sur
+    l'interface entrante eth0.
+
+Autoriser le serveur DHCP local :
+
+  # iptables -A INPUT -p udp -i eth0 --dport 67 -j ACCEPT
+
+  > On autorise le protocole UDP sur le port 67, sur l'interface entrante eth0.
+
+Autoriser le serveur DNS local :
+
+  # iptables -A INPUT -p tcp -i eth0 --dport 53 -j ACCEPT
+  # iptables -A INPUT -p udp -i eth0 --dport 53 -j ACCEPT
+
+  > On autorise les protocoles TCP et UDP sur le port 53, sur l'interface
+    entrante eth0.
+
+Enregistrer les paquets rejetés :
+
+  # iptables -A INPUT -j LOG --log-prefix "+++ IPv4 packet rejected +++"
+  # iptables -A INPUT -j REJECT
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

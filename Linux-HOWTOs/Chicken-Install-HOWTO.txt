@@ -1,0 +1,358 @@
+=====================
+Chicken Install HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=====================
+
+Dernière révision : 8 janvier 2013
+
+Ce HOWTO décrit l'installation basique (en mode "poule") de Slackware 14.0.
+
+  · Installation
+  · Configuration post-installation
+
+
+Installation
+------------
+
+Options de démarrage :
+
+  · 'hugesmp.s' -> 32bit
+  · 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
+  · 'vga=788'   -> écran normal
+  · 'vga=791'   -> grand écran
+
+Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY français.
+
+Éventuellement, supprimer la table de partitions existante :
+
+  # dd if=/dev/zero of=/dev/sda bs=512 count=64
+
+Partitionner le disque :
+
+  # cfdisk /dev/sda
+
+Schéma de partitionnement le plus simple possible :
+
+  · une partition swap 
+  · une partition principale, formatée en ext4
+
+Schéma de partitionnement alternatif A :
+
+  · une partition pour '/boot', de 100 Mo, formaté en ext2
+  · une partition swap 
+  · une partition principale, formatée en ext4
+  
+Schéma de partitionnement alternatif B :
+
+  · une partition pour '/boot', de 100 Mo, formaté en ext2
+  · une partition swap 
+  · une partition principale, formatée en ext4
+  · une partition pour '/home', formatée en ext4
+
+Remarques :
+
+  > Si l'on dispose de moins de 512 Mo de RAM, la swap sera égale à deux fois
+    la quantité de RAM.
+
+  > Si l'on a au moins 512 Mo de RAM, la swap sera égale à la quantité de RAM.
+
+  > La partition swap sera de type 'Linux swap' (code 82).
+
+  > Toutes les autres partitions seront de type 'Linux' (code 83).
+
+Lancer l'installation :
+
+  # setup
+
+Toutes les opérations de formatage s'effectuent sans la recherche méticuleuse
+de secteurs défectueux.
+
+  > Attention : l'installateur Slackware requiert de partitionner la partition
+    principale '/' en premier !
+
+Consignes pour le formatage :
+
+  > système de fichiers ext2 pour '/boot'
+
+  > système de fichiers ext4 pour les autres : '/', '/home', ...
+
+Installer à partir du CD-Rom ou du DVD Slackware.
+
+Rechercher le lecteur CD-Rom ou DVD.
+
+Sélection des groupes de paquets :
+
+  a) sur un poste de travail
+
+  [*] A 
+  [*] AP
+  [*] D
+  [ ] E -> désélectionner
+  [*] F
+  [*] K
+  [ ] KDE -> désélectionner
+  [ ] KDEI
+  [*] L 
+  [*] N
+  [*] T
+  [*] TCL
+  [*] X
+  [*] XAP
+  [*] XFCE
+  [*] Y
+
+  b) sur un serveur 
+
+  [*] A 
+  [*] AP
+  [*] D
+  [ ] E -> désélectionner
+  [*] F
+  [*] K
+  [ ] KDE -> désélectionner
+  [ ] KDEI
+  [*] L 
+  [*] N
+  [ ] T -> désélectionner
+  [*] TCL
+  [*] X
+  [ ] XAP -> désélectionner
+  [ ] XFCE -> désélectionner
+  [*] Y
+
+SELECT PROMPTING MODE : 'full'. Alternativement, le mode 'terse' offre un
+résultat identique mais avec une présentation plus compacte. 
+
+MAKE USB FLASH BOOT : 'Skip making a USB boot stick'
+
+INSTALL LILO : 'Try to install LILO automatically'
+
+CONFIGURE LILO TO USE FRAME BUFFER CONSOLE : 'standard - Use the standard Linux
+console (the safe choice). 
+
+  > Pour la résolution de la console et les paramètres à passer au kernel
+    (prochain écran), on peut très bien ne rien mettre et peaufiner le tout en
+    éditant '/etc/lilo.conf' plus tard.
+
+OPTIONAL LILO append="<kernel parameters>" LINE : ne rien indiquer pour
+l'instant, voir la précédente remarque.
+
+USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problèmes
+avec certains utilitaires en mode console, notamment avec des pages man en
+langue étrangère qui s'affichent mal, il n'empêche qu'il est dorénavant établi
+comme standard un peu partout. Le choix par défaut 'No' s'explique uniquement
+par un excès de prudence de la part du distributeur.
+
+SELECT LILO DESTINATION : 'MBR - Install to Master Boot Record'
+
+MOUSE CONFIGURATION : 'imps2- Microsoft PS/2 Intellimouse'
+
+  > La configuration de la souris ne concerne que son utilisation en mode
+    console, avec GPM. On peut simplement accepter le choix par défaut, qui
+    correspond à toutes les souris modernes.
+
+GPM CONFIGURATION : 'No'. Le service GPM permet de copier/coller du texte avec
+la souris en mode console. Étant donné que nous nous servons de Vim pour cela,
+nous décidons de ne pas le démarrer.
+
+CONFIGURE NETWORK: 'Yes'
+
+ENTER HOSTNAME : il s'agit de choisir un nom d'hôte pour la machine.
+Choisissez-en un à votre convenance et écrivez-le en minuscules, comme ceci :
+  
+  · 'slackbox'
+  · 'alphamule'
+  · 'grossebertha'
+  · 'raymonde'
+  · 'poste10'
+  ·  etc.
+
+ENTER DOMAINNAME FOR '<machine>' : choisissez un nom de domaine pour la
+machine, comme par exemple :
+
+  · 'local'
+  · 'microlinux.montpezat'
+  · 'crpconsulting.montpellier'
+  ·  etc.
+
+CONFIGURATION TYPE FOR '<machine.domaine>' : selon le contexte, on choisira
+'static IP' ou 'DHCP' pour une connexion cablée sur un serveur ou un poste de
+travail. Sur un ordinateur portable qui fonctionne alternativement avec une
+connexion wifi ou cablée ou en mode "nomade", on préférera 'NetworkManager',
+une application qui gère la connexion "automagique" du réseau. 
+
+SET DHCP HOSTNAME : nom d'hôte DHCP à envoyer au FAI pour une connexion.
+Laisser vide tout simplement.
+
+CONFIRM STARTUP SERVICES TO RUN :
+
+  a) sur un poste de travail 
+
+  [*] rc.fuse       -> laisser la sélection telle quelle
+  [*] rc.inetd
+  [*] rc.messagebus
+  [*] rc.syslog
+  [*] rc.sshd
+
+  b) sur un serveur 
+
+  [ ] rc.fuse       -> désélectionner
+  [ ] rc.inetd      -> désélectionner
+  [ ] rc.messagebus -> désélectionner
+  [*] rc.syslog
+  [*] rc.sshd
+
+CONSOLE FONT CONFIGURATION : 'No'
+
+HARDWARE CLOCK SET TO UTC ? 'YES - Hardware clock is set to UTC'
+
+  > Le seul cas de figure où l'on optera pour 'local time', c'est dans un
+    scénario de double boot avec Windows, pour éviter que ce dernier ne dérègle
+    l'horloge à chaque redémarrage.
+
+TIMEZONE CONFIGURATION : 'Europe/Paris'
+
+SELECT DEFAULT WINDOW MANAGER FOR X : 'xinitrc.fluxbox'
+
+  > Même si l'on compte utiliser l'environnement de bureau Xfce, Fluxbox est un
+    bon choix préalable pour configurer le serveur graphique.
+
+Définir un mot de passe pour root. On ne le verra pas apparaître à l'écran.
+
+Quitter l'installateur Slackware : 'EXIT'
+
+Redémarrer avec la combinaison de touches [Ctrl]+[Alt]+[Suppr] ou alors :
+
+  # reboot
+
+
+Configuration post-installation
+-------------------------------
+
+Créer un utilisateur :
+
+  # adduser
+
+  > Attention à bien ajouter l'utilisateur aux groupes supplémentaires :
+    'audio', 'video', 'cdrom' , etc.
+
+Pour vérifier les groupes auxquels appartient l'utilisateur, on utilise la
+commande 'groups'. Exemple :
+
+  # groups kikinovak
+  kikinovak : users lp floppy audio video cdrom plugdev power netdev scanner
+
+Franciser le système. Dans un premier temps, il faudra définir les paramètres
+'LANG' et 'LC_COLLATE' au niveau du système :
+
+--8<---------- /etc/profile.d/lang.sh ----------------------------------------
+...
+export LANG=fr_FR.utf8
+export LC_COLLATE=fr_FR.utf8
+...
+--8<--------------------------------------------------------------------------
+
+Remplacer le kernel 'huge' par le kernel 'generic'. Voir le
+Generic-Kernel-HOWTO.
+
+Peaufiner certaines options de LILO :
+
+--8<--------- /etc/lilo.conf -------------------------------------------------
+append="quiet vt.default_utf8=1 video=1366x768"
+boot = /dev/sda
+compact
+lba32
+...
+timeout = 50
+...
+--8<--------------------------------------------------------------------------
+
+  > "Lorsque le paramètre 'quiet' est passé au kernel, ça lui permet de fermer
+    sa gueule et plus qu'y spamme au début." (c) Kevin F. 
+  
+  > "Et ça évite qu'il floode la console." (c) Valia V.
+
+  > Certaines cartes graphiques permettent l'utilisation du paramètre
+    'video=XXXxYYY' pour modifier la résolution de la console.
+
+  > 'timeout' spécifie un temps d'attente exprimé en 1/10èmes de secondes.
+
+Prendre en compte les modifications dans la configuration de LILO :
+
+  # lilo
+
+Configurer le serveur graphique.
+
+En tant que root, choisir un gestionnaire de fenêtres basique, par exemple
+Fluxbox :
+
+  # xwmconfig
+
+Tenter un premier démarrage du serveur graphique :
+
+  # startx
+
+Pour l'instant, on ne dispose que d'un clavier QWERTY américain. On va donc
+changer la disposition du clavier dans l'environnement graphique.
+
+Le répertoire '/usr/share/X11/xorg.conf.d' contient une panoplie de fichiers
+modèles pour la configuration. Copier le fichier '90-keyboard-layout.conf' vers
+l'endroit approprié du système :
+
+  # cd /usr/share/X11/xorg.conf.d
+  # cp 90-keyboard-layout.conf /etc/X11/xorg.conf.d/
+
+Éditer ce fichier :
+
+--8<---------- /etc/X11/xorg.conf.d ------------------------------------------
+Section "InputClass"
+  Identifier "keyboard-all"
+  MatchIsKeyboard "on"
+  MatchDevicePath "/dev/input/event*"
+  Driver "evdev"
+  Option "XkbLayout" "fr"
+  #Option "XkbVariant" ""
+  Option "XkbOptions" "terminate:ctrl_alt_bksp"
+EndSection
+...
+--8<--------------------------------------------------------------------------
+
+Relancer X et vérifier la disposition correcte du clavier dans un terminal
+graphique.
+
+Dans XTerm, faire un premier test pour l'accélération graphique :
+
+  # glxgears
+
+Puis :
+
+  # glxinfo | head -n 3
+  name of display: :0.0
+  display: :0  screen: 0
+  direct rendering: Yes
+
+Maintenant que le serveur graphique est correctement configuré, on peut choisir
+l'environnement Xfce par défaut pour l'utilisateur normal :
+
+  $ xwmconfig
+
+Par défaut, Slackware démarre en niveau d'exécution (runlevel) 3. On va passer
+en runlevel 4 pour démarrer directement en mode graphique. Éditer
+'/etc/inittab' et changer la valeur de 'initdefault' de 3 à 4 :
+
+--8<---------- /etc/inittab --------------------------------------------------
+...
+# Default runlevel. (Do not set to 0 or 6)
+id:4:initdefault:
+--8<--------------------------------------------------------------------------
+
+À partir de là, on peut redémarrer, ou alors passer directement en niveau
+d'exécution 4 :
+
+  # init 4
+ 
+Si tout se passe bien, c'est XDM qui s'affiche, le gestionnaire de connexion le
+plus moche de la planète.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

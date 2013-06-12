@@ -1,0 +1,459 @@
+================
+LAN Server HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+================
+
+Dernière révision : 8 janvier 2013
+
+Ce HOWTO décrit l'installation d'un serveur de réseau local sous Slackware.
+
+  · HP Proliant Microserver
+  · Démarrer sur le support d'installation
+  · Faire le ménage sur les disques
+  · Partitionnement et définition des assemblages RAID 
+  · Lancer l'installation
+  · Construire l'initrd et configurer LILO 
+  · Premier redémarrage 
+  · Peaufiner la configuration du réseau 
+  · Activer le relais des paquets 
+  · Sécuriser le serveur 
+  · Installer les services
+
+
+HP Proliant Microserver
+-----------------------
+
+Réglage du BIOS :
+
+Appuyer sur [F10] pour entrer dans le BIOS > onglet 'Advanced'.
+
+  > 'CPU Configuration' :
+  · 'Secure Virtual Machine Mode' : disabled
+
+  > 'IDE Configuration' :
+  · 'SATA Controller Mode'        : AHCI
+  · 'Embedded SATA Link Rate'     : 3.0 Gbps max
+  · 'Drive Write Cache'           : disabled
+
+Le HP Proliant Microserver ne contient pas de lecteur optique. Il faut donc
+confectionner une clé USB bootable. Pour plus de détails, voir le
+'USB-Install-HOWTO'.
+
+
+Démarrer sur le support d'installation
+--------------------------------------
+
+Options de démarrage :
+
+  · 'huge.s'    -> 64bit
+  · 'hugesmp.s' -> 32bit
+  · 'vga=788'   -> affichage 800x600
+
+Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY français.
+
+Si l'on utilise une clé USB, créer un point de montage :
+
+  # mkdir /disk
+
+Identifier et monter la clé :
+
+  # ls -l /dev/sd*
+  # mount /dev/sdX1 /disk
+
+
+Faire le ménage sur les disques
+-------------------------------
+
+Avant de faire quoi que ce soit, désactiver d'éventuels vestiges d'assemblages
+RAID provenant d'une installation antérieure :
+
+  # mdadm -Ss
+
+Effacer les métadonnées RAID persistantes sur les partitions, comme ceci par
+exemple :
+
+  # mdadm --zero-superblock /dev/sda1
+  # mdadm --zero-superblock /dev/sda2
+  # mdadm --zero-superblock /dev/sda3
+  # mdadm --zero-superblock /dev/sdb1
+  # mdadm --zero-superblock /dev/sdb2
+  # mdadm --zero-superblock /dev/sdb3
+  ...
+
+Remettre les tables de partitions à zéro :
+
+  # dd if=/dev/zero of=/dev/sda bs=512 count=64
+  # dd if=/dev/zero of=/dev/sdb bs=512 count=64
+
+Redémarrer.
+
+
+Partitionnement et définition des assemblages RAID
+--------------------------------------------------
+
+Partitionner les disques :
+
+  # cfdisk /dev/sdX
+
+Schéma de partitionnement :
+
+  · un disque RAID pour '/boot', de 100 Mo, formaté en ext2
+  · un disque RAID pour la partition swap, de 1 Go
+  · un disque RAID pour '/', formaté en ext4
+
+  > Les partitions RAID sont de type DA ('Non-FS data').
+
+Deux disques en RAID 1 :
+
+  # mdadm --create /dev/md1 --level=1 --raid-devices=2 --metadata=0.90
+    /dev/sda1 /dev/sdb1
+  # mdadm --create /dev/md2 --level=1 --raid-devices=2 --metadata=0.90
+    /dev/sda2 /dev/sdb2
+  # mdadm --create /dev/md3 --level=1 --raid-devices=2 --metadata=0.90
+    /dev/sda3 /dev/sdb3
+
+Quatre disques en RAID 5 :
+
+  # mdadm --create /dev/md1 --level=1 --raid-devices=4 --metadata=0.90
+    /dev/sda1 /dev/sdb1 /dev/sdc1 /dev/sdd1
+  # mdadm --create /dev/md2 --level=1 --raid-devices=4 --metadata=0.90
+    /dev/sda2 /dev/sdb2 /dev/sdc2 /dev/sdd2
+  # mdadm --create /dev/md3 --level=5 --raid-devices=4 --metadata=0.90
+    /dev/sda3 /dev/sdb3 /dev/sdc3 /dev/sdd3
+
+  > Les partitions '/dev/md1' et '/dev/md2' sont assemblées en RAID 1.
+
+  > La partition '/dev/md3' est assemblée en RAID 5.
+
+Formater la partition swap pour que l'installateur la reconnaisse :
+
+  # mkswap /dev/md2
+
+
+Lancer l'installation
+---------------------
+
+Lancer l'installation :
+
+  # setup
+
+L'installateur proposera les disques RAID '/dev/mdX' au formatage.
+
+SOURCE MEDIA SELCTION : Si l'on installe à partir de la clé, il faudra choisir
+'Install from a pre-mounted directory' et indiquer '/disk/slackware' pour
+Slackware et '/disk/slackware64' pour Slackware64 dans l'écran subséquent.
+
+Sélectionner les séries de paquets :
+
+  [*] A 
+  [*] AP
+  [*] D
+  [ ] E -> désélectionner
+  [*] F
+  [*] K
+  [ ] KDE -> désélectionner
+  [ ] KDEI
+  [*] L
+  [*] N
+  [*] T 
+  [*] TCL
+  [*] X
+  [ ] XAP -> désélectionner
+  [ ] XFCE -> désélectionner
+  [*] Y
+
+  /!\ Le groupe T est bizarrement nécessaire pour compiler le paquet 'ffmpeg',
+  dont on pourra éventuellement avoir besoin sur un serveur de flux audio.
+
+SELECT PROMPTING MODE : 'full'. Alternativement, le mode 'terse' offre un
+résultat identique mais avec une présentation plus compacte. 
+
+MAKE USB FLASH BOOT : 'Skip making a USB boot stick'
+
+INSTALL LILO : 'Try to install LILO automatically'
+
+CONFIGURE LILO TO USE FRAME BUFFER CONSOLE : 'standard - Use the standard Linux
+console (the safe choice). 
+
+  > Pour la résolution de la console et les paramètres à passer au kernel
+    (prochain écran), on peut très bien ne rien mettre et peaufiner le tout en
+    éditant '/etc/lilo.conf' plus tard.
+
+OPTIONAL LILO append="<kernel parameters>" LINE : ne rien indiquer pour
+l'instant, voir la précédente remarque.
+
+USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problèmes
+avec certains utilitaires en mode console, notamment avec des pages man en
+langue étrangère qui s'affichent mal, il n'empêche qu'il est dorénavant établi
+comme standard un peu partout. Le choix par défaut 'No' s'explique uniquement
+par un excès de prudence de la part du distributeur.
+
+SELECT LILO DESTINATION : 'MBR - Install to Master Boot Record'
+
+MOUSE CONFIGURATION : 'imps2- Microsoft PS/2 Intellimouse'
+
+  > La configuration de la souris ne concerne que son utilisation en mode
+    console, avec GPM. On peut simplement accepter le choix par défaut, qui
+    correspond à toutes les souris modernes.
+
+GPM CONFIGURATION : 'No'. Le service GPM permet de copier/coller du texte avec
+la souris en mode console. Étant donné que nous nous servons de Vim pour cela,
+nous décidons de ne pas le démarrer.
+
+CONFIGURE NETWORK: 'Yes'
+
+ENTER HOSTNAME : il s'agit de choisir un nom d'hôte pour le serveur.
+Choisissez-en un à votre convenance et écrivez-le en minuscules, comme ceci :
+  
+  · 'slackbox'
+  · 'grossebertha'
+  · 'serveur'
+
+ENTER DOMAINNAME FOR '<machine>' : choisissez un nom de domaine "en bois",
+comme par exemple :
+
+  · 'local'
+  · 'microlinux.montpezat'
+  · 'crpconsulting.montpellier'
+  ·  etc.
+
+CONFIGURATION TYPE FOR '<machine.domaine>' : 'static IP'. Renseigner les
+paramètres réseau "côté Internet". 
+
+SET DHCP HOSTNAME : Laisser vide tout simplement.
+
+CONFIRM STARTUP SERVICES TO RUN :
+
+  [ ] rc.fuse -> désélectionner
+  [ ] rc.inetd -> désélectionner
+  [ ] rc.messagebus -> désélectionner
+  [*] rc.syslog
+  [*] rc.sshd
+
+CONSOLE FONT CONFIGURATION : 'No'
+
+HARDWARE CLOCK SET TO UTC ? 'YES - Hardware clock is set to UTC'
+
+TIMEZONE CONFIGURATION : 'Europe/Paris'
+
+SELECT DEFAULT WINDOW MANAGER FOR X : 'xinitrc.twm'
+
+  > Le gestionnaire de fenêtres rudimentaire est installé avec le groupe de
+    paquets 'X'. Même si nous le définissons comme environnement par défaut,
+    nous ne l'utiliserons pas.
+
+Définir un mot de passe pour root. On ne le verra pas apparaître à l'écran.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! NE PAS REDÉMARRER AVANT D'AVOIR CONFIGURÉ LILO POUR GÉRER LE RAID !!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Sortir de l'installateur ('EXIT') et effectuer quelques retouches finales :
+
+  # chroot /mnt
+
+
+Construire l'initrd et configurer LILO
+--------------------------------------
+
+Supprimer les liens symboliques dans '/boot' :
+
+  # cd /boot
+  # rm -f System.map config vmlinuz
+
+Préparer l'initrd :
+
+  # cd /etc
+  # cp mkinitrc.conf.sample mkinitrd.conf
+
+Détecter les modules nécessaires au démarrage :
+
+  # /usr/share/mkinitrd/mkinitrd_command_generator.sh
+
+Éditer '/etc/mkinitrd.conf' en utilisant l'option ':set nobackup' de Vim :
+
+--8<---------- /etc/mkinitrd.conf --------------------------------------------
+SOURCE_TREE="/boot/initrd-tree"
+CLEAR_TREE="1"
+OUTPUT_IMAGE="/boot/initrd.gz"
+KERNEL_VERSION="$(uname -r)"
+KEYMAP="fr_CH-latin1"
+MODULE_LIST="ext4"
+ROOTDEV="/dev/md3"
+ROOTFS="ext4"
+RAID="1"
+LVM="0"
+UDEV="1"
+MODCONF="0"
+WAIT="1"
+--8<--------------------------------------------------------------------------
+
+  > Ici, 'RAID="1"' ne désigne pas un quelconque niveau de RAID, mais signifie
+    simplement que l'on utilise le RAID.
+
+Il faudra éventuellement ajouter explicitement les modules pour le contrôleur
+de disques. Exemple sur un serveur IBM XServer 225 :
+
+--8<---------- /etc/mkinitrd.conf --------------------------------------------
+...
+MODULE_LIST="ext4:mptbase:mptscsih:mptspi"
+...
+--8<--------------------------------------------------------------------------
+
+Éditer '/etc/lilo.conf' :
+
+--8<---------- /etc/lilo.conf ------------------------------------------------
+...
+append="nomodeset quiet vt.default_utf8=1 ipv6.disable=1"
+boot=/dev/md1
+compact
+lba32
+raid-extra-boot = mbr-only
+...
+timeout = 30
+...
+image = /boot/vmlinuz-generic-3.2.29
+  initrd = /boot/initrd.gz
+  root = /dev/md3
+  label = 14.0-64bit
+  read-only
+--8<--------------------------------------------------------------------------
+
+  > Là aussi, activer l'option ':set nobackup' dans Vim pour ne pas se
+    retrouver avec une copie de sauvegarde 'lilo.conf~'.
+
+  > Dans le cas d'une installation USB, supprimer la stance 'Windows' inutile.
+
+  # lilo
+
+On peut tranquillement ignorer le message d'erreur qui dit que "/dev/sdb n'est
+pas sur le premier disque" :o)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ATTENDRE LA SYNCHRONISATION COMPLÈTE DE LA GRAPPE !!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  # watch cat /proc/mdstat
+
+Aller boire un ou plusieurs cafés, jouer avec le chat, faire un tour dans la
+garrigue, etc.
+
+  # exit
+  # reboot
+
+
+Premier redémarrage
+-------------------
+
+Tester la connexion à Internet :
+
+  # ping -c 3 www.google.fr
+
+Si l'on n'a pas accès au réseau au premier redémarrage, on peut éventuellement
+permuter l'affectation des interfaces réseau 'eth0' et 'eth1', en éditant
+'/etc/udev/rules.d/70-persistent-net.rules'. 
+
+Procéder à un réglage initial de l'horloge système :
+
+  # ntpdate pool.ntp.org
+
+Récupérer mes scripts et mes fichiers de configuration :
+
+  # cd 
+  # git clone https://github.com/kikinovak/server
+
+  /!\ Au cas où l'on obtiendrait une erreur SSL, réessayer avec le simple
+  protocole HTTP.
+
+Construire et installer les paquets supplémentaires :
+
+  # cd server/14.0
+  # ./MLES.SlackBuild
+
+
+Peaufiner la configuration du réseau
+------------------------------------
+
+--8<---------- /etc/rc.d/rc.inet1.conf ---------------------------------------
+# Config information for eth0:
+IPADDR[0]="192.168.1.2"
+NETMASK[0]="255.255.255.0"
+USE_DHCP[0]=""
+DHCP_HOSTNAME[0]=""
+
+# Config information for eth1:
+IPADDR[1]="192.168.2.1"
+NETMASK[1]="255.255.255.0"
+USE_DHCP[1]=""
+DHCP_HOSTNAME[1]=""
+
+...
+
+# Default gateway IP address:
+GATEWAY="192.168.1.1"
+--8<--------------------------------------------------------------------------
+
+Corriger la configuration de l'installateur dans '/etc/hosts'. Par exemple :
+
+--8<---------- /etc/hosts ----------------------------------------------------
+127.0.0.1     localhost.localdomain localhost
+192.168.2.1   nestor.microlinux.montpezat nestor
+--8<--------------------------------------------------------------------------
+
+
+Activer le relais des paquets
+-----------------------------
+
+Pour activer le relais des paquets ("packet forwarding"), il faut d'abord
+ajouter une ligne à '/etc/rc.d/rc.ip_forward' :
+
+--8<---------- /etc/rc.d/rc.ip_forward ---------------------------------------
+  ...
+  echo "Activating IPv4 packet forwarding."
+  echo 1 > /proc/sys/net/ipv4/ip_forward
+  /usr/sbin/iptables -t nat -A POSTROUTING -o eth0 -s 192.168.2.0/24 -j MASQUERADE
+  ...
+--8<--------------------------------------------------------------------------
+
+  > '-o eth0' désigne l'interface réseau côté Internet.
+
+  > '-s 192.168.2.0/24' est le réseau local.
+
+Pour utiliser le tout :
+
+  # chmod 0755 /etc/rc.d/rc.ip_forward
+  # /etc/rc.d/rc.ip_forward {start|stop|restart}
+
+  > Il suffit de rendre le script exécutable pour qu'il se lance au démarrage
+    de la machine.
+
+
+Sécuriser le serveur
+--------------------
+
+Dans un premier temps, configurer les encapsuleurs TCP. Voir le
+TCP-Wrapper-HOWTO.
+
+Ensuite, activer le pare-feu. Copier le script 'rc.firewall.lan' à l'endroit
+approprié et l'activer :
+
+  # cp rc.firewall.lan /etc/rc.d/rc.firewall
+  # chmod 0755 /etc/rc.d/rc.firewall
+  # /etc/rc.d/rc.firewall start
+  
+  > Attention, un redémarrage manuel du pare-feu désactive le relais des
+    paquets. Il faudra donc toujours utiliser les deux de concert, comme ceci: 
+
+  # /etc/rc.d/rc.firewall restart
+  # /etc/rc.d/rc.ip_forward restart
+
+
+Installer les services
+----------------------
+
+  · Serveur DHCP (DHCP-HOWTO)
+  · Serveur DNS (DNS-HOWTO)
+  · Serveur NTP (NTP-HOWTO)
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

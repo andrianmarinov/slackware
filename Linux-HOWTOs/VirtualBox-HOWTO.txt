@@ -1,0 +1,98 @@
+================
+VirtualBox HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+================
+
+Dernière révision : 28 février 2013
+
+Ce document décrit de façon succincte l'installation, la configuration et
+l'utilisation de VirtualBox sous Slackware.
+
+
+Installation
+------------
+
+Sur un système Slackware64, un jeu complet de bibliothèques de compatibilité
+32-bit doit être installé.
+
+Dépendances de compilation :
+
+  · acpica (SBo)
+  · jdk
+
+Le groupe 'vboxusers' (GID 215) doit exister sur le système. La création de ce
+groupe est prise en charge par mon SlackBuild.
+
+Compiler et installer 'virtualbox'.
+
+Ensuite, dans le répertoire source/virtualbox-kernel :
+
+  # sh virtualbox-kernel-mksrctarball.sh 
+  --> Copying sourcecode from /usr/src/virtualbox-kernel-4.1.24
+  --> Making the sourcecode tarball: ./virtualbox-kernel-4.1.24.tar.xz
+  --> Erasing the sourcecode directory: ./virtualbox-kernel-4.1.24/
+
+Vérifier si la version du script correspond à la version installée de
+VirtualBox et lancer le script :
+
+  # ./virtualbox-kernel.SlackBuild
+
+Enfin, installer le paquet résultant :
+
+  # installpkg /tmp/virtualbox-kernel-4.1.24_3.2.29_smp-i486-1_microlinux.tgz 
+  
+Éditer '/etc/rc.d/rc.local' et ajouter une stance pour charger le module du
+kernel :
+
+--8<---------- /etc/rc.d/rc.local --------------------------------------------
+# Start vboxdrv
+if [ -x /etc/rc.d/rc.vboxdrv ]; then
+  /etc/rc.d/rc.vboxdrv start
+fi
+--8<--------------------------------------------------------------------------
+
+Pareillement pour l'arrêt de la machine :
+
+--8<---------- /etc/rc.d/rc.local_shutdown -----------------------------------
+# Stop vboxdrv
+if [ -x /etc/rc.d/rc.vboxdrv ]; then
+  /etc/rc.d/rc.vboxdrv stop
+fi
+--8<--------------------------------------------------------------------------
+
+L'utilisation de périphériques USB dans les systèmes invités nécessitera un
+redémarrage du système hôte après l'installation de VirtualBox.
+
+Tous les utilisateurs qui souhaitent utiliser VirtualBox devront être membres
+du groupe 'vboxusers' :
+
+  # usermod -a -G vboxusers kikinovak
+
+Sur le site de VirtualBox (http://www.virtualbox.org), suivre le lien
+'Downloads' et télécharger le "VirtualBox Extension Pack" correspondant à la
+version installée, par exemple :
+
+  · Oracle_VM_VirtualBox_Extension_Pack-4.1.24-82872.vbox-extpack
+
+Ranger les extensions dans '/tmp' et les installer comme ceci :
+
+  # VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-* 
+  0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+  Successfully installed "Oracle VM VirtualBox Extension Pack".
+
+
+Système invité Slackware
+------------------------
+
+Installer les additions invité :
+
+Périphériques > Installer les Additions Invité
+
+  # mount /dev/cdrom /mnt/cdrom
+  # cd /mnt/cdrom
+  # ./VBoxLinuxAdditions.run
+
+Redémarrer.
+   
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

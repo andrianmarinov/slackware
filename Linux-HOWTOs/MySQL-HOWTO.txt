@@ -1,0 +1,174 @@
+===========
+MySQL HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+===========
+
+Dernière révision : 22 janvier 2013
+
+Ce HOWTO décrit la mise en place d'un serveur de bases de données MySQL sous
+Slackware. 
+
+  · Généralités
+  · Choisir un fichier de configuration
+  · Initialiser le serveur MySQL
+  · Sécuriser le serveur MySQL
+
+
+Généralités
+-----------
+
+MySQL est le système de bases de données le plus populaire du monde de l'Open
+Source. Un grand nombre d'applications web utilisent MySQL comme moteur de
+bases de données : wikis, moteurs de blogs et de forums, systèmes de gestion de
+contenu, etc.
+
+On entend parfois dire que MySQL n'est pas un "vrai" système de bases de
+données en comparaison à des systèmes comme Oracle ou DB/2. Contentons-nous de
+savoir que MySQL est utilisé, entre autres, par Facebook, Google et Yahoo! 
+
+
+Choisir un fichier de configuration
+-----------------------------------
+
+Sélectionner un fichier de configuration dans la panoplie de modèles
+disponibles selon les besoins dans le répertoire '/etc/mysql' :
+
+	· my-small.cnf           --> base de données taille S
+	· my-medium.cnf          --> base de données taille M
+	· my-large.cnf           --> base de données taille L
+	· my-huge.cnf            --> base de données taille XL
+	· my-innodb-heavy-4G.cnf --> base de données taille XXL
+
+Exemple :
+
+	# cd /etc/mysql
+	# cp my-small.cnf my.cnf
+
+
+Initialiser le serveur MySQL
+----------------------------
+
+Initialiser le répertoire de données MySQL :
+
+  # mysql_install_db
+  Installing MySQL system tables...
+  OK
+  Filling help tables...
+  OK
+  ...
+
+Régler les permissions :
+
+	# chown -R mysql:mysql /var/lib/mysql
+
+Activer le démon MySQL :
+
+	# chmod +x /etc/rc.d/rc.mysqld
+
+Lancer le démon MySQL :
+
+  # /etc/rc.d/rc.mysqld start
+  mysqld_safe Logging to '/var/lib/mysql/alphamule.err'.
+  mysqld_safe Starting mysqld daemon with databases from /var/lib/mysql
+
+  > Il faut éventuellement appuyer une deuxième fois sur [Entrée] pour
+    récupérer l'invite de commandes.
+
+
+Sécuriser le serveur MySQL
+--------------------------
+
+MySQL dispose de l'utilitaire 'mysql_secure_installation' pour assurer la
+sécurité d'une installation fraîche sur une machine de production. Ce programme
+permet d'effectuer quelques démarches de sécurisation essentielles :
+
+  > Définir un mot de passe du compte root MySQL (à ne PAS confondre avec le
+    compte root Linux).
+
+  > Supprimer les comptes root MySQL accessibles de l'extérieur. 
+
+  > Supprimer les connexions anonymes.
+
+  > Supprimer la base de données de test.
+
+Lancer la sécurisation :
+
+  # mysql_secure_installation
+  ...
+  Set root password? [Y/n] --> [Y]
+  New password: 
+  Re-enter new password: 
+  Password updated successfully!
+  Reloading privilege tables..
+   ... Success!
+  Remove anonymous users? [Y/n] --> [Y]
+   ... Success!
+  Disallow root login remotely? [Y/n] --> [Y]
+   ... Success!
+  Remove test database and access to it? [Y/n] --> [Y]
+   - Dropping test database...
+   ... Success!
+   - Removing privileges on test database...
+   ... Success!
+  Reload privilege tables now? [Y/n] --> [Y]
+   ... Success!
+  Cleaning up...
+
+Lancer une connexion à la console MySQL :
+
+	# mysql -u root -p
+	Enter password: 
+	Welcome to the MySQL monitor.
+
+Afficher les bases de données :
+
+  mysql> show databases;
+  +--------------------+
+  | Database           |
+  +--------------------+
+  | information_schema |
+  | mysql              |
+  | performance_schema |
+  +--------------------+
+  3 rows in set (0.00 sec)
+
+Utiliser la base de données 'mysql' :
+
+  mysql> use mysql;
+  Database changed
+
+Afficher les utilisateurs :
+
+  mysql> select user, host, password from user;
+  +------+-----------+-------------------------------------------+
+  | user | host      | password                                  |
+  +------+-----------+-------------------------------------------+
+  | root | localhost | *6883418C147A759B04D78A2D1E4E0C5BB0CDD1B4 |
+  | root | 127.0.0.1 | *6883418C147A759B04D78A2D1E4E0C5BB0CDD1B4 |
+  | root | ::1       | *6883418C147A759B04D78A2D1E4E0C5BB0CDD1B4 |
+  +------+-----------+-------------------------------------------+
+  3 rows in set (0.00 sec)
+
+Si l'on n'utilise pas l'IPv6, on peut désactiver 'root@::1' comme ceci :
+
+  mysql> delete from user where host = '::1';
+  Query OK, 1 row affected (0.00 sec)
+
+Vérifier le résultat de l'opération :
+
+  mysql> select user, host, password from user;
+  +------+-----------+-------------------------------------------+
+  | user | host      | password                                  |
+  +------+-----------+-------------------------------------------+
+  | root | localhost | *6883418C147A759B04D78A2D1E4E0C5BB0CDD1B4 |
+  | root | 127.0.0.1 | *6883418C147A759B04D78A2D1E4E0C5BB0CDD1B4 |
+  +------+-----------+-------------------------------------------+
+  2 rows in set (0.00 sec)
+
+Quitter la console MySQL :
+
+  mysql> quit;
+  Bye
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

@@ -1,0 +1,237 @@
+===============
+NFS + NIS HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+===============
+
+Dernière révision : 12 janvier 2013
+
+Ce HOWTO décrit la centralisation des répertoires utilisateurs et de
+l'authentification avec NFS et NIS.
+
+  · Configuration du serveur
+  · Configuration des postes clients
+
+
+Configuration du serveur
+------------------------
+
+Pour utiliser NFS et NIS conjointement avec un pare-feu, on va commencer par
+assigner des ports statiques aux différents services. Ce n'est pas strictement
+nécessaire, mais pour faire les choses plus proprement, on va noter les ports
+choisis dans '/etc/services', à la fin du fichier :
+
+--8<---------- /etc/services -------------------------------------------------
+...
+
+# Port statique pour NIS
+ypserv    834/tcp    # NIS server
+ypserv    834/udp    # NIS server
+
+# Ports statiques pour NFS
+statd     32765/tcp  # NFS statd (in)
+statd     32765/udp  # NFS statd (in)
+statd     32766/tcp  # NFS statd (out)
+statd     32766/udp  # NFS statd (out)
+mountd    32767/tcp  # NFS mountd
+mountd    32767/udp  # NFS mountd
+lockd     32768/tcp  # NFS lockd 
+lockd     32768/udp  # NFS lockd 
+rquotad   32769/tcp  # NFS mountd
+rquotad   32769/udp  # NFS mountd
+--8<--------------------------------------------------------------------------
+
+  > Bien évidemment, il ne faudra pas oublier d'ouvrir les ports en question.
+
+Définir les ports pour 'statd' dans '/etc/rc.d/rc.rpc' :
+
+--8<---------- /etc/rc.d/rc.rpc ----------------------------------------------
+...
+  if ! ps axc | grep -q rpc.statd ; then
+    echo "Starting RPC NSM (Network Status Monitor):  /sbin/rpc.statd"
+    /sbin/rpc.statd --port 32765 --outgoing-port 32766
+  fi
+...
+--8<--------------------------------------------------------------------------
+
+Les ports pour 'rquotad' et 'mountd' peuvent être définis dans
+'/etc/rc.d/rc.nfsd' :
+
+--8<---------- /etc/rc.d/rc.nfsd ---------------------------------------------
+...
+  if [ -x /usr/sbin/rpc.rquotad ]; then
+    echo "  /usr/sbin/rpc.rquotad"
+    /usr/sbin/rpc.rquotad --port 32769
+  fi
+...
+  if [ -x /usr/sbin/rpc.mountd ]; then
+    echo "  /usr/sbin/rpc.mountd"
+    /usr/sbin/rpc.mountd --port 32767
+  fi
+...
+--8<--------------------------------------------------------------------------
+
+Enfin, pour 'lockd', on pourra créer un fichier '/etc/sysctl.conf' :
+
+--8<---------- /etc/sysctl.conf ----------------------------------------------
+fs.nfs.nlm_tcpport=32768
+fs.nfs.nlm_udpport=32768
+--8<--------------------------------------------------------------------------
+
+  > Cette dernière option ne sera prise en compte qu'après un redémarrage du
+    serveur.
+
+Définir les partages NFS :
+
+--8<---------- /etc/exports --------------------------------------------------
+/home 192.168.2.0/24(rw,async,no_subtree_check)
+--8<--------------------------------------------------------------------------
+
+Activer les partages :
+
+  # exportfs -a
+  # chmod +x /etc/rc.d/rc.rpc
+  # chmod +x /etc/rc.d/rc.nfsd
+
+Redémarrer le serveur et vérifier si tous les services sont activés et
+utilisent bien les ports respectifs :
+
+  # pmap_dump
+
+Sur un serveur Slackware64, corriger un bug dans 'yptools' :
+
+  # cd /usr/lib
+  # ln -s /usr/lib64/yp .
+
+Définir le domaine NIS :
+
+--8<---------- /etc/defaultdomain --------------------------------------------
+microlinux.montpezat
+--8<--------------------------------------------------------------------------
+
+Le serveur NIS sera également un client NIS :
+
+--8<---------- /etc/yp.conf --------------------------------------------------
+domain microlinux.montpezat server localhost
+--8<--------------------------------------------------------------------------
+
+Activer le serveur NIS dans '/etc/rc.d/rc.yp' et définir un port statique :
+
+--8<---------- /etc/rc.d/rc.yp -----------------------------------------------
+# Set non-zero to enable yp client functions
+YP_CLIENT_ENABLE=1
+ 
+# Set non-zero to enable yp server functions
+YP_SERVER_ENABLE=1
+
+...
+
+    if [ -x /usr/sbin/ypserv ]; then
+      echo "Starting NIS server:  /usr/sbin/ypserv"
+      /usr/sbin/ypserv --port 834
+    fi
+...
+--8<--------------------------------------------------------------------------
+
+Activer le script et le lancer :
+
+  # chmod +x /etc/rc.d/rc.yp
+  # /etc/rc.d/rc.yp start
+
+Procéder à quelques ajustements dans '/var/yp/Makefile' : 
+
+  > La valeur 'MINGID' passe de '500' à '1'.
+
+  > Les valeurs de 'MERGE_PASSWD' et 'MERGE_GROUP' passent de 'true' à 'false'.
+
+  > L'option 'publickey' doit être désactivée.
+
+--8<---------- /var/yp/Makefile ----------------------------------------------
+...
+MINGID=1
+...
+MERGE_PASSWD=false
+MERGE_GROUP=false
+...
+all:  passwd group hosts rpc services netid protocols netgrp mail \
+  shadow # publickey networks ethers bootparams printcap \
+  # amd.home auto.master auto.home auto.local passwd.adjunct \
+  # timezone locale netmasks
+...
+--8<--------------------------------------------------------------------------
+
+Initialiser le domaine NIS :
+
+  # /usr/lib/yp/ypinit -m
+
+Ajouter les utilisateurs :
+
+  # adduser <utilisateur>
+  # cd /var/yp
+  # make
+
+On peut vérifier si les informations sur un utilisateur ont été mises à jour :
+
+  # ypmatch <utilisateur> passwd
+
+
+Configuration des postes clients
+--------------------------------
+ 
+Nettoyer '/home', qui sera le point de montage pour les partages NFS :
+
+  # rmdir /home/ftp
+
+Démarrer '/etc/rc.d/rc.rpc' et essayer de monter manuellement les partages :
+
+  # chmod +x /etc/rc.d/rc.rpc
+  # /etc/rc.d/rc.rpc start
+  # mount -t nfs nestor:/home /home
+  # ls /home
+  # umount /home
+
+Définir le montage NFS permanent dans '/etc/fstab' :
+
+--8<---------- /etc/fstab ----------------------------------------------------
+...
+nestor:/home /home nfs rsize=8192,wsize=8192,timeo=14,intr 0 0
+--8<--------------------------------------------------------------------------
+
+Spécifier le nom de domaine NIS comme sur le serveur :
+
+--8<---------- /etc/defaultdomain --------------------------------------------
+microlinux.montpezat
+--8<--------------------------------------------------------------------------
+
+Éditer '/etc/yp.conf' :
+
+--8<---------- /etc/yp.conf --------------------------------------------------
+domain microlinux.montpezat server nestor
+--8<--------------------------------------------------------------------------
+
+Ensuite, modifier '/etc/nsswitch.conf' comme ceci :
+
+--8<---------- /etc/nsswitch.conf --------------------------------------------
+passwd:     files nis
+shadow:     files nis
+group:      files nis
+hosts:      files dns nis
+networks:   files
+services:   files
+protocols:  files
+rpc:        files
+ethers:     files
+netmasks:   files
+netgroup:   files
+bootparams: files
+automount:  files
+aliases:    files
+--8<--------------------------------------------------------------------------
+
+Activer '/etc/rc.d/rc.yp' :
+
+  # chmod +x /etc/rc.d/rc.yp
+
+Redémarrer et vérifier si les utilisateurs peuvent se connecter en init 3.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

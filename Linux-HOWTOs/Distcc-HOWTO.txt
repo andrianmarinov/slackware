@@ -1,0 +1,437 @@
+============
+Distcc HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+============
+
+Dernière révision : 26 janvier 2013
+
+Ce HOWTO décrit la mise en place d'une grappe de machines sous Slackware pour
+la compilation distribuée.
+
+  · Introduction
+  · Configurer Distcc sur un poste serveur
+  · Utiliser Distcc sur un poste client
+  · Monitoring
+  · Ajouter un cache de compilation
+  · Documentation
+
+
+Introduction
+------------
+
+Certaines grosses applications ou bibliothèques comme Firefox, Thunderbird, Qt
+ou KDE sont très longues à compiler. À moins de disposer d'un avion de chasse
+genre Intel Core 7 gavé de RAM, on est condamné à passer des heures à attendre
+la fin de la compilation.
+
+Une solution consiste à configurer la compilation distribuée avec Distcc.
+L'idée, c'est de mettre en commun la puissance de calcul de tous les
+processeurs dans le réseau.
+
+Le cache de compilation Ccache permet par ailleurs d'accélérer les compilations
+répétées de façons significative.
+
+Petite explication des termes utilisés :
+
+  > La machine "client", c'est celle sur laquelle on effectue la compilation.
+    C'est là où l'on trouve le code source, le script SlackBuild, etc.
+
+  > La ou les machines "serveur" sont celles qui lui viennent en aide pour que
+    la compilation aille plus vite.
+
+Attention à bien utiliser la même architecture sur les machines client et
+serveur et à ne pas mélanger Slackware 32-bits et 64-bits !
+
+Prérequis
+---------
+
+Distcc utilise le port 3632 en TCP et en UDP par défaut. Il faut donc songer à
+ouvrir ce port sur les machines faisant office de serveur de compilation si
+l'on utilise un pare-feu.
+
+
+Configurer Distcc sur un poste serveur
+--------------------------------------
+
+Éditer '/etc/services' et ajouter le service 'distcc' à la fin :
+
+--8<---------- /etc/services -------------------------------------------------
+...
+distcc   3632/tcp    #Système de compilation distributée C/C++
+distcc   3632/udp    #Système de compilation distributée C/C++
+--8<--------------------------------------------------------------------------
+
+Adapater le script de démarrage suivant :
+
+--8<---------- /etc/rc.d/rc.distccd ------------------------------------------
+#!/bin/sh
+# Start/stop/restart the distributed C/C++ compiler server (distccd)
+# Written for Slackware Linux by Erik Jan Tromp
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+distccd_start() {
+  if [ -x /usr/bin/distccd ]; then
+    echo "Starting distributed C/C++ compiler server:  /usr/bin/distccd"
+    PATH=/usr/bin # everything we need is here
+    /usr/bin/distccd --daemon \
+      --allow 192.168.2.0/24 \
+      --listen 192.168.2.3 \
+      --log-file /var/log/distccd \
+      --user nobody
+  fi
+}
+
+distccd_stop() {
+  killall distccd
+}
+
+distccd_restart() {
+  distccd_stop
+  sleep 1
+  distccd_start
+}
+
+case "$1" in
+'start')
+  distccd_start
+  ;;
+'stop')
+  distccd_stop
+  ;;
+'restart')
+  distccd_restart
+  ;;
+*)
+  echo "usage: $0 start|stop|restart"
+esac
+--8<--------------------------------------------------------------------------
+
+  > La directive 'allow' spécifie le réseau local.
+
+  > La directive 'listen' indique l'adresse IP du serveur.
+
+Créer un fichier log :
+
+  # touch /var/log/distccd
+  # chown nobody:nogroup /var/log/distccd
+
+Pour que Distcc se lance automatiquement au démarrage de la machine, il faut
+l'ajouter à 'rc.local' :
+
+--8<---------- /etc/rc.d/rc.local --------------------------------------------
+...
+# Start Distcc server
+if [ -x /etc/rc.d/rc.distccd ]; then
+  /etc/rc.d/rc.distccd start
+fi
+--8<--------------------------------------------------------------------------
+
+Tant qu'à faire, on peut aussi l'arrêter proprement :
+
+--8<---------- /etc/rc.d/rc.local_shutdown  ----------------------------------
+...
+# Stop Distcc server
+if [ -x /etc/rc.d/rc.distccd ]; then
+  /etc/rc.d/rc.distccd stop
+fi
+--8<--------------------------------------------------------------------------
+
+Rendre le script exécutable :
+
+  # chmod 0755 /etc/rc.d/rc.distccd 
+
+Lancer le démon :
+
+  # /etc/rc.d/rc.distccd start
+
+Vérifier s'il tourne correctement :
+
+  # ps aux | grep distccd
+
+
+Utiliser Distcc sur un poste client
+-----------------------------------
+
+Depuis la version 2.0, Distcc utilise le mode "masquerade", qui passe par une
+série de liens symboliques. 
+
+Créer le répertoire "masquerade" :
+
+# mkdir -pv /usr/lib/distcc/bin
+mkdir: création du répertoire « /usr/lib/distcc »
+mkdir: création du répertoire « /usr/lib/distcc/bin »
+# cd /usr/lib/distcc/bin
+
+Identifier les compilateurs :
+
+# which gcc
+/usr/bin/gcc
+# ls -l /usr/bin/gcc
+lrwxrwxrwx 1 root root 9 janv. 24 23:44 /usr/bin/gcc -> gcc-4.7.1
+# which g++
+/usr/bin/g++
+# ls -l /usr/bin/g++
+lrwxrwxrwx 1 root root 13 janv. 24 23:44 /usr/bin/g++ -> g++-gcc-4.7.1
+
+Créer les liens symboliques :
+
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/c++
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/cc
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/g++
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/g++-gcc-4.7.1
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/gcc
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/gcc-4.7.1
+
+Sur une machine 32-bits :
+
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-c++
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-g++
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-gcc
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-gcc-4.7.1
+
+Sur une machine 64-bits :
+
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-c++
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-g++
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-gcc
+# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-gcc-4.7.1
+
+Pour éviter cette tâche fastidieuse, on peut utiliser le script
+'mkdistccsymlinks.sh', qu'on trouvera dans le répertoire 'tools' :
+
+--8<---------- mkdistccsymlinks.sh -------------------------------------------
+#!/bin/sh
+#
+# Create masquerade symlinks for distcc
+#
+# Written for Slackware Linux by Erik Jan Tromp
+# 
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+# Compilers for C and C++ (without path)
+COMPILERS="gcc-4.7.1 g++-gcc-4.7.1"
+
+# Masquerade directory
+MASQUERADE_DIRECTORY=/usr/lib/distcc/bin
+
+# Distcc path
+DISTCC=../../../bin/distcc
+
+# Clear directory
+rm -rf $MASQUERADE_DIRECTORY
+mkdir -p $MASQUERADE_DIRECTORY
+
+# Weed out bogus compiler entries
+COMPILERS=`which $COMPILERS 2> /dev/null`
+
+# Find all links
+LINKS=""
+for COMPILER in $COMPILERS ; do
+  COMPILER_DIRECTORY=`dirname $COMPILER`
+  COMPILER_FILE=`basename $COMPILER`
+  INODE=`find $COMPILER_DIRECTORY -name $COMPILER_FILE -follow -printf %i 2> /dev/null`
+  LINKS=$LINKS`find $COMPILER_DIRECTORY -inum $INODE -follow -printf "%f " 2> /dev/null`
+done
+
+# Create all links
+for LINK in $LINKS ; do
+  echo $LINK
+  ln -s $DISTCC $MASQUERADE_DIRECTORY/$LINK
+done
+--8<--------------------------------------------------------------------------
+
+Lancer le script :
+
+  # ./mkdistccsymlinks.sh
+
+Vérifier si les liens ont été créés correctement :
+
+  # ls -l /usr/lib/distcc/bin
+  ...
+  lrwxrwxrwx 1 root root 19 janv. 26 17:16 c++ -> ../../../bin/distcc
+  lrwxrwxrwx 1 root root 19 janv. 26 17:16 cc -> ../../../bin/distcc
+  lrwxrwxrwx 1 root root 19 janv. 26 17:16 g++ -> ../../../bin/distcc
+  lrwxrwxrwx 1 root root 19 janv. 26 17:16 gcc -> ../../../bin/distcc
+  ...
+
+Créer le fichier '/etc/distcc/hosts' et indiquer les hôtes disponibles, du plus
+puissant au moins puissant :
+
+--8<---------- /etc/distcc/hosts ---------------------------------------------
+localhost bernadette raymonde
+--8<--------------------------------------------------------------------------
+
+  > On peut effectuer une série de tests en compilant successivement la même
+    application avec un hôte différent. Dans ce cas, régler NUMJOBS à une
+    valeur plus basse comme 2 ou 4. Chronométrer les temps de compilation
+    respectifs, puis écrire les hôtes en allant du plus performant vers le
+    moins performant.
+
+Ajouter '/usr/lib/distcc/bin' en tête dans le PATH et définir le nombre de
+tâches de compilation simultanées :
+
+--8<---------- /root/.bashrc -------------------------------------------------
+...
+PATH=/usr/lib/distcc/bin:$PATH
+NUMJOBS="-j11"
+export PATH NUMJOBS
+--8<--------------------------------------------------------------------------
+
+
+Monitoring
+----------
+
+Lancer une compilation sur le poste client. Dans une deuxième console,
+afficher le journal de la compilation distribuée en direct. 
+
+  # distccmon-text 2
+
+On doit obtenir quelque chose qui ressemble à ceci :
+
+  ...
+  7232  Blocked                                                      [0]
+  7252  Preprocess  muxer_lavf.c                           bernadette[1]
+  7256  Preprocess  utils.c                                bernadette[2]
+  6611  Compile     postprocess.c                          bernadette[3]
+  7248  Compile     tree.c                                  localhost[0]
+  7214  Compile     sha.c                                   localhost[1]
+  7239  Compile     bink.c                                   raymonde[0]
+  7196  Compile     adpcmenc.c                               raymonde[1]
+  7188  Compile     adpcm.c                                  raymonde[2]
+  7145  Compile     muxer_mpeg.c                             raymonde[3]
+  ...
+
+Si l'on dispose d'un environnement graphique sur le client, on peut afficher le
+moniteur graphique. Il faut le lancer en tant que root à partir d'un terminal :
+
+  # distccmon-gnome
+
+Côté serveur, on peut afficher le fichier journal en temps réel :
+
+  # tail -f /var/log/distccd
+  distccd[13278] cc /root/.ccache/tmp/yop.tmp.buildbox.25986.i 
+  on localhost completed ok
+  distccd[13278] job complete
+  ...
+
+
+Ajouter un cache de compilation
+-------------------------------
+
+On peut combiner Distcc et Ccache lorsqu'on recompile souvent les mêmes
+applications. Là aussi, on utilisera le mode "masquerade".
+
+Créer les liens symboliques :
+
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/c++
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/cc
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/g++
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/g++-gcc-4.7.1
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/gcc
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/gcc-4.7.1
+
+Sur une machine 32-bits :
+
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-c++
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-g++
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-gcc
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-gcc-4.7.1
+
+Sur une machine 64-bits :
+
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-c++
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-g++
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-gcc
+# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-gcc-4.7.1
+
+Alternativement, le script 'mkccachesymlinks.sh' se chargera de le faire à
+notre place :
+
+--8<---------- mkccachesymlinks.sh -------------------------------------------
+#!/bin/sh
+#
+# Create masquerade symlinks for ccache
+#
+# Written for Slackware Linux by Erik Jan Tromp
+# 
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+# Compilers for C and C++ (without path)
+COMPILERS="gcc-4.7.1 g++-gcc-4.7.1"
+
+# Masquerade directory
+MASQUERADE_DIRECTORY=/usr/lib/ccache/bin
+
+# Ccache path
+CCACHE=../../../bin/ccache
+
+# Clear directory
+rm -rf $MASQUERADE_DIRECTORY
+mkdir -p $MASQUERADE_DIRECTORY
+
+# Weed out bogus compiler entries
+COMPILERS=`which $COMPILERS 2> /dev/null`
+
+# Find all links
+LINKS=""
+for COMPILER in $COMPILERS ; do
+  COMPILER_DIRECTORY=`dirname $COMPILER`
+  COMPILER_FILE=`basename $COMPILER`
+  INODE=`find $COMPILER_DIRECTORY -name $COMPILER_FILE -follow -printf %i 2> /dev/null`
+  LINKS=$LINKS`find $COMPILER_DIRECTORY -inum $INODE -follow -printf "%f " 2> /dev/null`
+done
+
+# Create all links
+for LINK in $LINKS ; do
+  echo $LINK
+  ln -s $CCACHE $MASQUERADE_DIRECTORY/$LINK
+done
+--8<--------------------------------------------------------------------------
+
+Lancer le script :
+
+  # ./mkccachesymlinks.sh
+
+Vérifier les liens nouvellement créés :
+
+  # ls -l /usr/lib/ccache/bin
+
+Il ne reste plus qu'à ajouter le chemin ver '/usr/lib/ccache/bin' en premier
+dans le PATH, avant 'distcc'.
+
+--8<---------- /root/.bashrc -------------------------------------------------
+...
+PATH=/usr/lib/ccache/bin:/usr/lib/distcc/bin:$PATH
+NUMJOBS="-j11"
+export PATH NUMJOBS
+--8<--------------------------------------------------------------------------
+
+Afficher la taille maximale et l'état du cache :
+
+  # ccache --show-stats
+  cache directory                     /root/.ccache
+  cache hit (direct)                     0
+  cache hit (preprocessed)               0
+  cache miss                          1357
+  called for link                      201
+  called for preprocessing               1
+  unsupported source language            1
+  no input file                          5
+  files in cache                      4247
+  cache size                          36.4 Mbytes
+  max cache size                       1.0 Gbytes
+
+Modifier la taille maximale du cache :
+
+  # ccache --max-size=5G
+
+
+Documentation
+-------------
+
+  · http://alphageek.dyndns.org/linux/distcc/
+  · man distcc
+  · man ccache
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
