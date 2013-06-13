@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=Vector Graphics Editor
+Name[de]=Vektorgrafik-Editor
+Name[fr]=Éditeur d’images vectorielles
+Comment=Inkscape
+Type=Application
+Categories=Graphics;VectorGraphics;GTK;
+MimeType=image/svg+xml;image/svg+xml-compressed;application/vnd.corel-draw;application/pdf;application/postscript;image/x-eps;application/illustrator;
+Exec=inkscape %F
+TryExec=inkscape
+Terminal=false
+StartupNotify=true
+Icon=inkscape

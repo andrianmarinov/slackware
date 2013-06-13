@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=CD/DVD Burner
+Name[de]=CD/DVD Brennprogramm
+Name[fr]=Gravure de CD/DVD
+Comment=Brasero
+MimeType=application/x-cd-image;application/x-cdrdao-toc;application/x-cue;application/x-toc;audio/x-scpls;audio/x-ms-asx;audio/x-mp3-playlist;audio/x-mpegurl;application/x-brasero;x-content/audio-cdda;x-content/video-dvd;x-content/video-vcd;x-content/video-svcd;x-content/image-picturecd;
+Exec=brasero %U
+Icon=brasero
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Utility;

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Electronic Mail
+Name[de]=Elektronische Post
+Name[fr]=Courrier électronique
+Comment=Mozilla Thunderbird ESR
+Exec=thunderbird
+Icon=thunderbird
+StartupNotify=true
+Type=Application
+Categories=Application;Network;

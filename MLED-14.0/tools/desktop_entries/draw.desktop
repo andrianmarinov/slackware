@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=openofficeorg3-draw
+Type=Application
+Categories=Graphics;
+Exec=sdraw %U
+MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw;
+Name=Drawing Program
+Name[de]=Zeichenprogramm
+Name[fr]=Logiciel de dessin
+Comment=Libre Office Draw
+StartupNotify=true
+InitialPreference=5

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=CD/DVD Covers
+Name[de]=CD/DVD-Hüllen
+Name[fr]=Pochettes de CD/DVD
+Comment=Gtkcdlabel
+Exec=/usr/bin/gtkcdlabel.py
+Icon=media-optical
+Type=Application
+Terminal=false
+Name=Gtkcdlabel
+Categories=Graphics;
+StartupNotify=true

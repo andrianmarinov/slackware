@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Audio CD Ripper
+Name[de]=Audio-CD-Ripper
+Name[fr]=Extracteur de CD audio
+Comment=Asunder
+Exec=asunder
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=AudioVideo;Audio;
+Icon=asunder
+

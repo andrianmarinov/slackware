@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=File Manager
+Name[de]=Dateimanager
+Name[fr]=Gestionnaire de fichiers
+Comment=Thunar
+Exec=Thunar %F
+Icon=system-file-manager
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=Utility;
+

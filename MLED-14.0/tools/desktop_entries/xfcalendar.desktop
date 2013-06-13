@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Calendar
+Name[de]=Kalender
+Name[fr]=Calendrier
+Comment=Orage
+Exec=orage
+Icon=xfcalendar
+StartupNotify=true
+MimeType=text/calendar;
+Terminal=false
+Type=Application
+Categories=Utility;

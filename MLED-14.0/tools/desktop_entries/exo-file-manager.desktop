@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=File Manager
+Name[de]=Dateimanager
+Name[fr]=Gestionnaire de fichiers
+Comment=Thunar
+Version=1.0
+Type=Application
+Exec=Thunar %F
+Icon=system-file-manager
+StartupNotify=true
+Terminal=false
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+OnlyShowIn=XFCE;
+X-XFCE-MimeType=x-scheme-handler/file;x-scheme-handler/trash;

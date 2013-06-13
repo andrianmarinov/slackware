@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FTP Client
+Name[de]=FTP-Programm
+Name[fr]=Client FTP
+Comment=GFTP
+Exec=gftp %u
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=network-workgroup
+Categories=Application;Network;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=gftp
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Version=2.0.19
+StartupNotify=true

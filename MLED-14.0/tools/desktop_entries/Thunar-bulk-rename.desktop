@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Batch Rename
+Name[de]=Stapelverarbeitung
+Name[fr]=Traitement par lots
+Comment=Thunar Bulk Rename
+Exec=/usr/lib64/Thunar/ThunarBulkRename %F
+Icon=folder-documents
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=Utility;
+

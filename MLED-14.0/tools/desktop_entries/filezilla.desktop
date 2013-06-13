@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=FTP client
+Name[de]=FTP-Programm
+Name[fr]=Client FTP
+Comment=filezilla
+Exec=filezilla
+Terminal=false
+Icon=filezilla
+Type=Application
+Categories=Network;FileTransfer;
+Version=1.0
+StartupNotify=true

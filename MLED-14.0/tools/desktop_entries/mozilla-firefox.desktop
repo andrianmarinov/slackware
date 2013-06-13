@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Web Browser
+Name[de]=Webbrowser
+Name[fr]=Navigateur Internet
+Comment=Mozilla Firefox ESR
+Exec=firefox %u
+Icon=firefox
+Type=Application
+Categories=Network;
+MimeType=text/html;
+Terminal=false
+StartupNotify=true

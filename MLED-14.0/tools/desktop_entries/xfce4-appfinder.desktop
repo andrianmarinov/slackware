@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Application Finder
+Name[de]=Programm-Manager
+Name[fr]=Gestionnaire d'applications
+Comment=Xfce4 Appfinder
+Exec=xfce4-appfinder
+Icon=xfce4-appfinder
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=X-XFCE;Utility;

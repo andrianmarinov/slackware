@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=openofficeorg3-base
+Type=Application
+Categories=Office;
+Exec=sbase %U
+MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
+Name=Database 
+Name[de]=Datenbanken
+Name[fr]=Bases de données
+Comment=Open Office Base
+StartupNotify=true
+InitialPreference=5

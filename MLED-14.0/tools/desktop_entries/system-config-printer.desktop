@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Manage Printer
+Name[de]=Druckerverwaltung
+Name[fr]=Gestion de l'imprimante
+Exec=system-config-printer
+Terminal=false
+Type=Application
+Icon=printer
+StartupNotify=true
+X-Desktop-File-Install-Version=0.16
+#Categories=GTK;Printing;HardwareSettings;Settings;System;
+Categories=X-XFCE;Settings;DesktopSettings;X-XfceSettingsDialog;

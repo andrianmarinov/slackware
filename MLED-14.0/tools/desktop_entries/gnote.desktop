@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Take notes
+Name[de]=Notizblock
+Name[fr]=Prendre des notes
+Comment=Gnote
+Exec=gnote --search
+Icon=gnote
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Utility;

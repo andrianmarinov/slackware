@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Drawing Program
+Name[de]=Zeichenprogramm
+Name[fr]=Logiciel de dessin
+Comment=Libre Office Draw
+Terminal=false
+#Icon=libreoffice4.0-draw
+Icon=openofficeorg3-draw
+Type=Application
+Categories=Graphics;
+Exec=libreoffice4.0 --draw %U
+MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.visio;application/x-wpg;
+StartupNotify=true

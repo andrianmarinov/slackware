@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Databases
+Name[de]=Datenbanken
+Name[fr]=Bases de données
+Comment=LibreOffice Base
+#Icon=libreoffice4.0-base
+Icon=openofficeorg3-base
+Type=Application
+Categories=Office;
+Exec=libreoffice4.0 --base %U
+Terminal=false
+MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
+StartupNotify=true

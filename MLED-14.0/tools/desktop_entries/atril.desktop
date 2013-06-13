@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Document Viewer
+Name[de]=Dokumentenbetrachter
+Name[fr]=Visualiseur de documents
+Comment=Document Viewer
+TryExec=atril
+Exec=atril %U
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=acroread
+X-MATE-DocPath=
+X-MATE-Bugzilla-Bugzilla=MATE
+X-MATE-Bugzilla-Product=atril
+X-MATE-Bugzilla-Component=BugBuddyBugs
+X-MATE-Bugzilla-Version=1.4.0
+Categories=Office;
+MimeType=application/pdf;application/x-bzpdf;application/x-gzpdf;application/postscript;application/x-bzpostscript;application/x-gzpostscript;image/x-eps;image/x-bzeps;image/x-gzeps;image/vnd.djvu;image/tiff;application/x-cbr;application/x-cbz;application/x-cb7;application/x-cbt;

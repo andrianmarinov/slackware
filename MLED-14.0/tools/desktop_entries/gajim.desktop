@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Internet Messenger
+Name[de]=Sofortnachrichtendienst
+Name[fr]=Messagerie instantanée
+Comment=Gajim
+Exec=gajim
+Icon=emesene
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Network;
+StartupNotify=true

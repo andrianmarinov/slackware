@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=DVD Ripper
+Name[de]=DVD-Ripper
+Name[fr]=Extracteur de DVD
+Comment=DVD::Rip
+Type=Application
+Exec=dvdrip
+Icon=dvdrip
+Categories=AudioVideo;Video;
+StartupNotify=true

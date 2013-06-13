@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=LibreOffice Printer Administration
+Name[de]=LibreOffice Druckerverwaltung
+Name[fr]=Gestion de l'imprimante LibreOffice
+Comment=LibreOffice Printeradmin
+Terminal=false
+#Icon=libreoffice4.0-printeradmin
+Icon=openofficeorg3-printeradmin
+Type=Application
+Categories=Settings;
+Exec=libreoffice4.0-printeradmin
+StartupNotify=true

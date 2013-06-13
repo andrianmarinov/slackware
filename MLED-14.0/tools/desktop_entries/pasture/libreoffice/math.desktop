@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Formula Editor
+Name[de]=Formeleditor
+Name[fr]=Éditeur de formules
+Comment=LibreOffice Math
+Terminal=false
+NoDisplay=true
+#Icon=libreoffice4.0-math
+Icon=openofficeorg3-math
+Type=Application
+Categories=Office;
+Exec=libreoffice4.0 --math %U
+MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.oasis.opendocument.formula-template;text/mathml;
+StartupNotify=true

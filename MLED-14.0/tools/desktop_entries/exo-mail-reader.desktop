@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Electronic Mail
+Name[de]=Elektronische Post
+Name[fr]=Courrier électronique
+Comment=Mozilla Thunderbird ESR
+Type=Application
+Exec=thunderbird
+Icon=thunderbird
+StartupNotify=true
+Terminal=false
+Categories=Network;X-XFCE;X-Xfce-Toplevel;
+OnlyShowIn=XFCE;
+X-XFCE-MimeType=x-scheme-handler/mailto;
