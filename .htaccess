@@ -1,0 +1,23 @@
+# ENABLE DIRECTORY VIEWS
+Options +Indexes
+Options +FollowSymlinks
+
+# Encoding
+AddDefaultCharset utf-8
+
+# STRONG HTACCESS PROTECTION
+<Files ~ "^.*\.([Hh][Tt][Aa])">
+ order allow,deny
+ deny from all
+</Files>
+
+# DIRECTORY CUSTOMIZATION
+<IfModule mod_autoindex.c>
+
+	# SET INDEX OPTIONS
+	IndexOptions IgnoreCase FancyIndexing FoldersFirst NameWidth=* DescriptionWidth=* 
+
+	# SET DISPLAY ORDER
+	IndexOrderDefault Ascending Name
+
+</IfModule>
