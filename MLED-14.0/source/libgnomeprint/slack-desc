@@ -1,0 +1,12 @@
+             |-----handy-ruler------------------------------------------------------|
+libgnomeprint: libgnomeprint (The GNOME Printing Library)
+libgnomeprint:
+libgnomeprint: This is an implementation of the GNOME Printing Architecture
+libgnomeprint: as described at: http://www.levien.com/gnome/print-arch.html.
+libgnomeprint:
+libgnomeprint:
+libgnomeprint:
+libgnomeprint:
+libgnomeprint:
+libgnomeprint:
+libgnomeprint: Package created by Niki Kovacs <info@microlinux.fr>

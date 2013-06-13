@@ -1,0 +1,12 @@
+                        |-----handy-ruler------------------------------------------------------|
+user-settings-openoffice: user-settings-openoffice (Default Open Office profile for MLED)
+user-settings-openoffice:
+user-settings-openoffice: This package contains the default user profile for the Open Office 
+user-settings-openoffice: suite :
+user-settings-openoffice: - Nagging assistant is OFF.
+user-settings-openoffice: - Auto-completion is OFF.
+user-settings-openoffice: - Auto-correction is OFF.
+user-settings-openoffice: - Grammar check is OFF.
+user-settings-openoffice:
+user-settings-openoffice:
+user-settings-openoffice: Package created by Niki Kovacs <info@microlinux.fr>

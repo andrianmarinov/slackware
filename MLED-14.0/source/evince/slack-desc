@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+evince: Evince (a simple GNOME-based document viewer)
+evince:
+evince: Evince is a document viewer for multiple document formats.
+evince: It currently supports PDF, Postscript, DJVU and TIFF. 
+evince:
+evince: The goal of Evince is to replace the multiple document viewers
+evince: that exist on the GNOME Desktop with a single simple application.
+evince:
+evince: 
+evince:
+evince: Package created by Niki Kovacs <info@microlinux.fr>

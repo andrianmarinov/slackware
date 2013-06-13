@@ -1,0 +1,12 @@
+              |-----handy-ruler------------------------------------------------------|
+libgnomecanvas: libgnomecanvas (GNOME canvas library)
+libgnomecanvas:
+libgnomecanvas: The GNOME canvas is an engine for structured graphics that offers
+libgnomecanvas: a rich imaging model, high performance rendering and a powerful,
+libgnomecanvas: high-level API.  It offers a choice of two rendering back-ends, one
+libgnomecanvas: based on Xlib for extremely fast display, and another based on Libart,
+libgnomecanvas: a sophisticated, antialiased, alpha-compositing engine. Applications
+libgnomecanvas: have a choice between the Xlib imaging model or a superset of the
+libgnomecanvas: PostScript imaging model, depending on the level of graphic
+libgnomecanvas: sophistication required.
+libgnomecanvas: Package created by Niki Kovacs <info@microlinux.fr>

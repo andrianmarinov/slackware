@@ -1,0 +1,12 @@
+         |-----handy-ruler------------------------------------------------------|
+xarchiver: Xarchiver (A GTK+2 only Archive Manager)
+xarchiver:
+xarchiver: Xarchiver is a Desktop Environment independent archiver frontend.
+xarchiver: All common archive types are supported. RPM and DEB packages are
+xarchiver: handled without their package managers. To run it you only need
+xarchiver: GTK+2 libraries and obviously the various rar, arj and 7z for
+xarchiver: these archive types.
+xarchiver:
+xarchiver: 
+xarchiver:
+xarchiver: Package created by Niki Kovacs <info@microlinux.fr>

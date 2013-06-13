@@ -1,0 +1,36 @@
+if [ "$PS1" ]; then
+  
+  # Colored output for 'ls'
+  eval `dircolors -b`
+  alias ls='ls --color=auto'
+
+  # Some more aliases
+  alias ll='ls -al'
+  alias ..='cd ..'
+  alias ...='cd ../..'
+  alias cp='cp -i'
+  alias rm='rm -i'
+  alias mv='mv -i'
+  alias vi='vim'
+  alias uman='GROFF_ENCODING=utf8 man'
+
+  # Command prompt for users
+  GREEN='\[\033[0;32m\]'
+  WHITE='\[\033[1;37m\]'
+  NC='\[\033[0;m\]'
+  PS1="$GREEN[$WHITE\u$NC@$WHITE\h$NC:$WHITE\W$GREEN] \$ $NC"
+
+  # Vim is our preferred editor
+  EDITOR=vim
+  VISUAL=$EDITOR
+  export EDITOR VISUAL
+
+  # Needed by libcanberra 
+  if [ -z "$GTK_MODULES" ] ; then
+    GTK_MODULES="canberra-gtk-module"
+  else
+    GTK_MODULES="$GTK_MODULES:canberra-gtk-module"
+  fi
+  export GTK_MODULES
+
+fi

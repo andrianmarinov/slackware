@@ -1,0 +1,12 @@
+             |-----handy-ruler------------------------------------------------------|
+webcore-fonts: webcore fonts (Microsoft's core fonts for the web)
+webcore-fonts: 
+webcore-fonts: The Webcore Fonts include a collection of Microsoft fonts:
+webcore-fonts: 
+webcore-fonts: 	* Core fonts for the Web
+webcore-fonts:	* Fonts for Windows Vista
+webcore-fonts:	* Tahoma 
+webcore-fonts: 
+webcore-fonts: 
+webcore-fonts:
+webcore-fonts: Package created by Niki Kovacs <info@microlinux.fr>

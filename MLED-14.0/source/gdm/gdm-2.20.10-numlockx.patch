@@ -1,0 +1,12 @@
+diff -Naur gdm-2.20.10-old/config/Init.in gdm-2.20.10/config/Init.in
+--- gdm-2.20.10-old/config/Init.in	2009-03-19 06:59:27.000000000 +0200
++++ gdm-2.20.10/config/Init.in	2009-09-01 12:48:57.629155533 +0300
+@@ -86,4 +86,8 @@
+   fi
+ fi
+ 
++if [ -x /etc/rc.d/rc.numlock ] && [ -x /usr/bin/numlockx ]; then
++	/usr/bin/numlockx on
++fi
++
+ exit 0

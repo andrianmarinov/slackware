@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Color Chooser
+Name[de]=Farbauswahl
+Name[fr]=Sélecteur de couleurs
+Comment=GColor2
+Icon=preferences-color
+Exec=gcolor2
+Terminal=false
+Categories=Graphics;
+StartupNotify=true
+

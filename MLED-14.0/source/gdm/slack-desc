@@ -1,0 +1,12 @@
+   |-----handy-ruler------------------------------------------------------|
+gdm: gdm (GNOME Display Manager)
+gdm:
+gdm: The Gnome Display Manager (GDM) is a display manager that
+gdm: implements all significant features required for managing
+gdm: local and remote displays. For full information about GDM
+gdm: features, refer to the documentation.
+gdm:
+gdm: 
+gdm:
+gdm:
+gdm: Package created by Niki Kovacs <info@microlinux.fr>

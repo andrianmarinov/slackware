@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+live555: Live555 (C++ libraries for multimedia streaming)
+live555:
+live555: This code forms a set of C++ libraries for multimedia streaming,
+live555: using open standard protocols (RTP/RTCP, RTSP, SIP). These libraries
+live555: can be used to build streaming applications.
+live555:
+live555:
+live555:
+live555:
+live555:
+live555: Package created by Niki Kovacs <info@microlinux.fr>

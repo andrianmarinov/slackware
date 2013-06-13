@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+libkate: libkate (codec for karaoke and text support in Ogg)
+libkate:
+libkate: Kate is a codec for karaoke and text encapsulation for Ogg.
+libkate: Most of the time, this would be multiplexed with audio/video
+libkate: to carry subtitles, song lyrics etc.
+libkate:
+libkate: 
+libkate:
+libkate:
+libkate:
+libkate: Package created by Niki Kovacs <info@microlinux.fr>

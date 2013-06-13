@@ -1,0 +1,12 @@
+     |-----handy-ruler------------------------------------------------------|
+atkmm: atkmm (C++ bindings for ATK)
+atkmm:
+atkmm: Atkmm is the C++ binding for the ATK library.
+atkmm: This module is part of the GNOME C++ bindings effort.
+atkmm:
+atkmm: 
+atkmm:
+atkmm:
+atkmm:
+atkmm:
+atkmm: Package created by Niki Kovacs <info@microlinux.fr>

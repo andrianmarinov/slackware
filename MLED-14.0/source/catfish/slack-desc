@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+catfish: Catfish (A versatile file searching tool)
+catfish:
+catfish: Catfish is a frontend for different search engines (daemons). The
+catfish: interface is intentionally lightweight and simple, using only GTK+ 2.
+catfish: You can configure it to your needs by using several command line
+catfish: options.
+catfish:
+catfish: 
+catfish:
+catfish:
+catfish: Package created by Niki Kovacs <info@microlinux.fr>

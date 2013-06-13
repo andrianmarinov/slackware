@@ -1,0 +1,12 @@
+        |-----handy-ruler------------------------------------------------------|
+libmp4v2: libmp4v2 (library to read, create, and modify mp4 files)
+libmp4v2:
+libmp4v2: This library provides functions to read, create and modify mp4 files. 
+libmp4v2: This is a standalone version of the mp4v2 library. It is derived from 
+libmp4v2: the mpeg4ip source tree, but for licensing reasons it has been
+libmp4v2: adapted to this form.  
+libmp4v2:
+libmp4v2: 
+libmp4v2:
+libmp4v2:
+libmp4v2: Package created by Niki Kovacs <info@microlinux.fr>

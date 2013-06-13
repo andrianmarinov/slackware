@@ -1,0 +1,85 @@
+#!/bin/sh
+
+# Slackware build script for cddb-py
+
+# Written by Mihai Militaru <mihai.militaru@gmx.com>
+# March 2009
+#
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+PRGNAM=cddb-py
+ORIGNAM=CDDB
+VERSION=${VERSION:-1.4}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_microlinux}
+
+# Automatically determine the architecture we're building on:
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i486 ;;
+    arm*) ARCH=arm ;;
+    # Unless $ARCH is already set, use uname -m for all other archs:
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+DOCS="COPYING CHANGES README"
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+if [ ! -r $ORIGNAM.tar.gz ] ; then
+   wget -c http://$PRGNAM.sourceforge.net/$ORIGNAM.tar.gz
+fi
+
+md5sum -c $ORIGNAM.tar.gz.md5
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$ORIGNAM.tar.gz
+cd $ORIGNAM-$VERSION
+chown -R root:root .
+find . \
+ \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+ -exec chmod 644 {} \;
+
+python setup.py install --root $PKG
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+
+cp -a \
+  $DOCS \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+cd $TMP
+rm -rf $ORIGNAM-$VERSION $PKG

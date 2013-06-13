@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=File search
+Name[de]=Dateisuche
+Name[fr]=Recherche de fichiers
+Comment=Catfish
+Categories=Utility;
+Exec=catfish
+Icon=catfish
+Terminal=false
+StartupNotify=true

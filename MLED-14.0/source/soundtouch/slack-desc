@@ -1,0 +1,12 @@
+          |-----handy-ruler------------------------------------------------------|
+soundtouch: soundtouch (sound processing library)
+soundtouch:
+soundtouch: Soundtouch is an open-source audio processing library
+soundtouch: that allows changing the sound tempo, pitch and playback
+soundtouch: rate parameters independently from each other. Using it
+soundtouch: it's possible to for example change the tempo of a song,
+soundtouch: while the pitch stays the same.
+soundtouch:
+soundtouch:
+soundtouch:
+soundtouch: Package created by Niki Kovacs <info@microlinux.fr>

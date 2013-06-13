@@ -1,0 +1,12 @@
+       |-----handy-ruler-----------------------------------------------------|
+cairomm: cairomm (C++ wrapper for the cairo graphics library)
+cairomm:
+cairomm: Cairomm is a C++ wrapper for the Cairo graphics library. It offers
+cairomm: all the power of Cairo with an interface familiar to C++ developers,
+cairomm: including use of the Standard Template Library where it makes sense.
+cairomm: 
+cairomm: 
+cairomm:
+cairomm:
+cairomm: 
+cairomm: Package created by Niki Kovacs <info@microlinux.fr>

@@ -1,0 +1,22 @@
+diff -Naur brasero-2.26.0-old/src/brasero-app.c brasero-2.26.0/src/brasero-app.c
+--- brasero-2.26.0-old/src/brasero-app.c	2009-03-16 02:47:47.000000000 +0200
++++ brasero-2.26.0/src/brasero-app.c	2009-03-20 18:33:07.353536169 +0200
+@@ -126,9 +126,6 @@
+ 	{"Exit", GTK_STOCK_QUIT, NULL, NULL,
+ 	 N_("Exit the program"), G_CALLBACK (on_exit_cb)},
+ 
+-	{"Contents", GTK_STOCK_HELP, N_("_Contents"), "F1", N_("Display help"),
+-	 G_CALLBACK (on_help_cb)}, 
+-
+ 	{"About", GTK_STOCK_ABOUT, NULL, NULL, N_("About"),
+ 	 G_CALLBACK (on_about_cb)},
+ };
+@@ -157,8 +154,6 @@
+ 		"<menuitem action='Check'/>"
+ 	    "</menu>"
+ 	    "<menu action='HelpMenu'>"
+-		"<menuitem action='Contents'/>"
+-		"<separator/>"
+ 		"<menuitem action='About'/>"
+ 	    "</menu>"
+ 	    "</menubar>"

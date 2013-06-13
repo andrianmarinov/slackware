@@ -1,0 +1,87 @@
+#!/bin/sh
+
+# Slackware build script for x264
+
+# Written by core (eroc@linuxmail.org)
+# Modified by Heinz Wiesinger <pprkut@liwjatan.at>
+#
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+PRGNAM=x264
+VERSION=20120804
+BUILD=${BUILD:-1}
+TAG=${TAG:-_microlinux}
+
+NUMJOBS=${NUMJOBS:--j2}
+
+if [ -z "$ARCH" ]; then
+ case "$( uname -m )" in
+   i?86) ARCH=i486 ;;
+   arm*) ARCH=arm ;;
+      *) ARCH=$( uname -m ) ;;
+ esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+if [ ! -r $PRGNAM-snapshot-$VERSION-2245-stable.tar.bz2 ] ; then
+   wget -c ftp://ftp.videolan.org/pub/videolan/$PRGNAM/snapshots/$PRGNAM-snapshot-$VERSION-2245-stable.tar.bz2
+fi
+
+md5sum -c $PRGNAM-snapshot-$VERSION-2245-stable.tar.bz2.md5
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-snapshot-$VERSION-2245-stable
+tar xvf $CWD/$PRGNAM-snapshot-$VERSION-2245-stable.tar.bz2
+cd $PRGNAM-snapshot-$VERSION-2245-stable
+chown -R root:root .
+chmod -R u+w,go+r-w,a-s .
+
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --enable-visualize \
+  --enable-shared \
+  --enable-pic \
+  --enable-strip
+
+make $NUMJOBS 
+make install DESTDIR=$PKG || exit 1
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a AUTHORS COPYING doc/*.txt $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n -p $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+cd $TMP          
+rm -rf $PRGNAM-snapshot-$VERSION-2245-stable $PKG
+

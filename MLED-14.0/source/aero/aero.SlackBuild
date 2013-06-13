@@ -1,0 +1,98 @@
+#!/bin/sh
+
+# Slackware build script for aero
+
+# Written by Niki Kovacs <info@microlinux.fr)
+#
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+PRGNAM=aero
+# No version really, but the master build script needs one anyway to work
+# properly
+VERSION=${VERSION:-1.0}	
+BUILD=${BUILD:-1}
+TAG=${TAG:-_microlinux}		
+
+ARCH=noarch # hardcode ARCH
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}	
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}	
+
+set -e 
+
+THEMES="aero \
+        aero-drop \
+        aero-large \
+        aero-large-drop \
+        aero-extra-large \
+        aero-extra-large-drop \
+        aero-left \
+        aero-drop-left \
+        aero-large-left \
+        aero-large-drop-left \
+        aero-extra-large-left \
+        aero-extra-large-drop-left"
+         
+for THEME in $THEMES; do
+  if [ ! -r $THEME.tar.gz ]; then 
+    wget -c http://www.infinality.net/files/$THEME.tar.gz
+		md5sum -c $THEME.tar.gz.md5
+  fi
+done
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM*
+for THEME in $THEMES; do
+  tar xvf $CWD/$THEME.tar.gz || exit 1
+done
+
+mkdir -p $PKG/usr/share/icons
+mv aero* $PKG/usr/share/icons/
+
+# Fix permissions
+chown -R root:root $PKG
+find $PKG \
+ \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+ -exec chmod 644 {} \;
+
+# This is a workaround for a bug in Xfce that creates different mouse cursor
+# themes in different places. 
+cd $PKG/usr/share/icons
+ln -s aero-large-drop default
+cd -
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+cd $TMP
+rm -rf $PRGNAM* $PKG

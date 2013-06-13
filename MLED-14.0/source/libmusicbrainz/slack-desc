@@ -1,0 +1,12 @@
+              |-----handy-ruler------------------------------------------------------|
+libmusicbrainz: libmusicbrainz (library for accessing MusicBrainz servers)
+libmusicbrainz:
+libmusicbrainz: MusicBrainz is a user-maintained community music metadatabase.
+libmusicbrainz: The MusicBrainz client library allows applications to make metadata
+libmusicbrainz: lookups to a MusicBrainz server, generate signatures from WAV files
+libmusicbrainz: and create CD Index Disk IDs from audio CD-ROMs.
+libmusicbrainz:
+libmusicbrainz: 
+libmusicbrainz: 
+libmusicbrainz: 
+libmusicbrainz: Package created by Niki Kovacs <info@microlinux.fr>

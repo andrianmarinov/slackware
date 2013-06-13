@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Text editor
+Name[de]=Texteditor
+Name[fr]=Éditeur de texte
+Comment=Leafpad
+Exec=leafpad %f
+Icon=leafpad
+Terminal=false
+Type=Application
+MimeType=text/plain
+Categories=GTK;Utility;TextEditor;
+StartupNotify=true

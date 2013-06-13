@@ -1,0 +1,12 @@
+          |-----handy-ruler-------------------------------------------------------|
+openoffice: openoffice (a full-featured open-source office suite)
+openoffice:
+openoffice: Open Office is a full-featured open-source office suite that is
+openoffice: compatible with all other major office software.
+openoffice:
+openoffice: This is a repackaging of the official Open Office binary RPMs
+openoffice: distributed by the upstream developers.
+openoffice:
+openoffice: 
+openoffice:
+openoffice: Package created by Niki Kovacs <info@microlinux.fr>

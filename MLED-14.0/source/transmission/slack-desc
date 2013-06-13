@@ -1,0 +1,12 @@
+            |-----handy-ruler------------------------------------------------------|
+transmission: Transmission (bittorrent client)
+transmission:
+transmission: Transmission is a lightweight open source BitTorrent client,
+transmission: providing useful functionality without feature bloat.
+transmission: It consists of a daemon, a GTK+, Qt and CLI client.
+transmission:
+transmission: 
+transmission:
+transmission:
+transmission:
+transmission: Package created by Niki Kovacs <info@microlinux.fr>

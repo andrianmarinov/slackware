@@ -1,0 +1,12 @@
+         |-----handy-ruler----------------------------------------------------|
+transcode: transcode (Audio/Video transcoding)
+transcode:
+transcode: transcode is a text-console utility for video stream processing.
+transcode: Decoding and encoding is done by loading modules that are
+transcode: responsible for feeding transcode with raw video/audio streams
+transcode: (import modules) and encoding the frames (export modules). It
+transcode: supports elementary video and audio frame transformations,
+transcode: including de-interlacing or fast resizing of video frames and
+transcode: loading of external filters.
+transcode:
+transcode: Package created by Niki Kovacs <info@microlinux.fr>

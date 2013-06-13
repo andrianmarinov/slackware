@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+acpica: acpica (ACPI Source Language [ASL] Utils)
+acpica:
+acpica: ACPI CA includes:
+acpica: - iasl, an ASL compiler/decompiler
+acpica: - acpisrc, a source code conversion tool
+acpica: - acpiexec, a user-space AML interpreter
+acpica: - acpixtract, convert ascii ACPI tables to binary
+acpica:
+acpica: 
+acpica:
+acpica: Package created by Niki Kovacs <info@microlinux.fr>

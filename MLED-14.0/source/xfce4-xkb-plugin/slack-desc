@@ -1,0 +1,12 @@
+                |-----handy-ruler------------------------------------------------------|
+xfce4-xkb-plugin: xfce4-xkb-plugin (Xkb plugin for the Xfce panel)
+xfce4-xkb-plugin:
+xfce4-xkb-plugin: The Xkb plugin can be used to show the current keyboard layout and/or
+xfce4-xkb-plugin: to select a layout from those defined in the /etc/X11/xorg.conf file.
+xfce4-xkb-plugin:
+xfce4-xkb-plugin:
+xfce4-xkb-plugin:
+xfce4-xkb-plugin:
+xfce4-xkb-plugin:
+xfce4-xkb-plugin:
+xfce4-xkb-plugin: Package created by Niki Kovacs <info@microlinux.fr>

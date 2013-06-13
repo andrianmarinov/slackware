@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+cddb-py: cddb-py (CDDB and FreeDB audio CD track info access in Python)
+cddb-py:
+cddb-py: This is actually a set of three modules to access the CDDB and
+cddb-py: FreeDB online databases of audio CD track titles and information.
+cddb-py: It includes a C extension module to fetch track lengths under
+cddb-py: Linux, FreeBSD, OpenBSD, Mac OS X, Solaris, and Win32, which is
+cddb-py: easily ported to other operating systems.
+cddb-py: 
+cddb-py: 
+cddb-py:
+cddb-py: Package created by Niki Kovacs <info@microlinux.fr>
