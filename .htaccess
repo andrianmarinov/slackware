@@ -3,7 +3,7 @@ Options +Indexes
 Options +FollowSymlinks
 
 # Encoding
-AddDefaultCharset utf-8
+AddDefaultCharset uft-8
 
 # STRONG HTACCESS PROTECTION
 <Files ~ "^.*\.([Hh][Tt][Aa])">
@@ -15,9 +15,56 @@ AddDefaultCharset utf-8
 <IfModule mod_autoindex.c>
 
 	# SET INDEX OPTIONS
-	IndexOptions IgnoreCase FancyIndexing FoldersFirst NameWidth=* DescriptionWidth=* 
+	IndexOptions IgnoreCase FancyIndexing FoldersFirst NameWidth=* DescriptionWidth=* SuppressHTMLPreamble
 
 	# SET DISPLAY ORDER
 	IndexOrderDefault Ascending Name
 
+  # SPECIFY HEADER FILE
+  HeaderName /slackware/repository-layout/header.html
+
+  # SPECIFY FOOTER FILE
+  ReadmeName /slackware/repository-layout/footer.html
+
+  # IGNORE THESE FILES  
+  IndexIgnore repository-layout .gitignore
+
+  # ICONS
+  DefaultIcon   /slackware/repository-layout/text-x-generic.png
+  AddIcon       /slackware/repository-layout/folder.png ^^DIRECTORY^^
+  AddIcon       /slackware/repository-layout/go-up.png ..
+  AddIcon       /slackware/repository-layout/text-x-script.png .sh
+  AddIcon       /slackware/repository-layout/internet-news-reader.png ChangeLog.txt
+  AddIcon       /slackware/repository-layout/emblem-important.png README
+  AddIcon       /slackware/repository-layout/slackware.png .SlackBuild
+  AddIcon       /slackware/repository-layout/package-x-generic.png .tgz .gz .bz2 .7z .zip .rpm .deb
+  AddIcon       /slackware/repository-layout/system-installer.png .txz 
+  AddIconByType /slackware/repository-layout/image-x-generic.png image/*
+
+  # DESCRIPTIONS
+  AddDescription "Linux documentation" Linux-HOWTOs -HOWTO.txt
+  AddDescription "Microlinux Enterprise Desktop 14.0"   MLED-14.0
+  AddDescription "Microlinux Enterprise Server 14.0"    MLES-14.0
+  AddDescription "Plain text file" .txt README
+  AddDescription "Slackware build script" .SlackBuild
+  AddDescription "Slackware package" .txz
+  AddDescription "Slackware package description file" slack-desc
+  AddDescription "Checksum file" .md5
+  AddDescription "Patch file" .patch
+  AddDescription "Desktop menu entry file" .desktop
+  AddDescription "GZIP compressed TAR archive" .tgz .tar.gz
+  AddDescription "BZIP2 compressed TAR archive" .tar.bz2
+  AddDescription "GZIP compressed archive" .Z .z .gz .zip
+  AddDescription "RAR compressed archive" .rar
+  AddDescription "TAR compressed archive" .tar
+  AddDescription "ZIP compressed archive" .zip 
+  AddDescription "Joint Photographics Experts Group" .jpg .jpeg .jpe
+  AddDescription "Graphic Interchange Format" .gif
+  AddDescription "Portable Network Graphic" .png
+  AddDescription "Vector graphic" .ps .ai .eps
+  AddDescription "Hypertext Markup Language" .html .shtml .htm
+  AddDescription "Extensible Markup Language" .xml
+  AddDescription "Javascript" .js
+  AddDescription "Unix shell script" .sh .shar .csh .ksh .command
+  AddDescription "Configuration file" .conf
 </IfModule>
