@@ -12,14 +12,14 @@ case $(uname -m) in
   *     ) TXZDIR=pkg ;;
 esac  
 
-#/usr/bin/wget \
-#-c \
-#-r \
-#-np \
-#-nH \
-#--cut-dirs=3 \
-#--reject "index.html*" \
-#$SERVER/$DIRECTORY/MLED-$VERSION/$TXZDIR/ -P ../$TXZDIR
+/usr/bin/wget \
+-c \
+-r \
+-np \
+-nH \
+--cut-dirs=3 \
+--reject "index.html*" \
+$SERVER/$DIRECTORY/MLED-$VERSION/$TXZDIR/ -P ../$TXZDIR
 
 echo
 echo ":: All packages downloaded to the $TXZDIR directory. Change into it and"
