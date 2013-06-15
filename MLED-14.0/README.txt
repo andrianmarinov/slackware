@@ -164,9 +164,9 @@ The MLED package collection can be downloaded here:
   * http://www.microlinux.fr/slackware/MLED-14.0/
 
 Packages for 32-bit Slackware are in the 'pkg' subdirectory, packages for
-Slackware64 can be found in 'pkg64'. Of course, you're free to use wget, curl,
-lynx or links or whatever tool you prefer to grab all the packages. The easiest
-way will be to use the automated download script:
+Slackware64 can be found in 'pkg64'. Of course, you're free to use 'wget',
+'curl', 'lynx' or 'links' or whatever tool you prefer to grab all the packages.
+The easiest way will be to use the automated download script:
 
   # cd tools
   # ./get-MLED.sh
@@ -226,6 +226,46 @@ install everything:
   # upgradepkg --install-new *-compat32/*.t?z
 
 
+Clean up the applications menu
+------------------------------
+
+The 'tools/' directory features the 'cleanmenu' utility, a small Bash script to
+clean up various desktop menu entries and make them Joe-Sixpack-friendly. Run
+this utility:
+
+  # cd tools/
+  # ./cleanmenu
+
+  /!\ The script replaces many '*.desktop' files in '/usr/share/applications'
+  and similar locations by some custom-made menu entry files. For now, they're
+  only localized in english, french and german, so you may not want to run the
+  script if you use another language.
+
+
+Finishing up
+------------
+
+We're almost there. Here's what's left to be done.
+
+  1. Configure the X.org server. 
+
+  2. Define one or more normal users for the system.
+
+  3. Switch to default runlevel 4.
+
+Reboot and enjoy your shiny new Microlinux Enterprise Desktop.
+
+
+Build MLED from source
+----------------------
+
+Installing the collection of binary packages is by far the easiest method. If
+you prefer building your packages from source - for whatever reason - here's a
+few instructions. 
+
+Read them carefully. The paragraphs you don't read will come back and bite you.
+
+
 A word about NVidia cards
 -------------------------
 
@@ -265,7 +305,7 @@ Start the build
 
   # ./MLED.SlackBuild
 
-This master build takes care of: 
+This master build parses the 'Packages.txt' file and takes care of: 
 
   1. downloading all sources;
 
@@ -273,7 +313,7 @@ This master build takes care of:
 
   3. installing packages as they are built;
 
-  4. storing them in the right location, depending on your architecture.
+  4. storing them in 'pkg' or 'pkg64', depending on your architecture.
 
   /!\ Some applications like Firefox ESR and Thunderbird ESR can take ages to
   build on old hardware. Whenever possible, complete the whole build on a fast
@@ -281,36 +321,7 @@ This master build takes care of:
   hardware.
 
 
-Clean up the applications menu
-------------------------------
-
-The 'tools/' directory features - among other things - the 'cleanmenu' utility,
-a small Bash script to clean up various desktop menu entries and make them
-Joe-Sixpack-friendly. Run this utility:
-
-  # cd tools/
-  # ./cleanmenu
-
-  /!\ The script replaces many '*.desktop' files in '/usr/share/applications'
-  and similar locations by some custom-made menu entry files. For now, they're
-  only localized in english, french and german, so you may not want to run the
-  script if you use another language.
-
-
-Finishing up
-------------
-
-We're almost there. Here's what's left to be done.
-
-  1. Configure the X.org server. 
-
-  2. Define one or more normal users for the system.
-
-  3. Switch to default runlevel 4.
-
-Reboot and enjoy your shiny new Microlinux Enterprise Desktop.
-
-                                    Niki Kovacs, Tue May  7 18:22:13 CEST 2013
+                                    Niki Kovacs, Sat Jun 15 13:45:05 CEST 2013
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
