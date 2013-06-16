@@ -1,4 +1,4 @@
-# MLES packages
+# Build order for MLES packages
 user-settings-console
 sbopkg
 recode

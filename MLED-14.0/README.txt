@@ -305,7 +305,7 @@ Start the build
 
   # ./MLED.SlackBuild
 
-This master build parses the 'Packages.txt' file and takes care of: 
+This master build parses the 'build_order' file and takes care of: 
 
   1. downloading all sources;
 

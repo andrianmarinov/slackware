@@ -1,4 +1,4 @@
-# MLED packages
+# Build order for MLED packages
 user-settings-console
 cdlabelgen
 p7zip

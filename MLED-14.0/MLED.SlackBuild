@@ -3,7 +3,7 @@
 # Copyright (c) 2013 Niki Kovacs <info@microlinux.fr>
 # -----------------------------------------------------------------------------
 #
-# This script builds all Slackware packages listed in the 'Packages.txt' file. 
+# This script builds all Slackware packages listed in the 'build_order' file. 
 #
 # It puts them in the corresponding package directory. 
 #
@@ -11,7 +11,7 @@
 # installed, the script skips to the next package.
 #
 # Otherwise it builds and installs the package, until all packages listed in
-# the 'Packages.txt' file are built.
+# the 'build_order' file are built.
 #
 
 CWD=$(pwd)
@@ -25,7 +25,7 @@ esac
 NUMJOBS="-j5"
 export NUMJOBS="$NUMJOBS"
 
-PACKAGES=$(egrep -v '(^\#)|(^\s+$)' $CWD/Packages.txt)
+PACKAGES=$(egrep -v '(^\#)|(^\s+$)' $CWD/build_order)
 
 for PACKAGE in $PACKAGES; do
   if [ -r ${TXZDIR}/${PACKAGE}-[r,0-9]*.txz ] ; then
