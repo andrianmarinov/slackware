@@ -147,7 +147,7 @@ basic 'trim-desktop-base.sh' script that takes care of two things:
 
 The script makes use of 'slackpkg', so make sure it's configured for use.
 
-  # cd slackware/MLED-14.0/tools/
+  # cd slackware/desktop-14.0/tools/
   # ./trim-desktop-base.sh
 
 If you don't use the script, then you still have to install the MPlayer plugin
@@ -161,12 +161,14 @@ Download the MLED package collection
 
 The MLED package collection can be downloaded here:
 
-  * http://www.microlinux.fr/slackware/MLED-14.0/
+  * http://www.microlinux.fr/slackware/
 
-Packages for 32-bit Slackware are in the 'pkg' subdirectory, packages for
-Slackware64 can be found in 'pkg64'. Of course, you're free to use 'wget',
-'curl', 'lynx' or 'links' or whatever tool you prefer to grab all the packages.
-The easiest way will be to use the automated download script:
+
+Packages for 32-bit Slackware are in the 'desktop-14.0/slackware' subdirectory,
+packages for Slackware64 can be found in 'desktop64-14.0/slackware64'. Of
+course, you're free to use 'wget', 'curl', 'lynx' or 'links' or whatever tool
+you prefer to grab all the packages.  The easiest way will be to use the
+automated download script:
 
   # cd tools
   # ./get-MLED.sh
