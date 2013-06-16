@@ -17,8 +17,8 @@
 CWD=$(pwd)
 SOURCEDIR=${CWD}/source
 case $(uname -m) in 
-  x86_64) TXZDIR=$CWD/pkg64 ;;
-  *     ) TXZDIR=$CWD/pkg ;;
+  x86_64) TXZDIR=$CWD/slackware64 ;;
+  *     ) TXZDIR=$CWD/slackware ;;
 esac  
 
 # Set the number of parallel make jobs
