@@ -1,20 +1,38 @@
 Sun Jun 16 13:22:19 CEST 2013
-user-settings-console-1.0-noarch-2_microlinux.txz
-sbopkg-0.36.0-noarch-1_microlinux.txz
-recode-3.6-i486-2_microlinux.txz
-unrar-4.0.7-i486-1_microlinux.txz
-p7zip-9.20.1-i486-1_microlinux.txz
-faad2-2.7-i486-1_microlinux.txz
-lame-3.99.5-i486-1_microlinux.txz
-libcuefile-r453-i486-1_microlinux.txz
-libmms-0.6.2-i486-1_microlinux.txz
-libmp4v2-2.0.0-i486-1_microlinux.txz
-libreplaygain-r453-i486-1_microlinux.txz
-speex-1.2rc1-i486-1_microlinux.txz
-twolame-0.3.13-i486-1_microlinux.txz
-faac-1.28-i486-2_microlinux.txz
-ffmpeg-0.11.1-i686_custom-1_microlinux.txz
-musepack-tools-r435-i486-1_microlinux.txz
-libshout-2.2.2-i486-1_microlinux.txz
-mpd-0.17.1-i486-1_microlinux.txz
+Work in progress.
+
+user-settings-console-1.0-noarch-2_microlinux.txz: Added.
+sbopkg-0.36.0-noarch-1_microlinux.txz: Added.
+recode-3.6-i486-2_microlinux.txz: Added.
+recode-3.6-x86_64-2_microlinux.txz: Added.
+unrar-4.0.7-i486-1_microlinux.txz: Added.
+unrar-4.0.7-x86_64-1_microlinux.txz: Added.
+p7zip-9.20.1-i486-1_microlinux.txz: Added.
+p7zip-9.20.1-x86_64-1_microlinux.txz: Added.
+faad2-2.7-i486-1_microlinux.txz: Added.
+faad2-2.7-x86_64-1_microlinux.txz: Added.
+lame-3.99.5-i486-1_microlinux.txz: Added.
+lame-3.99.5-x86_64-1_microlinux.txz: Added.
+libcuefile-r453-i486-1_microlinux.txz: Added.
+libcuefile-r453-x86_64-1_microlinux.txz: Added.
+libmms-0.6.2-i486-1_microlinux.txz: Added.
+libmms-0.6.2-x86_64-1_microlinux.txz: Added.
+libmp4v2-2.0.0-i486-1_microlinux.txz: Added.
+libmp4v2-2.0.0-x86_64-1_microlinux.txz: Added.
+libreplaygain-r453-i486-1_microlinux.txz: Added.
+libreplaygain-r453-x86_64-1_microlinux.txz: Added.
+speex-1.2rc1-i486-1_microlinux.txz: Added.
+speex-1.2rc1-x86_64-1_microlinux.txz: Added.
+twolame-0.3.13-i486-1_microlinux.txz: Added.
+twolame-0.3.13-x86_64-1_microlinux.txz: Added.
+faac-1.28-i486-2_microlinux.txz: Added.
+faac-1.28-x86_64-2_microlinux.txz: Added.
+ffmpeg-0.11.1-i686_custom-1_microlinux.txz: Added.
+ffmpeg-0.11.1-x86_64_custom-1_microlinux.txz: Added.
+musepack-tools-r435-i486-1_microlinux.txz: Added.
+musepack-tools-r435-x86_64-1_microlinux.txz: Added.
+libshout-2.2.2-i486-1_microlinux.txz: Added.
+libshout-2.2.2-x86_64-1_microlinux.txz: Added.
+mpd-0.17.1-i486-1_microlinux.txz: Added.
+mpd-0.17.1-x86_64-1_microlinux.txz: Added.
 +---------------------------+
