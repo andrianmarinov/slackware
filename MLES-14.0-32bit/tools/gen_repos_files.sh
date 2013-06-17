@@ -119,7 +119,7 @@ FORCEASC="no"    # .asc files
 # We may have a need to only update the ChangeLog files:
 RSSONLY="no"     # ChangeLog .rss and .txt
 # For a sub-repository we do not have a ChangeLog:
-CHANGELOG="no"
+CHANGELOG="yes"
 
 # Variable used to limit the search for packages which lack .md5/.asc file,
 # to those packages changed less than NOTOLDER days ago.
