@@ -7,9 +7,6 @@ Terminal-0.6.1-x86_64-1_microlinux.txz: Upgraded.
   Version 0.6.1 introduces some really nice color themes as well as the
   possibility to define a default geometry. Thanks to Robby Workman for the
   hint.
-pasture/flash-player-plugin-legacy-10.3.183.11-i386-1_microlinux.txz: Added.
-  This is the legacy version of the Adobe Flash Player for CPUs that don't come
-  with the "sse2" feature. Special thanks to ljb643 on LQ.
 +--------------------------+
 Sun Jun 15 17:02:40 CEST 2013
 Microlinux Enterprise Desktop 14.0 is released !
