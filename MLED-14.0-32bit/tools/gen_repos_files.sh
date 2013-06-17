@@ -46,7 +46,7 @@ USERDEFS=${USERDEFS:-~/.genreprc}
 # Sane defaults:
 
 # The directory of the Slackware package repository:
-REPOSROOT=${REPOSROOT:-"/web/mirror/htdocs/microlinux/MLED-14.0/"}
+REPOSROOT=${REPOSROOT:-"/web/mirror/htdocs/microlinux/MLED-14.0-32bit/"}
 
 # Repository maintainer
 REPOSOWNER=${REPOSOWNER:-"Niki Kovacs <info@microlinux.fr>"}
@@ -57,29 +57,29 @@ REPOSOWNER=${REPOSOWNER:-"Niki Kovacs <info@microlinux.fr>"}
 REPOSOWNERGPG=${REPOSOWNERGPG:-""}
 
 # Under what URL is the repository accessible:
-DL_URL=${DL_URL:-"http://www.microlinux.fr/slackware/MLED-14.0/"}
+DL_URL=${DL_URL:-"http://www.microlinux.fr/slackware/MLED-14.0-32bit/"}
 
 # The title of the generated RSS feed:
-RSS_TITLE=${RSS_TITLE:-"Microlinux Enterprise Desktop 14.0"}
+RSS_TITLE=${RSS_TITLE:-"Microlinux Enterprise Desktop 14.0 32-bit"}
 
 # The logo picture used for the RSS feed:
 RSS_ICON=${RSS_ICON:-"http://www.microlinux.fr/images/habillage/pingouin_ayo_small.png"}
 
 # The URL linked to when clicking on the logo:
-RSS_LINK=${RSS_LINK:-"http://www.microlinux.fr/slackware/MLED-14.0/"}
+RSS_LINK=${RSS_LINK:-"http://www.microlinux.fr/slackware/MLED-14.0-32bit"}
 
 # URL to the full changelog.txt:
-RSS_CLURL=${RSS_CLURL:-"http://www.microlinux.fr/slackware/MLED-14.0/ChangeLog.txt"}
+RSS_CLURL=${RSS_CLURL:-"http://www.microlinux.fr/slackware/MLED-14.0-32bit/ChangeLog.txt"}
 
 # The descriptive text for the RSS feed:
-RSS_DESCRIPTION=${RSS_DESCRIPTION:-"Microlinux Enterprise Desktop 14.0. The package directories include the SlackBuild scripts and sources."}
+RSS_DESCRIPTION=${RSS_DESCRIPTION:-"Slackware packages for the Microlinux Enterprise Desktop 14.0 32-bit. The package directories include the SlackBuild script and sources."}
 
 # Maximum number of RSS feed entries to display:
 RSS_FEEDMAX=${RSS_FEEDMAX:-15}
 
 # The RSS generator must use a unique feed identifier.
 # Generate one for your feed by using the string returned by "uuidgen -t":
-RSS_UUID=${RSS_UUID:-"a7130e44-d683-11e2-ba54-08002769b704"} 
+RSS_UUID=${RSS_UUID:-"3855acf8-d743-11e2-b88a-080027de0d25"}
 
 # Either use gpg or gpg2:
 GPGBIN=${GPGBIN:-"/usr/bin/gpg"}
@@ -113,13 +113,13 @@ DEBUG=0
 # A value of "yes" means that .meta .md5 and/or .asc files are
 # always (re)generated.
 # while "no" means: only generate these files if they are missing.
-FORCEMD5="yes"    # .md5 files
-FORCEPKG="yes"    # .meta files
-FORCEASC="yes"    # .asc files
+FORCEMD5="no"    # .md5 files
+FORCEPKG="no"    # .meta files
+FORCEASC="no"    # .asc files
 # We may have a need to only update the ChangeLog files:
 RSSONLY="no"     # ChangeLog .rss and .txt
 # For a sub-repository we do not have a ChangeLog:
-CHANGELOG="no"
+CHANGELOG="yes"
 
 # Variable used to limit the search for packages which lack .md5/.asc file,
 # to those packages changed less than NOTOLDER days ago.
