@@ -1,1 +1,1 @@
-../../desktop-14.0/tools/trim-desktop-base.sh
+../../MLED-14.0-32bit/tools/trim-desktop-base.sh

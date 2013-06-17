@@ -1,1 +1,1 @@
-../../desktop-14.0/tools/get-MLED.sh
+../../MLED-14.0-32bit/tools/get-MLED.sh

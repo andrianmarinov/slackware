@@ -1,1 +1,1 @@
-../../desktop-14.0/tools/cleanmenu.sh
+../../MLED-14.0-32bit/tools/cleanmenu.sh
