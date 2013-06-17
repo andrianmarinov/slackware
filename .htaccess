@@ -35,6 +35,7 @@ AddDefaultCharset uft-8
   AddIcon       /slackware/repository-layout/go-up.png ..
   AddIcon       /slackware/repository-layout/text-x-script.png .sh
   AddIcon       /slackware/repository-layout/internet-news-reader.png ChangeLog.txt
+  AddIcon       /slackware/repository-layout/application-rss+xml.png .rss
   AddIcon       /slackware/repository-layout/emblem-important.png README README.txt
   AddIcon       /slackware/repository-layout/slackware.png .SlackBuild
   AddIcon       /slackware/repository-layout/package-x-generic.png .tgz .gz .bz2 .7z .zip .rpm .deb
