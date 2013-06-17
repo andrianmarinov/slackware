@@ -46,7 +46,7 @@ USERDEFS=${USERDEFS:-~/.genreprc}
 # Sane defaults:
 
 # The directory of the Slackware package repository:
-REPOSROOT=${REPOSROOT:-"/web/mirror/htdocs/microlinux/MLES-14.0/"}
+REPOSROOT=${REPOSROOT:-"/web/mirror/htdocs/microlinux/MLES-14.0-32bit/"}
 
 # Repository maintainer
 REPOSOWNER=${REPOSOWNER:-"Niki Kovacs <info@microlinux.fr>"}
@@ -57,7 +57,7 @@ REPOSOWNER=${REPOSOWNER:-"Niki Kovacs <info@microlinux.fr>"}
 REPOSOWNERGPG=${REPOSOWNERGPG:-""}
 
 # Under what URL is the repository accessible:
-DL_URL=${DL_URL:-"http://www.microlinux.fr/slackware/MLES-14.0/"}
+DL_URL=${DL_URL:-"http://www.microlinux.fr/slackware/MLES-14.0-32bit/"}
 
 # The title of the generated RSS feed:
 RSS_TITLE=${RSS_TITLE:-"Microlinux Enterprise Server 14.0"}
