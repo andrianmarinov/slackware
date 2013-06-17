@@ -15,7 +15,7 @@
 #
 
 CWD=$(pwd)
-SOURCEDIR=${CWD}/source
+SOURCEDIR=${CWD}/../MLES-14.0-source
 case $(uname -m) in 
   x86_64) TXZDIR=$CWD/slackware64 ;;
   *     ) TXZDIR=$CWD/slackware ;;
