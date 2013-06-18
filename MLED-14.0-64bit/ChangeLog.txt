@@ -2,6 +2,8 @@ Tue Jun 18 13:53:57 CEST 2013
 mozilla-firefox-17.0.6-x86_64-1_microlinux.txz: Upgraded.
 mozilla-firefox-l10n-17.0.6-x86_64-1_microlinux.txz: Upgraded.
 user-settings-firefox-17.0.6-x86_64-1_microlinux.txz: Upgraded.
+mozilla-thunderbird-17.0.6-x86_64-1_microlinux.txz: Upgraded.
+mozilla-thunderbird-l10n-17.0.6-x86_64-1_microlinux.txz: Upgraded.
 +--------------------------+
 Sun Jun 16 12:51:48 CEST 2013
 hplip-3.12.11-x86_64-1_microlinux.txz: Upgraded.
