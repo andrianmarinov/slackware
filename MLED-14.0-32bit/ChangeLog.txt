@@ -1,9 +1,7 @@
 Sun Jun 16 12:51:48 CEST 2013
 hplip-3.12.11-i486-1_microlinux.txz: Upgraded.
-hplip-3.12.11-x86_64-1_microlinux.txz: Upgraded.
   Fix for broken 'hp-toolbox' utility.
 Terminal-0.6.1-i486-1_microlinux.txz: Upgraded.
-Terminal-0.6.1-x86_64-1_microlinux.txz: Upgraded.
   Version 0.6.1 introduces some really nice color themes as well as the
   possibility to define a default geometry. Thanks to Robby Workman for the
   hint.
