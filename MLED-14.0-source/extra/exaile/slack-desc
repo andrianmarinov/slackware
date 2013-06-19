@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+exaile: Exaile (Amarok-like Media Player for GTK+)
+exaile:
+exaile: Exaile is a music manager and player for GTK+ written in Python. it
+exaile: incorporates automatic fetching of album art, handling of large
+exaile: libraries, lyrics fetching, artist/album information via Wikipedia,
+exaile: Lastfm submission support, and optional iPod support.
+exaile:
+exaile: It includes a built-in SHOUTcast directory browser, tabbed playlists
+exaile: and other features.
+exaile:
+exaile: Package created by Niki Kovacs <info@microlinux.fr> 
