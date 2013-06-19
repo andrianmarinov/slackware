@@ -1,3 +1,8 @@
+Wed Jun 19 10:18:13 CEST 2013
+extra/mutagen-1.21-i486-1_microlinux.txz: Added.
+extra/gst-python-0.10.22-i486-1_microlinux.txz: Added.
+extra/exaile-3.3.1-i486-1_microlinux.txz: Added.
++--------------------------+
 Tue Jun 18 13:53:57 CEST 2013
 mozilla-firefox-17.0.6-i486-1_microlinux.txz: Upgraded.
 mozilla-firefox-l10n-17.0.6-i486-1_microlinux.txz: Upgraded.
