@@ -1,0 +1,23 @@
+VirtualBox Open Source Edition (OSE) is a general-purpose full
+virtualizer for x86 hardware.
+
+By default VirtualBox will be compiled with hardening enabled. That
+means all binaries will be run suid root, which is the default
+behaviour of upstream packages. However, you are still able
+to disable this by passing HARDENING=no to the script.
+
+You have to create a vboxusers group, e.g. "groupadd -g 215 vboxusers"
+and make your user a member of that group.
+
+To compile virtualbox without the Qt4 GUI pass QT4=no to the script.
+
+To enable the webservice pass WEBSERVICE=yes to the script. This adds gsoap
+to the list of required dependencies.
+
+If you want to attach VirtualBox to a VDE network you will need vde2.
+
+VirtualBox requires acpica, the jdk package from /extra, and the
+virtualbox-kernel package is needed at runtime. See README.SLACKWARE
+for some setup notes.
+
+NOTE: This will not build on a stock x86_64 system.
