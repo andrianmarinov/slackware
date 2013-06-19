@@ -2,6 +2,8 @@ Wed Jun 19 10:24:12 CEST 2013
 extra/mutagen-1.21-x86_64-1_microlinux.txz: Added.
 extra/gst-python-0.10.22-x86_64-1_microlinux.txz: Added.
 extra/exaile-3.3.1-x86_64-1_microlinux.txz: Added.
+extra/virtualbox-4.1.24-x86_64-1_microlinux.tgz: Added.
+extra/virtualbox-kernel-4.1.24_3.2.29-x86_64-1_microlinux.tgz.
 +--------------------------+
 Tue Jun 18 13:53:57 CEST 2013
 mozilla-firefox-17.0.6-x86_64-1_microlinux.txz: Upgraded.
