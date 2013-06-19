@@ -86,7 +86,7 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 sed "s%@KERNEL@%$KERNEL%" $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$PKG_VERS-$PKG_ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$PKG_VERS-$PKG_ARCH-$BUILD$TAG.${PKGTYPE:-txz}
 
 # Cleanup
 cd $TMP
