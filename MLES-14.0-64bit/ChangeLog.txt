@@ -1,3 +1,8 @@
+
+Tue Jun 25 17:06:06 CEST 2013
+icecast-2.3.2-x86_64-2_microlinux.txz: Rebuilt.
+  Fixed rc.icecast.new configuration in doinst.sh.
++---------------------------+
 Thu Jun 20 16:12:52 CEST 2013
 icecast-2.3.2-x86_64-1_microlinux.txz: Added.
 libmpdclient-2.7-x86_64-1_microlinux.txz: Added.
