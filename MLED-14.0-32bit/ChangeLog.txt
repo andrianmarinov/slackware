@@ -1,3 +1,7 @@
+Thu Jun 20 18:42:06 CEST 2013
+extra/filezilla-3.7.1-i486-1_microlinux.txz: Added.
+extra/poedit-1.4.6.1-i486-1_microlinux.txz: Added.
++--------------------------+
 Thu Jun 20 10:48:47 CEST 2013
 extra/virtualbox-4.1.24-i486-1_microlinux.txz: Added.
 extra/virtualbox-kernel-4.1.24_3.2.29_smp-i486-1_microlinux.txz: Added.
