@@ -89,6 +89,9 @@ KERNEL_VERSION="3.2.45"
 ...
 --8<--------------------------------------------------------------------------
 
+  /!\ Sur un système 32-bits qui utilise le kernel SMP, la version du kernel
+  sera "3.2.45-smp" et non "3.2.45" !
+
   /!\ Si VirtualBox est installé, il faut impérativement supprimer les modules
   correspondants avant de construire l'Initrd, sous peine de se retrouver avec
   des erreurs mystérieuses du genre 'VBoxCreateUSBNode.sh not found' au
