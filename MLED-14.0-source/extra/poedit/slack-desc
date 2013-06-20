@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+poedit: Poedit (cross-platform gettext catalogs editor)
+poedit:
+poedit: Poedit is a cross-platform gettext catalogs (.po files) editor.
+poedit:
+poedit: It aims to provide a more convenient approach to editing catalogs
+poedit: than launching Vim and editing the file by hand.
+poedit:
+poedit: It also has support for spellchecking (gtkspell).
+poedit:
+poedit: 
+poedit: Package created by Niki Kovacs <info@microlinux.fr>
