@@ -1,9 +1,10 @@
 #!/bin/sh
-SCP=$(which scp)
+RSYNC=$(which rsync)
 CWD=$(pwd)
-LOCALDIR=$CWD/../..
-SCPUSER=kikinovak
+LOCALSTUFF=$CWD/../..
+EXCLUDEFILE=$CWD/reposync_exclude
+RSYNCUSER=kikinovak
 SERVER=nestor
 SERVERDIR=/srv/httpd/vhosts/mirror/htdocs/microlinux
-$SCP -r $LOCALDIR/* $SCPUSER@$SERVER:$SERVERDIR/
+$RSYNC -av $LOCALSTUFF --exclude-from $EXCLUDEFILE $RSYNCUSER@$SERVER:$SERVERDIR 
 

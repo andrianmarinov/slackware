@@ -27,7 +27,7 @@ AddDefaultCharset uft-8
   ReadmeName /slackware/repository-layout/footer.html
 
   # IGNORE THESE FILES  
-  IndexIgnore repository-layout .gitignore
+  IndexIgnore repository-layout .gitignore 
 
   # ICONS
   DefaultIcon   /slackware/repository-layout/text-x-generic.png
