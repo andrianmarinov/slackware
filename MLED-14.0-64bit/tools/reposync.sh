@@ -1,1 +1,1 @@
-../../MLED-14.0-32bit/tools/reposync.sh
+../../MLES-14.0-32bit/tools/reposync.sh
