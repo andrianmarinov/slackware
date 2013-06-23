@@ -21,15 +21,12 @@ for PACKAGE in $INSTALL; do
   fi
 done
 
-if [ -z $PACKAGES ]; then
-  echo
-  echo ":: Microlinux Enterprise Desktop is already installed."
-  echo 
-  exit 1
+if [ -z "$PACKAGES" ]; then
+  continue
+else
+  /usr/sbin/slackpkg install $PACKAGES
 fi
 
-/usr/sbin/slackpkg install $PACKAGES
-
 echo
-echo ":: Microlinux Enterprise Desktop is now installed."
+echo ":: Microlinux Enterprise Desktop installed."
 echo

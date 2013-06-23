@@ -26,12 +26,12 @@ for PACKAGE in $INSTALL; do
   fi
 done
 
-if [ -z $PACKAGES ]; then
+if [ -z "$PACKAGES" ]; then
   continue
 else
   /usr/sbin/slackpkg install $PACKAGES
 fi
 
 echo
-echo ":: System is ready for building the Microlinux Enterprise Desktop."
+echo ":: Base Slackware system is ready."
 echo
