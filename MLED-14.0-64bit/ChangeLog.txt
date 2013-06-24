@@ -3,6 +3,8 @@ Replaced 'get-MLED.sh' by 'install-MLED.sh'. This new script makes installing
 MLED even more simple. Instead of downloading everything using wget and
 installing the package collection using upgradepkg --reinstall --install-new,
 we just parse the 'build_order' script and use slackpkg to install everything. 
+Removed the 'get-multilib.sh' script as well as the multilib/ directory, since
+this is also handled much more efficiently by slackpkg now.
 Updated the documentation in 'MLED-14.0-*/README.txt' to reflect these changes.
 Added a section about managing MLED with slackpkg+ and fixed a few typos.
 Thanks to zakame, rinias and Bertman123 on LQ.
