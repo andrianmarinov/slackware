@@ -1,3 +1,8 @@
+Mon Jun 24 08:49:54 CEST 2013
+patches/ffmpeg-0.11.1-x86_64-2_microlinux.txz: Rebuilt.
+  Fixed inconsistent $ARCH field in the package name, which made the package
+	fly under slackpkg's radar ;o)
++--------------------------+
 Sat Jun 22 08:50:20 CEST 2013
 extra/virtualbox-kernel-4.1.24_3.2.29-x86_64-1_microlinux.txz: Removed.
 	When the virtualbox-kernel-4.1.24_3.2.45 package is installed, slackpkg+
