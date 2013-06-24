@@ -1,3 +1,12 @@
+Mon Jun 24 10:40:37 CEST 2013
+Replaced 'get-MLED.sh' by 'install-MLED.sh'. This new script makes installing
+MLED even more simple. Instead of downloading everything using wget and
+installing the package collection using upgradepkg --reinstall --install-new,
+we just parse the 'build_order' script and use slackpkg to install everything. 
+Updated the documentation in 'MLED-14.0-*/README.txt' to reflect these changes.
+Added a section about managing MLED with slackpkg+ and fixed a few typos.
+Thanks to zakame, rinias and Bertman123 on LQ.
++--------------------------+
 Mon Jun 24 08:49:54 CEST 2013
 ffmpeg-0.11.1-i486-2_microlinux.txz: Rebuilt.
   Fixed inconsistent $ARCH field in the package name, which made the package
