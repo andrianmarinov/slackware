@@ -6,6 +6,23 @@ This repository contains a complete collection of extra software for the
 Slackware-based Microlinux Enterprise Desktop (MLED).
 
 
+  · Introduction
+  · Installation
+  · Download the Microlinux scripts
+  · Configure 'slackpkg'
+  · Trim and upgrade
+  · Install the MLED package collection
+  · Set locales
+  · Multilib stuff 
+  · Clean up the applications menu
+  · Finishing up
+
+  · Build MLED from source
+  · A word about NVidia cards
+  · Java Development Kit
+  · Start the build
+
+
 Introduction
 ------------
 
@@ -49,25 +66,28 @@ Bring up your network interface, for example:
 The Slackware installation environment already sports an empty '/tag' directory
 for a set of tagfiles, so let's use it.
 
-  root@slackware:/# cd /tag
+  # cd /tag
 
 Grab the set of tagfiles from the server:
 
-  root@slackware:/tag# wget http://www.microlinux.fr/slackware/MLED-14.0/tagfiles.tar.gz
+  # wget http://www.microlinux.fr/slackware/MLED-14.0-32bit/tagfiles.tar.gz
+
+  /!\ The sets of tagfiles in the 32-bit and 64-bit subdirectories are
+  symlinked and thus identical. 
 
 Unpack the downloaded archive:
 
-  root@slackware:/tag# tar xvzf tagfiles.tar.gz
+  # tar xvzf tagfiles.tar.gz
 
 Your '/tag' directory should now contain a series of directories corresponding
 to the Slackware package sets:
 
-  root@slackware:/tag# ls
+  # ls
   a/ ap/ d/ e/ f/ k/ kde/ kdei/ l/ n/ t/ tcl/ x/ xap/ xfce/ y/
 
 Now start the Slackware installer:
 
-  root@slackware:/tag# setup
+  # setup
  
 PACKAGE SERIES SELECTION: accept the default package selection, since the
 tagfiles will override this and take care of selecting each package anyway.
@@ -93,8 +113,7 @@ Download the Microlinux scripts
 -------------------------------
 
 I'm providing a few helper scripts that will speed up the installation process.
-Grab the whole Microlinux file tree using the following command. It's really
-just a bunch of scripts and text files, so the download goes quite fast:
+Grab the whole Microlinux file tree using the following command:
 
   # cd
   # git clone https://github.com/kikinovak/slackware
@@ -110,8 +129,8 @@ handling third-party repositories like MLED:
 
 Grab the package from the 'pkg/' directory and install it.
 
-Edit '/etc/slackpkg/mirrors' and choose one and only one Slackware mirror
-according to your geographical location, for example:
+Edit '/etc/slackpkg/mirrors' and choose a Slackware mirror according to your
+geographical location, for example:
 
 --8<---------- /etc/slackpkg/mirrors -----------------------------------------
 ...
@@ -119,6 +138,8 @@ according to your geographical location, for example:
 ftp://mirror.ovh.net/mirrors/ftp.slackware.com/slackware64-14.0/
 ...
 --8<--------------------------------------------------------------------------
+
+  /!\ Make sure you choose only one single mirror for Slackware stable.
 
 Configure 'slackpkg+':
 
@@ -146,6 +167,11 @@ REPOPLUS=( slackpkgplus microlinux )
 MIRRORPLUS['microlinux']=http://www.microlinux.fr/slackware/MLED-14.0-64bit/
 MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
+
+Eric Hameleers kindly provides a mirror for the Microlinux repository. You may
+want to use it as an alternative to the main repository:
+
+  * http://taper.alienbase.nl/mirrors/people/kikinovak/
 
 Update information about available packages:
 
@@ -217,21 +243,50 @@ export LC_COLLATE=en_US.utf8
 Multilib stuff 
 --------------
 
-On Slackware64, you may want to add applications like VirtualBox.  In that
-case, you have to install the 32-bit compatibility layer provided by Eric
-Hameleers. I'm providing a little script in the 'tools' directory that takes
-care of downloading all necessary Multilib packages : 
-  
-  # cd tools/
-  # get-multilib.sh
+On Slackware64, you may want to add applications like VirtualBox, Wine, Skype,
+etc.  In that case, you have to install the 32-bit compatibility layer provided
+by Eric Hameleers. The 'slackpkg+' plugin makes this task very easy. 
 
-Once all packages are downloaded, change into the 'multilib' directory and
-install everything:
+First, add the Multilib repository:
 
-  # cd ../multilib/14.0/
-  # upgradepkg --reinstall --install-new *.t?z
-  # cd slackware64-compat32/
-  # upgradepkg --install-new *-compat32/*.t?z
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+...
+REPOPLUS=( ... multilib )
+MIRRORPLUS['multilib']=http://taper.alienbase.nl/mirrors/people/alien/multilib/14.0/
+...
+--8<--------------------------------------------------------------------------
+
+The Multilib repository takes precedence over standard Slackware packages:
+
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+...
+PKGS_PRIORITY=( ... multilib:.* )
+...
+--8<--------------------------------------------------------------------------
+
+Here's what our complete configuration file looks like now:
+
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+# /etc/slackpkg/slackpkgplus.conf
+SLACKPKGPLUS=on
+PKGS_PRIORITY=( microlinux:.* multilib:.* )
+REPOPLUS=( microlinux slackpkgplus )
+MIRRORPLUS['microlinux']=http://mirror.nestor/microlinux/MLED-14.0-64bit/
+MIRRORPLUS['multilib']=http://taper.alienbase.nl/mirrors/people/alien/multilib/14.0/
+MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
+--8<--------------------------------------------------------------------------
+
+Upgrade your system:
+
+  # slackpkg upgrade-all
+
+  /!\ This will replace all the stock gcc-* and glibc-* packages with Eric's
+  multilib versions.
+
+Now install the complete set of additional 32-bit support libraries. This can
+be done in one simple step using the following command:
+
+  # slackpkg install compat32
 
 
 Clean up the applications menu
