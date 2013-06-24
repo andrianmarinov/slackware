@@ -103,8 +103,15 @@ just a bunch of scripts and text files, so the download goes quite fast:
 Configure 'slackpkg'
 --------------------
 
-Edit '/etc/slackpkg/mirrors' and choose one and only one mirror according to
-your geographical location, for example:
+Download the 'slackpkg+' plugin for 'slackpkg'. It's very convenient for
+handling third-party repositories like MLED:
+
+  # links slakfinder.org/slackpkg+
+
+Grab the package from the 'pkg/' directory and install it.
+
+Edit '/etc/slackpkg/mirrors' and choose one and only one Slackware mirror
+according to your geographical location, for example:
 
 --8<---------- /etc/slackpkg/mirrors -----------------------------------------
 ...
@@ -113,30 +120,40 @@ ftp://mirror.ovh.net/mirrors/ftp.slackware.com/slackware64-14.0/
 ...
 --8<--------------------------------------------------------------------------
 
-Now blacklist all packages tagged "microlinux" to prevent them from getting
-squashed by an update:
+Configure 'slackpkg+':
 
---8<---------- /etc/slackpkg/blacklist ---------------------------------------
-...
-[0-9]+_microlinux
+  # cd /etc/slackpkg
+  # mv slackpkgplus.conf slackpkgplus.conf.orig
+
+On 32-bit Slackware:
+
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+# /etc/slackpkg/slackpkgplus.conf
+SLACKPKGPLUS=on
+PKGS_PRIORITY=( microlinux:.* )
+REPOPLUS=( slackpkgplus microlinux )
+MIRRORPLUS['microlinux']=http://www.microlinux.fr/slackware/MLED-14.0-32bit/
+MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
 
-On Slackware64, you'll also have to blacklist Eric's Multilib packages:
+On Slackware64:
 
---8<---------- /etc/slackpkg/blacklist ---------------------------------------
-...
-[0-9]+_microlinux
-[0-9]+alien
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+# /etc/slackpkg/slackpkgplus.conf
+SLACKPKGPLUS=on
+PKGS_PRIORITY=( microlinux:.* )
+REPOPLUS=( slackpkgplus microlinux )
+MIRRORPLUS['microlinux']=http://www.microlinux.fr/slackware/MLED-14.0-64bit/
+MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
 
-Now update everything:
+Update information about available packages:
 
   # slackpkg update
-  # slackpkg upgrade-all
 
 
-Trim the installation 
----------------------
+Trim and upgrade
+----------------
 
 In case you didn't use the set of tagfiles during the initial installation,
 now's the time to eventually catch up on it. The 'tools' directory provides a
@@ -145,47 +162,36 @@ basic 'trim-desktop-base.sh' script that takes care of two things:
   1. install needed packages
   2. get rid of unneeded packages
 
-The script makes use of 'slackpkg', so make sure it's configured for use.
+The script makes use of 'slackpkg', so make sure it's configured correctly.
 
-  # cd slackware/desktop-14.0/tools/
+  # cd slackware/MLED-14.0-32bit/tools/
   # ./trim-desktop-base.sh
 
-If you don't use the script, then you still have to install the MPlayer plugin
-from 'extra/' manually:
+  /!\ You may use this script in Slackware64. The script in the 64-bit file
+  tree is only a symlink to the script above.
+
+If you don't use the 'trim-desktop-base.sh' script, then you still have to
+install the MPlayer plugin from 'extra/' manually:
 
   # slackpkg install mplayerplug-in
 
+Now upgrade the base Slackware packages:
 
-Download the MLED package collection
-------------------------------------
-
-The MLED package collection can be downloaded here:
-
-  * http://www.microlinux.fr/slackware/
+  # slackpkg upgrade-all
 
 
-Packages for 32-bit Slackware are in the 'desktop-14.0/slackware' subdirectory,
-packages for Slackware64 can be found in 'desktop64-14.0/slackware64'. Of
-course, you're free to use 'wget', 'curl', 'lynx' or 'links' or whatever tool
-you prefer to grab all the packages.  The easiest way will be to use the
-automated download script:
+Install the MLED package collection
+-----------------------------------
 
-  # cd tools
-  # ./get-MLED.sh
+The easiest - and recommended - way to install the MLED package collection is
+to use the provided 'install-MLED.sh' script in the 'tools/' directory:
 
-There are roughly 500 megabytes of packages, so you'll have to wait a moment
-depending on your bandwidth. Once the download is finished, change into the
-package directory:
+  # cd tools/
+  # ./install-MLED.sh
 
-  # cd ../pkg
-
-On Slackware64:
-
-  # cd ../pkg64
-
-Install the whole package collection using the following command:
-
-  # upgradepkg --reinstall --install-new *.txz
+This script simply parses the 'build_order' file in the parent directory and
+takes care of downloading and installing all listed packages using 'slackpkg'.
+There are roughly 500 megabytes of packages to download.
 
 
 Set locales
