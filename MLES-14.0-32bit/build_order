@@ -18,4 +18,6 @@ musepack-tools
 libshout
 mpd
 icecast
+libmpdclient
+ncmpc
 
