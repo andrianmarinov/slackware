@@ -12,6 +12,7 @@ config() {
 }
 
 config etc/icecast.xml.new
+config etc/rc.d/rc.icecast.new
 
 # Create log files if they don't exist already
 [ ! -e var/log/icecast/access.log ] && touch var/log/icecast/access.log
