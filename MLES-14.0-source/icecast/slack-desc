@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+icecast: icecast (streaming media server)
+icecast:
+icecast: Icecast is a streaming media server which currently supports Ogg
+icecast: streaming including the Vorbis and Theora codecs. Also Icecast can
+icecast: handle other streams like MP3/AAC/NSV.
+icecast: 
+icecast: 
+icecast: 
+icecast:
+icecast:
+icecast: Package created by Niki Kovacs <info@microlinux.fr>
