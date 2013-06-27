@@ -6,7 +6,7 @@
 start() {
       # Start daemons.
       echo -n "Starting Icecast server ... "
-      /usr/bin/icecast -b -c /etc/icecast/icecast.xml
+      /usr/bin/icecast -b -c /etc/icecast.xml
       echo
 }
 stop() {

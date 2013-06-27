@@ -1,0 +1,103 @@
+#!/bin/sh
+
+# Slackware build script for rtorrent
+# Written by Brian Kysela <brian.kysela@gmail.com> 2009-11-04
+# Updated to 0.8.6 by Brian Kysela 2010-02-16
+# Updated to include rtorrent.rc 2010-04-20
+# Updated to 0.8.7 by Brian Kysela 2010-10-27
+# Patched for new ncurses in 13.37 by rworkman
+# Updated to 0.8.8 by Brian Kysela 2011-05-09
+# Updated to 0.8.9 by Brian Kysela 2011-06-22
+# Updated to 0.9.0 by Brian Kysela 2011-12-12
+#
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+PRGNAM=rtorrent
+VERSION=0.9.0
+BUILD=${BUILD:-2}
+TAG=${TAG:-_microlinux}
+
+NUMJOBS=${NUMJOBS:--j5}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i486 ;;
+    arm*) ARCH=arm ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+if [ ! -r $PRGNAM-$VERSION.tar.gz ] ; then
+   wget -c http://libtorrent.rakshasa.no/downloads/$PRGNAM-$VERSION.tar.gz
+fi
+
+md5sum -c $PRGNAM-$VERSION.tar.gz.md5
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+rm -rf $TMP/$PRGNAM-$VERSION
+cd $TMP
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
+chown -R root:root .
+chmod -R u+w,go+r-w,a-s .
+
+LDFLAGS="-lpthread" \
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --mandir=/usr/man \
+  --build=$ARCH-slackware-linux
+
+make $NUMJOBS
+make install DESTDIR=$PKG
+
+# Taken out as developer removed "out-of-date man page". If you want it back
+# in you will need to edit doc/Makefile.am in the source and uncomment
+# 'man_MANS = rtorrent.1' as well as the line below.
+#gzip -9 $PKG/usr/man/man?/*.?
+
+find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a \
+  AUTHORS COPYING INSTALL README doc/rtorrent.rc \
+    $PKG/usr/doc/$PRGNAM-$VERSION
+find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM-SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+cd $TMP
+rm -rf $PRGNAM-$VERSION $PKG

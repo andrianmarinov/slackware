@@ -1,0 +1,12 @@
+          |-----handy-ruler------------------------------------------------------|
+libtorrent: libtorrent (C++ torrent library)
+libtorrent:
+libtorrent: LibTorrent is a BitTorrent library written in C++ for *nix
+libtorrent: with a focus on high performance and good code.
+libtorrent:
+libtorrent: 
+libtorrent:
+libtorrent:
+libtorrent:
+libtorrent:
+libtorrent: Package created by Niki Kovacs <info@microlinux.fr>
