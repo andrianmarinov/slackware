@@ -1,0 +1,12 @@
+        |-----handy-ruler------------------------------------------------------|
+rtorrent: rtorrent (command-line torrent client)
+rtorrent:
+rtorrent: rtorrent is a BitTorrent client for ncurses
+rtorrent: which uses the libtorrent library.
+rtorrent:
+rtorrent: 
+rtorrent:
+rtorrent:
+rtorrent:
+rtorrent:
+rtorrent: Package created by Niki Kovacs <info@microlinux.fr>

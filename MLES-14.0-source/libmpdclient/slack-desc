@@ -1,0 +1,12 @@
+            |-----handy-ruler------------------------------------------------------|
+libmpdclient: libmpdclient (mpd client library)
+libmpdclient:
+libmpdclient: libmpdclient is a stable, documented, asynchronous API library
+libmpdclient: for interfacing MPD in the C, C++ & Objective C languages.
+libmpdclient:
+libmpdclient:
+libmpdclient:
+libmpdclient:
+libmpdclient:
+libmpdclient:
+libmpdclient: Package created by Niki Kovacs <info@microlinux.fr>

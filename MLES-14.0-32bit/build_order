@@ -17,4 +17,14 @@ ffmpeg
 musepack-tools
 libshout
 mpd
+icecast
+libmpdclient
+ncmpc
+libsigc++
+libtorrent
+rtorrent
+squid
+squidGuard
+postfix
+dovecot
 

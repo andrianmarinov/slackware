@@ -1,0 +1,12 @@
+     |-----handy-ruler------------------------------------------------------|
+ncmpc: ncmpc (ncurses MPD frontend)
+ncmpc:
+ncmpc: ncmpc is a curses client for the Music Player Daemon MPD. ncmpc
+ncmpc: connects to MPD running on a machine on the local network and 
+ncmpc: controls it with an interface inspired by cplay.
+ncmpc: 
+ncmpc:
+ncmpc:
+ncmpc:
+ncmpc:
+ncmpc: Package created by Niki Kovacs <info@microlinux.fr>

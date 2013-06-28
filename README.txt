@@ -47,6 +47,10 @@ The "official" file tree, where you'll find binaries and complete sources:
 
   * http://www.microlinux.fr/slackware
 
+Eric Hameleers' mirror for this repository:
+
+  * http://taper.alienbase.nl/mirrors/people/kikinovak
+
 The Github repo, where the development happens:
 
   * https://github.com/kikinovak/slackware

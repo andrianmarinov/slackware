@@ -1,0 +1,125 @@
+#!/bin/sh
+
+# Slackware build script for squidGuard
+
+# Written by Niki Kovacs <info@microlinux.fr)
+
+PRGNAM=squidGuard			
+VERSION=${VERSION:-1.4}	 
+BUILD=${BUILD:-1}
+TAG=${TAG:-_microlinux}		
+
+NUMJOBS=${NUMJOBS:--j5}
+
+# Automatically determine the architecture we're building on:
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i486 ;;
+    arm*) ARCH=arm ;;
+    # Unless $ARCH is already set, use uname -m for all other archs:
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}	
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}	
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e # Exit on most errors
+
+# Download tarball
+if [ ! -r $PRGNAM-$VERSION.tar.gz ] ; then
+   wget -c http://www.squidguard.org/Downloads/$PRGNAM-$VERSION.tar.gz
+fi
+
+# Check tarball
+md5sum -c $PRGNAM-$VERSION.tar.gz.md5
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvzf $CWD/$PRGNAM-$VERSION.tar.gz
+
+# This patch fixes one buffer overflow problem in sgLog.c when overlong URLs
+# are requested.
+tar xvzf $CWD/$PRGNAM-$VERSION-patch-20091015.tar.gz
+echo ":: Applying patch #1"
+cat squidGuard-1.4-patch-20091015/sgLog.c > $PRGNAM-$VERSION/src/sgLog.c
+
+# This patch fixes two bypass problems with URLs which length is close to the
+# limit defined by MAX_BUF (default: 4096) in squidGuard and MAX_URL (default:
+# 4096 in squid 2.x and 8192 in squid 3.x) in squid. For this kind of URLs the
+# proxy request exceeds MAX_BUF causing squidGuard to complain about not being
+# able to parse the squid request. Increasing the buffer limit to be higher
+# than the one defined in MAX_URL solves the issue.
+tar xvzf $CWD/$PRGNAM-$VERSION-patch-20091019.tar.gz
+echo ":: Applying patch #2"
+cat squidGuard-1.4-20091019/sg.h.in > $PRGNAM-$VERSION/src/sg.h.in
+cat squidGuard-1.4-20091019/sgDiv.c.in > $PRGNAM-$VERSION/src/sgDiv.c.in
+
+cd $PRGNAM-$VERSION
+
+chown -R root:root .
+find . \
+ \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+ -exec chmod 644 {} \;
+
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure --prefix=/usr \
+	--with-sg-config="/etc/squidguard/squidguard.conf" \
+	--with-sg-logdir="/var/log/squidguard" \
+	--with-sg-dbhome="/var/lib/squidguard" \
+  --with-squiduser=nobody \
+  --build=$ARCH-slackware-linux
+
+make $NUMJOBS
+make prefix=$PKG/usr install 
+
+mkdir -p $PKG/usr/local/sbin
+cat $CWD/blacklist.sh > $PKG/usr/local/sbin/blacklist.sh
+chmod 0700 $PKG/usr/local/sbin/blacklist.sh 
+
+mkdir -p $PKG/etc/squidguard
+cat samples/sample.conf > $PKG/etc/squidguard/squidguard.conf.sample
+cat $CWD/squidguard.conf > $PKG/etc/squidguard/squidguard.conf
+chmod 0644 $PKG/etc/squidguard/squidguard.conf*
+
+mkdir -p $PKG/var/lib/squidguard
+
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a ANNOUNCE CHANGELOG CONFIGURATION COPYING FAQ GPL INSTALL ISSUES.txt \
+README* samples/sample.conf doc/{*.html,*.txt,*.gif} \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+cd $TMP
+rm -rf $PRGNAM-$VERSION* $PKG

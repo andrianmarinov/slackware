@@ -1,0 +1,222 @@
+#!/bin/bash
+#
+# Copyright 2006, 2011 Alan Hicks, Lizella, GA
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Updates by mario@slackverse.org, 2010-2011
+#
+# Modified by Niki Kovacs <info@microlinux.fr>
+
+PRGNAM=postfix
+VERSION=${VERSION:-2.9.7}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_microlinux}
+
+NUMJOBS=${NUMJOBS:--j5}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i486 ;;
+    arm*) ARCH=arm ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}
+PKG="$TMP/package-$PRGNAM"
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+# Build with dovecot sasl by default, cyrus/dovecot are supported
+SASL=${SASL:-dovecot}
+case "$SASL" in
+     dovecot) SASLARGS='-DDEF_SERVER_SASL_TYPE=\"dovecot\"' 
+              SASLLIBS="" ;;
+       cyrus) SASLARGS='-DUSE_CYRUS_SASL -I/usr/include/sasl'
+              SASLLIBS="-L/usr/lib${LIBDIRSUFFIX}/sasl2 -lsasl2" ;;
+           *) SASLARGS=''
+              SASLLIBS="" ;;
+esac
+
+# Build with no database support by default
+DATABASE=${DATABASE:-none}
+case "$DATABASE" in
+       mysql) DBARGS='-DHAS_MYSQL -I/usr/include/mysql'
+              DBLIBS="-L/usr/lib${LIBDIRSUFFIX}/mysql -lmysqlclient -lz -lm" ;;
+           *) DBARGS=''
+              DBLIBS="" ;;
+esac
+
+# MySQL compile hack
+if [ $DATABASE == "mysql" ] && [ -f /usr/include/mysql/events.h ]; then
+
+cat << EOF
+
+  Postfix will fail to compile with mysql support if a system-wide
+  events.h file is not removed (postfix has its own events.h).
+  Either disable mysql support or (re)move events.h, eg:
+
+  # mv /usr/include/mysql/events.h /usr/include/mysql/events.h.bak
+
+EOF
+  exit
+fi
+
+set -e
+
+if [ ! -r $PRGNAM-$VERSION.tar.gz ] ; then
+   wget -c http://mirror.ovh.net/ftp.postfix.org/postfix-release/official/$PRGNAM-$VERSION.tar.gz
+fi
+
+md5sum -c $PRGNAM-$VERSION.tar.gz.md5
+
+CFLAGS=${CFLAGS:-$SLKCFLAGS}
+
+config_directory=/etc/postfix
+daemon_directory=/usr/libexec/postfix
+command_directory=/usr/sbin
+queue_directory=/var/spool/postfix
+sendmail_path=/usr/sbin/sendmail
+newaliases_path=/usr/bin/newaliases
+mailq_path=/usr/bin/mailq
+html_directory=/usr/doc/$PRGNAM-$VERSION/html
+manpage_directory=/usr/man
+readme_directory=/usr/doc/$PRGNAM-$VERSION/README_FILES
+mail_owner=postfix
+setgid_group=postdrop
+
+# Create postfix group 
+if ! grep -q "^postfix:" /etc/group ; then
+groupadd -g 200 postfix
+echo ":: Added postfix group."
+sleep 3
+fi
+
+# Create postfix user 
+if ! grep -q "^postfix:" /etc/passwd ; then
+useradd -u 200 -d /dev/null -s /bin/false -g postfix postfix
+echo ":: Added postfix user."
+sleep 3
+fi
+
+# Create postdrop group 
+if ! grep -q "^postdrop:" /etc/group ; then
+groupadd -g 201 postdrop
+echo ":: Added postdrop group."
+sleep 3
+fi
+
+rm -fr $PKG $TMP/$PRGNAM-$VERSION
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
+
+# TLS, and SASL support
+# Postfix unfortunately does not use a handy ./configure script so you
+# must generate the makefiles using (what else?) "make makefiles". The
+# following includes support for TLS, SASL and MYSQL if you setup your
+# variables properly (see the README file). It should
+# automatically find PCRE and DB3 support. The docs have information
+# for adding additional support such as LDAP.
+
+make makefiles \
+  CCARGS="-DUSE_SASL_AUTH -DUSE_TLS $SASLARGS $DBARGS" \
+  AUXLIBS="-lssl -lcrypto $SASLLIBS $DBLIBS" \
+  OPT="$SLKCFLAGS" DEBUG=""
+
+make $NUMJOBS
+
+make non-interactive-package \
+  install_root=$PKG \
+  tempdir=$TMP/$PRGNAM-temp \
+  config_directory=$config_directory \
+  daemon_directory=$daemon_directory \
+  command_directory=$command_directory \
+  queue_directory=$queue_directory \
+  sendmail_path=$sendmail_path \
+  newaliases_path=$newaliases \
+  mailq_path=$mailq_path \
+  mail_owner=$mail_owner \
+  setgid_group=$setgid_group \
+  html_directory=$html_directory \
+  manpage_directory=$manpage_directory \
+  readme_directory=$readme_directory
+
+mkdir -p $PKG/install $PKG/etc/rc.d $PKG/usr/doc/$PRGNAM-$VERSION
+
+cp -r AAAREADME COMPATIBILITY COPYRIGHT HISTORY IPv6-ChangeLog LICENSE \
+  PORTING RELEASE_NOTES TLS_ACKNOWLEDGEMENTS TLS_CHANGES TLS_LICENSE \
+  US_PATENT_6321267 implementation-notes examples \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/postfix.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/postfix.SlackBuild
+
+install -m 0755 $CWD/rc.postfix  $PKG/etc/rc.d/rc.postfix.new
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+find $PKG -type f | \
+ ( while read LINE; do
+  if file $LINE | egrep "ELF.*(executable|shared object).*not stripped" \
+    &> /dev/null; then
+  strip $LINE
+  fi
+ done )
+
+gzip -9 $PKG/usr/man/*/*
+
+cd $PKG/etc/postfix
+# Since we gzip the manpages, let's fix the postfix-files to reflect that
+# so it won't throw errors during post-install
+( cd $PKG/usr/libexec/postfix
+grep manpage postfix-files | while read line; 
+do MANPAGE="$(echo "$line" | cut -d: -f1)" 
+  sed -i s#"$MANPAGE"#"$MANPAGE.gz"# postfix-files ; 
+done
+)
+
+# Create .new files
+for i in \
+  access aliases canonical generic header_checks main.cf main.cf.default \
+  makedefs.out master.cf relocated transport virtual ;
+do \
+  mv $i $i.new ;
+done
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
+
+# Cleanup
+cd $TMP
+rm -rf $PRGNAM-$VERSION $PKG $PRGNAM-temp
