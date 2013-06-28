@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=P2P Client
+Name[de]=P2P-Programm
+Name[fr]=Téléchargement P2P
+Comment=aMule
+Exec=amule
+Icon=amule
+Terminal=false
+Type=Application
+Categories=Network;P2P;
+StartupNotify=true

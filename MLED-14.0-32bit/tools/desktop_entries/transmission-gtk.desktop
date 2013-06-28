@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=BitTorrent Client
 Name[de]=BitTorrent-Programm
-Name[fr]=Client BitTorrent
+Name[fr]=Téléchargement BitTorrent
 Comment=Transmission
 Exec=transmission-gtk %U
 Icon=transmission

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=FTP client
 Name[de]=FTP-Programm
-Name[fr]=Client FTP
+Name[fr]=Téléchargement FTP
 Comment=filezilla
 Exec=filezilla
 Terminal=false
