@@ -1,3 +1,12 @@
+Sun Jun 30 16:12:12 CEST 2013
+extra/autogen-5.16.2-x86_64-1_microlinux.txz: Added.
+extra/itstool-1.2.0-x86_64-1_microlinux.txz: Added.
+extra/gdl-3.7.3-x86_64-1_microlinux.txz: Added.
+extra/gtksourceview3-3.7.2-x86_64-1_microlinux.txz: Added.
+extra/libgda-5.1.2-x86_64-1_microlinux.txz: Added.
+  Built with LDFLAGS="-L/usr/lib64" ./libgda.SlackBuild. 
+	Thanks to Ozan Türkyilmaz.
++--------------------------+
 Sat Jun 29 08:17:43 CEST 2013
 flash-player-plugin-11.2.202.291-x86_64-1_microlinux.txz: Upgraded.
 +--------------------------+

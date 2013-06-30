@@ -64,7 +64,7 @@ if [ ! -r $PRGNAM-$VERSION.tar.xz ] ; then
    wget -c http://ftp.gnome.org/pub/gnome/sources/$PRGNAM/5.1/$PRGNAM-$VERSION.tar.xz
 fi
 
-md5sum -c $PRGNAM-$VERSION.tar.bz2.md5
+md5sum -c $PRGNAM-$VERSION.tar.xz.md5
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
