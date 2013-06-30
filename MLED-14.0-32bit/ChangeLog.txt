@@ -1,3 +1,10 @@
+
+extra/autogen-5.16.2-i486-1_microlinux.txz: Added.
+extra/itstool-1.2.0-i486-1_microlinux.txz: Added.
+extra/gdl-3.7.3-i486-1_microlinux.txz: Added.
+extra/gtksourceview3-3.7.2-i486-1_microlinux.txz: Added.
+extra/libgda-5.1.2-i486-1_microlinux.txz: Added.
++--------------------------+
 Sat Jun 29 08:17:43 CEST 2013
 flash-player-plugin-11.2.202.291-i386-1_microlinux.txz: Upgraded.
 +--------------------------+

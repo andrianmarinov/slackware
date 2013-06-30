@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+autogen: autogen (configure generator)
+autogen:
+autogen: autogen generates program files from repetitive text with varied
+autogen: substitutions.  Its goal is to simplify the maintenance of programs
+autogen: that contain large amounts of repetitive text.  This is especially
+autogen: valuable if there are several blocks of such text that must be kept
+autogen: synchronized in parallel tables.
+autogen:
+autogen: 
+autogen:
+autogen: Package created by Niki Kovacs <info@microlinux.fr>

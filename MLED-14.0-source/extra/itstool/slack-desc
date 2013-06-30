@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+itstool: itstool (Translate XML documents with PO files)
+itstool:
+itstool: ITS Tool allows you to translate your XML documents with PO
+itstool: files, using rules from the W3C Internationalization Tag Set
+itstool: (ITS) to determine what to translate and how to separate it
+itstool: into PO file messages.
+itstool:
+itstool: 
+itstool:
+itstool:
+itstool: Package created by Niki Kovacs <info@microlinux.fr>

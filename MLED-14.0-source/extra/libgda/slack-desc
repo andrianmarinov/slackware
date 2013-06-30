@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+libgda: libgda (GNOME DB)
+libgda:
+libgda: libgda provides a data abstraction layer with mysql, pgsql, xml,
+libgda: sqlite providers.
+libgda:
+libgda: 
+libgda:
+libgda:
+libgda:
+libgda:
+libgda: Package created by Niki Kovacs <info@microlinux.fr>
