@@ -1,9 +1,9 @@
 Sun Jun 30 16:12:12 CEST 2013
-extra/autogen-5.16.2-x86_64-1_microlinux.txz: Added.
-extra/itstool-1.2.0-x86_64-1_microlinux.txz: Added.
-extra/gdl-3.7.3-x86_64-1_microlinux.txz: Added.
-extra/gtksourceview3-3.7.2-x86_64-1_microlinux.txz: Added.
-extra/libgda-5.1.2-x86_64-1_microlinux.txz: Added.
+autogen-5.16.2-x86_64-1_microlinux.txz: Added.
+itstool-1.2.0-x86_64-1_microlinux.txz: Added.
+gdl-3.7.3-x86_64-1_microlinux.txz: Added.
+gtksourceview3-3.7.2-x86_64-1_microlinux.txz: Added.
+libgda-5.1.2-x86_64-1_microlinux.txz: Added.
   Built with LDFLAGS="-L/usr/lib64" ./libgda.SlackBuild. 
 	Thanks to Ozan Türkyilmaz.
 +--------------------------+
@@ -11,8 +11,8 @@ Sat Jun 29 08:17:43 CEST 2013
 flash-player-plugin-11.2.202.291-x86_64-1_microlinux.txz: Upgraded.
 +--------------------------+
 Fri Jun 28 08:51:31 CEST 2013
-extra/cryptopp-5.6.1-x86_64-2_microlinux.txz: Added.
-extra/aMule-2.3.1-x86_64-1_microlinux.txz: Added.
+cryptopp-5.6.1-x86_64-2_microlinux.txz: Added.
+aMule-2.3.1-x86_64-1_microlinux.txz: Added.
 +--------------------------+
 Mon Jun 24 10:40:37 CEST 2013
 Replaced 'get-MLED.sh' by 'install-MLED.sh'. This new script makes installing
@@ -26,28 +26,28 @@ Added a section about managing MLED with slackpkg+ and fixed a few typos.
 Thanks to zakame, rinias and Bertman123 on LQ.
 +--------------------------+
 Mon Jun 24 08:49:54 CEST 2013
-patches/ffmpeg-0.11.1-x86_64-2_microlinux.txz: Rebuilt.
+ffmpeg-0.11.1-x86_64-2_microlinux.txz: Rebuilt.
   Fixed inconsistent $ARCH field in the package name, which made the package
 	fly under slackpkg's radar ;o)
 +--------------------------+
 Sat Jun 22 08:50:20 CEST 2013
-extra/virtualbox-kernel-4.1.24_3.2.29-x86_64-1_microlinux.txz: Removed.
+virtualbox-kernel-4.1.24_3.2.29-x86_64-1_microlinux.txz: Removed.
 	When the virtualbox-kernel-4.1.24_3.2.45 package is installed, slackpkg+
 	attempts to "upgrade" it with this older version. So let's just remove it.
 +--------------------------+
 Thu Jun 20 18:56:59 CEST 2013
-extra/filezilla-3.7.1-x86_64-1_microlinux.txz: Added.
-extra/poedit-1.4.6.1-x86_64-1_microlinux.txz: Added.
+filezilla-3.7.1-x86_64-1_microlinux.txz: Added.
+poedit-1.4.6.1-x86_64-1_microlinux.txz: Added.
 +--------------------------+
 Thu Jun 20 12:22:21 CEST 2013
-extra/virtualbox-4.1.24-x86_64-1_microlinux.txz: Added.
-extra/virtualbox-kernel-4.1.24_3.2.29-x86_64-1_microlinux.txz: Added.
-extra/virtualbox-kernel-4.1.24_3.2.45-x86_64-1_microlinux.txz: Added.
+virtualbox-4.1.24-x86_64-1_microlinux.txz: Added.
+virtualbox-kernel-4.1.24_3.2.29-x86_64-1_microlinux.txz: Added.
+virtualbox-kernel-4.1.24_3.2.45-x86_64-1_microlinux.txz: Added.
 +--------------------------+
 Wed Jun 19 10:24:12 CEST 2013
-extra/mutagen-1.21-x86_64-1_microlinux.txz: Added.
-extra/gst-python-0.10.22-x86_64-1_microlinux.txz: Added.
-extra/exaile-3.3.1-x86_64-1_microlinux.txz: Added.
+mutagen-1.21-x86_64-1_microlinux.txz: Added.
+gst-python-0.10.22-x86_64-1_microlinux.txz: Added.
+exaile-3.3.1-x86_64-1_microlinux.txz: Added.
 +--------------------------+
 Tue Jun 18 13:53:57 CEST 2013
 mozilla-firefox-17.0.6-x86_64-1_microlinux.txz: Upgraded.
@@ -71,4 +71,141 @@ Check out README.txt for a general description and step by step installation
 instructions.
 
 Enjoy!
+
+user-settings-console-1.0-noarch-1_microlinux.txz: Added.
+cdlabelgen-4.3.0-noarch-1_microlinux.txz: Added.
+p7zip-9.20.1-x86_64-1_microlinux.txz: Added.
+recode-3.6-x86_64-2_microlinux.txz: Added.
+sbopkg-0.36.0-noarch-1_microlinux.txz: Added.
+unrar-4.0.7-x86_64-1_microlinux.txz: Added.
+acpica-20130214-x86_64-1_microlinux.txz: Added.
+gc-7.2d-x86_64-1_microlinux.txz: Added.
+lua-5.1.5-x86_64-1_microlinux.txz: Added.
+numpy-1.6.2-x86_64-1_microlinux.txz: Added.
+orc-0.4.16-x86_64-1_microlinux.txz: Added.
+jdk-7u15-x86_64-1_microlinux.txz: Added.
+scons-2.2.0-x86_64-1_microlinux.txz: Added.
+BeautifulSoup-3.2.0-x86_64-1_microlinux.txz: Added.
+cddb-py-1.4-x86_64-1_microlinux.txz: Added.
+enca-1.14-x86_64-1_microlinux.txz: Added.
+gsl-1.15-x86_64-1_microlinux.txz: Added.
+imlib2-1.4.5-x86_64-1_microlinux.txz: Added.
+libevent-2.0.21-x86_64-1_microlinux.txz: Added.
+libburn-1.2.4-x86_64-1_microlinux.txz: Added.
+libisofs-1.2.4-x86_64-1_microlinux.txz: Added.
+libisoburn-1.2.4-x86_64-1_microlinux.txz: Added.
+lxml-3.1.1-x86_64-1_microlinux.txz: Added.
+pyxdg-0.18-x86_64-1_microlinux.txz: Added.
+tolua++-1.0.93-x86_64-1_microlinux.txz: Added.
+wxGTK-2.8.12-x86_64-2_microlinux.txz: Added.
+dconf-0.12.1-x86_64-1_microlinux.txz: Added.
+libgnomecanvas-2.30.3-x86_64-1_microlinux.txz: Added.
+libgnomecups-0.2.3-x86_64-1_microlinux.txz: Added.
+libgnomeprint-2.18.8-x86_64-1_microlinux.txz: Added.
+libgnomeprintui-2.18.6-x86_64-1_microlinux.txz: Added.
+gdm-2.20.11-x86_64-1_microlinux.txz: Added.
+totem-pl-parser-2.32.5-x86_64-1_microlinux.txz: Added.
+libsigc++-2.2.10-x86_64-1_microlinux.txz: Added.
+glibmm-2.32.1-x86_64-1_microlinux.txz: Added.
+cairomm-1.10.0-x86_64-1_microlinux.txz: Added.
+pangomm-2.28.4-x86_64-1_microlinux.txz: Added.
+atkmm-2.22.6-x86_64-1_microlinux.txz: Added.
+mm-common-0.9.5-noarch-1_microlinux.txz: Added.
+gtkmm-2.24.2-x86_64-1_microlinux.txz: Added.
+goocanvas-0.15-x86_64-1_microlinux.txz: Added.
+pygoocanvas-0.14.1-x86_64-2_microlinux.txz: Added.
+a52dec-0.7.4-x86_64-1_microlinux.txz: Added.
+celt-0.11.3-x86_64-1_microlinux.txz: Added.
+dirac-1.0.2-x86_64-1_microlinux.txz: Added.
+faad2-2.7-x86_64-1_microlinux.txz: Added.
+flash-player-plugin-11.2.202.275-x86_64-1_microlinux.txz: Added.
+frei0r-1.3-x86_64-1_microlinux.txz: Added.
+gsm-1.0.13-x86_64-1_microlinux.txz: Added.
+gst-ffmpeg-0.10.13-x86_64-1_microlinux.txz: Added.
+lame-3.99.5-x86_64-1_microlinux.txz: Added.
+libavc1394-0.5.3-x86_64-2_microlinux.txz: Added.
+libbluray-0.2.3-x86_64-1_microlinux.txz: Added.
+libcdaudio-0.99.12p2-x86_64-1_microlinux.txz: Added.
+libcuefile-r453-x86_64-1_microlinux.txz: Added.
+libdc1394-2.2.0-x86_64-1_microlinux.txz: Added.
+libdca-0.0.5-x86_64-1_microlinux.txz: Added.
+libdv-1.0.0-x86_64-1_microlinux.txz: Added.
+libdvdcss-1.2.11-x86_64-1_microlinux.txz: Added.
+libdvdnav-4.2.0-x86_64-1_microlinux.txz: Added.
+libiec61883-1.2.0-x86_64-2_microlinux.txz: Added.
+libkate-0.4.1-x86_64-1_microlinux.txz: Added.
+libmms-0.6.2-x86_64-1_microlinux.txz: Added.
+libmodplug-0.8.8.4-x86_64-1_microlinux.txz: Added.
+libmp4v2-2.0.0-x86_64-1_microlinux.txz: Added.
+libmusicbrainz-2.1.5-x86_64-1_microlinux.txz: Added.
+libreplaygain-r453-x86_64-1_microlinux.txz: Added.
+libvpx-1.1.0-x86_64-1_microlinux.txz: Added.
+live555-2011.12.23-x86_64-1_microlinux.txz: Added.
+mjpegtools-2.0.0-x86_64-1_microlinux.txz: Added.
+mplayer-codecs-20071007-x86_64-3_microlinux.txz: Added.
+OpenAL-1.13-x86_64-1_microlinux.txz: Added.
+opencore-amr-0.1.2-x86_64-1_microlinux.txz: Added.
+openjpeg-1.5.1-x86_64-1_microlinux.txz: Added.
+rtmpdump-20120308_7340f6d-x86_64-1_microlinux.txz: Added.
+soundtouch-1.6.0-x86_64-1_microlinux.txz: Added.
+speex-1.2rc1-x86_64-1_microlinux.txz: Added.
+twolame-0.3.13-x86_64-1_microlinux.txz: Added.
+vcdimager-0.7.23-x86_64-1_microlinux.txz: Added.
+x264-20120804-x86_64-1_microlinux.txz: Added.
+xvidcore-1.3.2-x86_64-1_microlinux.txz: Added.
+faac-1.28-x86_64-2_microlinux.txz: Added.
+libass-0.10.1-x86_64-1_microlinux.txz: Added.
+libshout-2.2.2-x86_64-1_microlinux.txz: Added.
+schroedinger-1.0.11-x86_64-1_microlinux.txz: Added.
+ffmpeg-0.11.1-x86_64_custom-1_microlinux.txz: Added.
+libquicktime-1.2.4-x86_64-1_microlinux.txz: Added.
+mlt-0.8.2-x86_64-1_microlinux.txz: Added.
+musepack-tools-r435-x86_64-1_microlinux.txz: Added.
+gst-plugins-bad-0.10.23-x86_64-1_microlinux.txz: Added.
+gst-plugins-ugly-0.10.19-x86_64-1_microlinux.txz: Added.
+transcode-1.1.7-x86_64-1_microlinux.txz: Added.
+google-droid-fonts-20100409-noarch-1_microlinux.txz: Added.
+webcore-fonts-3.0-noarch-3_microlinux.txz: Added.
+eurostile-fonts-1.0-noarch-1_microlinux.txz: Added.
+aero-1.0-noarch-1_microlinux.txz: Added.
+faenza-icon-theme-1.3-noarch-1_microlinux.txz: Added.
+xfwm4-theme-axe-1.0-noarch-1_microlinux.txz: Added.
+gtk-engines-2.20.2-x86_64-2_microlinux.txz: Added.
+clearlooks-phenix-theme-2.0.10-noarch-1_microlinux.txz: Added.
+microlinux-wallpapers-1.0-noarch-1_microlinux.txz: Added.
+slack-wallpapers-0.116-noarch-1_microlinux.txz: Added.
+xarchiver-0.5.2-x86_64-3_microlinux.txz: Added.
+thunar-archive-plugin-0.3.0-x86_64-1_microlinux.txz: Added.
+xfce4-xkb-plugin-0.5.4.3-x86_64-1_microlinux.txz: Added.
+asunder-2.2-x86_64-1_microlinux.txz: Added.
+audacious-3.2.4-x86_64-1_microlinux.txz: Added.
+audacious-plugins-3.2.4-x86_64-1_microlinux.txz: Added.
+audacity-2.0.3-x86_64-1_microlinux.txz: Added.
+brasero-3.4.1-x86_64-1_microlinux.txz: Added.
+catfish-0.3.2-noarch-1_microlinux.txz: Added.
+conky-1.9.0-x86_64-2_microlinux.txz: Added.
+evince-3.4.0-x86_64-1_microlinux.txz: Added.
+galculator-1.3.4-x86_64-1_microlinux.txz: Added.
+gcolor2-0.4-x86_64-3_microlinux.txz: Added.
+geany-1.23-x86_64-1_microlinux.txz: Added.
+geany-plugins-1.23-x86_64-1_microlinux.txz: Added.
+gnote-0.7.6-x86_64-1_microlinux.txz: Added.
+gtkcdlabel-1.15-noarch-1_microlinux.txz: Added.
+inkscape-0.48.4-x86_64-1_microlinux.txz: Added.
+leafpad-0.8.18.1-x86_64-1_microlinux.txz: Added.
+mozilla-firefox-17.0.5-x86_64-1_microlinux.txz: Added.
+mozilla-thunderbird-17.0.5-x86_64-1_microlinux.txz: Added.
+MPlayer-1.1-x86_64-1_microlinux.txz: Added.
+openoffice-3.4.1_en_US-x86_64-1_microlinux.txz: Added.
+openshot-1.4.3-x86_64-1_microlinux.txz: Added.
+simple-scan-2.32.0.2-x86_64-1_microlinux.txz: Added.
+smplayer-0.8.4-x86_64-1_microlinux.txz: Added.
+transmission-2.75-x86_64-1_microlinux.txz: Added.
+mozilla-firefox-l10n-17.0.5-x86_64-1_microlinux.txz: Added.
+mozilla-thunderbird-l10n-17.0.5-x86_64-1_microlinux.txz: Added.
+openoffice-langpack-3.4.1_fr-x86_64-1_microlinux.txz: Added.
+user-settings-firefox-17.0.5-x86_64-1_microlinux.txz: Added.
+user-settings-openoffice-3.4.1-noarch-1_microlinux.txz: Added.
+user-settings-xfce-1.0-noarch-5_microlinux.txz: Added.
+
 +--------------------------+
