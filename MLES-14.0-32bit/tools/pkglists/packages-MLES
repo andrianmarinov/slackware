@@ -1,0 +1,51 @@
+################
+# User profile #
+################
+user-settings-console
+
+###################
+# Basic utilities #
+###################
+sbopkg
+recode
+unrar
+p7zip
+
+##########################
+# Streaming audio server #
+##########################
+faac
+faad2
+ffmpeg
+lame
+libcuefile
+libmms
+libmp4v2
+libmpdclient
+libreplaygain
+libshout
+musepack-tools
+speex
+twolame
+mpd
+icecast
+ncmpc
+
+#####################
+# BitTorrent client #
+#####################
+libsigc++
+libtorrent
+rtorrent
+
+################
+# Proxy server #
+################
+squid
+squidGuard
+
+###############
+# Mail server #
+###############
+postfix
+dovecot
