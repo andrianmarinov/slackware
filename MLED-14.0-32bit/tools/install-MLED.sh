@@ -3,15 +3,15 @@
 # Copyright (c) 2013 Niki Kovacs <info@microlinux.fr>
 # -----------------------------------------------------------------------------
 #
-# This script parses the build_order file in the parent directory and installs
-# all listed packages using slackpkg. 
+# This script parses the packages-MLED file in the pkglists directory and
+# installs all listed packages using slackpkg. 
 #
 # The slackpkg+ plugin has to be installed and the MLED repository configured.
 #
 
 CWD=$(pwd)
 
-INSTALL=$(egrep -v '(^\#)|(^\s+$)' $CWD/../build_order)
+INSTALL=$(egrep -v '(^\#)|(^\s+$)' $CWD/pkglists/packages-MLED)
 
 unset PACKAGES
 

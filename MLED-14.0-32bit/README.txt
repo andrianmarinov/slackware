@@ -209,15 +209,17 @@ Now upgrade the base Slackware packages:
 Install the MLED package collection
 -----------------------------------
 
-The easiest - and recommended - way to install the MLED package collection is
-to use the provided 'install-MLED.sh' script in the 'tools/' directory:
+Simply use the provided 'install-MLED.sh' script in the 'tools/' directory:
 
   # cd tools/
   # ./install-MLED.sh
 
-This script simply parses the 'build_order' file in the parent directory and
+This script parses the 'packages-MLED' file in the 'pkglists' directory and
 takes care of downloading and installing all listed packages using 'slackpkg'.
-There are roughly 500 megabytes of packages to download.
+
+  /!\ From time to time, there's some new stuff added to MLED. If you want to
+  integrate the Full Monty of new packages, it's as simple as re-running the
+  'install-MLED.sh' script. It will automagically take care of everything.
 
 
 Set locales
@@ -317,71 +319,6 @@ We're almost there. Here's what's left to be done.
   3. Switch to default runlevel 4.
 
 Reboot and enjoy your shiny new Microlinux Enterprise Desktop.
-
-
-Build MLED from source
-----------------------
-
-Installing the collection of binary packages is by far the easiest method. If
-you prefer building your packages from source - for whatever reason - here's a
-few instructions. 
-
-Read them carefully. The paragraphs you don't read will come back and bite you.
-
-
-A word about NVidia cards
--------------------------
-
-I've had some bad freezes with the 'nouveau' drivers on various cards, so I
-decided not to include these - as well as the legacy 'nv' drivers - in the
-basic package set. I recommend downloading and building the proprietary
-'nvidia' drivers from http://www.nvidia.com. 
-
-If you don't want to use the 'nvidia' driver, you can still grab the
-'xf86-video-nouveau' or 'xf86-video-nv' packages manually.
-
-That being said, don't install the proprietary 'nvidia' driver yet. Its
-presence will lead to build errors for some packages like wxGTK, Firefox ESR
-and Thunderbird ESR.
-
-Eventually, you can always uninstall it like this:
-
-  # ./NVIDIA-Linux-x86-XXX.YY.run --uninstall
- 
-In that case, reinstall the 'mesa' package.
-
-
-Java Development Kit
---------------------
-
-Before launching the build, go to 'http://www.oracle.com' and download the JDK
-tarball for your architecture:
-
-  * jdk-7uXX-linux-i586.tar.gz for 32-bit Slackware
-  * jdk-7uXX-linux-x64.tar.gz for 64-bit Slackware
-
-Move the tarball to source/d/jdk/.
-
-
-Start the build
----------------
-
-  # ./MLED.SlackBuild
-
-This master build parses the 'build_order' file and takes care of: 
-
-  1. downloading all sources;
-
-  2. building packages in the right order;
-
-  3. installing packages as they are built;
-
-  4. storing them in 'pkg' or 'pkg64', depending on your architecture.
-
-  /!\ Some applications like Firefox ESR and Thunderbird ESR can take ages to
-  build on old hardware. Whenever possible, complete the whole build on a fast
-  machine and then install the resulting binaries on your less performing
-  hardware.
 
 
                                     Niki Kovacs, Sat Jun 15 13:45:05 CEST 2013
