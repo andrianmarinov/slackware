@@ -1,16 +1,27 @@
+Mon Jul  1 17:50:59 CEST 2013
+Merged all the stuff from extra/, patches/ and pasture/ into the main
+slackware/ directory. Keep It Simple Stupid.
+mozilla-firefox-17.0.6-i486-1_microlinux.txz: Removed.
+mozilla-thunderbird-17.0.6-i486-1_microlinux.txz: Removed.
+	Official Slackware seems to move both Firefox and Thunderbird to Extended
+	Support Releases, so we might as well use these. 
+mozilla-firefox-l10n-17.0.7-i486-1_microlinux.txz: Upgraded.
+mozilla-thunderbird-l10n-17.0.7-i486-1_microlinux.txz: Upgraded.
+user-settings-firefox-17.0.7-i486-1_microlinux.txz: Upgraded.
++--------------------------+
 Sun Jun 30 11:10:38 CEST 2013
-extra/autogen-5.16.2-i486-1_microlinux.txz: Added.
-extra/itstool-1.2.0-i486-1_microlinux.txz: Added.
-extra/gdl-3.7.3-i486-1_microlinux.txz: Added.
-extra/gtksourceview3-3.7.2-i486-1_microlinux.txz: Added.
-extra/libgda-5.1.2-i486-1_microlinux.txz: Added.
+autogen-5.16.2-i486-1_microlinux.txz: Added.
+itstool-1.2.0-i486-1_microlinux.txz: Added.
+gdl-3.7.3-i486-1_microlinux.txz: Added.
+gtksourceview3-3.7.2-i486-1_microlinux.txz: Added.
+libgda-5.1.2-i486-1_microlinux.txz: Added.
 +--------------------------+
 Sat Jun 29 08:17:43 CEST 2013
 flash-player-plugin-11.2.202.291-i386-1_microlinux.txz: Upgraded.
 +--------------------------+
 Fri Jun 28 08:51:31 CEST 2013
-extra/cryptopp-5.6.1-i486-2_microlinux.txz: Added.
-extra/aMule-2.3.1-i486-1_microlinux.txz: Added.
+cryptopp-5.6.1-i486-2_microlinux.txz: Added.
+aMule-2.3.1-i486-1_microlinux.txz: Added.
 +--------------------------+
 Mon Jun 24 10:40:37 CEST 2013
 Replaced 'get-MLED.sh' by 'install-MLED.sh'. This new script makes installing
@@ -27,23 +38,23 @@ ffmpeg-0.11.1-i486-2_microlinux.txz: Rebuilt.
 	fly under slackpkg's radar ;o)
 +--------------------------+
 Sat Jun 22 08:50:20 CEST 2013
-extra/virtualbox-kernel-4.1.24_3.2.29_smp-i486-1_microlinux.txz: Removed.
+virtualbox-kernel-4.1.24_3.2.29_smp-i486-1_microlinux.txz: Removed.
 	When the virtualbox-kernel-4.1.24_3.2.45 package is installed, slackpkg+
 	attempts to "upgrade" it with this older version. So let's just remove it.
 +--------------------------+
 Thu Jun 20 18:42:06 CEST 2013
-extra/filezilla-3.7.1-i486-1_microlinux.txz: Added.
-extra/poedit-1.4.6.1-i486-1_microlinux.txz: Added.
+filezilla-3.7.1-i486-1_microlinux.txz: Added.
+poedit-1.4.6.1-i486-1_microlinux.txz: Added.
 +--------------------------+
 Thu Jun 20 10:48:47 CEST 2013
-extra/virtualbox-4.1.24-i486-1_microlinux.txz: Added.
-extra/virtualbox-kernel-4.1.24_3.2.29_smp-i486-1_microlinux.txz: Added.
-extra/virtualbox-kernel-4.1.24_3.2.45_smp-i486-1_microlinux.txz: Added.
+virtualbox-4.1.24-i486-1_microlinux.txz: Added.
+virtualbox-kernel-4.1.24_3.2.29_smp-i486-1_microlinux.txz: Added.
+virtualbox-kernel-4.1.24_3.2.45_smp-i486-1_microlinux.txz: Added.
 +--------------------------+
 Wed Jun 19 10:18:13 CEST 2013
-extra/mutagen-1.21-i486-1_microlinux.txz: Added.
-extra/gst-python-0.10.22-i486-1_microlinux.txz: Added.
-extra/exaile-3.3.1-i486-1_microlinux.txz: Added.
+mutagen-1.21-i486-1_microlinux.txz: Added.
+gst-python-0.10.22-i486-1_microlinux.txz: Added.
+exaile-3.3.1-i486-1_microlinux.txz: Added.
 +--------------------------+
 Tue Jun 18 13:53:57 CEST 2013
 mozilla-firefox-17.0.6-i486-1_microlinux.txz: Upgraded.
@@ -59,7 +70,7 @@ Terminal-0.6.1-i486-1_microlinux.txz: Upgraded.
   Version 0.6.1 introduces some really nice color themes as well as the
   possibility to define a default geometry. Thanks to Robby Workman for the
   hint.
-pasture/flash-player-plugin-legacy-10.3.183.11-i386-1_microlinux.txz: Added.
+flash-player-plugin-legacy-10.3.183.11-i386-1_microlinux.txz: Added.
   This is the legacy version of the Adobe Flash Player for CPUs that don't come
   with the "sse2" feature. Special thanks to ljb643 on LQ.
 +--------------------------+
