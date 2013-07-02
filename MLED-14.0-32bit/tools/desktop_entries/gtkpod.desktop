@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=iPod Manager
+Name[de]=iPod-Manager
+Name[fr]=Gestionnaire iPod
+Comment=Gtkpod
+Exec=gtkpod
+Icon=gtkpod
+Terminal=false
+Type=Application
+Categories=GTK;AudioVideo;
+StartupNotify=true
+

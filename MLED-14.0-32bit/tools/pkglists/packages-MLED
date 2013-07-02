@@ -11,6 +11,7 @@ unrar
 # Development #
 ###############
 acpica
+autogen
 gc
 jdk
 lua
@@ -22,9 +23,11 @@ scons
 # Libraries #
 #############
 BeautifulSoup
+cryptopp
 enca
 gsl
 imlib2
+itstool
 libburn
 libevent
 libisoburn
@@ -37,13 +40,17 @@ wxGTK
 #########
 # GNOME #
 #########
+anjuta
 atkmm
 cairomm
 dconf
+gdl
 gdm
 glibmm
 goocanvas
 gtkmm
+gtksourceview3
+libgda
 libgnomecanvas
 libgnomecups
 libgnomeprint
@@ -53,6 +60,7 @@ mm-common
 pangomm
 pygoocanvas
 totem-pl-parser
+vte3
 
 ##############
 # Multimedia #
@@ -134,6 +142,7 @@ xfwm4-theme-axe
 ################
 # Applications #
 ################
+aMule
 asunder
 audacious
 audacious-plugins
@@ -148,6 +157,7 @@ geany
 geany-plugins
 gnote
 gtkcdlabel
+gtkpod
 inkscape
 leafpad
 mozilla-firefox
