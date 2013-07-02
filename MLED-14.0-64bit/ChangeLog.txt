@@ -1,3 +1,7 @@
+
+Changed xap/tagfile and the package lists in the tools/ directory to include
+the stock mozilla-firefox and mozilla-thunderbird packages.
++--------------------------+
 Mon Jul  1 17:50:59 CEST 2013
 Merged all the stuff from extra/, patches/ and pasture/ into the main
 slackware64/ directory. Keep It Simple Stupid.
