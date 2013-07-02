@@ -4,6 +4,8 @@ geeqie:ADD
 gftp:ADD
 gimp:ADD
 imagemagick:ADD
+mozilla-firefox:ADD
+mozilla-thunderbird:ADD
 network-manager-applet:ADD
 pidgin:ADD
 sane:ADD
@@ -23,8 +25,6 @@ gnuchess:SKP
 gnuplot:SKP
 gucharmap:SKP
 gv:SKP
-mozilla-firefox:SKP
-mozilla-thunderbird:SKP
 pan:SKP
 rdesktop:SKP
 rxvt:SKP
