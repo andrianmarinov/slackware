@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=Video Converter
+Name[de]=Video-Konvertierer
+Name[fr]=Convertisseur vidéo
+Comment=WinFF
+MimeType=application/winff;
+Exec=winff
+Icon=winff
+Terminal=false
+Type=Application
+Categories=AudioVideo;AudioVideoEditing;GTK;
+StartupNotify=true
+
