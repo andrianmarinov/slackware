@@ -125,7 +125,7 @@ Configure 'slackpkg'
 Download the 'slackpkg+' plugin for 'slackpkg'. It's very convenient for
 handling third-party repositories like MLED:
 
-  # links slakfinder.org/slackpkg+
+  # links http://slakfinder.org/slackpkg+
 
 Grab the package from the 'pkg/' directory and install it.
 
@@ -172,6 +172,10 @@ Eric Hameleers kindly provides a mirror for the Microlinux repository. You may
 want to use it as an alternative to the main repository:
 
   * http://taper.alienbase.nl/mirrors/people/kikinovak/
+
+Update GPG keys :
+
+  # slackpkg update gpg
 
 Update information about available packages:
 

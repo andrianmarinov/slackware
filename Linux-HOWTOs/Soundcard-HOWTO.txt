@@ -1,0 +1,47 @@
+===============
+Soundcard HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+===============
+
+Dernière révision : 3 juillet 2013
+
+Ce HOWTO décrit la configuration d'une carte son récalcitrante sous Slackware
+Linux.
+
+
+Sur les machines équipées de deux cartes son, il se peut que l'on veuille en
+désactiver une. Exemple :
+
+  # lspci | grep -i audio
+  00:10.1 Audio device: nVidia Corporation MCP51 High Definition Audio 
+  04:01.0 Multimedia audio controller: C-Media Electronics Inc CM8738 
+
+Dans ce cas, il faut identifier le module de la carte que l'on souhaite
+désactiver, puis blacklister la carte en question comme ceci :
+
+  # echo "blacklist snd_hda_intel" > /lib/modprobe.d/onboard-sound.conf
+
+Sur un portable HP Pavilion DM-1, j'ai dû configurer le son comme ceci :
+
+--8<---------- /etc/modprobe.d/snd-hda-intel.conf ----------------------------
+options snd-hda-intel model=auto
+--8<--------------------------------------------------------------------------
+
+Et pour qu'ALSA ne se trompe pas de carte :
+
+--8<---------- /etc/asound.conf ----------------------------------------------
+pcm.!default {
+  type hw
+  card SB
+}
+ctl.!default {
+  type hw
+  card SB
+}
+--8<--------------------------------------------------------------------------
+
+  > Curieusement, 'aplay' ne marche pas, et les boutons de réglage du volume
+    non plus.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

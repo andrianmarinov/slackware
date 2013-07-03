@@ -1,0 +1,145 @@
+==========
+Xfce HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==========
+
+Dernière révision : 3 juillet 2013
+
+Ce HOWTO décrit la configuration du bureau Xfce sous Slackware Linux.
+
+
+  * Configuration initiale de Xfce
+  * Création du profil
+  * Supprimer les partitions du bureau
+
+
+Configuration initiale de Xfce
+------------------------------
+
+Créer un utilisateur 'template' pour le modèle de configuration.
+
+Premier démarrage : Utiliser les paramètres par défaut.
+
+Déplacer la zone de notifications à gauche du sélecteur de bureaux virtuels.
+
+Ajouter deux applets entre la zone de notifications et le sélecteur de bureaux
+virtuels :
+
+  * un bouton 'Clipman'
+  * un bouton 'Mixer'
+
+  > Apparence
+  * Style > Clearlooks-Phenix
+  * Icônes > Faenza-Xfce
+  * Polices > Police par défaut : Droid Sans Regular 11
+
+  > Applications favorites
+  * Navigateur Web : Mozilla Firefox
+  * Client de messagerie : Mozilla Thunderbird
+  * Gestionnaire de fichiers : Thunar
+  * Émulateur de Terminal : Terminal Xfce
+
+  > Bureau
+  * Arrière-plan : opensuse-1600x1200.jpg
+  * Icônes > Icônes par défaut :
+  * [ ] Répertoire personnel
+  * [ ] Système de fichiers
+  * [ ] Corbeille
+  * [*] Périphériques amovibles
+
+  > Économiseur d'écran
+  * Mode : Seulement un économiseur d'écran : GLMatrix
+
+  > Espaces de travail
+  * Nombre d'espaces de travail : 2
+
+  > Gestionnaire de fenêtres
+  * Style > Thème : Axe Rounded
+
+  > Gestionnaire de fichiers
+  * Affichage > Voir un nouveau dossier en utilisant : Liste détaillée
+
+  > Peaufinage des fenêtres
+  * Compositeur > [*] Activer le compositeur d'affichage
+  * [*] Affichage direct des fenêtres plein écran
+  * [*] Afficher l'ombre sous les fenêtres normales
+  * [*] Afficher l'ombre sous les fenêtres contextuelles
+  * [*] Afficher l'ombre sous les fenêtres du dock
+  * Opacité des décorations des fenêtres : laisser tel quel
+  * Opacité des fenêtres inactives : réduire d'un cran
+  * Opacité des fenêtres durant leur déplacement : réduire de deux crans
+  * Opacité des fenêtres durant leur redimensionnement : réduire d'un cran
+  * Opacité des fenêtres contextuelles : laisser tel quel
+
+  > Souris
+  Thème : Défaut ( = Aero Large Drop)
+
+  > Tableau de bord > Panneau 2
+  * Dans un premier temps, maximiser la largeur du panneau pour pouvoir ajouter
+    les applications plus confortablement.
+  * Supprimer tous les lanceurs prédéfinis.
+  * Ajouter la sélection d'applications, une par une.
+  * Affichage > Dimensions > Taille : 40 - 48 pixels selon le nombre
+    d'applications
+  * Largeur : 1 %
+  * Apparence > Opacité : 1 %
+  * Apparence > Arrière-plan > Opacité : 0 %
+  * Pour chacune des entrées qu'on vient d'ajouter :
+    [ ] Désactiver les bulles d'aide
+ 
+Peaufiner Xfce Terminal.
+
+Bouton du menu d'applications : remplacer le logo de Xfce par celui de
+Slackware. 
+
+  * Icônes des emplacements > 'start-here-slackware'
+
+Agrandir la taille des icônes. Lancer l'éditeur de paramètres
+'xfce4-settings-editor' et définir les paramètres xsettings > Gtk > IconSizes :
+
+  * gtk-menu=16,16
+  * gtk-button=20,20
+  * panel-applications-menu=24,24
+  * panel-directory-menu=24,24
+
+Écrire tous ces paramètres dans une seule ligne, séparés par ':' sans espace.
+
+
+Création du profil
+------------------
+
+  # cp -Rv /home/template/.config /etc/skel/
+  # cd /etc/skel/.config
+
+Garder les répertoires suivants :
+
+  * Thunar
+  * xfce4
+
+Supprimer tout le reste.
+
+Empaqueter la configuration :
+
+  # cd ..
+  # tar cvjf config.tar.bz2 .config/
+
+
+Supprimer les partitions du bureau
+----------------------------------
+
+Si le bureau affiche les partitions système comme points de montage sur une
+installation multiboot, on peut s'en débarrasser en éditant '/etc/fstab' comme
+ceci :
+
+--8<---------- /etc/fstab ----------------------------------------------------
+...
+/dev/sda5        /mnt/sda5        ext4        defaults,noauto  0   0
+/dev/sda6        /mnt/sda6        ext4        defaults,noauto  0   0
+/dev/sda7        /mnt/sda7        ext4        defaults,noauto  0   0
+/dev/sda8        /mnt/sda8        ext4        defaults,noauto  0   0
+/dev/sda9        /mnt/sda9        ext4        defaults,noauto  0   0
+/dev/sda10       /mnt/sda10       ext4        defaults,noauto  0   0
+--8<--------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt

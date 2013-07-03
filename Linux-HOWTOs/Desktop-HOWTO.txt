@@ -2,39 +2,32 @@
 Desktop HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =============
 
-Dernière révision : 9 mai 2013
+Dernière révision : 3 juillet 2013
 
 Ce HOWTO décrit l'installation d'un poste de travail Microlinux Entreprise basé
 sur Slackware 14.0.
 
 
-  · Démarrage et choix du clavier
-  · Récupérer les tagfiles
-  · Partitionner le disque dur
-  · Formater le disque dur
-  · Choisir ce qu'on va installer
-  · Configurer LILO
-  · Configurer la souris
-  · Configurer le réseau et les services au démarrage
-  · Configurer l'horloge et le fuseau horaire
-  · Choisir un gestionnaire de fenêtres
-  · Avant de redémarrer
-  · Peaufiner la configuration réseau
-  · Récupérer les scripts Microlinux
-  · Configurer 'slackpkg'
-  · Élaguer le système de base
-  · Mise en garde pour les cartes NVidia
-  · Récupérer JDK manuellement 
-  · Lancer la compilation
-  · Nettoyer le menu des applications
-  · Configurations diverses
-  · Configuration initiale de Xfce
-  · Création du profil
-  · Multilib
-  · Supprimer les partitions du bureau
-  · Configurer les cartes son récalcitrantes
-  · Nettoyer une installation existante
-  · Installation rapide
+  * Démarrage et choix du clavier
+  * Récupérer les tagfiles
+  * Partitionner le disque dur
+  * Formater le disque dur
+  * Choisir ce qu'on va installer
+  * Configurer LILO
+  * Configurer la souris
+  * Configurer le réseau et les services au démarrage
+  * Configurer l'horloge et le fuseau horaire
+  * Choisir un gestionnaire de fenêtres
+  * Avant de redémarrer
+  * Peaufiner la configuration réseau
+  * Récupérer les scripts Microlinux
+  * Configurer 'slackpkg'
+  * Élaguer le système de base
+  * Installer la collection de paquets MLED
+  * Installer les paquets Multilib
+  * Nettoyer le menu des applications
+  * Terminer l'installation
+  * Nettoyer une installation existante
 
 
 Démarrage et choix du clavier
@@ -42,10 +35,10 @@ Démarrage et choix du clavier
  
 Options de démarrage :
 
-  · 'hugesmp.s' -> 32bit
-  · 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
-  · 'vga=788'   -> écran normal
-  · 'vga=791'   -> grand écran
+  * 'hugesmp.s' -> 32bit
+  * 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
+  * 'vga=788'   -> écran normal
+  * 'vga=791'   -> grand écran
 
 Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY français.
 
@@ -64,19 +57,18 @@ Activer le réseau, par exemple :
 L'environnement d'installation de Slackware contient déjà un répertoire '/tag',
 censé recevoir l'arborescence des tagfiles :
 
-  root@slackware:/# cd /tag
+  # cd /tag
 
 Récupérer les tagfiles du serveur de Microlinux :
 
-  root@slackware:/tag# wget http://www.microlinux.fr/tagfiles/MLED-14.0.tar.gz
+  wget http://www.microlinux.fr/slackware/MLED-14.0-32bit/tagfiles.tar.gz
+
+  /!\ Les jeux de tagfiles dans les sous-répertoires 32-bit et 64-bit sont des
+  liens symboliques et de fait identiques.
 
 Décompresser l'archive :
 
-  root@slackware:/tag# tar xvzf MLED-14.0.tar.gz
-
-Éventuellement, faire un brin de ménage :
-
-  root@slackware:/tag# rm -f MLED-14.0.tar.gz README
+  # tar xvzf MLED-14.0.tar.gz
 
 Si tout s'est bien passé, le répertoire '/tag' contient une série de
 répertoires correspondant aux groupes de paquets Slackware :
@@ -102,9 +94,9 @@ Partitionner le disque :
 
 Schéma de partitionnement :
 
-  · une partition pour /boot, de 100 Mo, formaté en ext2
-  · une partition swap, égale à la quantité de RAM disponible
-  · une partition principale, formatée en ext4
+  * une partition pour /boot, de 100 Mo, formaté en ext2
+  * une partition swap, égale à la quantité de RAM disponible
+  * une partition principale, formatée en ext4
 
   > Si l'on dispose de moins de 512 Mo de RAM, la swap sera égale à deux fois
     la quantité de RAM.
@@ -162,9 +154,9 @@ console (the safe choice).
 
 OPTIONAL LILO append="<kernel parameters>" LINE : 
 
-  · 'nomodeset quiet ipv6.disable=1' 
-  · 'quiet ipv6.disable=1 video=1366x768' (carte Intel)
-  · résolutions courantes : 800x600, 1024x768, 1366x768
+  * 'nomodeset quiet ipv6.disable=1' 
+  * 'quiet ipv6.disable=1 video=1366x768' (carte Intel)
+  * résolutions courantes : 800x600, 1024x768, 1366x768
 
 USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problèmes
 avec certains utilitaires en mode console, il n'empêche qu'il est dorénavant
@@ -196,20 +188,20 @@ CONFIGURE NETWORK: 'Yes'
 ENTER HOSTNAME : il s'agit de choisir un nom d'hôte pour la machine.
 Choisissez-en un à votre convenance et écrivez-le en minuscules, comme ceci :
   
-  · 'slackbox'
-  · 'alphamule'
-  · 'grossebertha'
-  · 'raymonde'
-  · 'poste10'
-  ·  etc.
+  * 'slackbox'
+  * 'alphamule'
+  * 'grossebertha'
+  * 'raymonde'
+  * 'poste10'
+  *  etc.
 
 ENTER DOMAINNAME FOR '<machine>' : choisissez un nom de domaine pour la
 machine, comme par exemple :
 
-  · 'local'
-  · 'microlinux.montpezat'
-  · 'crpconsulting.montpellier'
-  ·  etc.
+  * 'local'
+  * 'microlinux.montpezat'
+  * 'crpconsulting.montpellier'
+  *  etc.
 
   /!\ Sur un poste de travail dont le nom d'hôte est géré de façon centralisée
   par le serveur DHCP, on choisira 'localhost' et 'localdomain'. 
@@ -301,86 +293,90 @@ WLAN_KEY[1]="d5ad1f04acf048ec2d0b1c80c7"
 Récupérer les scripts Microlinux
 --------------------------------
 
-Les scripts, SlackBuilds et fichiers de configuration Microlinux se trouvent
-sur Github.
+Les scripts sont stockés dans un dépôt Github :
 
-Récupérer ces fichiers :
-  
   # cd
-  # git clone https://github.com/kikinovak/desktop
+  # git clone https://github.com/kikinovak/slackware
 
 
 Configurer 'slackpkg'
 ---------------------
 
-Selon le contexte, on utilisera par ordre de préférence :
+Télécharger l'extension 'slackpkg+' pour 'slackpkg'. C'est un outil fort
+pratique pour gérer les dépôts de paquets tiers comme MLED :
 
-  1. un dépôt local
-  2. le DVD 
-  3. un miroir sur Internet
-  
-  * Dépôt local :
+  # links http://slakfinder.org/slackpkg+
 
---8<---------- /etc/slackpkg/mirrors -----------------------------------------
-...
-http://mirror.nestor/slackware/slackware-14.0/
-...
---8<--------------------------------------------------------------------------
+Récupérer le paquet dans le répertoire 'pkg/' et l'installer.
 
-  * DVD :
+Éditer '/etc/slackpkg/mirrors' et choisir un miroir de téléchargement en
+fonction de l'emplacement géographique. Par exemple :
 
 --8<---------- /etc/slackpkg/mirrors -----------------------------------------
 ...
-cdrom://mnt/cdrom/
+# FRANCE (FR)
+ftp://mirror.ovh.net/mirrors/ftp.slackware.com/slackware64-14.0/
 ...
 --8<--------------------------------------------------------------------------
 
-  /!\ Ne pas oublier de monter le DVD avant d'invoquer 'slackpkg' ;o)
+  /!\ Assurez-vous de ne choisir qu'un seul miroir pour la version stable.
 
-  * Miroir sur Internet :
+Configurer 'slackpkg+' :
 
---8<---------- /etc/slackpkg/mirrors -----------------------------------------
-...
-ftp://ftp.slackware.at/slackware-14.0
-...
+  # cd /etc/slackpkg
+  # mv slackpkgplus.conf slackpkgplus.conf.orig
+
+Sur Slackware 32-bits :
+
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+# /etc/slackpkg/slackpkgplus.conf
+SLACKPKGPLUS=on
+PKGS_PRIORITY=( microlinux:.* )
+REPOPLUS=( slackpkgplus microlinux )
+MIRRORPLUS['microlinux']=http://www.microlinux.fr/slackware/MLED-14.0-32bit/
+MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
 
-  > Évidemment, on fera les ajustements nécessaires pour Slackware64.
+Sur Slackware64:
 
-Blacklister tous les paquets marqués "microlinux" pour éviter qu'ils se fassent
-écraser par une mise à jour :
-
---8<---------- /etc/slackpkg/blacklist ---------------------------------------
-...
-[0-9]+_microlinux
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+# /etc/slackpkg/slackpkgplus.conf
+SLACKPKGPLUS=on
+PKGS_PRIORITY=( microlinux:.* )
+REPOPLUS=( slackpkgplus microlinux )
+MIRRORPLUS['microlinux']=http://www.microlinux.fr/slackware/MLED-14.0-64bit/
+MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
 
-Sur Slackware64, il faudra également songer à blacklister les paquets multilib
-fournis par Eric Hameleers :
+Eric Hameleers a la gentillesse de fournir un miroir pour le dépôt Microlinux,
+que l'on peut donc configurer alternativement :
 
---8<---------- /etc/slackpkg/blacklist ---------------------------------------
-...
-[0-9]+_microlinux
-[0-9]+alien
---8<--------------------------------------------------------------------------
+  * http://taper.alienbase.nl/mirrors/people/kikinovak/
 
-Effectuer la mise à jour initiale du système :
+Mettre à jour les clés GPG :
+
+  # slackpkg update gpg
+
+Mettre à jour les informations sur les paquets disponibles :
 
   # slackpkg update
-  # slackpkg upgrade-all
-
-Installer le plug-in MPlayer du groupe 'extra' :
-
-  # slackpkg install mplayerplug-in
 
 
 Élaguer le système de base
 --------------------------
 
-Si l'on n'a pas utilisé les tagfiles pour l'installation du système de base, on
-peut le peaufiner comme ceci :
+Si l'on n'a pas utilisé les tagfiles pour l'installation du système de base, le
+moment est venu de rattraper le peaufinage du système de base. Le répertoire
+'tools/' contient un script simple 'trim-desktop-base.sh' qui s'occupe
+essentiellement de deux choses :
 
-  # cd /root/desktop/14.0/tools
+  1. installer les paquets de base nécessaires
+  2. supprimer les paquets superflus
+
+Le script utilise 'slackpkg', il faut donc s'assurer de l'avoir correctement
+configuré.
+
+  # cd slackware/MLED-14.0-32bit/tools
   # ./trim-desktop-base.sh
 
   /!\ Cette dernière commande installe une série de paquets, notamment une
@@ -390,66 +386,75 @@ peut le peaufiner comme ceci :
   'desktop-base-remove' dans le répertoire 'tools/pkglists'.
 
 
-Mise en garde pour les cartes NVidia
-------------------------------------
+Installer la collection de paquets MLED
+---------------------------------------
 
-La compilation de certains paquets comme wxGTK, Firefox ou Thunderbird échoue
-lorsqu'on utilise le driver propriétaire NVidia. Avant de lancer la
-compilation, il faut donc le désinstaller :
+Utilisez le script 'install-MLED.sh' dans le répertoire 'tools/' :
 
-  # ./NVIDIA-Linux-x86-XXX.YY.run --uninstall
+  # cd tools/
+  # ./install-MLED.sh
 
-Ensuite, réinstaller le paquet 'mesa' :
+Ce script lit les informations contenues dans le fichier 'packages-MLED' situé
+dans le répertoire 'pkglists' et installe "à la louche" l'ensemble des paquets
+contenus dans cette liste, en utilisant 'slackpkg'.
 
-  # slackpkg reinstall mesa
-
-
-Récupérer JDK manuellement 
---------------------------
-
-Slackware ne peut plus redistribuer JDK (le Java Development Kit) sous forme
-binaire, pour des raisons de licence. En revanche, le répertoire 'extra/' des
-fichiers Slackware contient un SlackBuild qui permet facilement de construire
-le paquet en question. J'ai rapatrié ce SlackBuild vers le répertoire
-'14.0/build/jdk'.
-
-Au préalable, aller sur le site d'Oracle :
-
-  * http://www.oracle.com
-
-Suivre le lien 'Downloads' > 'Java for Developers' > 'Java Platform (JDK)'
-
-Accepter les termes de la licence :
-
-  [*] Accept Licence Agreement
-  
-Puis, télécharger un des deux fichiers suivants :
-
-  · jdk-7uXX-linux-i586.tar.gz (32-bits)
-  · jdk-7uXX-linux-x64.tar.gz  (64-bits)
-
-Ranger l'archive téléchargée dans le répertoire 'source/d/jdk'. 
+  /!\ De temps en temps, de nouveaux paquets sont ajoutés à MLED. Pour rester à
+  jour avec votre installation, il vous suffit de réinvoquer le script
+  'install-MLED.sh'. Au préalable, il vous faudra bien évidemment mettre à jour
+  le contenu du dépôt Github. Pour ce faire, allez à la racine des fichiers
+  téléchargés ('/root/slackware' dans l'exemple') et invoquez 'git pull'.
 
 
-Lancer la compilation
----------------------
+Installer les paquets Multilib
+------------------------------
 
-Démarrer la compilation en tant que root :
+Sur Slackware64, vous voudrez peut-être ajouter des applications comme
+VirtualBox, Wine ou Skype, etc. Dans ce cas, il faudra installer la couche de
+compatibilité 32-bits fournie par Eric Hameleers. Le plugin 'slackpkg+' rend
+cette tâche extrêmement facile.
 
-  # ./MLED.SlackBuild
+Dans un premier temps, ajoutez le dépôt Multilib :
 
-Ce script maître se charge de plusieurs choses :
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+...
+REPOPLUS=( ... multilib )
+MIRRORPLUS['multilib']=http://taper.alienbase.nl/mirrors/people/alien/multilib/14.0/
+...
+--8<--------------------------------------------------------------------------
 
-  1. télécharger automatiquement les sources ;
+Le dépôt Multilib est prioritaire par rapport aux paquets Slackware officiels :
 
-  2. compiler les paquets dans l'ordre approprié ;
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+...
+PKGS_PRIORITY=( ... multilib:.* )
+...
+--8<--------------------------------------------------------------------------
 
-  3. installer les paquets au fur et à mesure ;
+Voici à quoi ressemble notre fichier de configuration au total :
 
-  4. les ranger dans un endroit approprié.
+--8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
+# /etc/slackpkg/slackpkgplus.conf
+SLACKPKGPLUS=on
+PKGS_PRIORITY=( microlinux:.* multilib:.* )
+REPOPLUS=( microlinux slackpkgplus )
+MIRRORPLUS['microlinux']=http://mirror.nestor/microlinux/MLED-14.0-64bit/
+MIRRORPLUS['multilib']=http://taper.alienbase.nl/mirrors/people/alien/multilib/14.0/
+MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
+--8<--------------------------------------------------------------------------
 
-Compter quelques heures pour la procédure. La durée totale sera fonction de la
-puissance du matériel et de la bande passante.
+Mettez à jour le système :
+
+  # slackpkg update gpg
+  # slackpkg update
+  # slackpkg upgrade-all
+
+  /!\ Cette dernière commande remplacera tous les paquets gcc-* et glibc-*
+  standard par les versions Multilib fournies par Eric.
+
+À présent, installez la panoplie complète de paquets de compatibilité 32-bits.
+Cette opération peut être effectuée tout simplement comme ceci :
+
+  # slackpkg install compat32
 
 
 Nettoyer le menu des applications
@@ -469,7 +474,7 @@ afin que Mme Michu s'y retrouve. Lancer ce script :
   autre langue pour votre environnement de bureau.
 
 
-Configurations diverses
+Terminer l'installation
 -----------------------
 
 Éventuellement, synchroniser le poste avec le serveur NTP local (NTP-HOWTO).
@@ -484,187 +489,6 @@ centralisée, c'est le moment de la configurer.
 Passer en init 4.
 
 
-Configuration initiale de Xfce
-------------------------------
-
-Créer un utilisateur 'template' pour le modèle de configuration.
-
-Premier démarrage : Utiliser les paramètres par défaut.
-
-Déplacer la zone de notifications à gauche du sélecteur de bureaux virtuels.
-
-Ajouter deux applets entre la zone de notifications et le sélecteur de bureaux
-virtuels :
-
-  · un bouton 'Clipman'
-  · un bouton 'Mixer'
-
-  > Apparence
-  · Style > Clearlooks-Phenix
-  · Icônes > Faenza-Xfce
-  · Polices > Police par défaut : Droid Sans Regular 11
-
-  > Applications favorites
-  · Navigateur Web : Mozilla Firefox
-  · Client de messagerie : Mozilla Thunderbird
-  · Gestionnaire de fichiers : Thunar
-  · Émulateur de Terminal : Terminal Xfce
-
-  > Bureau
-  · Arrière-plan : opensuse-1600x1200.jpg
-  · Icônes > Icônes par défaut :
-  · [ ] Répertoire personnel
-  · [ ] Système de fichiers
-  · [ ] Corbeille
-  · [*] Périphériques amovibles
-
-  > Économiseur d'écran
-  · Mode : Seulement un économiseur d'écran : GLMatrix
-
-  > Espaces de travail
-  · Nombre d'espaces de travail : 2
-
-  > Gestionnaire de fenêtres
-  · Style > Thème : Axe Rounded
-
-  > Gestionnaire de fichiers
-  · Affichage > Voir un nouveau dossier en utilisant : Liste détaillée
-
-  > Peaufinage des fenêtres
-  · Compositeur > [*] Activer le compositeur d'affichage
-  · [*] Affichage direct des fenêtres plein écran
-  · [*] Afficher l'ombre sous les fenêtres normales
-  · [*] Afficher l'ombre sous les fenêtres contextuelles
-  · [*] Afficher l'ombre sous les fenêtres du dock
-  · Opacité des décorations des fenêtres : laisser tel quel
-  · Opacité des fenêtres inactives : réduire d'un cran
-  · Opacité des fenêtres durant leur déplacement : réduire de deux crans
-  · Opacité des fenêtres durant leur redimensionnement : réduire d'un cran
-  · Opacité des fenêtres contextuelles : laisser tel quel
-
-  > Souris
-  Thème : Défaut ( = Aero Large Drop)
-
-  > Tableau de bord > Panneau 2
-  · Dans un premier temps, maximiser la largeur du panneau pour pouvoir ajouter
-    les applications plus confortablement.
-  · Supprimer tous les lanceurs prédéfinis.
-  · Ajouter la sélection d'applications, une par une.
-  · Affichage > Dimensions > Taille : 40 - 48 pixels selon le nombre
-    d'applications
-  · Largeur : 1 %
-  · Apparence > Opacité : 1 %
-  · Apparence > Arrière-plan > Opacité : 0 %
-  · Pour chacune des entrées qu'on vient d'ajouter :
-    [ ] Désactiver les bulles d'aide
- 
-Peaufiner Xfce Terminal.
-
-Bouton du menu d'applications : remplacer le logo de Xfce par celui de
-Slackware. 
-
-  · Icônes des emplacements > 'start-here-slackware'
-
-Agrandir la taille des icônes. Lancer l'éditeur de paramètres
-'xfce4-settings-editor' et définir les paramètres xsettings > Gtk > IconSizes :
-
-  · gtk-menu=16,16
-  · gtk-button=20,20
-  · panel-applications-menu=24,24
-  · panel-directory-menu=24,24
-
-Écrire tous ces paramètres dans une seule ligne, séparés par ':' sans espace.
-
-
-Création du profil
-------------------
-
-  # cp -Rv /home/template/.config /etc/skel/
-  # cd /etc/skel/.config
-
-Garder les répertoires suivants :
-
-  · Thunar
-  · xfce4
-
-Supprimer tout le reste.
-
-Empaqueter la configuration :
-
-  # cd ..
-  # tar cvjf config.tar.bz2 .config/
-
-
-Multilib
---------
-
-Si l'on utilise des applications comme VirtualBox, Skype ou Wine sous
-Slackware64, il faudra installer une couche de compatibilité 32-bit :
-
-  # cd multilib/
-  # ./get-multilib.sh
-  # cd 14.0
-  # upgradepkg --reinstall --install-new *.t?z
-  # cd slackware64-compat32
-  # upgradepkg --install-new *.compat32/*.t?z
-
-
-Supprimer les partitions du bureau
-----------------------------------
-
-Si le bureau affiche les partitions système comme points de montage sur une
-installation multiboot, on peut s'en débarrasser en éditant '/etc/fstab' comme
-ceci :
-
---8<---------- /etc/fstab ----------------------------------------------------
-...
-/dev/sda5        /mnt/sda5        ext4        defaults,noauto  0   0
-/dev/sda6        /mnt/sda6        ext4        defaults,noauto  0   0
-/dev/sda7        /mnt/sda7        ext4        defaults,noauto  0   0
-/dev/sda8        /mnt/sda8        ext4        defaults,noauto  0   0
-/dev/sda9        /mnt/sda9        ext4        defaults,noauto  0   0
-/dev/sda10       /mnt/sda10       ext4        defaults,noauto  0   0
---8<--------------------------------------------------------------------------
-
-
-Configurer les cartes son récalcitrantes
-----------------------------------------
-
-Sur les machines équipées de deux cartes son, il se peut que l'on veuille en
-désactiver une. Exemple :
-
-  # lspci | grep -i audio
-  00:10.1 Audio device: nVidia Corporation MCP51 High Definition Audio 
-  04:01.0 Multimedia audio controller: C-Media Electronics Inc CM8738 
-
-Dans ce cas, il faut identifier le module de la carte que l'on souhaite
-désactiver, puis blacklister la carte en question comme ceci :
-
-  # echo "blacklist snd_hda_intel" > /lib/modprobe.d/onboard-sound.conf
-
-Sur un portable HP Pavilion DM-1, j'ai dû configurer le son comme ceci :
-
---8<---------- /etc/modprobe.d/snd-hda-intel.conf ----------------------------
-options snd-hda-intel model=auto
---8<--------------------------------------------------------------------------
-
-Et pour qu'ALSA ne se trompe pas de carte :
-
---8<---------- /etc/asound.conf ----------------------------------------------
-pcm.!default {
-  type hw
-  card SB
-}
-ctl.!default {
-  type hw
-  card SB
-}
---8<--------------------------------------------------------------------------
-
-  > Curieusement, 'aplay' ne marche pas, et les boutons de réglage du volume
-    non plus.
-
-
 Nettoyer une installation existante
 -----------------------------------
 
@@ -677,25 +501,15 @@ Passer en init 3.
 Nettoyer '/tmp'.
 
 Sur un système Slackware64, supprimer les paquets multilib. Commenter la ligne
-correspondante dans '/etc/slackpkg/blacklist' :
-
---8<---------- /etc/slackpkg/blacklist ---------------------------------------
-...
-#[0-9]+alien
---8<--------------------------------------------------------------------------
+correspondante dans '/etc/slackpkg/blacklist' ou alors supprimer la
+configuration correspondante dans '/etc/slackpkg/slackpkgplus.conf'.
 
 Ensuite, "mettre à jour" tous les paquets gcc-* et glibc-*, ce qui les remplace
 par les versions 64-bit pures.
 
   # slackpkg upgrade-all
 
-Commenter tout ce qui reste dans '/etc/slackpkg/blacklist' :
-
---8<---------- /etc/slackpkg/blacklist ---------------------------------------
-...
-#[0-9]_SBo
-#[0-9]_microlinux
---8<--------------------------------------------------------------------------
+Supprimer tout ce qui reste éventuellement dans '/etc/slackpkg/blacklist'
 
 Supprimer les paquets multilib restants :
 
@@ -724,34 +538,6 @@ Peaufiner le profil du système de base :
 
   # cd tools/
   # ./trim-desktop-base.sh
-
-
-Installation rapide
--------------------
-
-1.  Installer le système de base.
-
-2.  Récupérer les scripts Microlinux sur Github.
-
-3.  Configurer 'slackpkg'.
-
-4.  Élaguer le système de base si l'on n'a pas utilisé les tagfiles.
-
-5.  Récupérer les paquets MLED du support d'installation.
-
-6.  Installer les paquets MLED.
-
-7.  Peaufiner la configuration réseau.
-
-8.  Mettre à jour le système.
-
-9.  Synchroniser la machine avec NTP.
-
-10. Configurer X11.
-
-11. Définir le ou les utilisateurs.
-
-12. Passer en init 4 et lancer le bureau.
 
 
 ------------------------------------------------------------------------------
