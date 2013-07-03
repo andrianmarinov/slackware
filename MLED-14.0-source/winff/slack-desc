@@ -1,0 +1,12 @@
+     |-----handy-ruler------------------------------------------------------|
+winff: winff (GUI for ffmpeg)
+winff:
+winff: WinFF is a GUI for the command line video converter, FFMPEG. It will
+winff: convert most any video file that FFmpeg will convert. WinFF does
+winff: multiple files in multiple formats at one time. You can for example
+winff: convert MPEGs, FLVs and MOVs into AVIs all at once.
+winff:
+winff:
+winff: 
+winff:
+winff: Package created by Niki Kovacs <info@microlinux.fr>
