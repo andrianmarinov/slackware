@@ -1,3 +1,6 @@
+Wed Jul  3 11:32:51 CEST 2013
+winff-1.3.0-i486-1_microlinux.txz: Added.
++--------------------------+
 Tue Jul  2 16:16:07 CEST 2013
 Changed xap/tagfile and the package lists in the tools/ directory to include
 the stock mozilla-firefox and mozilla-thunderbird packages.
