@@ -77,21 +77,21 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-# Compile
+# Build
 lazbuild --primary-config-path=/usr/share/lazarus -B winff.lpr
 
-# Install executable program
+# Executable program
 mkdir -p $PKG/usr/bin
 install -m 0755 winff $PKG/usr/bin
 
-# Install languages
+# Languages
 mkdir -p $PKG/usr/share/winff/languages
 install -m 0644 languages/*.po $PKG/usr/share/winff/languages
 
-# Install presets
+# Presets
 install -m 0644 presets.xml $PKG/usr/share/winff
 
-# Install icons
+# Icons
 mkdir -p $PKG/usr/share/pixmaps
 install -m 0644 winff-icons/48x48/winff.png $PKG/usr/share/pixmaps
 
@@ -103,34 +103,34 @@ done
 mkdir -p $PKG/usr/share/winff/winff-icons
 install -m 0644 winff-icons/*.{png,svgz} $PKG/usr/share/winff/winff-icons
 
-#exit 1
+# Man page
+mkdir -p $PKG/usr/man/man1
+install -m 0644 winff.1 $PKG/usr/man/man1
+gzip -9 $PKG/usr/man/man1/winff.1
 
-# Copy compressed man file
-#mkdir -p $PKG/usr/man/man1
-#cp -a usr/share/man/man1/* $PKG/usr/man/man1
+# Help files
+mkdir -p $PKG/usr/share/winff/docs
+install -m 0644 docs/* $PKG/usr/share/winff/docs
 
-# Copy desktop entries
-#mkdir -p $PKG/usr/share/applications
-#cat usr/share/applications/$PRGNAM.desktop > \
-#  $PKG/usr/share/applications/$PRGNAM.desktop
+# Desktop menu entry
+mkdir -p $PKG/usr/share/applications
+cat $CWD/winff.desktop > $PKG/usr/share/applications/winff.desktop
+chown root:root $PKG/usr/share/applications/winff.desktop
+chmod 0644 $PKG/usr/share/applications/winff.desktop
 
-# Copy icon
-#mkdir -p $PKG/usr/share/pixmaps
-#cat usr/share/icons/hicolor/48x48/apps/winff.png > $PKG/usr/share/pixmaps/winff.png
-
-# Copy documentation
-#mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-#cp -a usr/share/doc/$PRGNAM/* \
-#  $PKG/usr/doc/$PRGNAM-$VERSION
-#cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+# Documentation
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a AUTHORS COMPILE.TXT COPYING README* RESOURCES.RC  \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
-#cat $CWD/doinst.sh > $PKG/install/doinst.sh
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}
 
 # Cleanup
-#cd $TMP
-#rm -rf $PRGNAM-$VERSION $PKG control.tar.gz data.tar.gz debian-binary
+cd $TMP
+rm -rf $PRGNAM $PKG 
