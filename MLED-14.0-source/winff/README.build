@@ -1,0 +1,5 @@
+WinFF doesn't have any particular runtime dependencies, but it's written in
+Free Pascal, so you'll need a Free Pascal Compiler on your machine.
+
+Be sure to install packages fpc, fpc-source and lazarus before launching the
+build. They're all available on SlackBuilds.org.
