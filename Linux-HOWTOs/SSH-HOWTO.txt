@@ -1,0 +1,79 @@
+=========
+SSH HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=========
+
+Dernière révision : 6 juillet 2013
+
+Ce HOWTO décrit l'utilisation de SSH sous Slackware Linux.
+
+  * Introduction
+
+
+Introduction
+------------
+
+OpenSSH est l'outil standard pour l'administration à distance sous Linux et
+*BSD. Il est simple d'utilisation, robuste et sûr. Il permet de travailler de
+travailler sur une machine distante aussi confortablement que si l'on était
+physiquement installé devant. L'authentification aussi bien que les transferts
+de données sont encryptés. On utilisera donc OpenSSH au quotidien pour
+administrer aussi bien les serveurs locaux que les serveurs dédiés ou les
+postes de travail à distance.
+
+Pour lever une potentielle confusion, on clarifiera quelques termes :
+
+  * Le serveur SSH, c'est la machine à laquelle on se connecte.
+
+  * Le client SSH, c'est la machine à partir de laquelle on se connecte.
+
+
+Gestion du service SSH
+----------------------
+
+Activer le serveur OpenSSH au démarrage de la machine :
+
+  # chmod +x /etc/rc.d/rc.sshd
+
+Lancer SSH :
+
+  # /etc/rc.d/rc.sshd start
+
+Arrêter SSH :
+
+  # /etc/rc.d/rc.sshd stop
+
+Relancer SSH :
+
+  # /etc/rc.d/rc.sshd restart
+
+
+Se connecter à une machine distante
+-----------------------------------
+
+Dans l'exemple ci-dessous, l'utilisateur 'kikinovak' qui travaille sur la
+machine 'virtualbox' veut se connecter à la machine 'alphamule'. Plusieurs
+conditions doivent être remplies pour cela.
+
+D'une part, le serveur OpenSSH (démon 'sshd') doit tourner sur 'alphamule'.
+D'autre part, l'utilisateur 'kikinovak' doit également disposer d'un compte
+shell sur 'alphamule'. En revanche, il n'est pas nécessaire que le démon 'sshd'
+soit activé sur 'virtualbox'. 
+
+Lors d'une première tentative de connexion, on obtient le message suivant :
+
+  [kikinovak@virtualbox:~] $ ssh alphamule
+  The authenticity of host 'alphamule (192.168.2.2)' can't be established.
+  ECDSA key fingerprint is 20:79:e0:6b:d6:18:81:fb:44:03:13:a6:41:a6:9e:c8.
+  Are you sure you want to continue connecting (yes/no)? 
+
+Si l'on répond par l'affirmative ("yes"), la clé publique de la machine
+distante est copiée vers le fichier local ~/.ssh/known_hosts.
+
+  Warning: Permanently added 'alphamule,192.168.2.2' (ECDSA) to the list of
+  known hosts.
+
+
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
