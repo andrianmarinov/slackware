@@ -1,0 +1,159 @@
+============
+Backup HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+============
+
+Dernière révision : 8 juillet 2013
+
+Ce HOWTO décrit quelques stratégies de sauvegarde pour Linux en général et
+Slackware en particulier.
+
+
+Sauvegarde simple pour une Dedibox
+----------------------------------
+
+La location d'une Dedibox chez le fournisseur Online comprend un espace de
+sauvegarde de 200 gigaoctets, moyennant quelques euros de plus. Cet espace est
+accessible via un compte FTP.
+
+Une stratégie de sauvegarde simple prévoit un instantané quotidien pour les
+données "vitales" comme par exemple la configuration du serveur, les sites Web,
+les mails et les bases de données. Pour les données moins importantes comme les
+fichiers audio d'une webradio, on se contentera d'une sauvegarde hebdomadaire. 
+
+Les arborescences de données à sauvegarder sont compressées "à la louche" avec
+la commande 'tar'. Ensuite, c'est l'utilitaire 'curl' qui se charge du
+transfert FTP. Chaque fichier est estampillé du mois sous forme numérique
+('date "+%m"'). 
+
+Pour les sauvegardes quotidiennes, éditer un fichier '/etc/cron.daily/backup'
+en renseignant les identifiants de connexion divers et variés :
+
+--8<---------- /etc/cron.daily/backup ----------------------------------------
+#!/bin/bash
+#
+# /etc/cron.daily/backup
+MONTH=$(date "+%m")
+SERVER="sd-XXXXX"
+FTPUSER="sd-XXXXX"
+FTPPASS="le_mot_de_passe_ftp"
+FTPHOST="dedibackup-bzn.online.net"
+
+# Configuration du serveur
+cd /
+tar czf - etc/ | curl -T - -u $FTPUSER:$FTPPASS \
+  ftp://$FTPHOST/$SERVER-$MONTH-config.tar.gz
+
+# Sites Web
+cd /var/www
+tar czf - vhosts/ | curl -T - -u $FTPUSER:$FTPPASS \
+  ftp://$FTPHOST/$SERVER-$MONTH-vhosts.tar.gz
+
+# Mails
+cd /
+tar czf - home/ | curl -T - -u $FTPUSER:$FTPPASS \
+  ftp://$FTPHOST/$SERVER-$MONTH-mails.tar.gz
+
+# Bases de données 
+DB1NAME="mabase"
+DB1USER="utilisateur_mysql_de_mabase"
+DB1PASS="pass_mysql_de_mabase"
+mysqldump -u $DB1USER -p$DB1PASS $DB1NAME | curl -T - -u $FTPUSER:$FTPPASS \
+  ftp://$FTPHOST/$SERVER-$MONTH-database-$DB1NAME.sql
+--8<--------------------------------------------------------------------------
+
+  /!\ Il vaut mieux sauvegarder les bases de données MySQL individuellement.
+  Dans le cas contraire, on peut se retrouver avec un véritable "dump",
+  c'est-à-dire une "bouse" qu'il sera pénible de réimporter.
+
+Pour les sauvegardes hebdomadaires, c'est le fichier '/etc/cron.weekly/backup'
+qu'il faudra éditer, avec les identifiants de connexion respectifs :
+
+--8<---------- /etc/cron.weekly/backup ---------------------------------------
+#!/bin/bash
+#
+# /etc/cron.weekly/backup
+MONTH=$(date "+%m")
+SERVER="sd-XXXXX"
+FTPUSER="sd-XXXXX"
+FTPPASS="le_mot_de_passe_ftp"
+FTPHOST="dedibackup-bzn.online.net"
+
+# Webradio
+cd /var/lib
+tar czf - mpd/ | curl -T - -u $FTPUSER:$FTPPASS \
+  ftp://$FTPHOST/$SERVER-$MONTH-webradio.tar.gz
+--8<--------------------------------------------------------------------------
+
+Étant donné que ces deux fichiers contiennent des identifiants de connexion et
+des mots de passe "en clair", il est vital de restreindre les permissions de
+sorte à ce que seul root puisse avoir accès au contenu :
+
+  # chmod 0700 /etc/cron.{daily,weekly}/backup
+
+Pour tester le bon fonctionnement des scripts de sauvegarde, on peut déjà les
+lancer manuellement :
+
+  # /etc/cron.daily/backup 
+    % Total    % Received % Xferd  Average Speed   Time    Time    Current
+                                   Dload  Upload   Total   Spent   Speed
+  100 2124k    0     0    0 2124k      0   636k --:--:--  0:00:03  998k
+    % Total    % Received % Xferd  Average Speed   Time    Time    Current
+                                   Dload  Upload   Total   Spent   Speed
+  100 12.5M    0     0    0 12.5M      0  3255k --:--:--  0:00:03  3264k
+    % Total    % Received % Xferd  Average Speed   Time    Time    Current
+                                   Dload  Upload   Total   Spent   Speed
+  100  3172    0     0    0  3172      0   3619 --:--:-- --:--:--  3637
+    % Total    % Received % Xferd  Average Speed   Time    Time    Current
+                                   Dload  Upload   Total   Spent   Speed
+  100  233k    0     0    0  233k      0   246k --:--:-- --:--:--  247k
+
+Ou encore :
+
+  # /etc/cron.weekly/backup 
+    % Total    % Received % Xferd  Average Speed   Time    Time    Current
+                                   Dload  Upload   Total   Spent   Speed
+  100 2095M    0     0    0 2095M      0  3987k --:--:--  0:08:58  4318k
+
+Vérifier si le transfert s'est correctement effectué :
+
+  # ncftp -u sd-XXXXX dedibackup-bzn.online.net
+  ...
+  ncftp / > ls
+  sd-XXXXX-07-config.tar.gz                           
+  sd-XXXXX-07-database-mabase.sql                
+  sd-XXXXX-07-mails.tar.gz
+  sd-XXXXX-07-vhosts.tar.gz
+  sd-XXXXX-07-webradio.tar.gz
+
+Pour connaître les horaires d'exécution des scripts respectifs, invoquer la
+commande suivante :
+
+  # crontab -l
+  # Run hourly cron jobs at 47 minutes after the hour:
+  47 * * * * /usr/bin/run-parts /etc/cron.hourly 1> /dev/null
+  #
+  # Run daily cron jobs at 4:40 every day:
+  40 4 * * * /usr/bin/run-parts /etc/cron.daily 1> /dev/null
+  #
+  # Run weekly cron jobs at 4:30 on the first day of the week:
+  30 4 * * 0 /usr/bin/run-parts /etc/cron.weekly 1> /dev/null
+  #
+  # Run monthly cron jobs at 4:20 on the first day of the month:
+  20 4 1 * * /usr/bin/run-parts /etc/cron.monthly 1> /dev/null
+
+Pour changer l'heure d'exécution d'une série de scripts, il faudra utiliser
+l'option '-e' comme ceci :
+
+  # crontab -e
+  ...
+  # Run daily cron jobs at 0:00 every day:
+  00 0 * * * /usr/bin/run-parts /etc/cron.daily 1> /dev/null
+  ...
+
+Consulter le manuel de 'crontab' pour la syntaxe détaillée :
+
+  # man crontab
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
