@@ -12,15 +12,16 @@ Ce HOWTO décrit l'utilisation de SSH sous Slackware Linux.
 Introduction
 ------------
 
-OpenSSH est l'outil standard pour l'administration à distance sous Linux et
-*BSD. Il est simple d'utilisation, robuste et sûr. Il permet de travailler de
-travailler sur une machine distante aussi confortablement que si l'on était
-physiquement installé devant. L'authentification aussi bien que les transferts
-de données sont encryptés. On utilisera donc OpenSSH au quotidien pour
-administrer aussi bien les serveurs locaux que les serveurs dédiés ou les
-postes de travail à distance.
+SSH ("Secure Shell") est l'outil standard pour l'administration à distance sous
+Linux.  Il est simple d'utilisation, robuste et sûr. Il permet de travailler en
+mode console sur une machine distante, aussi confortablement que si l'on était
+physiquement installé devant. 
 
-Pour lever une potentielle confusion, on clarifiera quelques termes :
+L'authentification aussi bien que les transferts de données sont encryptés. On
+utilisera donc SSH au quotidien pour administrer aussi bien les serveurs locaux
+que les serveurs dédiés ou les postes de travail à distance.
+
+Une petite clarification pour lever une potentielle confusion :
 
   * Le serveur SSH, c'est la machine à laquelle on se connecte.
 
@@ -50,8 +51,8 @@ Relancer SSH :
 Se connecter à une machine distante
 -----------------------------------
 
-Dans l'exemple ci-dessous, l'utilisateur 'kikinovak' qui travaille sur la
-machine 'virtualbox' veut se connecter à la machine 'alphamule'. Plusieurs
+Dans l'exemple ci-dessous, l'utilisateur 'kikinovak' travaille sur la machine
+'virtualbox' et veut se connecter à la machine 'alphamule'. Plusieurs
 conditions doivent être remplies pour cela.
 
 D'une part, le serveur OpenSSH (démon 'sshd') doit tourner sur 'alphamule'.
@@ -67,13 +68,75 @@ Lors d'une première tentative de connexion, on obtient le message suivant :
   Are you sure you want to continue connecting (yes/no)? 
 
 Si l'on répond par l'affirmative ("yes"), la clé publique de la machine
-distante est copiée vers le fichier local ~/.ssh/known_hosts.
+distante est copiée vers le fichier local '~/.ssh/known_hosts'.
 
   Warning: Permanently added 'alphamule,192.168.2.2' (ECDSA) to the list of
   known hosts.
 
 
+Ouverture rapide d'une session avec des clés SSH
+------------------------------------------------
 
+Dans l'exemple, je veux que l'utilisateur 'kikinovak' puisse se connecter de sa
+station de travail ('alphamule') au serveur ('dedibox' ou 'sd-25854') sans
+avoir à saisir de mot de passe.
+
+  [kikinovak@alphamule:~] $ ssh-keygen -t rsa
+  Generating public/private rsa key pair.
+  Enter file in which to save the key (/home/kikinovak/.ssh/id_rsa): 
+  Enter passphrase (empty for no passphrase): 
+  Enter same passphrase again: 
+  Your identification has been saved in /home/kikinovak/.ssh/id_rsa.
+  Your public key has been saved in /home/kikinovak/.ssh/id_rsa.pub.
+  The key fingerprint is:
+  dc:ff:d0:ea:96:3b:b1:8f:29:e5:04:5c:5b:b6:be:bd kikinovak@alphamule
+  The key's randomart image is:
+  +--[ RSA 2048]----+
+  |                 |
+  |            . o  |
+  |         . . + . |
+  |       . .o . .  |
+  |        S .. .   |
+  |           .+..  |
+  |           +o+.o |
+  |          . **. .|
+  |           +*+oE.|
+  +-----------------+
+
+Ici, on accepte le fichier proposé par défaut, c'est-à-dire '~/.ssh/id_rsa'.
+Lorsqu'on est sollicité pour une phrase secrète, simplement appuyer sur
+[Entrée], faute de quoi il faudra la saisir à chaque fois.
+
+Copier la clé publique sur le serveur :
+
+  [kikinovak@alphamule:~] $ ssh-copy-id -i ~/.ssh/id_rsa.pub dedibox
+
+Se connecter sur le serveur :
+
+  [kikinovak@alphamule:~] $ ssh dedibox
+
+La commande 'ssh-copy-id' a stocké la clé publique 'id_rsa.pub' sur le serveur,
+dans le fichier '~/.ssh/authorized_keys', en créant le fichier ainsi que le
+répertoire '~.ssh' en cas de besoin.
+
+  [kikinovak@sd-25854:~] $ tree -a .ssh/
+  .ssh/
+  `-- authorized_keys
+
+  0 directories, 1 file
+
+Voici à quoi cela peut ressembler :
+
+  [kikinovak@sd-25854:~] $ cat .ssh/authorized_keys ssh-rsa
+  AAAAB3NzaC1yc2EAAAADAQABAAABAQDNRDc6lz+46hocpMIsvrrbKhl5c
+  w4K0s2lz5j6fkivwFzr4iL+3w4eYi42F/0eNz88K0LWt0yxBam99+qHO/
+  JsAXx6djBXnT0+9q6zSbppOih5j93QAiOFk+vAB+9G63m3YyGfOwvIh+l
+  HCABB4oU75gbHHYi57xhGFokr579tyNrwPlJKKvNqO8JAJCOV/FQQSoev
+  AV3swJnv1yFt6LV8o8LAqKVlRnVPcZ7AqrwYxc1HVO3xxkV3xJd474a7x
+  iODr7LuKZPL5RfH7q+RIBGjbzYTQpQlHJ6/k9e+Y8i+ckMy9sL0kzrbqK
+  0tl+ruwuWFrtJ+xu3efkAaoFuLBfzx kikinovak@alphamule
+
+À partir de là, on peut ouvrir une session distante sans mot de passe.
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
