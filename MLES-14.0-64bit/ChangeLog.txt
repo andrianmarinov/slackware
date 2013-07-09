@@ -1,3 +1,6 @@
+Tue Jul  9 09:58:00 CEST 2013
+pwgen-2.06-x86_64-1_microlinux.txz: Added.
++---------------------------+
 Tue Jul  2 08:04:20 CEST 2013
 Merged the patches/ directory into the main slackware/ package directory.
 +---------------------------+
