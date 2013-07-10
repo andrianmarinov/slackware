@@ -1,11 +1,11 @@
-
-perl-IO-Multiplex-1.13-i486-1_microlinux.txz
-perl-digest-sha1-2.13-i486-1_microlinux.txz
-perl-digest-hmac-1.03-i486-1_microlinux.txz
-perl-net-ip-1.26-i486-1_microlinux.txz
-perl-net-dns-0.72-i486-1_microlinux.txz
-perl-Net-Server-2.007-i486-1_microlinux.txz
-perl-BerkeleyDB-0.52-i486-1_microlinux.txz
+Wed Jul 10 11:06:46 CEST 2013
+perl-IO-Multiplex-1.13-i486-1_microlinux.txz: Added.
+perl-digest-sha1-2.13-i486-1_microlinux.txz: Added.
+perl-digest-hmac-1.03-i486-1_microlinux.txz: Added.
+perl-net-ip-1.26-i486-1_microlinux.txz: Added.
+perl-net-dns-0.72-i486-1_microlinux.txz: Added.
+perl-Net-Server-2.007-i486-1_microlinux.txz: Added.
+perl-BerkeleyDB-0.52-i486-1_microlinux.txz: Added.
 +---------------------------+
 Tue Jul  9 09:58:00 CEST 2013
 pwgen-2.06-i486-1_microlinux.txz: Added.
