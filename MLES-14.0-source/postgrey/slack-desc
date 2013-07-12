@@ -1,0 +1,12 @@
+        |-----handy-ruler------------------------------------------------------|
+postgrey: postgrey (Postfix Greylisting Policy Server)
+postgrey:
+postgrey: Postgrey is a Postfix policy server implementing greylisting developed
+postgrey: by David Schweikert.
+postgrey:
+postgrey: Homepage: http://postgrey.schweikert.ch/
+postgrey:
+postgrey:
+postgrey:
+postgrey:
+postgrey: Package created by Niki Kovacs <info@microlinux.fr>
