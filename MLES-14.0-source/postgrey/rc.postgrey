@@ -2,12 +2,12 @@
 
 PORT=10025
 PIDFILE=/var/run/postgrey/postgrey.pid
-USER=%POSTGREYUSR%
-GROUP=%POSTGREYGRP%
-HOST=mail.example.com
+USER=nobody
+GROUP=nogroup
+HOST=sd-XXXXX.dedibox.fr
 
 postgrey_start() {
-  echo "Starting postgrey milter:  /usr/bin/postgrey -d --inet=$PORT --pidfile=$PIDFILE --user=$USER --group=$GROUP --dbdir=/var/lib/postgrey --hostname=$HOST"
+  echo "Starting Postgrey mailfilter."
   mkdir -p /var/run/postgrey
   /usr/bin/postgrey -d \
                     --inet=$PORT \
@@ -19,7 +19,7 @@ postgrey_start() {
 
 postgrey_stop() {
   if [ -e $PIDFILE ]; then
-    echo "Stopping postgrey milter..."
+    echo "Stopping Postgrey mailfilter..."
     kill $(cat $PIDFILE) 1>/dev/null
   fi
 }
