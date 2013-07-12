@@ -2,9 +2,9 @@
 Backup HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ============
 
-DerniÃ¨re rÃ©vision : 8 juillet 2013
+Dernière révision : 8 juillet 2013
 
-Ce HOWTO dÃ©crit quelques stratÃ©gies de sauvegarde pour Linux en gÃ©nÃ©ral et
+Ce HOWTO décrit quelques stratégies de sauvegarde pour Linux en général et
 Slackware en particulier.
 
 
@@ -15,18 +15,18 @@ La location d'une Dedibox chez le fournisseur Online comprend un espace de
 sauvegarde de 200 gigaoctets, moyennant quelques euros de plus. Cet espace est
 accessible via un compte FTP.
 
-Une stratÃ©gie de sauvegarde simple prÃ©voit un instantanÃ© quotidien pour les
-donnÃ©es "vitales" comme par exemple la configuration du serveur, les sites Web,
-les mails et les bases de donnÃ©es. Pour les donnÃ©es moins importantes comme les
+Une stratégie de sauvegarde simple prévoit un instantané quotidien pour les
+données "vitales" comme par exemple la configuration du serveur, les sites Web,
+les mails et les bases de données. Pour les données moins importantes comme les
 fichiers audio d'une webradio, on se contentera d'une sauvegarde hebdomadaire. 
 
-Les arborescences de donnÃ©es Ã  sauvegarder sont compressÃ©es "Ã  la louche" avec
+Les arborescences de données à sauvegarder sont compressées "à la louche" avec
 la commande 'tar'. Ensuite, c'est l'utilitaire 'curl' qui se charge du
-transfert FTP. Chaque fichier est estampillÃ© du mois sous forme numÃ©rique
+transfert FTP. Chaque fichier est estampillé du mois sous forme numérique
 ('date "+%m"'). 
 
-Pour les sauvegardes quotidiennes, Ã©diter un fichier '/etc/cron.daily/backup'
-en renseignant les identifiants de connexion divers et variÃ©s :
+Pour les sauvegardes quotidiennes, éditer un fichier '/etc/cron.daily/backup'
+en renseignant les identifiants de connexion divers et variés :
 
 --8<---------- /etc/cron.daily/backup ----------------------------------------
 #!/bin/bash
@@ -53,7 +53,7 @@ cd /
 tar czf - home/ | curl -T - -u $FTPUSER:$FTPPASS \
   ftp://$FTPHOST/$SERVER-$MONTH-mails.tar.gz
 
-# Bases de donnÃ©es 
+# Bases de données 
 DB1NAME="mabase"
 DB1USER="utilisateur_mysql_de_mabase"
 DB1PASS="pass_mysql_de_mabase"
@@ -61,12 +61,12 @@ mysqldump -u $DB1USER -p$DB1PASS $DB1NAME | curl -T - -u $FTPUSER:$FTPPASS \
   ftp://$FTPHOST/$SERVER-$MONTH-database-$DB1NAME.sql
 --8<--------------------------------------------------------------------------
 
-  /!\ Il vaut mieux sauvegarder les bases de donnÃ©es MySQL individuellement.
-  Dans le cas contraire, on peut se retrouver avec un vÃ©ritable "dump",
-  c'est-Ã -dire une "bouse" qu'il sera pÃ©nible de rÃ©importer.
+  /!\ Il vaut mieux sauvegarder les bases de données MySQL individuellement.
+  Dans le cas contraire, on peut se retrouver avec un véritable "dump",
+  c'est-à-dire une "bouse" qu'il sera pénible de réimporter.
 
 Pour les sauvegardes hebdomadaires, c'est le fichier '/etc/cron.weekly/backup'
-qu'il faudra Ã©diter, avec les identifiants de connexion respectifs :
+qu'il faudra éditer, avec les identifiants de connexion respectifs :
 
 --8<---------- /etc/cron.weekly/backup ---------------------------------------
 #!/bin/bash
@@ -84,13 +84,13 @@ tar czf - mpd/ | curl -T - -u $FTPUSER:$FTPPASS \
   ftp://$FTPHOST/$SERVER-$MONTH-webradio.tar.gz
 --8<--------------------------------------------------------------------------
 
-Ã‰tant donnÃ© que ces deux fichiers contiennent des identifiants de connexion et
+Étant donné que ces deux fichiers contiennent des identifiants de connexion et
 des mots de passe "en clair", il est vital de restreindre les permissions de
-sorte Ã  ce que seul root puisse avoir accÃ¨s au contenu :
+sorte à ce que seul root puisse avoir accès au contenu :
 
   # chmod 0700 /etc/cron.{daily,weekly}/backup
 
-Pour tester le bon fonctionnement des scripts de sauvegarde, on peut dÃ©jÃ  les
+Pour tester le bon fonctionnement des scripts de sauvegarde, on peut déjà les
 lancer manuellement :
 
   # /etc/cron.daily/backup 
@@ -114,7 +114,7 @@ Ou encore :
                                    Dload  Upload   Total   Spent   Speed
   100 2095M    0     0    0 2095M      0  3987k --:--:--  0:08:58  4318k
 
-VÃ©rifier si le transfert s'est correctement effectuÃ© :
+Vérifier si le transfert s'est correctement effectué :
 
   # ncftp -u sd-XXXXX dedibackup-bzn.online.net
   ...
@@ -125,7 +125,7 @@ VÃ©rifier si le transfert s'est correctement effectuÃ© :
   sd-XXXXX-07-vhosts.tar.gz
   sd-XXXXX-07-webradio.tar.gz
 
-Pour connaÃ®tre les horaires d'exÃ©cution des scripts respectifs, invoquer la
+Pour connaître les horaires d'exécution des scripts respectifs, invoquer la
 commande suivante :
 
   # crontab -l
@@ -141,7 +141,7 @@ commande suivante :
   # Run monthly cron jobs at 4:20 on the first day of the month:
   20 4 1 * * /usr/bin/run-parts /etc/cron.monthly 1> /dev/null
 
-Pour changer l'heure d'exÃ©cution d'une sÃ©rie de scripts, il faudra utiliser
+Pour changer l'heure d'exécution d'une série de scripts, il faudra utiliser
 l'option '-e' comme ceci :
 
   # crontab -e
@@ -150,10 +150,11 @@ l'option '-e' comme ceci :
   00 0 * * * /usr/bin/run-parts /etc/cron.daily 1> /dev/null
   ...
 
-Consulter le manuel de 'crontab' pour la syntaxe dÃ©taillÃ©e :
+Consulter le manuel de 'crontab' pour la syntaxe détaillée :
 
   # man crontab
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1
