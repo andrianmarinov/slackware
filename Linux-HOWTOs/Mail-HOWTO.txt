@@ -8,24 +8,25 @@ Ce HOWTO décrit la mise en place d'un serveur mail IMAP avec Postfix et Dovecot
 sous Slackware Linux.
 
 
-  · Le MTA Postfix
-  · Prérequis
-  · Installation de Postfix
-  · Configuration initiale de Postfix
-  · Gérer les mails en ligne de commande avec Mutt
-  · Créer les comptes Linux pour la messagerie
-  · Les alias
-  · Définir les destinataires autorisés
-  · Faire correspondre les comptes Linux aux adresses de messagerie
-  · Domaines virtuels avec des utilisateurs distincts
-  · Le serveur IMAP Dovecot
-  · Prérequis
-  · Installation de Dovecot
-  · Générer le certificat
-  · Configuration initiale de Dovecot
-  · Ajouter l'authentification SMTP à Postfix
-  · Supprimer Dovecot
-  · Supprimer Postfix
+  * Le MTA Postfix
+  * Prérequis
+  * Installation de Postfix
+  * Configuration initiale de Postfix
+  * Gérer les mails en ligne de commande avec Mutt
+  * Créer les comptes Linux pour la messagerie
+  * Les alias
+  * Définir les destinataires autorisés
+  * Faire correspondre les comptes Linux aux adresses de messagerie
+  * Domaines virtuels avec des utilisateurs distincts
+  * Le serveur IMAP Dovecot
+  * Prérequis
+  * Installation de Dovecot
+  * Générer le certificat
+  * Configuration initiale de Dovecot
+  * Ajouter l'authentification SMTP à Postfix
+  * Filtre anti-spam avec Postgrey
+  * Supprimer Dovecot
+  * Supprimer Postfix
 
 
 Le MTA Postfix
@@ -783,6 +784,58 @@ Exemple de configuration SMTP de Thunderbird :
   Sécurité de la connexion   : STARTTLS
   Méthode d'authentification : Mot de passe normal
   Nom d'utilisateur          : kikinovak
+
+
+Filtre anti-spam avec Postgrey
+------------------------------
+
+Le "greylisting" (inscription sur liste grise) est une technique anti-spam très
+simple qui consiste à rejeter temporairement un email, par émission d'un code
+de refus temporaire au MTA (serveur émetteur). Dans la majorité des cas, les
+serveurs émetteurs réexpédient le message après quelques minutes. La plupart
+des serveurs de spams ne prennent pas cette peine. 
+
+Installer le paquet 'postgrey' ainsi que toutes les dépendances requises à
+l'aide des scripts de SlackBuilds.org.
+
+
+Éditer '/etc/rc.d/rc.postgrey'. Le filtre Postgrey est censé tourner en tant
+que nobody:nogroup. Quant à la variable HOST, son contenu doit correspondre au
+résultat de 'hostname --fqdn' :
+
+--8<---------- /etc/rc.d/rc.postgrey -----------------------------------------
+...
+PORT=10025
+PIDFILE=/var/run/postgrey/postgrey.pid
+USER=nobody
+GROUP=nogroup
+HOST=sd-25854.dedibox.fr
+...
+--8<--------------------------------------------------------------------------
+
+Activer et lancer Postgrey :
+
+  # chmod +x /etc/rc.d/rc.postgrey
+  # /etc/rc.d/rc.postgrey start
+
+Pour intégrer le filtrage de Postgrey à Postfix, il faut ajouter la ligne
+suivante à '/etc/postfix/main.cf' :
+
+--8<---------- /etc/postfix/main.cf ------------------------------------------
+...
+smtpd_recipient_restrictions    = permit_mynetworks,
+                                  permit_sasl_authenticated,
+                                  reject_unauth_destination,
+                                  check_policy_service inet:127.0.0.1:10025
+--8<--------------------------------------------------------------------------
+
+Dans la configuration par défaut, les messages provenant d'un expéditeur sur
+liste grise arrivent avec un délai de cinq minutes.
+
+Pour surveiller de près l'arrivée des messages et leur traitement par Postgrey,
+afficher les logs en temps réel :
+
+  # tail -f /var/log/maillog
 
 
 Supprimer Dovecot
