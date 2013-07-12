@@ -6,10 +6,22 @@ user-settings-console
 ###################
 # Basic utilities #
 ###################
-sbopkg
-recode
-unrar
 p7zip
+pwgen
+recode
+sbopkg
+unrar
+
+################
+# Perl modules #
+################
+perl-BerkeleyDB
+perl-digest-hmac
+perl-digest-sha1
+perl-IO-Multiplex
+perl-net-dns
+perl-net-ip
+perl-Net-Server
 
 ##########################
 # Streaming audio server #
@@ -49,3 +61,4 @@ squidGuard
 ###############
 postfix
 dovecot
+postgrey
