@@ -2,17 +2,17 @@
 RecordMyDesktop HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =====================
 
-DerniÃ¨re rÃ©vision : 22 mars 2013
+Dernière révision : 22 mars 2013
 
 RecordMyDesktop est un utilitaire en ligne de commande permettant d'effectuer
-des "screencasts", c'est-Ã -dire de capturer une vidÃ©o de ce qui se passe sur le
+des "screencasts", c'est-à-dire de capturer une vidéo de ce qui se passe sur le
 bureau.
 
 
 Installation
 ------------
 
-Slackware fournit RecordMyDesktop, dans le rÃ©pertoire 'extra/'.
+Slackware fournit RecordMyDesktop, dans le répertoire 'extra/'.
 
   # slackpkg install recordmydesktop
 
@@ -20,47 +20,47 @@ Slackware fournit RecordMyDesktop, dans le rÃ©pertoire 'extra/'.
 Utilisation
 -----------
 
-DÃ©marrer un screencast :
+Démarrer un screencast :
 
   $ recordmydesktop
 
-ArrÃªter l'enregistrement : [Ctrl]+[C].
+Arrêter l'enregistrement : [Ctrl]+[C].
 
-Voir ce que Ã§a donne :
+Voir ce que ça donne :
 
   $ mplayer out.ogv
 
-Le rÃ©sultat est Ã  peu prÃ¨s inutilisable, ce qui est dÃ» Ã  un dÃ©bit binaire
-insuffisant par dÃ©faut. DÃ©finissons donc une meilleure qualitÃ© vidÃ©o. L'option
-'--v_bitrate' permet de spÃ©cifier le dÃ©bit binaire de la vidÃ©o, avec une
-qualitÃ© allant de 45000 Ã  2000000 :
+Le résultat est à peu près inutilisable, ce qui est dû à un débit binaire
+insuffisant par défaut. Définissons donc une meilleure qualité vidéo. L'option
+'--v_bitrate' permet de spécifier le débit binaire de la vidéo, avec une
+qualité allant de 45000 à 2000000 :
 
   $ rm out.ogv
   $ recordmydesktop --v_bitrate 2000000 
 
-RecordMyDesktop prÃ©voit le raccourci clavier [Ctrl]+[Alt]+[P] pour interrompre
-et reprendre l'enregistrement, et [Ctrl]+[Alt]+[S] pour l'arrÃªter.
-Malheureusement, ce dernier raccourci est dÃ©jÃ  assignÃ© sous Xfce pour enrouler
-une fenÃªtre sur la barre de titre. Dans ce cas, on utilisera l'option
-'--stop-shortcut' pour rÃ©assigner une autre combinaison de touches, par exemple
+RecordMyDesktop prévoit le raccourci clavier [Ctrl]+[Alt]+[P] pour interrompre
+et reprendre l'enregistrement, et [Ctrl]+[Alt]+[S] pour l'arrêter.
+Malheureusement, ce dernier raccourci est déjà assigné sous Xfce pour enrouler
+une fenêtre sur la barre de titre. Dans ce cas, on utilisera l'option
+'--stop-shortcut' pour réassigner une autre combinaison de touches, par exemple
 [Ctrl]+[AltGauche]+[Espace], comme ceci :
 
   $ recordmydesktop ... --stop-shortcut Control+Mod1+space
 
-Dans sa configuration par dÃ©faut, RecordMyDesktop produit une vidÃ©o 'out.ogv'.
-L'option '-o' permet de spÃ©cifier le nom du fichier rÃ©sultant :
+Dans sa configuration par défaut, RecordMyDesktop produit une vidéo 'out.ogv'.
+L'option '-o' permet de spécifier le nom du fichier résultant :
 
   $ recordmydesktop ... -o screencast.ogv
 
 Si l'on effectue plusieurs enregistrements successifs, le ou les fichiers
-existants ne seront pas Ã©crasÃ©s. RecordMyDesktop renommera le fichier
-rÃ©sultant, et l'on obtiendra une sÃ©rie de fichiers 'screencast.ogv',
-'screencast-1.ogv', 'screencast-2.ogv'. Si ce comportement n'est pas souhaitÃ©,
+existants ne seront pas écrasés. RecordMyDesktop renommera le fichier
+résultant, et l'on obtiendra une série de fichiers 'screencast.ogv',
+'screencast-1.ogv', 'screencast-2.ogv'. Si ce comportement n'est pas souhaité,
 on ajoutera l'option '--overwrite' :
 
   $ recordmydesktop ... -o screencast.ogv --overwrite
 
-Pour capturer une seule fenÃªtre, il faut d'abord connaÃ®tre l'ID de la fenÃªtre
+Pour capturer une seule fenêtre, il faut d'abord connaître l'ID de la fenêtre
 en question :
 
   $ xwininfo
@@ -68,37 +68,37 @@ en question :
   would like information by clicking the
   mouse in that window.
 
-Un clic sur la fenÃªtre, et l'on obtient quelque chose comme ceci :
+Un clic sur la fenêtre, et l'on obtient quelque chose comme ceci :
 
   xwininfo: Window id: 0x300008c "Google - Mozilla Firefox"
 
-Ã€ partir de lÃ , on fera la capture vidÃ©o comme ceci :
+À partir de là, on fera la capture vidéo comme ceci :
 
   $ recordmydesktop ... --windowid 0x300008c
 
-Les options '-x', '-y', '--width' et '--height' permettent de dÃ©finir une zone
-de l'Ã©cran Ã  capturer. 
+Les options '-x', '-y', '--width' et '--height' permettent de définir une zone
+de l'écran à capturer. 
 
-Capture de l'Ã©cran gauche avec une configuration double Ã©cran pour une
-rÃ©solution de 2560x1024 :
+Capture de l'écran gauche avec une configuration double écran pour une
+résolution de 2560x1024 :
 
   $ recordmydesktop ... --width 1280 --height 1024
 
-Capturer l'Ã©cran de droite :
+Capturer l'écran de droite :
 
   $ recordmydesktop ... --width 1280 --height 1024 -x 1280
 
-L'option '--delay' permet de retarder le dÃ©but de l'enregistrement. Pour
-commencer la capture avec un dÃ©lai de dix secondes, faire ceci :
+L'option '--delay' permet de retarder le début de l'enregistrement. Pour
+commencer la capture avec un délai de dix secondes, faire ceci :
 
   $ recordmydesktop ... --delay 10
 
-L'option '--s_quality' permet de dÃ©finir la qualitÃ© du son. Pour une qualitÃ©
+L'option '--s_quality' permet de définir la qualité du son. Pour une qualité
 optimale, on choisira la valeur 10 :
 
   $ recordmydesktop ... --s_quality 10
 
-Pour utiliser RecordMyDesktop plus confortablement, on peut crÃ©er un alias dans
+Pour utiliser RecordMyDesktop plus confortablement, on peut créer un alias dans
 '~/.bashrc', comme ceci :
 
 --8<---------- ~/.bashrc -----------------------------------------------------
@@ -109,7 +109,7 @@ alias screencast='recordmydesktop \
                     --height 1024 \
                     --v_bitrate 2000000 \
                     --s_quality 10 \
-                    -o ~/VidÃ©os/Captures/Capture.ogv \
+                    -o ~/Vidéos/Captures/Capture.ogv \
                     --overwrite \
                     --pause-shortcut Control+Mod1+p \
                     --stop-shortcut Control+Mod1+space \
@@ -117,15 +117,16 @@ alias screencast='recordmydesktop \
 ...
 --8<--------------------------------------------------------------------------
 
-Ã€ partir de lÃ , l'utilisation est simple. Dans sa configuration par dÃ©faut, la
-commande 'screencast' enregistre une vidÃ©o de l'Ã©cran de gauche :
+À partir de là, l'utilisation est simple. Dans sa configuration par défaut, la
+commande 'screencast' enregistre une vidéo de l'écran de gauche :
 
   $ screencast
 
-Si l'on veut enregistrer l'Ã©cran de droite, on invoquera la commande suivante :
+Si l'on veut enregistrer l'écran de droite, on invoquera la commande suivante :
 
   $ screencast -x 1280
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

@@ -2,61 +2,61 @@
 Generic Kernel HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ====================
 
-DerniÃ¨re rÃ©vision : 7 janvier 2013
+Dernière révision : 7 janvier 2013
 
-Ce HOWTO dÃ©crit la procÃ©dure de remplacement du kernel "huge" par le kernel
+Ce HOWTO décrit la procédure de remplacement du kernel "huge" par le kernel
 "generic" sur une installation Slackware 14.0.
 
-  Â· GÃ©nÃ©ralitÃ©s
-  Â· Identifier les modules nÃ©cessaires
-  Â· Construire l'initrd
-  Â· DÃ©marrer sur le kernel gÃ©nÃ©rique avec l'initrd 
-  Â· Le cas spÃ©cifique des cartes graphiques Intel
-  Â· RTFM
+  * Généralités
+  * Identifier les modules nécessaires
+  * Construire l'initrd
+  * Démarrer sur le kernel générique avec l'initrd 
+  * Le cas spécifique des cartes graphiques Intel
+  * RTFM
 
 
-GÃ©nÃ©ralitÃ©s
+Généralités
 -----------
 
 Le noyau "huge" qui vient avec une installation standard de Slackware contient
-tous les drivers compilÃ©s "en dur". Une des premiÃ¨res choses Ã  faire sur une
-installation fraÃ®che de Slackware, c'est de remplacer ce noyau "huge" par un
+tous les drivers compilés "en dur". Une des premières choses à faire sur une
+installation fraîche de Slackware, c'est de remplacer ce noyau "huge" par un
 noyau "generic". Ce dernier contient tous les drivers en tant que modules, mais
-nÃ©cessite l'utilisation d'un initrd ("initial ramdisk") au dÃ©marrage.
+nécessite l'utilisation d'un initrd ("initial ramdisk") au démarrage.
 
 
-Identifier les modules nÃ©cessaires
+Identifier les modules nécessaires
 ----------------------------------
 
-Dans un premier temps, il faut savoir quels sont les modules nÃ©cessaires pour
-le dÃ©marrage de la machine. Pour ce faire, on peut lancer le script
+Dans un premier temps, il faut savoir quels sont les modules nécessaires pour
+le démarrage de la machine. Pour ce faire, on peut lancer le script
 '/usr/share/mkinitrd/mkinitrd_command_generator.sh', comme ceci :
 
   # /usr/share/mkinitrd/mkinitrd_command_generator.sh
 
-On obtient un rÃ©sultat de la sorte :
+On obtient un résultat de la sorte :
 
   mkinitrd -c -k 3.2.29-smp -f ext4 -r /dev/sda3 -m mbcache:jbd2:ext4 -u -o
     /boot/initrd.gz
 
-  > Attention, ce rÃ©sultat pourra varier en fonction du matÃ©riel que vous
+  > Attention, ce résultat pourra varier en fonction du matériel que vous
     utilisez.
 
-Ce qui m'intÃ©resse ici, c'est l'option '-m mbcache:jbd2:ext4'. En langage
+Ce qui m'intéresse ici, c'est l'option '-m mbcache:jbd2:ext4'. En langage
 tam-tam, cela signifie que mon kernel "generic" a besoin des modules 'mbcache',
-'jbd2' et 'ext4' pour dÃ©marrer correctement. 
+'jbd2' et 'ext4' pour démarrer correctement. 
 
 
 Construire l'initrd
 -------------------
  
-Je vais pouvoir fournir les informations ci-dessus Ã  '/etc/mkinitrd.conf'.
-Copier le fichier modÃ¨le comme ceci :
+Je vais pouvoir fournir les informations ci-dessus à '/etc/mkinitrd.conf'.
+Copier le fichier modèle comme ceci :
 
   # cd /etc
   # cp mkinitrd.conf.sample mkinitrd.conf
 
-DÃ©commenter toutes les options et Ã©diter '/etc/mkinitrd.conf' comme ceci :
+Décommenter toutes les options et éditer '/etc/mkinitrd.conf' comme ceci :
 
 --8<--------- /etc/mkinitrd.conf ---------------------------------------------
 SOURCE_TREE="/boot/initrd-tree"
@@ -75,34 +75,34 @@ MODCONF="0"
 WAIT="1"
 --8<--------------------------------------------------------------------------
 
-  > CLEAR_TREE passe de "0" Ã  "1".
+  > CLEAR_TREE passe de "0" à "1".
 
-  > KEYMAP correspond Ã  la disposition de votre clavier.
+  > KEYMAP correspond à la disposition de votre clavier.
 
-  > MODULE_LIST est la liste explicite de modules Ã  intÃ©grer dans l'initrd,
-    sÃ©parÃ©s par ':' et sans espace.
+  > MODULE_LIST est la liste explicite de modules à intégrer dans l'initrd,
+    séparés par ':' et sans espace.
     
   > ROOTDEV, c'est l'emplacement de la partition principale.
 
-  > ROOTFS, c'est le systÃ¨me de fichiers utilisÃ© sur la partition principale.
+  > ROOTFS, c'est le système de fichiers utilisé sur la partition principale.
 
   > RESUMEDEV, c'est la partition swap.
 
-  > Les options LUKS* concernent les partitions encryptÃ©es. Supprimez les
+  > Les options LUKS* concernent les partitions encryptées. Supprimez les
     lignes correspondantes. 
 
   > Laissez les autres options telles quelles pour l'instant.
 
-Ã€ prÃ©sent, on peut construire l'initrd avec les informations contenues dans
+À présent, on peut construire l'initrd avec les informations contenues dans
 '/etc/mkinitrd.conf' :
 
   # mkinitrd -F
 
 
-DÃ©marrer sur le kernel gÃ©nÃ©rique avec l'initrd
+Démarrer sur le kernel générique avec l'initrd
 ----------------------------------------------
 
-Dans '/etc/lilo.conf', il faut crÃ©er une nouvelle stance pour le kernel
+Dans '/etc/lilo.conf', il faut créer une nouvelle stance pour le kernel
 "generic" :
 
 --8<---------- /etc/lilo.conf ------------------------------------------------
@@ -122,21 +122,21 @@ Prendre en compte la nouvelle configuration de LILO :
 
   # lilo
 
-Croiser les doigts et redÃ©marrer. 
+Croiser les doigts et redémarrer. 
 
 
-Le cas spÃ©cifique des cartes Intel
+Le cas spécifique des cartes Intel
 ----------------------------------
 
-VÃ©rifier si l'on dispose d'une carte graphique Intel :
+Vérifier si l'on dispose d'une carte graphique Intel :
 
   # lspci | grep -i vga
   00:02.0 VGA compatible controller: Intel Corporation 82865G Integrated
   Graphics Controller (rev 02)
 
-Les cartes graphiques Intel nÃ©cessitent l'intÃ©gration des modules
+Les cartes graphiques Intel nécessitent l'intégration des modules
 correspondants ('intel_agp' et 'i915') dans l'initrd pour fonctionner
-correctement. Ã‰diter '/etc/mkinitrd.conf' et ajouter les deux modules en
+correctement. Éditer '/etc/mkinitrd.conf' et ajouter les deux modules en
 question, comme ceci par exemple :
 
 --8<--------- /etc/mkinitrd.conf ---------------------------------------------
@@ -149,7 +149,7 @@ Reconstruire l'initrd :
 
   # mkinitrd -F
 
-Ne pas oublier de rÃ©invoquer LILO :
+Ne pas oublier de réinvoquer LILO :
 
   # lilo
 
@@ -157,10 +157,11 @@ Ne pas oublier de rÃ©invoquer LILO :
 RTFM
 ----
 
-  Â· mkinitrd(8)
-  Â· mkinitrd.conf(5)
-  Â· lilo.conf(5)
+  * mkinitrd(8)
+  * mkinitrd.conf(5)
+  * lilo.conf(5)
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

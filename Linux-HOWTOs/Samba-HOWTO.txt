@@ -2,55 +2,55 @@
 Samba HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ===========
 
-DerniÃ¨re rÃ©vision : 19 janvier 2013
+Dernière révision : 19 janvier 2013
 
-Ce HOWTO dÃ©crit la mise en place d'un serveur de fichiers Samba sous Slackware
-pour un rÃ©seau hÃ©tÃ©rogÃ¨ne composÃ© de clients sous Windows et sous Linux.
+Ce HOWTO décrit la mise en place d'un serveur de fichiers Samba sous Slackware
+pour un réseau hétérogène composé de clients sous Windows et sous Linux.
 
-  Â· GÃ©nÃ©ralitÃ©s
-  Â· PrÃ©requis
-  Â· Configuration
-  Â· CrÃ©er et gÃ©rer les utilisateurs Samba
-  Â· Gestion et utilisation
+  * Généralités
+  * Prérequis
+  * Configuration
+  * Créer et gérer les utilisateurs Samba
+  * Gestion et utilisation
 
 
-GÃ©nÃ©ralitÃ©s
+Généralités
 -----------
 
-Samba permet lâ€™Ã©change de fichiers entre Windows, Linux et Mac OS X. Le nom
-Samba est dÃ©rivÃ© du protocole SMB ("Server Message Block"), utilisÃ© par
-Microsoft depuis le dÃ©but des annÃ©es 90 pour le partage de donnÃ©es et
-dâ€™imprimantes. 
+Samba permet l´échange de fichiers entre Windows, Linux et Mac OS X. Le nom
+Samba est dérivé du protocole SMB ("Server Message Block"), utilisé par
+Microsoft depuis le début des années 90 pour le partage de données et
+d´imprimantes. 
 
 
-PrÃ©requis
+Prérequis
 ---------
 
 Dans le pare-feu, ouvrir les ports suivants :
 
-  Â· 135 en TCP 
-  Â· 137 en UDP 
-  Â· 138 en UDP 
-  Â· 139 en TCP 
-  Â· 445 en TCP
+  * 135 en TCP 
+  * 137 en UDP 
+  * 138 en UDP 
+  * 139 en TCP 
+  * 445 en TCP
 
   > Si les comptes utilisateurs des clients Linux sont sur un partage NFS, il
-    faut impÃ©rativement utiliser l'option 'no_root_squash' dans '/etc/exports',
-    sous peine de se retrouver avec une flopÃ©e de bugs bizarres de GVFS dÃ»s Ã 
-    des problÃ¨mes de permissions. 
+    faut impérativement utiliser l'option 'no_root_squash' dans '/etc/exports',
+    sous peine de se retrouver avec une flopée de bugs bizarres de GVFS dûs à
+    des problèmes de permissions. 
 
 
 Configuration
 -------------
 
-CrÃ©er les rÃ©pertoires des partages respectifs :
+Créer les répertoires des partages respectifs :
 
   # mkdir -pv -m 1777 /srv/samba/{public,confidentiel}
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â /srv/sambaÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â /srv/samba/publicÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â /srv/samba/confidentielÂ Â»
+  mkdir: création du répertoire « /srv/samba »
+  mkdir: création du répertoire « /srv/samba/public »
+  mkdir: création du répertoire « /srv/samba/confidentiel »
 
-Ã‰diter '/etc/samba.conf' comme ceci :
+Éditer '/etc/samba.conf' comme ceci :
 
 --8<---------- /etc/samba/smb.conf -------------------------------------------
 # /etc/samba/smb.conf
@@ -92,103 +92,103 @@ read only = no
 invalid users = root nobody smbguest
 --8<--------------------------------------------------------------------------
 
-  > 'workgroup = WORKGROUP' dÃ©finit le nom du groupe de travail. Les clients
-    Windows doivent tous Ãªtre membres de ce groupe de travail.
+  > 'workgroup = WORKGROUP' définit le nom du groupe de travail. Les clients
+    Windows doivent tous être membres de ce groupe de travail.
 
-  > 'netbios name = %h' dÃ©finit le nom qui apparaÃ®tra dans le Voisinage RÃ©seau
-    de Windows. ThÃ©oriquement, on pourrait trÃ¨s bien indiquer deux noms de
-    machine diffÃ©rents pour les protocoles TCP/IP et NetBIOS. En pratique, on
-    essaiera de rester cohÃ©rent, et on utilisera le nom d'hÃ´te du serveur
+  > 'netbios name = %h' définit le nom qui apparaîtra dans le Voisinage Réseau
+    de Windows. Théoriquement, on pourrait très bien indiquer deux noms de
+    machine différents pour les protocoles TCP/IP et NetBIOS. En pratique, on
+    essaiera de rester cohérent, et on utilisera le nom d'hôte du serveur
     ('%h').
 
   > 'server string = Serveur de fichiers %h' indique le nom avec lequel le
-    serveur s'identifie. LÃ  aussi, '%h' sera remplacÃ© par le nom d'hÃ´te.
+    serveur s'identifie. Là aussi, '%h' sera remplacé par le nom d'hôte.
   
-  > 'dns proxy = yes' active l'utilisation du serveur DNS local pour rÃ©soudre
-    les noms d'hÃ´tes Windows.
+  > 'dns proxy = yes' active l'utilisation du serveur DNS local pour résoudre
+    les noms d'hôtes Windows.
 
-  > La directive 'domain master' dÃ©signe un serveur Samba "maÃ®tre" pour le
+  > La directive 'domain master' désigne un serveur Samba "maître" pour le
     domaine local. On utilisera 'yes' sur le serveur principal et 'no' sur les
     autres serveurs. "Serveur principal" signifie ici quelque chose comme "la
-    machine la plus fiable", "le serveur qu'on Ã©teint le moins souvent", etc.
+    machine la plus fiable", "le serveur qu'on éteint le moins souvent", etc.
 
-  > 'log file = /var/log/samba/log.%m' dÃ©finit la journalisation. Pour chaque
-    client qui utilise Samba, un fichier journal 'log.client' est crÃ©Ã©. Quant
-    aux deux services Samba 'smbd' et 'nmbd', ils utilisent des Ã©vÃ©nements
+  > 'log file = /var/log/samba/log.%m' définit la journalisation. Pour chaque
+    client qui utilise Samba, un fichier journal 'log.client' est créé. Quant
+    aux deux services Samba 'smbd' et 'nmbd', ils utilisent des événements
     globaux dans les deux fichiers '/var/log/samba/log.smbd' et 'log.nmbd'. Ni
-    le nom ni l'emplacement de ces deux fichiers ne peuvent Ãªtre modifiÃ©s.
+    le nom ni l'emplacement de ces deux fichiers ne peuvent être modifiés.
 
-  > 'max log size = 1000' limite la taille maximale du fichier journal Ã  1000
-    kilooctets. Lorsqu'un fichier journal dÃ©passe cette taille, Samba le
+  > 'max log size = 1000' limite la taille maximale du fichier journal à 1000
+    kilooctets. Lorsqu'un fichier journal dépasse cette taille, Samba le
     renomme en 'fichier.old'.
 
-  > 'syslog = 0' signifie que seuls les messages d'erreur sont journalisÃ©s dans
+  > 'syslog = 0' signifie que seuls les messages d'erreur sont journalisés dans
     '/var/log/syslog'. Pour obtenir une journalisation plus "bavarde", on
     remplacera la valeur 0 par 1, 2, 3, etc.
   
-  > La directive 'interfaces' dÃ©finit les interfaces rÃ©seau par lesquelles
-    Samba est censÃ© communiquer. On veillera Ã  faire apparaÃ®tre les partages
-    uniquement dans le rÃ©seau local. Ne pas oublier 'localhost', faute de quoi
+  > La directive 'interfaces' définit les interfaces réseau par lesquelles
+    Samba est censé communiquer. On veillera à faire apparaître les partages
+    uniquement dans le réseau local. Ne pas oublier 'localhost', faute de quoi
     les outils d'administration comme 'smbclient' ne fonctionneront pas sur le
-    serveur. Les rÃ©glages par 'interfaces' sont activÃ©s par la directive 'bind
+    serveur. Les réglages par 'interfaces' sont activés par la directive 'bind
     interfaces only'.
 
   > Les directives 'hosts allow' et 'hosts deny' permettent respectivement
-    d'autoriser et d'interdire l'accÃ¨s de certaines machines du rÃ©seau Ã  Samba.
+    d'autoriser et d'interdire l'accès de certaines machines du réseau à Samba.
 
-  > La directive 'security = user' dÃ©finit le modÃ¨le de sÃ©curitÃ©. Elle est
-    optionnelle, Ã©tant donnÃ© qu'il s'agit du rÃ©glage par dÃ©faut de Samba.
+  > La directive 'security = user' définit le modèle de sécurité. Elle est
+    optionnelle, étant donné qu'il s'agit du réglage par défaut de Samba.
 
-  > 'passdb backend = tdbsam' dÃ©finit la gestion des mots de passe. "TDB"
-    signifie "Trivial Database" et dÃ©signe un format de stockage binaire.
-    Physiquement, les mots de passe sont stockÃ©s dans le fichier
+  > 'passdb backend = tdbsam' définit la gestion des mots de passe. "TDB"
+    signifie "Trivial Database" et désigne un format de stockage binaire.
+    Physiquement, les mots de passe sont stockés dans le fichier
     '/etc/samba/private/passdb.tdb'.
 
-  > 'unix password sync = no' dÃ©sactive la synchronisation des mots de passe
-    Samba avec les mots de passe Linux. Celle-ci est liÃ©e Ã  toute une sÃ©rie de
+  > 'unix password sync = no' désactive la synchronisation des mots de passe
+    Samba avec les mots de passe Linux. Celle-ci est liée à toute une série de
     restrictions qui risquent de nous compliquer la vie, et il vaut mieux s'en
     passer.
   
-  > 'guest account = smbguest' dÃ©signe l'utilisateur Linux auquel on fait
-    correspondre les utilisateurs invitÃ©s.
+  > 'guest account = smbguest' désigne l'utilisateur Linux auquel on fait
+    correspondre les utilisateurs invités.
 
-  > 'map to guest = bad user' renvoie vers le compte invitÃ© toute tentative de
+  > 'map to guest = bad user' renvoie vers le compte invité toute tentative de
     connexion avec un identifiant inexistant.
 
-  > 'force group = users' attribue tous les fichiers et rÃ©pertoires
-    nouvellement crÃ©Ã©s au groupe 'users'.
+  > 'force group = users' attribue tous les fichiers et répertoires
+    nouvellement créés au groupe 'users'.
 
-  > Les paramÃ¨tres 'create mode = 660' et 'directory mode = 770' assurent que
-    tous les fichiers (rw-rw----) et rÃ©pertoires (rwxrwx---) crÃ©Ã©s par un
-    membre du groupe puissent Ãªtre lus par tous les autres membres du groupe.
+  > Les paramètres 'create mode = 660' et 'directory mode = 770' assurent que
+    tous les fichiers (rw-rw----) et répertoires (rwxrwx---) créés par un
+    membre du groupe puissent être lus par tous les autres membres du groupe.
   
-  > Le nom du partage ('[Public]', '[Confidentiel]'), ne doit pas dÃ©passer
-    douze caractÃ¨res.
+  > Le nom du partage ('[Public]', '[Confidentiel]'), ne doit pas dépasser
+    douze caractères.
 
 
-CrÃ©er et gÃ©rer les utilisateurs Samba
+Créer et gérer les utilisateurs Samba
 -------------------------------------
 
-CrÃ©er un utilisateur public 'smbguest' pour Samba :
+Créer un utilisateur public 'smbguest' pour Samba :
 
   # useradd -c "Utilisateur Public Samba" -g users -s /bin/false smbguest
   # passwd -l smbguest
   # smbpasswd -a smbguest -d
 
-  > Lâ€™utilisateur ne dispose pas de shell de connexion ('-s /bin/false').
+  > L´utilisateur ne dispose pas de shell de connexion ('-s /bin/false').
 
-  > Le mot de passe du compte Linux est verrouillÃ© par 'passwd -l' ("lock").
+  > Le mot de passe du compte Linux est verrouillé par 'passwd -l' ("lock").
 
-  > Lâ€™option '-a' ("add") indique Ã  'smbpasswd' d'ajouter un utilisateur.
+  > L´option '-a' ("add") indique à 'smbpasswd' d'ajouter un utilisateur.
 
-  > Celui-ci sera immÃ©diatement dÃ©sactivÃ© par lâ€™option '-d' ("disabled").
+  > Celui-ci sera immédiatement désactivé par l´option '-d' ("disabled").
 
-CrÃ©er un ou plusieurs utilisateurs Samba normaux. Deux cas de figure se
-prÃ©sentent ici. Si l'utilisateur a dÃ©jÃ  un compte systÃ¨me :
+Créer un ou plusieurs utilisateurs Samba normaux. Deux cas de figure se
+présentent ici. Si l'utilisateur a déjà un compte système :
 
   # smbpasswd -a kikinovak
 
-Ã‰ventuellement, vÃ©rifier si l'utilisateur fait bien partie du groupe 'users' :
+Éventuellement, vérifier si l'utilisateur fait bien partie du groupe 'users' :
 
   # groups kikinovak | grep users
   kikinovak : users floppy audio video cdrom plugdev power netdev
@@ -197,15 +197,15 @@ Si ce n'est pas le cas, il faudra l'ajouter comme ceci :
 
   # usermod -a -G users kikinovak
 
-Autrement, s'il n'a pas de compte systÃ¨me :
+Autrement, s'il n'a pas de compte système :
 
   # useradd -g users -d /dev/null -s /bin/false kikinovak
   # passwd -l kikinovak
   # smbpasswd -a kikinovak
 
-  > Ici, l'utilisateur n'a ni rÃ©pertoire utilisateur, ni shell de connexion.
+  > Ici, l'utilisateur n'a ni répertoire utilisateur, ni shell de connexion.
 
-  > Son compte Linux est Ã©galement verrouillÃ©.
+  > Son compte Linux est également verrouillé.
 
 Afficher la liste des utilisateurs Samba :
 
@@ -215,7 +215,7 @@ Supprimer un utilisateur Samba :
 
   # smbpasswd -d <utilisateur>
 
-Ã‰ventuellement, on supprimera son compte Linux correspondant :
+Éventuellement, on supprimera son compte Linux correspondant :
 
   # userdel -r <utilisateur>
 
@@ -227,7 +227,7 @@ Tester la configuration :
 
   # testparm
 
-Activer et gÃ©rer Samba :
+Activer et gérer Samba :
 
   # chmod 0755 /etc/rc.d/rc.samba
   # /etc/rc.d/rc.samba start|stop|restart
@@ -239,3 +239,4 @@ Afficher les partages sur le serveur :
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

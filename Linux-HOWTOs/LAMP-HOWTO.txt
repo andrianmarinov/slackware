@@ -2,54 +2,54 @@
 LAMP HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ==========
 
-DerniÃ¨re rÃ©vision : 3 fÃ©vrier 2013
+Dernière révision : 3 février 2013
 
-Ce HOWTO dÃ©crit la configuration d'un serveur LAMP (Linux/Apache/MySQL/PHP) sur
+Ce HOWTO décrit la configuration d'un serveur LAMP (Linux/Apache/MySQL/PHP) sur
 une machine tournant sous Slackware. 
 
-  Â· Introduction
-  Â· PrÃ©requis
-  Â· Tester Apache
-  Â· Configuration de base
-  Â· HÃ©berger un site web statique
-  Â· Activer le support des scripts CGI
-  Â· HÃ©berger plusieurs sites sur un mÃªme serveur
-  Â· Utiliser les scripts CGI avec les hÃ´tes virtuels
-  Â· HÃ©berger des sites dynamiques avec PHP
-  Â· Utiliser MySQL Ã  partir de PHP
+  * Introduction
+  * Prérequis
+  * Tester Apache
+  * Configuration de base
+  * Héberger un site web statique
+  * Activer le support des scripts CGI
+  * Héberger plusieurs sites sur un même serveur
+  * Utiliser les scripts CGI avec les hôtes virtuels
+  * Héberger des sites dynamiques avec PHP
+  * Utiliser MySQL à partir de PHP
 
 
 Introduction
 ------------
 
-Apache est le principal serveur web du monde de l'Open Source. D'aprÃ¨s les
-statistiques de Netcraft (http://netcraft.com), plus de la moitiÃ© des sites web
+Apache est le principal serveur web du monde de l'Open Source. D'après les
+statistiques de Netcraft (http://netcraft.com), plus de la moitié des sites web
 du monde tournent sur un serveur Apache. 
 
-Une installation typique d'Apache est gÃ©nÃ©ralement constituÃ©e d'un assemblage
-cohÃ©rent de paquets : 
+Une installation typique d'Apache est généralement constituée d'un assemblage
+cohérent de paquets : 
 
-  Â· le serveur Apache Ã  proprement parler ;
-  Â· des bibliothÃ¨ques diverses et variÃ©es ;
-  Â· des plug-ins ;
-  Â· des langages de programmation ;
-  Â· etc.
+  * le serveur Apache à proprement parler ;
+  * des bibliothèques diverses et variées ;
+  * des plug-ins ;
+  * des langages de programmation ;
+  * etc.
 
-Ce HOWTO est basÃ© sur les paquets 'httpd' (Apache), 'mysql' et 'php', contenus
+Ce HOWTO est basé sur les paquets 'httpd' (Apache), 'mysql' et 'php', contenus
 dans une installation standard de Slackware.
 
 
-PrÃ©requis
+Prérequis
 ---------
 
 Apache utilise le port 80 en TCP pour le protocole HTTP. Il faudra donc songer
-Ã  ouvrir ce port dans le pare-feu. 
+à ouvrir ce port dans le pare-feu. 
 
 
 Tester Apache
 -------------
 
-Activer et dÃ©marrer Apache :
+Activer et démarrer Apache :
 
   # chmod +x /etc/rc.d/rc.httpd
   # /etc/rc.d/rc.httpd start
@@ -66,12 +66,12 @@ On doit voir quelque chose de ce genre :
 
   =======================
 
-Dans le rÃ©seau local, ouvrir l'adresse IP du serveur avec un navigateur, par
+Dans le réseau local, ouvrir l'adresse IP du serveur avec un navigateur, par
 exemple :
 
   * http://192.168.2.3
 
-On peut Ã©galement invoquer le nom d'hÃ´te :
+On peut également invoquer le nom d'hôte :
 
   * http://bernadette
 
@@ -84,12 +84,12 @@ Configuration de base
 ---------------------
 
 Le principal fichier de configuration d'Apache, c'est '/etc/httpd/httpd.conf'.
-Avant d'Ã©diter ce fichier, on va en faire une copie :
+Avant d'éditer ce fichier, on va en faire une copie :
 
   # cd /etc/httpd
   # cp httpd.conf httpd.conf.orig
 
-On peut dÃ©jÃ  renseigner quelques directives :
+On peut déjà renseigner quelques directives :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
 ...
@@ -98,14 +98,14 @@ ServerAdmin info@microlinux.fr
 ServerName bernadette.microlinux.montpezat:80
 --8<--------------------------------------------------------------------------
 
-  > L'adresse mail de l'administrateur apparaÃ®tra sur certaines pages gÃ©nÃ©rÃ©es
+  > L'adresse mail de l'administrateur apparaîtra sur certaines pages générées
     par le serveur, notamment les pages d'erreur.
 
-  > Le nom du serveur peut Ãªtre dÃ©terminÃ© automatiquement, mais il vaut mieux
-    le spÃ©cifier explicitement. 
+  > Le nom du serveur peut être déterminé automatiquement, mais il vaut mieux
+    le spécifier explicitement. 
     
-Dans le cas oÃ¹ l'hÃ´te n'a pas de nom de domaine enregistrÃ©, on peut fournir
-l'adresse IP Ã  la place :
+Dans le cas où l'hôte n'a pas de nom de domaine enregistré, on peut fournir
+l'adresse IP à la place :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
 ...
@@ -114,11 +114,11 @@ ServerName 213.41.252.141:80
 --8<--------------------------------------------------------------------------
 
 
-HÃ©berger un site web statique
+Héberger un site web statique
 -----------------------------
 
-Apache est immÃ©diatement utilisable dans sa configuration par dÃ©faut. Le
-serveur affiche le contenu du rÃ©pertoire '/var/www/htdocs', dÃ©fini par la
+Apache est immédiatement utilisable dans sa configuration par défaut. Le
+serveur affiche le contenu du répertoire '/var/www/htdocs', défini par la
 directive 'DocumentRoot' dans le fichier '/etc/httpd/httpd.conf' :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
@@ -132,12 +132,12 @@ Notons que '/srv/httpd' est un lien symbolique qui pointe vers '/var/www' :
   # ls -l /srv/httpd
   lrwxrwxrwx 1 root root 8 nov.   9 07:53 /srv/httpd -> /var/www
 
-Pour avoir quelque chose Ã  nous mettre sous la dent, on va ranger la page par
-dÃ©faut Ã  un autre endroit pour la remplacer par un "vrai" site web statique. On
-choisira la documentation de Slackware, qui vient sous forme d'une sÃ©rie de
+Pour avoir quelque chose à nous mettre sous la dent, on va ranger la page par
+défaut à un autre endroit pour la remplacer par un "vrai" site web statique. On
+choisira la documentation de Slackware, qui vient sous forme d'une série de
 pages HTML statiques.
 
-Sauvegarder les fichiers fournis par dÃ©faut comme ceci, par exemple :
+Sauvegarder les fichiers fournis par défaut comme ceci, par exemple :
 
   # cd /var/www/htdocs/
   # ls
@@ -145,16 +145,16 @@ Sauvegarder les fichiers fournis par dÃ©faut comme ceci, par exemple :
   # mkdir /root/htdocs_backup
   htdig  index.html  manual
   # mv -v * /root/htdocs_backup/
-  Â«Â htdigÂ Â» -> Â«Â /root/htdocs_backup/htdigÂ Â»
-  Â«Â index.htmlÂ Â» -> Â«Â /root/htdocs_backup/index.htmlÂ Â»
-  Â«Â manualÂ Â» -> Â«Â /root/htdocs_backup/manualÂ Â»
+  « htdig » -> « /root/htdocs_backup/htdig »
+  « index.html » -> « /root/htdocs_backup/index.html »
+  « manual » -> « /root/htdocs_backup/manual »
 
-Ensuite, rÃ©cupÃ©rer la documentation de Slackware. L'outil 'wget' est utilisÃ©
+Ensuite, récupérer la documentation de Slackware. L'outil 'wget' est utilisé
 ici comme aspirateur de site :
 
   # wget -r -np -nH --cut-dirs=1 http://www.slackbook.org/html/
 
-Ã‰ventuellement, assainir les permissions :
+Éventuellement, assainir les permissions :
 
   # find . -type d -exec chmod 0755 \{} \;
   # find . -type f -exec chmod 0644 \{} \;
@@ -169,23 +169,23 @@ Group apache
 ...
 --8<--------------------------------------------------------------------------
 
-On va donc attribuer toutes les pages de notre site local Ã  cet utilisateur et
-Ã  ce groupe :
+On va donc attribuer toutes les pages de notre site local à cet utilisateur et
+à ce groupe :
 
   # chown -R apache:apache /var/www/htdocs
 
-Ã€ prÃ©sent, on peut ouvrir le site dans un navigateur (Firefox, Links, Lynx) et
-apprÃ©cier le rÃ©sultat.
+À présent, on peut ouvrir le site dans un navigateur (Firefox, Links, Lynx) et
+apprécier le résultat.
 
 
 Activer le support des scripts CGI
 ----------------------------------
 
-CGI ("Common Gateway Interface") est une maniÃ¨re simple d'ajouter du contenu
-dynamique Ã  un site web. Apache doit Ãªtre configurÃ© pour autoriser l'exÃ©cution
+CGI ("Common Gateway Interface") est une manière simple d'ajouter du contenu
+dynamique à un site web. Apache doit être configuré pour autoriser l'exécution
 des programmes CGI.
 
-Ã‰diter '/etc/httpd/httpd.conf' et dÃ©commenter la ligne relative au chargement
+Éditer '/etc/httpd/httpd.conf' et décommenter la ligne relative au chargement
 du module 'mod_cgi' :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
@@ -194,14 +194,14 @@ LoadModule cgi_module lib/httpd/modules/mod_cgi.so
 ...
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache pour prendre en compte le chargement du module :
+Redémarrer Apache pour prendre en compte le chargement du module :
 
   # /etc/rc.d/rc.httpd restart
 
-La directive 'ScriptAlias' indique Ã  Apache qu'un rÃ©pertoire particulier est
-dÃ©diÃ© aux programmes CGI. Apache considÃ©rera que tout fichier situÃ© dans ce
-rÃ©pertoire est un programme CGI et tentera de l'exÃ©cuter lorsque cette
-ressource fera l'objet d'une requÃªte client :
+La directive 'ScriptAlias' indique à Apache qu'un répertoire particulier est
+dédié aux programmes CGI. Apache considérera que tout fichier situé dans ce
+répertoire est un programme CGI et tentera de l'exécuter lorsque cette
+ressource fera l'objet d'une requête client :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
 ...
@@ -211,12 +211,12 @@ ressource fera l'objet d'une requÃªte client :
 ...
 --8<--------------------------------------------------------------------------
 
-RÃ©gler les permissions :
+Régler les permissions :
 
   # chown -R apache:apache /var/www/cgi-bin
 
-Le rÃ©pertoire 'cgi-bin' contient un fichier 'test-cgi'. Pour l'utiliser, il
-faut d'abord indiquer l'interprÃ©teur correct, en Ã©ditant la premiÃ¨re ligne
+Le répertoire 'cgi-bin' contient un fichier 'test-cgi'. Pour l'utiliser, il
+faut d'abord indiquer l'interpréteur correct, en éditant la première ligne
 comme ceci :
 
 --8<--------------------------------------------------------------------------
@@ -242,14 +242,14 @@ Afficher la page du script :
   ...
 
 
-HÃ©berger plusieurs sites sur un mÃªme serveur
+Héberger plusieurs sites sur un même serveur
 --------------------------------------------
 
-Le principe des serveurs virtuels ("virtual hosts") consiste Ã  faire
-fonctionner un ou plusieurs sites Web sur une mÃªme machine. L'utilisateur final
-ne perÃ§oit pas qu'en fait il s'agit d'un mÃªme serveur physique. 
+Le principe des serveurs virtuels ("virtual hosts") consiste à faire
+fonctionner un ou plusieurs sites Web sur une même machine. L'utilisateur final
+ne perçoit pas qu'en fait il s'agit d'un même serveur physique. 
 
-Dans un premier temps, on va renommer le rÃ©pertoire '/var/www/htdocs' en
+Dans un premier temps, on va renommer le répertoire '/var/www/htdocs' en
 '/var/www/vhosts' :
 
   # cd /var/www
@@ -264,50 +264,50 @@ DocumentRoot "/srv/httpd/vhosts"
 ...
 --8<--------------------------------------------------------------------------
 
-On va dÃ©placer le site existant dans un nouveau rÃ©pertoire :
+On va déplacer le site existant dans un nouveau répertoire :
 
   # cd vhosts
   # mkdir -pv ../slackware/htdocs
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â ../slackwareÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â ../slackware/htdocsÂ Â»
+  mkdir: création du répertoire « ../slackware »
+  mkdir: création du répertoire « ../slackware/htdocs »
   # mv * ../slackware/htdocs/
   # mv ../slackware/ .
 
-Ensuite, on va crÃ©er un autre rÃ©pertoire, dans lequel on va tÃ©lÃ©charger un
+Ensuite, on va créer un autre répertoire, dans lequel on va télécharger un
 autre site, en l'occurrence la documentation de FreeBSD :
 
   # mkdir -pv freebsd/htdocs
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â freebsdÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â freebsd/htdocsÂ Â»
+  mkdir: création du répertoire « freebsd »
+  mkdir: création du répertoire « freebsd/htdocs »
   # cd freebsd/htdocs
   # wget -r -p -np -nH --cut-dirs=4 \
       http://www.freebsd.org/doc/fr_FR.ISO8859-1/books/handbook/
 
-Enfin, on va rÃ©tablir l'ancienne page 'index.html' Ã  un endroit appropriÃ© :
+Enfin, on va rétablir l'ancienne page 'index.html' à un endroit approprié :
 
   # cd /var/www/vhosts
   # mkdir -pv default/htdocs
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â defaultÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â default/htdocsÂ Â»
+  mkdir: création du répertoire « default »
+  mkdir: création du répertoire « default/htdocs »
   # mv -v /root/htdocs_backup/index.html default/
-  Â«Â /root/htdocs_backup/index.htmlÂ Â» -> Â«Â default/index.htmlÂ Â»
+  « /root/htdocs_backup/index.html » -> « default/index.html »
 
 Au total, on a donc :
 
   # ls -l
   total 20
-  drwxr-xr-x  2 root root  4096 fÃ©vr.  3 10:14 default
-  drwxr-xr-x  9 root root 12288 fÃ©vr.  3 10:05 freebsd
-  drwxr-xr-x 11 root root  4096 fÃ©vr.  3 09:51 slackware
+  drwxr-xr-x  2 root root  4096 févr.  3 10:14 default
+  drwxr-xr-x  9 root root 12288 févr.  3 10:05 freebsd
+  drwxr-xr-x 11 root root  4096 févr.  3 09:51 slackware
 
-On va dÃ©finir les permissions Ã  la louche :
+On va définir les permissions à la louche :
 
   # chown -R apache:apache *
 
-Ã‰diter le fichier '/etc/httpd/extra/httpd-vhosts.conf'. On pourra utiliser une
-des deux stances fournies en exemple comme modÃ¨le. Dans un premier temps,
-dÃ©finir le site affichÃ© par dÃ©faut, c'est-Ã -dire lorsqu'on invoque l'adresse IP
-ou le nom d'hÃ´te de la machine :
+Éditer le fichier '/etc/httpd/extra/httpd-vhosts.conf'. On pourra utiliser une
+des deux stances fournies en exemple comme modèle. Dans un premier temps,
+définir le site affiché par défaut, c'est-à-dire lorsqu'on invoque l'adresse IP
+ou le nom d'hôte de la machine :
 
 --8<---------- /etc/httpd/extra/httpd-vhosts.conf ----------------------------
 <VirtualHost *:80>
@@ -320,12 +320,12 @@ ou le nom d'hÃ´te de la machine :
 </VirtualHost>
 --8<--------------------------------------------------------------------------
 
-  > Une erreur Ã  ne pas commettre, c'est d'indiquer le chemin "rÃ©el" vers les
-    pages Web pour 'DocumentRoot', c'est-Ã -dire "/var/www/htdocs/default" au
-    lieu de "/srv/httpd/htdocs/default". Le chemin doit coÃ¯ncider avec celui
-    que l'on a dÃ©fini dans '/etc/httpd/httpd.conf' pour 'DocumentRoot".
+  > Une erreur à ne pas commettre, c'est d'indiquer le chemin "réel" vers les
+    pages Web pour 'DocumentRoot', c'est-à-dire "/var/www/htdocs/default" au
+    lieu de "/srv/httpd/htdocs/default". Le chemin doit coïncider avec celui
+    que l'on a défini dans '/etc/httpd/httpd.conf' pour 'DocumentRoot".
 
-Pour activer les hÃ´tes virtuels, il faut inclure le module en dÃ©commentant la
+Pour activer les hôtes virtuels, il faut inclure le module en décommentant la
 ligne correspondante dans '/etc/httpd/httpd.conf' :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
@@ -335,18 +335,18 @@ Include /etc/httpd/extra/httpd-vhosts.conf
 ...
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache pour prendre en compte les modifications :
+Redémarrer Apache pour prendre en compte les modifications :
 
   # /etc/rc.d/rc.httpd restart|graceful
 
-VÃ©rifier si la page par dÃ©faut du serveur s'affiche bien :
+Vérifier si la page par défaut du serveur s'affiche bien :
 
   # links http://bernadette
 
-Ã€ prÃ©sent, nous pouvons ajouter les deux autres sites :
+À présent, nous pouvons ajouter les deux autres sites :
 
 --8<---------- /etc/httpd/extra/httpd-vhosts.conf ----------------------------
-# Page par dÃ©faut du serveur
+# Page par défaut du serveur
 <VirtualHost *:80>
     ServerAdmin info@microlinux.fr
     DocumentRoot "/srv/httpd/vhosts/default/htdocs"
@@ -377,9 +377,9 @@ VÃ©rifier si la page par dÃ©faut du serveur s'affiche bien :
 </VirtualHost>
 --8<--------------------------------------------------------------------------
 
-Pour l'instant, les noms d'hÃ´tes 'slackware.bernadette' et 'freebsd.bernadette'
-ne correspondent Ã  rien dans notre rÃ©seau local. Dans un premier temps, nous
-pouvons les ajouter Ã  '/etc/hosts' pour y accÃ©der Ã  partir de la machine
+Pour l'instant, les noms d'hôtes 'slackware.bernadette' et 'freebsd.bernadette'
+ne correspondent à rien dans notre réseau local. Dans un premier temps, nous
+pouvons les ajouter à '/etc/hosts' pour y accéder à partir de la machine
 locale.
 
 --8<---------- /etc/hosts ----------------------------------------------------
@@ -396,8 +396,8 @@ Tester les deux sites directement sur le serveur :
   # links http://slackware.bernadette 
   # links http://freebsd.bernadette 
 
-Si l'on compte rendre ces hÃ´tes virtuels accessibles Ã  toutes les machines du
-rÃ©seau local, il faudra ajouter les enregistrements A respectifs ("A records")
+Si l'on compte rendre ces hôtes virtuels accessibles à toutes les machines du
+réseau local, il faudra ajouter les enregistrements A respectifs ("A records")
 dans la configuration de BIND. En l'occurrence :
 
 --8<---------- /var/named/zone.microlinux.montpezat --------------------------
@@ -408,14 +408,14 @@ freebsd.bernadette       IN A 192.168.2.3
 ...
 --8<--------------------------------------------------------------------------
 
-  > Ne pas oublier d'incrÃ©menter le numÃ©ro de sÃ©rie du fichier zone et de
-    redÃ©marrer BIND.
+  > Ne pas oublier d'incrémenter le numéro de série du fichier zone et de
+    redémarrer BIND.
 
 
-Utiliser les scripts CGI avec les hÃ´tes virtuels
+Utiliser les scripts CGI avec les hôtes virtuels
 ------------------------------------------------
 
-CrÃ©er un rÃ©pertoire 'cgi-bin' au mÃªme niveau que 'htdocs', comme ceci :
+Créer un répertoire 'cgi-bin' au même niveau que 'htdocs', comme ceci :
 
   # tree -d /var/www/vhosts/default/
   /var/www/vhosts/default/
@@ -424,10 +424,10 @@ CrÃ©er un rÃ©pertoire 'cgi-bin' au mÃªme niveau que 'htdocs', comme ceci :
 
   2 directories
 
-Copier le script 'test-cgi' dans ce rÃ©pertoire :
+Copier le script 'test-cgi' dans ce répertoire :
 
   # cp -v /var/www/cgi-bin/test-cgi default/cgi-bin/
-  Â«Â /var/www/cgi-bin/test-cgiÂ Â» -> Â«Â default/cgi-bin/test-cgiÂ Â»
+  « /var/www/cgi-bin/test-cgi » -> « default/cgi-bin/test-cgi »
 
 Ensuite, ajouter une ligne dans la stance correspondante de
 '/etc/httpd/extra/httpd-vhosts.conf' :
@@ -446,12 +446,12 @@ Ensuite, ajouter une ligne dans la stance correspondante de
 ...
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache et ouvrir la page suivante :
+Redémarrer Apache et ouvrir la page suivante :
 
   # links http://bernadette/cgi-bin/test-cgi
 
 
-HÃ©berger des sites dynamiques avec PHP
+Héberger des sites dynamiques avec PHP
 --------------------------------------
 
 Activer le module PHP dans '/etc/httpd/httpd.conf' :
@@ -464,9 +464,9 @@ Include /etc/httpd/mod_php.conf
 ...
 --8<--------------------------------------------------------------------------
 
-La directive 'DirectoryIndex' dÃ©finit le fichier qui sera affichÃ© lorsqu'un
-rÃ©pertoire est requis. On ajoutera les fichiers 'index.php', et on pourra
-Ã©galement complÃ©ter par 'index.htm', une extension que l'on rencontre rarement,
+La directive 'DirectoryIndex' définit le fichier qui sera affiché lorsqu'un
+répertoire est requis. On ajoutera les fichiers 'index.php', et on pourra
+également compléter par 'index.htm', une extension que l'on rencontre rarement,
 mais qui existe :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
@@ -477,14 +477,14 @@ mais qui existe :
 ...
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache pour prendre en compte les modifications.
+Redémarrer Apache pour prendre en compte les modifications.
 
 Ajouter une section pour afficher les infos PHP :
 
   # cd /var/www/vhosts
   # mkdir phpinfo/htdocs
 
-Dans ce rÃ©pertoire, Ã©diter un fichier 'index.php' comme ceci :
+Dans ce répertoire, éditer un fichier 'index.php' comme ceci :
 
 --8<---------- index.php -----------------------------------------------------
 <?php
@@ -492,36 +492,37 @@ echo phpinfo();
 ?>
 --8<--------------------------------------------------------------------------
 
-RÃ©gler les droits d'accÃ¨s :
+Régler les droits d'accès :
 
   # chown -R apache:apache /var/www/vhosts/phpinfo
 
-CrÃ©er un hÃ´te virtuel 'phpinfo.bernadette' (cf. ci-dessus) et afficher la page
+Créer un hôte virtuel 'phpinfo.bernadette' (cf. ci-dessus) et afficher la page
 'index.php' dans un navigateur.
 
 Le fichier '/etc/httpd/php.ini' contient la configuration de PHP. On peut
-commencer par dÃ©finir le fuseau horaire du serveur, nÃ©cessaire pour le bon
+commencer par définir le fuseau horaire du serveur, nécessaire pour le bon
 fonctionnement de certaines applications :
 
 --8<---------- /etc/httpd/php.ini --------------------------------------------
 [Date]
 ; Defines the default timezone used by the date functions
 ; http://php.net/date.timezone
-date.timezone = Europe/Paris      <-- dÃ©commenter et dÃ©finir le fuseau horaire
+date.timezone = Europe/Paris      <-- décommenter et définir le fuseau horaire
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache et vÃ©rifier les donnÃ©s correspondantes dans la page qui
+Redémarrer Apache et vérifier les donnés correspondantes dans la page qui
 affiche les infos PHP.
 
 
-Utiliser MySQL Ã  partir de PHP
+Utiliser MySQL à partir de PHP
 ------------------------------
 
-Voir le MySQL-HOWTO et le SQL-HOWTO pour le serveur de bases de donnÃ©es. Si
-MySQL est installÃ© sur la machine, il est utilisable Ã  partir de PHP sans autre
+Voir le MySQL-HOWTO et le SQL-HOWTO pour le serveur de bases de données. Si
+MySQL est installé sur la machine, il est utilisable à partir de PHP sans autre
 configuration.
 
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

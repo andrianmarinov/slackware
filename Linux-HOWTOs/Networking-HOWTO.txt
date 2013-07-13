@@ -2,94 +2,94 @@
 Networking HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ================
 
-DerniÃ¨re rÃ©vision : 14 janvier 2013
+Dernière révision : 14 janvier 2013
 
-Ce HOWTO contient le B.A.Ba de l'administration rÃ©seau sous Linux en gÃ©nÃ©ral.
+Ce HOWTO contient le B.A.Ba de l'administration réseau sous Linux en général.
 
-  Â· TCP/IP
-  Â· UDP
-  Â· ICMP
-  Â· PPP
-  Â· Ports
-  Â· Nom d'hÃ´te et nom de domaine
-  Â· Adresse IP
-  Â· Adresse MAC
-  Â· Interface rÃ©seau
-  Â· Boucle locale
-  Â· RÃ©seau local
-  Â· Passerelle
-  Â· Serveur de noms
-  Â· DHCP
+  * TCP/IP
+  * UDP
+  * ICMP
+  * PPP
+  * Ports
+  * Nom d'hôte et nom de domaine
+  * Adresse IP
+  * Adresse MAC
+  * Interface réseau
+  * Boucle locale
+  * Réseau local
+  * Passerelle
+  * Serveur de noms
+  * DHCP
 
 TCP/IP
 ------
 
-Tous les systÃ¨mes d'exploitation courants supportent le protocole rÃ©seau TCP/IP
-("Transmission Control Protocol/Internet Protocol"), qui gÃ¨re la communication
-entre les machines d'un rÃ©seau local aussi bien que sur Internet. Ã€ partir de
-ce moment-lÃ , peu importe si la machine distante est Ã  deux mÃ¨tres ou Ã  l'autre
-bout de la planÃ¨te. Les services rÃ©seau fonctionneront pareillement.
+Tous les systèmes d'exploitation courants supportent le protocole réseau TCP/IP
+("Transmission Control Protocol/Internet Protocol"), qui gère la communication
+entre les machines d'un réseau local aussi bien que sur Internet. À partir de
+ce moment-là, peu importe si la machine distante est à deux mètres ou à l'autre
+bout de la planète. Les services réseau fonctionneront pareillement.
 
 Le protocole TCP/IP se charge essentiellement de deux choses :
 
-  Â· Il identifie chaque machine par une adresse IP qui lui est propre.
+  * Il identifie chaque machine par une adresse IP qui lui est propre.
 
-  Â· Il vÃ©rifie si les donnÃ©es envoyÃ©es Ã  un destinataire sont arrivÃ©es. Plus
-  exactement, il assure l'arrivÃ©e des donnÃ©es sans altÃ©rations et dans l'ordre,
+  * Il vérifie si les données envoyées à un destinataire sont arrivées. Plus
+  exactement, il assure l'arrivée des données sans altérations et dans l'ordre,
   et se charge de la retransmission en cas de perte. Un processus de
-  "handshake" (poignÃ©e de main) se met en place entre les deux machines qui
-  communiquent, avec des accusÃ©s de rÃ©ception, des demandes d'Ã©missions, etc.
+  "handshake" (poignée de main) se met en place entre les deux machines qui
+  communiquent, avec des accusés de réception, des demandes d'émissions, etc.
 
-Les donnÃ©es sont envoyÃ©es sous forme de petits "paquets". Chacun de ces paquets
+Les données sont envoyées sous forme de petits "paquets". Chacun de ces paquets
 inclut :
 
-  Â· un en-tÃªte comprenant les informations utiles pour acheminer et
+  * un en-tête comprenant les informations utiles pour acheminer et
   reconstituer le message ;
 
-  Â· les donnÃ©es encapsulÃ©es.
+  * les données encapsulées.
 
-  > TCP/IP est nÃ©cessaire mÃªme lorsqu'une machine n'est reliÃ©e Ã  aucun hÃ´te
-    distant, Ã©tant donnÃ© que sur une machine Linux, une sÃ©rie de programmes -
-    comme par exemple le systÃ¨me d'impression CUPS - utilise ce protocole pour
+  > TCP/IP est nécessaire même lorsqu'une machine n'est reliée à aucun hôte
+    distant, étant donné que sur une machine Linux, une série de programmes -
+    comme par exemple le système d'impression CUPS - utilise ce protocole pour
     la communication interne.
 
 
 UDP
 ---
 
-UDP ("User Datagram Protocol") est un autre protocole utilisÃ© en-dehors de
-TCP/IP. Contrairement au protocole TCP, il fonctionne sans nÃ©gociation. UDP ne
-garantit donc pas la bonne livraison des datagrammes Ã  destination, ni de leur
-ordre d'arrivÃ©e. Il est Ã©galement possible que des datagrammes soient reÃ§us en
+UDP ("User Datagram Protocol") est un autre protocole utilisé en-dehors de
+TCP/IP. Contrairement au protocole TCP, il fonctionne sans négociation. UDP ne
+garantit donc pas la bonne livraison des datagrammes à destination, ni de leur
+ordre d'arrivée. Il est également possible que des datagrammes soient reçus en
 plusieurs exemplaires.
 
-  > Le "datagramme" est le terme gÃ©nÃ©ralement utilisÃ© pour dÃ©signer la
+  > Le "datagramme" est le terme généralement utilisé pour désigner la
     transmission d'un paquet via un service non "fiable". 
 
-Ã‰tant donnÃ© que la communication n'est pas "sÃ©curisÃ©e", il peut arriver que les
-paquets envoyÃ©s n'arrivent pas dans le bon ordre, voire mÃªme pas du tout. Dans
-ce cas, c'est au destinataire - et non pas au protocole - de vÃ©rifier
-l'intÃ©gritÃ© des donnÃ©es transmises.
+Étant donné que la communication n'est pas "sécurisée", il peut arriver que les
+paquets envoyés n'arrivent pas dans le bon ordre, voire même pas du tout. Dans
+ce cas, c'est au destinataire - et non pas au protocole - de vérifier
+l'intégrité des données transmises.
 
-L'avantage du protocole UDP par rapport Ã  TCP, c'est qu'il est plus lÃ©ger et
+L'avantage du protocole UDP par rapport à TCP, c'est qu'il est plus léger et
 donc plus rapide. On l'utilise par exemple pour les services DNS et NFS.
 
 
 ICMP
 ----
 
-Le protocole ICMP ("Internet Control Message Protocol") ne sert pas Ã  l'Ã©change
-de donnÃ©es entre les applications. On l'utilise pour vÃ©hiculier des messages de
-contrÃ´le et d'erreur pour le protocole TCP/IP, par exemple lorsqu'un service ou
-un hÃ´te est inaccessible.
+Le protocole ICMP ("Internet Control Message Protocol") ne sert pas à l'échange
+de données entre les applications. On l'utilise pour véhiculier des messages de
+contrôle et d'erreur pour le protocole TCP/IP, par exemple lorsqu'un service ou
+un hôte est inaccessible.
 
-ICMP est utilisÃ© par l'outil 'ping', par exemple.
+ICMP est utilisé par l'outil 'ping', par exemple.
 
 
 PPP
 ---
 
-Lorsque la connexion Ã  Internet se fait directement via un modem - et non pas
+Lorsque la connexion à Internet se fait directement via un modem - et non pas
 un modem/routeur ADSL - on utilise le protocole PPP ("Point-to-Point
 Protocol").
 
@@ -97,151 +97,151 @@ Protocol").
 Ports
 -----
 
-Chaque paquet IP comporte un numÃ©ro de port, ce qui permet de l'attribuer au
-bon service cÃ´tÃ© destinataire. La plupart des applications Internet (WWW, mail,
+Chaque paquet IP comporte un numéro de port, ce qui permet de l'attribuer au
+bon service côté destinataire. La plupart des applications Internet (WWW, mail,
 FTP, etc.) ont leurs propres ports.
 
 
-Nom d'hÃ´te et nom de domaine
+Nom d'hôte et nom de domaine
 ----------------------------
 
-Contrairement aux machines, les humains ne gÃ¨rent pas trÃ¨s bien les adresses
-IP, difficiles Ã  mÃ©moriser. C'est pour cette raison qu'une machine peut Ãªtre
-identifiÃ©e parallÃ¨lement par un nom d'hÃ´te et un nom de domaine.
+Contrairement aux machines, les humains ne gèrent pas très bien les adresses
+IP, difficiles à mémoriser. C'est pour cette raison qu'une machine peut être
+identifiée parallèlement par un nom d'hôte et un nom de domaine.
 
-Le nom d'hÃ´te dÃ©signe la machine Ã  proprement parler. Par exemple :
+Le nom d'hôte désigne la machine à proprement parler. Par exemple :
 
-  Â· serveur-linux
-  Â· nestor
-  Â· alphamule
-  Â· poste24
-  Â· etc.
+  * serveur-linux
+  * nestor
+  * alphamule
+  * poste24
+  * etc.
 
-Le nom de domaine dÃ©signe le segment de rÃ©seau Ã  l'intÃ©rieur duquel la machine
-est joignable. Il peut Ãªtre constituÃ© de plusieurs Ã©lÃ©ments. Par exemple :
+Le nom de domaine désigne le segment de réseau à l'intérieur duquel la machine
+est joignable. Il peut être constitué de plusieurs éléments. Par exemple :
 
-  Â· local
-  Â· microlinux.montpezat
-  Â· mairie.combas
-  Â· mediatheque.sommieres
-  Â· crpconsulting.montpellier
-  Â· etc.
+  * local
+  * microlinux.montpezat
+  * mairie.combas
+  * mediatheque.sommieres
+  * crpconsulting.montpellier
+  * etc.
 
-Il en rÃ©sulte des noms de machine complets (ou "pleinement qualifiÃ©s") qui
-ressemblent Ã  ceci :
+Il en résulte des noms de machine complets (ou "pleinement qualifiés") qui
+ressemblent à ceci :
 
-  Â· serveur-linux.mairie.combas
-  Â· alphamule.microlinux.montpezat
-  Â· poste24.local
-  Â· etc.
+  * serveur-linux.mairie.combas
+  * alphamule.microlinux.montpezat
+  * poste24.local
+  * etc.
 
-Lorsque vous intÃ©grez un poste Ã  un rÃ©seau, le nom doit correspondre au domaine
+Lorsque vous intégrez un poste à un réseau, le nom doit correspondre au domaine
 existant.
 
-Si votre machine doit faire office de serveur public pour hÃ©berger des pages
-web, du courrier Ã©lectronique ou d'autres services, vous devez choisir un nom
-de domaine et enregistrer celui-ci auprÃ¨s d'un "registrar" (bureau
+Si votre machine doit faire office de serveur public pour héberger des pages
+web, du courrier électronique ou d'autres services, vous devez choisir un nom
+de domaine et enregistrer celui-ci auprès d'un "registrar" (bureau
 d'enregistrement de noms de domaines), comme par exemple :
 
-  Â· http://www.bookmyname.com
-  Â· https://www.gandi.net
+  * http://www.bookmyname.com
+  * https://www.gandi.net
 
 Adresse IP
 ----------
 
-L'adresse IP sert Ã  identifier sans ambiguÃ¯tÃ© une machine Ã  l'intÃ©rieur d'un
-rÃ©seau. Exemple d'adresse IP typique pour une adresse dans un rÃ©seau local : 
+L'adresse IP sert à identifier sans ambiguïté une machine à l'intérieur d'un
+réseau. Exemple d'adresse IP typique pour une adresse dans un réseau local : 
 
-  Â· 192.168.0.174
+  * 192.168.0.174
 
 
 Adresse MAC
 -----------
 
-L'adresse MAC ("Media Access Control", rien Ã  voir avec les ordinateurs de la
+L'adresse MAC ("Media Access Control", rien à voir avec les ordinateurs de la
 marque Apple) est un identifiant unique au monde contenu dans chaque carte
-rÃ©seau (filaire et sans fil). Cette adresse MAC permet d'identifier la carte
-avant mÃªme qu'on lui attribue une adresse IP.
+réseau (filaire et sans fil). Cette adresse MAC permet d'identifier la carte
+avant même qu'on lui attribue une adresse IP.
 
 
-Interface rÃ©seau
+Interface réseau
 ----------------
 
-L'adresse IP ne dÃ©signe pas une machine, mais une interface rÃ©seau. Une machine
-dispose souvent de plusieurs interfaces rÃ©seau avec des adresses IP
-diffÃ©rentes. Interfaces rÃ©seau typiques :
+L'adresse IP ne désigne pas une machine, mais une interface réseau. Une machine
+dispose souvent de plusieurs interfaces réseau avec des adresses IP
+différentes. Interfaces réseau typiques :
 
-  Â· boucle locale ('lo') 127.0.0.1
-  Â· interfaces ethernet filaires 'eth0', 'eth1', etc.
-  Â· interfaces sans fil 'wlan0', 'eth1', etc.
-  Â· interfaces 'ppp' pour l'accÃ¨s via modem
+  * boucle locale ('lo') 127.0.0.1
+  * interfaces ethernet filaires 'eth0', 'eth1', etc.
+  * interfaces sans fil 'wlan0', 'eth1', etc.
+  * interfaces 'ppp' pour l'accès via modem
 
 Lorsqu'on parle de "l'adresse IP de la machine" comme s'il n'y en avait qu'une,
-on dÃ©signe en fait l'adresse par laquelle la machine est joignable dans le
-rÃ©seau local ou sur Internet. En rÃ¨gle gÃ©nÃ©rale il s'agit de l'adresse IP de
-l'interface Ethernet associÃ©e au nom d'hÃ´te et au nom de domaine, et qui est
-unique dans le rÃ©seau.
+on désigne en fait l'adresse par laquelle la machine est joignable dans le
+réseau local ou sur Internet. En règle générale il s'agit de l'adresse IP de
+l'interface Ethernet associée au nom d'hôte et au nom de domaine, et qui est
+unique dans le réseau.
 
 
 Boucle locale
 -------------
 
-La boucle locale ("loopback interface") joue un rÃ´le particulier, Ã©tant donnÃ©
-qu'elle permet l'utilisation des protocoles rÃ©seau pour des services locaux,
-c'est-Ã -dire pour la communication au sein mÃªme de la machine. MÃªme si cette
-approche paraÃ®t aberrante, elle est indispensable pour le bon fonctionnement
-d'un certain nombre de commandes Ã©lÃ©mentaires dont la communication se fonde
-justement sur le protocole rÃ©seau. Dans ce cas, peu importe si les donnÃ©es Ã 
-gÃ©rer se situent sur la machine locale ou sur une machine distante du rÃ©seau. 
+La boucle locale ("loopback interface") joue un rôle particulier, étant donné
+qu'elle permet l'utilisation des protocoles réseau pour des services locaux,
+c'est-à-dire pour la communication au sein même de la machine. Même si cette
+approche paraît aberrante, elle est indispensable pour le bon fonctionnement
+d'un certain nombre de commandes élémentaires dont la communication se fonde
+justement sur le protocole réseau. Dans ce cas, peu importe si les données à
+gérer se situent sur la machine locale ou sur une machine distante du réseau. 
 
-Le systÃ¨me d'impression CUPS, par exemple, accepte les tÃ¢ches d'impression
-aussi bien localement que depuis d'autres machines du rÃ©seau.
+Le système d'impression CUPS, par exemple, accepte les tâches d'impression
+aussi bien localement que depuis d'autres machines du réseau.
 
-L'adresse IP prÃ©vue pour la boucle locale est 127.0.0.1. Toutes les
-distributions Linux gÃ¨rent automatiquement la configuration de la boucle
-locale, mÃªme si aucune configuration rÃ©seau n'est effectuÃ©e par ailleurs. 
+L'adresse IP prévue pour la boucle locale est 127.0.0.1. Toutes les
+distributions Linux gèrent automatiquement la configuration de la boucle
+locale, même si aucune configuration réseau n'est effectuée par ailleurs. 
 
 
-RÃ©seau local
+Réseau local
 ------------
 
-L'Ã©tendue d'un rÃ©seau local est dÃ©finie par une sÃ©rie de masques : une sÃ©rie de
-groupes de quatre chiffres utilisÃ©es en interne comme masques binaires pour les
+L'étendue d'un réseau local est définie par une série de masques : une série de
+groupes de quatre chiffres utilisées en interne comme masques binaires pour les
 adresses IP. 
 
-Admettons que le rÃ©seau local comprenne toutes les adresses 192.168.0.x :
+Admettons que le réseau local comprenne toutes les adresses 192.168.0.x :
 
-  Â· Le masque de sous-rÃ©seau correspondant sera 255.255.255.0. 
-  Â· L'adresse du rÃ©seau sera 192.168.0.0.
-  Â· L'adresse broadcast sera 192.168.0.255.
+  * Le masque de sous-réseau correspondant sera 255.255.255.0. 
+  * L'adresse du réseau sera 192.168.0.0.
+  * L'adresse broadcast sera 192.168.0.255.
 
-Le rÃ©seau rÃ©sultant pourra Ãªtre dÃ©crit ainsi :
+Le réseau résultant pourra être décrit ainsi :
 
-  Â· 192.168.0.0/255.255.255.0
-  Â· 192.168.0.0./24
+  * 192.168.0.0/255.255.255.0
+  * 192.168.0.0./24
 
-Pour comprendre la deuxiÃ¨me notation, convertissons le masque de sous-rÃ©seau
+Pour comprendre la deuxième notation, convertissons le masque de sous-réseau
 255.255.255.0 en binaire. Nous obtenons ceci :
 
        255.     255.     255.       0
   11111111.11111111.11111111.00000000
 
-  > La notation brÃ¨ve renseigne donc sur le nombre de '1' binaires du masque.
+  > La notation brève renseigne donc sur le nombre de '1' binaires du masque.
 
   > Deux machines aux adresses IP respectives 192.168.0.174 et 192.168.0.175
-    pourront donc communiquer directement Ã  l'intÃ©rieur de ce rÃ©seau. Leurs
-    adresses correspondent dans l'Ã©tendue du masque. 
+    pourront donc communiquer directement à l'intérieur de ce réseau. Leurs
+    adresses correspondent dans l'étendue du masque. 
 
-  > On peut configurer un nombre maximum de 254 machines dans ce rÃ©seau, de .1
-    Ã  .254. Les adresses .0 et .255 sont rÃ©servÃ©es.
+  > On peut configurer un nombre maximum de 254 machines dans ce réseau, de .1
+    à .254. Les adresses .0 et .255 sont réservées.
 
 
 Passerelle
 ----------
 
-Une passerelle est une machine qui se situe Ã  la jonction entre deux rÃ©seaux,
-par exemple entre le rÃ©seau local et Internet. Si vous souhaitez que votre
-poste de travail Linux dans le rÃ©seau local puisse accÃ©der Ã  Internet, vous
+Une passerelle est une machine qui se situe à la jonction entre deux réseaux,
+par exemple entre le réseau local et Internet. Si vous souhaitez que votre
+poste de travail Linux dans le réseau local puisse accéder à Internet, vous
 devez lui fournir l'adresse de la passerelle lors de la configuration.
 
 
@@ -254,21 +254,22 @@ en adresses IP.
 
 Lorsque vous voulez ouvrir la page http://www.google.fr dans votre navigateur,
 celui-ci contacte d'abord le serveur de noms pour trouver l'adresse IP
-correspondante. Et c'est seulement lorsque le serveur de noms a retournÃ© une
-rÃ©ponse que le navigateur essaie d'Ã©tablir un contact avec l'adresse IP en
+correspondante. Et c'est seulement lorsque le serveur de noms a retourné une
+réponse que le navigateur essaie d'établir un contact avec l'adresse IP en
 question.
 
 
 DHCP
 ----
 
-Le protocole DHCP (Dynamic Host Configuration Protocol) est utilisÃ© dans les
-rÃ©seaux locaux pour centraliser la configuration rÃ©seau. Au lieu de dÃ©finir
-l'adresse IP, le masque de sous-rÃ©seau, l'IP de la passerelle et les serveurs
+Le protocole DHCP (Dynamic Host Configuration Protocol) est utilisé dans les
+réseaux locaux pour centraliser la configuration réseau. Au lieu de définir
+l'adresse IP, le masque de sous-réseau, l'IP de la passerelle et les serveurs
 DNS individuellement pour chaque machine, on configure un serveur DHCP (voir le
-DHCP-HOWTO). Lors du dÃ©marrage, chaque machine du rÃ©seau local entre en contact
-avec le serveur DHCP pour obtenir ses paramÃ¨tres rÃ©seau.
+DHCP-HOWTO). Lors du démarrage, chaque machine du réseau local entre en contact
+avec le serveur DHCP pour obtenir ses paramètres réseau.
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

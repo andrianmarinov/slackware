@@ -2,9 +2,9 @@
 SSH HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =========
 
-DerniÃ¨re rÃ©vision : 6 juillet 2013
+Dernière révision : 6 juillet 2013
 
-Ce HOWTO dÃ©crit l'utilisation de SSH sous Slackware Linux.
+Ce HOWTO décrit l'utilisation de SSH sous Slackware Linux.
 
   * Introduction
 
@@ -12,26 +12,26 @@ Ce HOWTO dÃ©crit l'utilisation de SSH sous Slackware Linux.
 Introduction
 ------------
 
-SSH ("Secure Shell") est l'outil standard pour l'administration Ã  distance sous
-Linux.  Il est simple d'utilisation, robuste et sÃ»r. Il permet de travailler en
-mode console sur une machine distante, aussi confortablement que si l'on Ã©tait
-physiquement installÃ© devant. 
+SSH ("Secure Shell") est l'outil standard pour l'administration à distance sous
+Linux.  Il est simple d'utilisation, robuste et sûr. Il permet de travailler en
+mode console sur une machine distante, aussi confortablement que si l'on était
+physiquement installé devant. 
 
-L'authentification aussi bien que les transferts de donnÃ©es sont encryptÃ©s. On
+L'authentification aussi bien que les transferts de données sont encryptés. On
 utilisera donc SSH au quotidien pour administrer aussi bien les serveurs locaux
-que les serveurs dÃ©diÃ©s ou les postes de travail Ã  distance.
+que les serveurs dédiés ou les postes de travail à distance.
 
 Une petite clarification pour lever une potentielle confusion :
 
-  * Le serveur SSH, c'est la machine Ã  laquelle on se connecte.
+  * Le serveur SSH, c'est la machine à laquelle on se connecte.
 
-  * Le client SSH, c'est la machine Ã  partir de laquelle on se connecte.
+  * Le client SSH, c'est la machine à partir de laquelle on se connecte.
 
 
 Gestion du service SSH
 ----------------------
 
-Activer le serveur OpenSSH au dÃ©marrage de la machine :
+Activer le serveur OpenSSH au démarrage de la machine :
 
   # chmod +x /etc/rc.d/rc.sshd
 
@@ -39,7 +39,7 @@ Lancer SSH :
 
   # /etc/rc.d/rc.sshd start
 
-ArrÃªter SSH :
+Arrêter SSH :
 
   # /etc/rc.d/rc.sshd stop
 
@@ -48,38 +48,38 @@ Relancer SSH :
   # /etc/rc.d/rc.sshd restart
 
 
-Se connecter Ã  une machine distante
+Se connecter à une machine distante
 -----------------------------------
 
 Dans l'exemple ci-dessous, l'utilisateur 'kikinovak' travaille sur la machine
-'virtualbox' et veut se connecter Ã  la machine 'alphamule'. Plusieurs
-conditions doivent Ãªtre remplies pour cela.
+'virtualbox' et veut se connecter à la machine 'alphamule'. Plusieurs
+conditions doivent être remplies pour cela.
 
-D'une part, le serveur OpenSSH (dÃ©mon 'sshd') doit tourner sur 'alphamule'.
-D'autre part, l'utilisateur 'kikinovak' doit Ã©galement disposer d'un compte
-shell sur 'alphamule'. En revanche, il n'est pas nÃ©cessaire que le dÃ©mon 'sshd'
-soit activÃ© sur 'virtualbox'. 
+D'une part, le serveur OpenSSH (démon 'sshd') doit tourner sur 'alphamule'.
+D'autre part, l'utilisateur 'kikinovak' doit également disposer d'un compte
+shell sur 'alphamule'. En revanche, il n'est pas nécessaire que le démon 'sshd'
+soit activé sur 'virtualbox'. 
 
-Lors d'une premiÃ¨re tentative de connexion, on obtient le message suivant :
+Lors d'une première tentative de connexion, on obtient le message suivant :
 
   [kikinovak@virtualbox:~] $ ssh alphamule
   The authenticity of host 'alphamule (192.168.2.2)' can't be established.
   ECDSA key fingerprint is 20:79:e0:6b:d6:18:81:fb:44:03:13:a6:41:a6:9e:c8.
   Are you sure you want to continue connecting (yes/no)? 
 
-Si l'on rÃ©pond par l'affirmative ("yes"), la clÃ© publique de la machine
-distante est copiÃ©e vers le fichier local '~/.ssh/known_hosts'.
+Si l'on répond par l'affirmative ("yes"), la clé publique de la machine
+distante est copiée vers le fichier local '~/.ssh/known_hosts'.
 
   Warning: Permanently added 'alphamule,192.168.2.2' (ECDSA) to the list of
   known hosts.
 
 
-Ouverture rapide d'une session avec des clÃ©s SSH
+Ouverture rapide d'une session avec des clés SSH
 ------------------------------------------------
 
 Dans l'exemple, je veux que l'utilisateur 'kikinovak' puisse se connecter de sa
 station de travail ('alphamule') au serveur ('dedibox' ou 'sd-25854') sans
-avoir Ã  saisir de mot de passe.
+avoir à saisir de mot de passe.
 
   [kikinovak@alphamule:~] $ ssh-keygen -t rsa
   Generating public/private rsa key pair.
@@ -103,11 +103,11 @@ avoir Ã  saisir de mot de passe.
   |           +*+oE.|
   +-----------------+
 
-Ici, on accepte le fichier proposÃ© par dÃ©faut, c'est-Ã -dire '~/.ssh/id_rsa'.
-Lorsqu'on est sollicitÃ© pour une phrase secrÃ¨te, simplement appuyer sur
-[EntrÃ©e], faute de quoi il faudra la saisir Ã  chaque fois.
+Ici, on accepte le fichier proposé par défaut, c'est-à-dire '~/.ssh/id_rsa'.
+Lorsqu'on est sollicité pour une phrase secrète, simplement appuyer sur
+[Entrée], faute de quoi il faudra la saisir à chaque fois.
 
-Copier la clÃ© publique sur le serveur :
+Copier la clé publique sur le serveur :
 
   [kikinovak@alphamule:~] $ ssh-copy-id -i ~/.ssh/id_rsa.pub dedibox
 
@@ -115,9 +115,9 @@ Se connecter sur le serveur :
 
   [kikinovak@alphamule:~] $ ssh dedibox
 
-La commande 'ssh-copy-id' a stockÃ© la clÃ© publique 'id_rsa.pub' sur le serveur,
-dans le fichier '~/.ssh/authorized_keys', en crÃ©ant le fichier ainsi que le
-rÃ©pertoire '~.ssh' en cas de besoin.
+La commande 'ssh-copy-id' a stocké la clé publique 'id_rsa.pub' sur le serveur,
+dans le fichier '~/.ssh/authorized_keys', en créant le fichier ainsi que le
+répertoire '~.ssh' en cas de besoin.
 
   [kikinovak@sd-25854:~] $ tree -a .ssh/
   .ssh/
@@ -125,7 +125,7 @@ rÃ©pertoire '~.ssh' en cas de besoin.
 
   0 directories, 1 file
 
-Voici Ã  quoi cela peut ressembler :
+Voici à quoi cela peut ressembler :
 
   [kikinovak@sd-25854:~] $ cat .ssh/authorized_keys ssh-rsa
   AAAAB3NzaC1yc2EAAAADAQABAAABAQDNRDc6lz+46hocpMIsvrrbKhl5c
@@ -136,7 +136,8 @@ Voici Ã  quoi cela peut ressembler :
   iODr7LuKZPL5RfH7q+RIBGjbzYTQpQlHJ6/k9e+Y8i+ckMy9sL0kzrbqK
   0tl+ruwuWFrtJ+xu3efkAaoFuLBfzx kikinovak@alphamule
 
-Ã€ partir de lÃ , on peut ouvrir une session distante sans mot de passe.
+À partir de là, on peut ouvrir une session distante sans mot de passe.
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

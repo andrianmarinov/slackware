@@ -2,27 +2,27 @@
 Nagios HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ============
 
-DerniÃ¨re rÃ©vision : 18 fÃ©vrier 2013
+Dernière révision : 18 février 2013
 
 
-PrÃ©requis
+Prérequis
 ---------
 
-Le serveur Apache doit Ãªtre configurÃ© avec PHP et les scripts CGI. 
+Le serveur Apache doit être configuré avec PHP et les scripts CGI. 
 
-  Â· LAMP-HOWTO.txt
+  * LAMP-HOWTO.txt
 
 
 Installation
 ------------
 
-CrÃ©er le groupe et l'utilisateur 'nagios' :
+Créer le groupe et l'utilisateur 'nagios' :
 
   # groupadd -g 213 nagios
   # useradd -u 213 -d /dev/null -s /bin/false -g nagios nagios
 
-Ajouter l'utilisateur 'apache' au groupe 'nagios' de faÃ§on Ã  ce qu'il puisse
-Ã©crire dans le rÃ©pertoire '/var/nagios/rw' :
+Ajouter l'utilisateur 'apache' au groupe 'nagios' de façon à ce qu'il puisse
+écrire dans le répertoire '/var/nagios/rw' :
 
   # usermod -G nagios apache
 
@@ -30,34 +30,34 @@ Installer le module Perl Nagios::Plugin :
 
   # cpan -i Nagios::Plugin
 
-  > CPAN est un module Perl qui permet le tÃ©lÃ©chargement, l'installation,
-    la mise Ã  jour et la maintenance des modules Perl archivÃ©s sur
+  > CPAN est un module Perl qui permet le téléchargement, l'installation,
+    la mise à jour et la maintenance des modules Perl archivés sur
     http://search.cpan.org.
 
-  > Il faut rÃ©pondre Ã  quelques questions en confirmant simplement le choix
-    par dÃ©faut. La commande 'cpan' se charge ensuite de tÃ©lÃ©charger et
-    d'installer une sÃ©rie de modules Perl.
+  > Il faut répondre à quelques questions en confirmant simplement le choix
+    par défaut. La commande 'cpan' se charge ensuite de télécharger et
+    d'installer une série de modules Perl.
 
 Installer les paquets suivants dans l'ordre, en utilisant 'sbopkg' :
 
-  1. rrdtool --> dÃ©pendance pour 'nagiosgraph'
+  1. rrdtool --> dépendance pour 'nagiosgraph'
   2. nagios [*]
   3. nagios-plugins
   4. nagiosgraph
 
-Si l'on installe Nagios en tant qu'hÃ´te virtuel d'Apache, Ã©diter la variable
+Si l'on installe Nagios en tant qu'hôte virtuel d'Apache, éditer la variable
 'DOCROOT' dans le script. Exemple :
 
 --8<--------------------------------------------------------------------------
 DOCROOT=/var/www/vhosts/nagios/htdocs 
 --8<--------------------------------------------------------------------------
 
-RÃ©gler quelques permissions :.
+Régler quelques permissions :.
   
   # chown -R apache:apache /var/www/htdocs/nagios
   # chown -R apache:apache /var/www/cgi-bin/nagios
 
-Ã‰diter '/etc/httpd/extra/nagios.conf' :
+Éditer '/etc/httpd/extra/nagios.conf' :
 
 --8<---------- /etc/httpd/extra/nagios.conf ----------------------------------
 ...
@@ -78,7 +78,7 @@ RÃ©gler quelques permissions :.
 --8<--------------------------------------------------------------------------
 
 Pour que le fichier soit pris en compte, il faut l'inclure explicitement dans
-la configuration, en ajoutant une ligne Ã  la fin de 'httpd.conf' :
+la configuration, en ajoutant une ligne à la fin de 'httpd.conf' :
 
 --8<---------- /etc/httpd/httpd.conf -----------------------------------------
 ...
@@ -86,38 +86,38 @@ la configuration, en ajoutant une ligne Ã  la fin de 'httpd.conf' :
 Include /etc/httpd/extra/nagios.conf
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache :
+Redémarrer Apache :
 
   # /etc/rc.d/rc.httpd restart
 
-DÃ©finir un mot de passe pour l'utilisateur 'nagiosadmin' :
+Définir un mot de passe pour l'utilisateur 'nagiosadmin' :
 
   # htpasswd -c /etc/nagios/htpasswd.users nagiosadmin
   New password: 
   Re-type new password: 
   Adding password for user nagiosadmin
 
-Activer et dÃ©marrer Nagios :
+Activer et démarrer Nagios :
 
   # chmod +x /etc/rc.d/rc.nagios 
   # /etc/rc.d/rc.nagios start
   Starting Nagios.
 
-Avec un navigateur graphique (Firefox ou autre), se connecter Ã 
+Avec un navigateur graphique (Firefox ou autre), se connecter à
 http://<serveur>/nagios.
 
   Utilisateur  : nagiosadmin
   Mot de passe : ********
 
-Dans l'interface graphique de Nagios, cliquer sur le lien 'Services' Ã  gauche
-et voir comment la surveillance de la machine Ã©volue petit Ã  petit.
+Dans l'interface graphique de Nagios, cliquer sur le lien 'Services' à gauche
+et voir comment la surveillance de la machine évolue petit à petit.
 
 
-CaractÃ¨res accuentuÃ©s
+Caractères accuentués
 ---------------------
 
-L'affichage des caractÃ¨res accentuÃ©s dans l'interface de Nagios est foireux.
-Pour y remÃ©dier, on va d'abord ajouter la directive suivante Ã  la fin du
+L'affichage des caractères accentués dans l'interface de Nagios est foireux.
+Pour y remédier, on va d'abord ajouter la directive suivante à la fin du
 fichier '/etc/httpd/extra/nagios.conf' :
 
 --8<---------- /etc/httpd/extra/nagios.conf ----------------------------------
@@ -139,8 +139,8 @@ fichier '/etc/httpd/extra/nagios.conf' :
 </Directory>
 --8<--------------------------------------------------------------------------
 
-Ensuite, il faut Ã©diter '/etc/nagios/cgi.cfg' et passer la valeur de la
-variable 'escape_html_tags' de 1 Ã  0, comme ceci :
+Ensuite, il faut éditer '/etc/nagios/cgi.cfg' et passer la valeur de la
+variable 'escape_html_tags' de 1 à 0, comme ceci :
 
 --8<---------- /etc/nagios/cgi.cfg -------------------------------------------
 ...
@@ -148,7 +148,7 @@ escape_html_tags=0
 ...
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Apache et Nagios, et le problÃ¨me est rÃ©glÃ© :
+Redémarrer Apache et Nagios, et le problème est réglé :
 
   # /etc/rc.d/rc.httpd restart
   # /etc/rc.d/rc.nagios restart
@@ -157,3 +157,4 @@ RedÃ©marrer Apache et Nagios, et le problÃ¨me est rÃ©glÃ© :
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

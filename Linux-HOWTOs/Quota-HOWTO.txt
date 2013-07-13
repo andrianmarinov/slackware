@@ -2,79 +2,80 @@
 Quota HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ===========
 
-DerniÃ¨re rÃ©vision : 8 juillet 2013
+Dernière révision : 8 juillet 2013
 
-Ce document dÃ©crit la mise en place de quotas pour les utilisateurs sur un
+Ce document décrit la mise en place de quotas pour les utilisateurs sur un
 serveur Slackware Linux.
 
 
 Initialisation
 --------------
 
-Pour utiliser les quotas, il faut les activer au niveau du systÃ¨me de fichiers,
-en ajoutant les options de montage suivantes Ã  la ligne dÃ©finissant le montage
+Pour utiliser les quotas, il faut les activer au niveau du système de fichiers,
+en ajoutant les options de montage suivantes à la ligne définissant le montage
 de la partition '/home', par exemple :
 
-	- usrquota
-	- usrjquota=aquota.user
-	- grpquota
-	- grpjquota=aquota.group
-	- jqfmt=vfsv0
+  - usrquota
+  - usrjquota=aquota.user
+  - grpquota
+  - grpjquota=aquota.group
+  - jqfmt=vfsv0
 
-  /!\ Si l'on n'utilise pas de partition '/home' sÃ©parÃ©e, on ajoutera ces
-  options de montage Ã  la partition principale.
+  /!\ Si l'on n'utilise pas de partition '/home' séparée, on ajoutera ces
+  options de montage à la partition principale.
 
-RedÃ©marrer et vÃ©rifier qu'on a bien ceci :
+Redémarrer et vérifier qu'on a bien ceci :
 
-	# cat /proc/mounts
-	...
-	/dev/sda4 /home ext4
-	rw,relatime,barrier=1,data=ordered,jqfmt=vfsv0,
-	usrjquota=aquota.user,grpjquota=aquota.group 0 0
+  # cat /proc/mounts
+  ...
+  /dev/sda4 /home ext4
+  rw,relatime,barrier=1,data=ordered,jqfmt=vfsv0,
+  usrjquota=aquota.user,grpjquota=aquota.group 0 0
 
-Ã‰diter le fichier quota d'un utilisateur :
+Éditer le fichier quota d'un utilisateur :
 
-	# edquota kikinovak
+  # edquota kikinovak
 
-	Disk quotas for user kikinovak (uid 1000):
-	Filesystem     blocks       soft       hard     inodes     soft hard
-	/dev/sda4          24     700000     800000          6        0    0
+  Disk quotas for user kikinovak (uid 1000):
+  Filesystem     blocks       soft       hard     inodes     soft hard
+  /dev/sda4          24     700000     800000          6        0    0
 
-	- Dans la dÃ©finition des quotas, la taille d'un "bloc" est toujours Ã©gale Ã 
-	  un kilooctet.
+  - Dans la définition des quotas, la taille d'un "bloc" est toujours égale à
+    un kilooctet.
 
-	- La taille des donnÃ©es d'un utilisateur peut dÃ©passer la limite "soft"
-	  pendant une certaine pÃ©riode.
+  - La taille des données d'un utilisateur peut dépasser la limite "soft"
+    pendant une certaine période.
 
-	- En revanche, elle ne pourra jamais dÃ©passer la limite "hard".
+  - En revanche, elle ne pourra jamais dépasser la limite "hard".
 
-	- Une valeur nulle signifie qu'il n'y a pas de limite.
+  - Une valeur nulle signifie qu'il n'y a pas de limite.
 
-Si les dÃ©finitions de quotas sont consistantes pour certains groupes
-d'utilisateurs, on peut rÃ©pliquer la configuration d'un utilisateur pour les
+Si les définitions de quotas sont consistantes pour certains groupes
+d'utilisateurs, on peut répliquer la configuration d'un utilisateur pour les
 autres :
 
-	# edquota -up <utilisateur_source> <utilisateur1> <utilisateur2> ...
+  # edquota -up <utilisateur_source> <utilisateur1> <utilisateur2> ...
 
 Par exemple :
 
-	# edquota -up kikinovak jmortreux kflores mfelix
+  # edquota -up kikinovak jmortreux kflores mfelix
 
-Afficher un rÃ©sumÃ© des quotas :
+Afficher un résumé des quotas :
 
-	# repquota -a
+  # repquota -a
 
-	*** Report for user quotas on device /dev/sda4
-	Block grace time: 7days; Inode grace time: 7days
-	                        Block limits                File limits
-	User            used    soft    hard  grace    used  soft  hard  grace
-	----------------------------------------------------------------------
-	root      --      24       0       0              3     0     0       
-	kikinovak --      24  700000  800000              6     0     0       
-	jmortreux --      24  700000  800000              6     0     0       
-	kflores   --      24  700000  800000              6     0     0       
-	mfelix    --      24  700000  800000              6     0     0      
+  *** Report for user quotas on device /dev/sda4
+  Block grace time: 7days; Inode grace time: 7days
+                          Block limits                File limits
+  User            used    soft    hard  grace    used  soft  hard  grace
+  ----------------------------------------------------------------------
+  root      --      24       0       0              3     0     0       
+  kikinovak --      24  700000  800000              6     0     0       
+  jmortreux --      24  700000  800000              6     0     0       
+  kflores   --      24  700000  800000              6     0     0       
+  mfelix    --      24  700000  800000              6     0     0      
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

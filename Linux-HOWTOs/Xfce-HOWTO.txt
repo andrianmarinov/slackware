@@ -2,26 +2,26 @@
 Xfce HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ==========
 
-DerniÃ¨re rÃ©vision : 3 juillet 2013
+Dernière révision : 3 juillet 2013
 
-Ce HOWTO dÃ©crit la configuration du bureau Xfce sous Slackware Linux.
+Ce HOWTO décrit la configuration du bureau Xfce sous Slackware Linux.
 
 
   * Configuration initiale de Xfce
-  * CrÃ©ation du profil
+  * Création du profil
   * Supprimer les partitions du bureau
 
 
 Configuration initiale de Xfce
 ------------------------------
 
-CrÃ©er un utilisateur 'template' pour le modÃ¨le de configuration.
+Créer un utilisateur 'template' pour le modèle de configuration.
 
-Premier dÃ©marrage : Utiliser les paramÃ¨tres par dÃ©faut.
+Premier démarrage : Utiliser les paramètres par défaut.
 
-DÃ©placer la zone de notifications Ã  gauche du sÃ©lecteur de bureaux virtuels.
+Déplacer la zone de notifications à gauche du sélecteur de bureaux virtuels.
 
-Ajouter deux applets entre la zone de notifications et le sÃ©lecteur de bureaux
+Ajouter deux applets entre la zone de notifications et le sélecteur de bureaux
 virtuels :
 
   * un bouton 'Clipman'
@@ -29,88 +29,88 @@ virtuels :
 
   > Apparence
   * Style > Clearlooks-Phenix
-  * IcÃ´nes > Faenza-Xfce
-  * Polices > Police par dÃ©faut : Droid Sans Regular 11
+  * Icônes > Faenza-Xfce
+  * Polices > Police par défaut : Droid Sans Regular 11
 
   > Applications favorites
   * Navigateur Web : Mozilla Firefox
   * Client de messagerie : Mozilla Thunderbird
   * Gestionnaire de fichiers : Thunar
-  * Ã‰mulateur de Terminal : Terminal Xfce
+  * Émulateur de Terminal : Terminal Xfce
 
   > Bureau
-  * ArriÃ¨re-plan : opensuse-1600x1200.jpg
-  * IcÃ´nes > IcÃ´nes par dÃ©faut :
-  * [ ] RÃ©pertoire personnel
-  * [ ] SystÃ¨me de fichiers
+  * Arrière-plan : opensuse-1600x1200.jpg
+  * Icônes > Icônes par défaut :
+  * [ ] Répertoire personnel
+  * [ ] Système de fichiers
   * [ ] Corbeille
-  * [*] PÃ©riphÃ©riques amovibles
+  * [*] Périphériques amovibles
 
-  > Ã‰conomiseur d'Ã©cran
-  * Mode : Seulement un Ã©conomiseur d'Ã©cran : GLMatrix
+  > Économiseur d'écran
+  * Mode : Seulement un économiseur d'écran : GLMatrix
 
   > Espaces de travail
   * Nombre d'espaces de travail : 2
 
-  > Gestionnaire de fenÃªtres
-  * Style > ThÃ¨me : Axe Rounded
+  > Gestionnaire de fenêtres
+  * Style > Thème : Axe Rounded
 
   > Gestionnaire de fichiers
-  * Affichage > Voir un nouveau dossier en utilisant : Liste dÃ©taillÃ©e
+  * Affichage > Voir un nouveau dossier en utilisant : Liste détaillée
 
-  > Peaufinage des fenÃªtres
+  > Peaufinage des fenêtres
   * Compositeur > [*] Activer le compositeur d'affichage
-  * [*] Affichage direct des fenÃªtres plein Ã©cran
-  * [*] Afficher l'ombre sous les fenÃªtres normales
-  * [*] Afficher l'ombre sous les fenÃªtres contextuelles
-  * [*] Afficher l'ombre sous les fenÃªtres du dock
-  * OpacitÃ© des dÃ©corations des fenÃªtres : laisser tel quel
-  * OpacitÃ© des fenÃªtres inactives : rÃ©duire d'un cran
-  * OpacitÃ© des fenÃªtres durant leur dÃ©placement : rÃ©duire de deux crans
-  * OpacitÃ© des fenÃªtres durant leur redimensionnement : rÃ©duire d'un cran
-  * OpacitÃ© des fenÃªtres contextuelles : laisser tel quel
+  * [*] Affichage direct des fenêtres plein écran
+  * [*] Afficher l'ombre sous les fenêtres normales
+  * [*] Afficher l'ombre sous les fenêtres contextuelles
+  * [*] Afficher l'ombre sous les fenêtres du dock
+  * Opacité des décorations des fenêtres : laisser tel quel
+  * Opacité des fenêtres inactives : réduire d'un cran
+  * Opacité des fenêtres durant leur déplacement : réduire de deux crans
+  * Opacité des fenêtres durant leur redimensionnement : réduire d'un cran
+  * Opacité des fenêtres contextuelles : laisser tel quel
 
   > Souris
-  ThÃ¨me : DÃ©faut ( = Aero Large Drop)
+  Thème : Défaut ( = Aero Large Drop)
 
   > Tableau de bord > Panneau 2
   * Dans un premier temps, maximiser la largeur du panneau pour pouvoir ajouter
     les applications plus confortablement.
-  * Supprimer tous les lanceurs prÃ©dÃ©finis.
-  * Ajouter la sÃ©lection d'applications, une par une.
+  * Supprimer tous les lanceurs prédéfinis.
+  * Ajouter la sélection d'applications, une par une.
   * Affichage > Dimensions > Taille : 40 - 48 pixels selon le nombre
     d'applications
   * Largeur : 1 %
-  * Apparence > OpacitÃ© : 1 %
-  * Apparence > ArriÃ¨re-plan > OpacitÃ© : 0 %
-  * Pour chacune des entrÃ©es qu'on vient d'ajouter :
-    [ ] DÃ©sactiver les bulles d'aide
+  * Apparence > Opacité : 1 %
+  * Apparence > Arrière-plan > Opacité : 0 %
+  * Pour chacune des entrées qu'on vient d'ajouter :
+    [ ] Désactiver les bulles d'aide
  
 Peaufiner Xfce Terminal.
 
 Bouton du menu d'applications : remplacer le logo de Xfce par celui de
 Slackware. 
 
-  * IcÃ´nes des emplacements > 'start-here-slackware'
+  * Icônes des emplacements > 'start-here-slackware'
 
-Agrandir la taille des icÃ´nes. Lancer l'Ã©diteur de paramÃ¨tres
-'xfce4-settings-editor' et dÃ©finir les paramÃ¨tres xsettings > Gtk > IconSizes :
+Agrandir la taille des icônes. Lancer l'éditeur de paramètres
+'xfce4-settings-editor' et définir les paramètres xsettings > Gtk > IconSizes :
 
   * gtk-menu=16,16
   * gtk-button=20,20
   * panel-applications-menu=24,24
   * panel-directory-menu=24,24
 
-Ã‰crire tous ces paramÃ¨tres dans une seule ligne, sÃ©parÃ©s par ':' sans espace.
+Écrire tous ces paramètres dans une seule ligne, séparés par ':' sans espace.
 
 
-CrÃ©ation du profil
+Création du profil
 ------------------
 
   # cp -Rv /home/template/.config /etc/skel/
   # cd /etc/skel/.config
 
-Garder les rÃ©pertoires suivants :
+Garder les répertoires suivants :
 
   * Thunar
   * xfce4
@@ -126,8 +126,8 @@ Empaqueter la configuration :
 Supprimer les partitions du bureau
 ----------------------------------
 
-Si le bureau affiche les partitions systÃ¨me comme points de montage sur une
-installation multiboot, on peut s'en dÃ©barrasser en Ã©ditant '/etc/fstab' comme
+Si le bureau affiche les partitions système comme points de montage sur une
+installation multiboot, on peut s'en débarrasser en éditant '/etc/fstab' comme
 ceci :
 
 --8<---------- /etc/fstab ----------------------------------------------------
@@ -143,3 +143,4 @@ ceci :
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

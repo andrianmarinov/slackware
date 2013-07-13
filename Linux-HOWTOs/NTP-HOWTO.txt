@@ -2,63 +2,63 @@
 NTP HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =========
 
-DerniÃ¨re rÃ©vision : 17 janvier 2013
+Dernière révision : 17 janvier 2013
 
-Ce HOWTO dÃ©crit la mise en place d'un serveur d'horloge atomique sous Slackware
+Ce HOWTO décrit la mise en place d'un serveur d'horloge atomique sous Slackware
 et la synchronisation des postes clients avec celui-ci.
 
-  Â· GÃ©nÃ©ralitÃ©s
-  Â· PrÃ©requis
-  Â· Synchronisation d'un serveur local ou dÃ©diÃ© avec un serveur NTP
-  Â· Gestion et utilisation
-  Â· Synchronisation des postes clients avec le serveur local
+  * Généralités
+  * Prérequis
+  * Synchronisation d'un serveur local ou dédié avec un serveur NTP
+  * Gestion et utilisation
+  * Synchronisation des postes clients avec le serveur local
 
 
-GÃ©nÃ©ralitÃ©s
+Généralités
 -----------
 
-Lorsque plusieurs personnes manipulent des donnÃ©es partagÃ©es sur des postes
-clients diffÃ©rents, il est essentiel que ces postes soient tous Ã  la mÃªme
-heure. Malheureusement, l'horloge intÃ©grÃ©e dans les machines n'est pas
+Lorsque plusieurs personnes manipulent des données partagées sur des postes
+clients différents, il est essentiel que ces postes soient tous à la même
+heure. Malheureusement, l'horloge intégrée dans les machines n'est pas
 suffisamment exacte. 
 
-Le protocole NTP ("Network Time Protocol") permet aux machines d'un rÃ©seau de
-mettre leurs pendules Ã  l'heure. Il permet la synchronisation des machines
+Le protocole NTP ("Network Time Protocol") permet aux machines d'un réseau de
+mettre leurs pendules à l'heure. Il permet la synchronisation des machines
 entre elles. Les serveurs de temps public sur Internet permettent de recevoir
-le temps exact. Ã€ partir de lÃ , on a plusieurs possibilitÃ©s d'utiliser NTP.
+le temps exact. À partir de là, on a plusieurs possibilités d'utiliser NTP.
 
-  > La commande 'ntpdate' procÃ¨de Ã  un ajustement ponctuel de l'horloge du
+  > La commande 'ntpdate' procède à un ajustement ponctuel de l'horloge du
     BIOS. 
 
-  > L'ajustement ponctuel ne suffit pas pour un serveur qui est censÃ© tourner
-    sans discontinuer. L'horloge du serveur risque de dÃ©vier de plus en plus de
-    l'heure exacte. Dans ce cas, il faudra configurer le dÃ©mon 'ntpd' contenu
+  > L'ajustement ponctuel ne suffit pas pour un serveur qui est censé tourner
+    sans discontinuer. L'horloge du serveur risque de dévier de plus en plus de
+    l'heure exacte. Dans ce cas, il faudra configurer le démon 'ntpd' contenu
     dans le paquet 'ntp', qui se charge de contacter les serveurs de temps
-    publics Ã  intervalles rÃ©guliers pour procÃ©der ensuite Ã  une sÃ©rie de
+    publics à intervalles réguliers pour procéder ensuite à une série de
     corrections de l'heure locale. 
 
-  > Le dÃ©mon 'ntpd' peut Ã  son tour Ãªtre configurÃ© comme serveur de temps pour
+  > Le démon 'ntpd' peut à son tour être configuré comme serveur de temps pour
     les machines locales.
 
 Dans la pratique quotidienne, on utilisera 'ntpdate' pour l'ajustement initiale
-de l'heure locale, et 'ntpd' pour la synchronisation rÃ©guliÃ¨re.
+de l'heure locale, et 'ntpd' pour la synchronisation régulière.
 
 
-PrÃ©requis
+Prérequis
 ---------
 
-Le dÃ©mon 'ntpd' utilise le port 123 en UDP. Il faut donc ouvrir ce port sur le
+Le démon 'ntpd' utilise le port 123 en UDP. Il faut donc ouvrir ce port sur le
 serveur pour permettre aux postes clients de se connecter.
 
 
-Synchronisation d'un serveur local ou dÃ©diÃ© avec un serveur NTP
+Synchronisation d'un serveur local ou dédié avec un serveur NTP
 ---------------------------------------------------------------
 
-CrÃ©er le fichier journal :
+Créer le fichier journal :
 
   # touch /var/log/ntp.log
 
-Ã‰ventuellement, aller sur http://www.pool.ntp.org et choisir la liste des
+Éventuellement, aller sur http://www.pool.ntp.org et choisir la liste des
 serveurs en fonction du pays.
 
 Configurer le service :
@@ -82,16 +82,16 @@ restrict 127.0.0.1 mask 255.0.0.0
 --8<--------------------------------------------------------------------------
 
   > La directive 'fudge 127.127.1.10 stratum 10' constitue un serveur "bidon"
-    en guise d'IP "fallback", au cas oÃ¹ la source de temps extÃ©rieure
-    deviendrait momentanÃ©ment indisponible. En cas d'indisponibilitÃ© du serveur
-    distant, NTP continuera Ã  tourner en se basant sur ce fonctionnement-lÃ .
+    en guise d'IP "fallback", au cas où la source de temps extérieure
+    deviendrait momentanément indisponible. En cas d'indisponibilité du serveur
+    distant, NTP continuera à tourner en se basant sur ce fonctionnement-là.
 
-  > NTP offre une panoplie de rÃ¨gles pour contrÃ´ler l'accÃ¨s au service, que
-    l'on pourra utiliser en-dehors des rÃ¨gles de pare-feu. Ici, les directives
-    'restrict' signifient qu'on empÃªche les machines distantes de modifier la
-    configuration du serveur (premiÃ¨re ligne) et qu'on fait confiance Ã  la
-    machine elle-mÃªme (deuxiÃ¨me ligne). La directive 'restrict' sans option
-    derriÃ¨re, mais suivie du seul nom d'hÃ´te, Ã©quivaut Ã  un 'allowÂ all'.
+  > NTP offre une panoplie de règles pour contrôler l'accès au service, que
+    l'on pourra utiliser en-dehors des règles de pare-feu. Ici, les directives
+    'restrict' signifient qu'on empêche les machines distantes de modifier la
+    configuration du serveur (première ligne) et qu'on fait confiance à la
+    machine elle-même (deuxième ligne). La directive 'restrict' sans option
+    derrière, mais suivie du seul nom d'hôte, équivaut à un 'allow all'.
 
 
 Gestion et utilisation
@@ -101,21 +101,21 @@ Avant de lancer le service, effectuer l'ajustement initial de l'horloge :
 
   # ntpdate pool.ntp.org
 
-  > La commande 'ntpdate' est normalement considÃ©rÃ©e comme obsolÃ¨te, mais elle
-    sert toujours Ã  effectuer des corrections importantes. ThÃ©oriquement, c'est
-    la commande 'ntpd -g' qui est censÃ©e remplacer 'ntpdate', mais son
-    utilisation s'avÃ¨re problÃ©matique sur des systÃ¨mes dÃ©rÃ©glÃ©s de plus d'une
+  > La commande 'ntpdate' est normalement considérée comme obsolète, mais elle
+    sert toujours à effectuer des corrections importantes. Théoriquement, c'est
+    la commande 'ntpd -g' qui est censée remplacer 'ntpdate', mais son
+    utilisation s'avère problématique sur des systèmes déréglés de plus d'une
     heure.
 
 Activer le service :
 
   # chmod 0755 /etc/rc.d/rc.ntpd
 
-GÃ©rer le service :
+Gérer le service :
 
   # /etc/rc.d/rc.ntpd start|stop|restart|status
 
-Afficher la liste des serveurs auxquels on est connectÃ© :
+Afficher la liste des serveurs auxquels on est connecté :
 
   # ntpq -p
   remote           refid      st t when poll reach   delay   offset jitter
@@ -126,31 +126,31 @@ Afficher la liste des serveurs auxquels on est connectÃ© :
   -ntp.univ-poitie 145.238.203.10   3 u   29   64  377   57.747  -191.58 107.002
   LOCAL(0)        .LOCL.          10 l  164   64  374    0.000    0.000 0.001
 
-  > Le petit astÃ©risque '*' en dÃ©but de ligne signifie que la machine est
-    correctement synchronisÃ©e avec le serveur distant. La premiÃ¨re
-    synchronisation peut nÃ©cessiter quelques minutes, parfois mÃªme une
+  > Le petit astérisque '*' en début de ligne signifie que la machine est
+    correctement synchronisée avec le serveur distant. La première
+    synchronisation peut nécessiter quelques minutes, parfois même une
     demi-heure.
 
-  > Pour guetter la premiÃ¨re synchronisation, on peut invoquer 'watch ntpq -p'.
+  > Pour guetter la première synchronisation, on peut invoquer 'watch ntpq -p'.
 
 
 Synchronisation des postes clients avec le serveur local
 --------------------------------------------------------
 
 Au lieu de synchroniser chaque poste avec un serveur NTP sur Internet, on va
-procÃ©der de faÃ§on plus Ã©conomique et prÃ©fÃ©rer la synchronisation avec le
+procéder de façon plus économique et préférer la synchronisation avec le
 serveur local. 
 
 Effectuer l'ajustement initial :
 
   # ntpdate pool.ntp.org
 
-CrÃ©er le fichier journal :
+Créer le fichier journal :
 
   # touch /var/log/ntp.log
 
 Configurer le service. Dans l'exemple, le serveur NTP est la machine
-192.168.2.1 du rÃ©seau local :
+192.168.2.1 du réseau local :
 
 --8<---------- /etc/ntp.conf -------------------------------------------------
 # /etc/ntp.conf
@@ -169,14 +169,14 @@ restrict 192.168.2.1 mask 255.255.255.255
 --8<--------------------------------------------------------------------------
 
   > Les directives 'restrict' signifient ici qu'on bloque tout le trafic NTP,
-    exceptÃ© pour la machine elle-mÃªme et le serveur.
+    excepté pour la machine elle-même et le serveur.
 
 Activer et lancer le service :
 
   # chmod 0755 /etc/rc.d/rc.ntpd
   # /etc/rc.d/rc.ntpd start
 
-VÃ©rifier si l'on est bien synchronisÃ© avec le serveur local :
+Vérifier si l'on est bien synchronisé avec le serveur local :
 
   # ntpq -p
        remote           refid      st t when poll reach  delay  offset  jitter
@@ -184,8 +184,9 @@ VÃ©rifier si l'on est bien synchronisÃ© avec le serveur local :
   *nestor.microlin 109.69.184.210   3 u  105  128  377   0.331  -0.047   0.028
    LOCAL(0)        .LOCL.          10 l 107m   64    0   0.000   0.000   0.000
 
-  > LÃ  aussi, il faudra attendre quelques minutes avant la premiÃ¨re
+  > Là aussi, il faudra attendre quelques minutes avant la première
     synchronisation.
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

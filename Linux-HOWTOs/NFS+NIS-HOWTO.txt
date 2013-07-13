@@ -2,22 +2,22 @@
 NFS + NIS HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ===============
 
-DerniÃ¨re rÃ©vision : 12 janvier 2013
+Dernière révision : 12 janvier 2013
 
-Ce HOWTO dÃ©crit la centralisation des rÃ©pertoires utilisateurs et de
+Ce HOWTO décrit la centralisation des répertoires utilisateurs et de
 l'authentification avec NFS et NIS.
 
-  Â· Configuration du serveur
-  Â· Configuration des postes clients
+  * Configuration du serveur
+  * Configuration des postes clients
 
 
 Configuration du serveur
 ------------------------
 
 Pour utiliser NFS et NIS conjointement avec un pare-feu, on va commencer par
-assigner des ports statiques aux diffÃ©rents services. Ce n'est pas strictement
-nÃ©cessaire, mais pour faire les choses plus proprement, on va noter les ports
-choisis dans '/etc/services', Ã  la fin du fichier :
+assigner des ports statiques aux différents services. Ce n'est pas strictement
+nécessaire, mais pour faire les choses plus proprement, on va noter les ports
+choisis dans '/etc/services', à la fin du fichier :
 
 --8<---------- /etc/services -------------------------------------------------
 ...
@@ -39,9 +39,9 @@ rquotad   32769/tcp  # NFS mountd
 rquotad   32769/udp  # NFS mountd
 --8<--------------------------------------------------------------------------
 
-  > Bien Ã©videmment, il ne faudra pas oublier d'ouvrir les ports en question.
+  > Bien évidemment, il ne faudra pas oublier d'ouvrir les ports en question.
 
-DÃ©finir les ports pour 'statd' dans '/etc/rc.d/rc.rpc' :
+Définir les ports pour 'statd' dans '/etc/rc.d/rc.rpc' :
 
 --8<---------- /etc/rc.d/rc.rpc ----------------------------------------------
 ...
@@ -52,7 +52,7 @@ DÃ©finir les ports pour 'statd' dans '/etc/rc.d/rc.rpc' :
 ...
 --8<--------------------------------------------------------------------------
 
-Les ports pour 'rquotad' et 'mountd' peuvent Ãªtre dÃ©finis dans
+Les ports pour 'rquotad' et 'mountd' peuvent être définis dans
 '/etc/rc.d/rc.nfsd' :
 
 --8<---------- /etc/rc.d/rc.nfsd ---------------------------------------------
@@ -69,17 +69,17 @@ Les ports pour 'rquotad' et 'mountd' peuvent Ãªtre dÃ©finis dans
 ...
 --8<--------------------------------------------------------------------------
 
-Enfin, pour 'lockd', on pourra crÃ©er un fichier '/etc/sysctl.conf' :
+Enfin, pour 'lockd', on pourra créer un fichier '/etc/sysctl.conf' :
 
 --8<---------- /etc/sysctl.conf ----------------------------------------------
 fs.nfs.nlm_tcpport=32768
 fs.nfs.nlm_udpport=32768
 --8<--------------------------------------------------------------------------
 
-  > Cette derniÃ¨re option ne sera prise en compte qu'aprÃ¨s un redÃ©marrage du
+  > Cette dernière option ne sera prise en compte qu'après un redémarrage du
     serveur.
 
-DÃ©finir les partages NFS :
+Définir les partages NFS :
 
 --8<---------- /etc/exports --------------------------------------------------
 /home 192.168.2.0/24(rw,async,no_subtree_check)
@@ -91,7 +91,7 @@ Activer les partages :
   # chmod +x /etc/rc.d/rc.rpc
   # chmod +x /etc/rc.d/rc.nfsd
 
-RedÃ©marrer le serveur et vÃ©rifier si tous les services sont activÃ©s et
+Redémarrer le serveur et vérifier si tous les services sont activés et
 utilisent bien les ports respectifs :
 
   # pmap_dump
@@ -101,19 +101,19 @@ Sur un serveur Slackware64, corriger un bug dans 'yptools' :
   # cd /usr/lib
   # ln -s /usr/lib64/yp .
 
-DÃ©finir le domaine NIS :
+Définir le domaine NIS :
 
 --8<---------- /etc/defaultdomain --------------------------------------------
 microlinux.montpezat
 --8<--------------------------------------------------------------------------
 
-Le serveur NIS sera Ã©galement un client NIS :
+Le serveur NIS sera également un client NIS :
 
 --8<---------- /etc/yp.conf --------------------------------------------------
 domain microlinux.montpezat server localhost
 --8<--------------------------------------------------------------------------
 
-Activer le serveur NIS dans '/etc/rc.d/rc.yp' et dÃ©finir un port statique :
+Activer le serveur NIS dans '/etc/rc.d/rc.yp' et définir un port statique :
 
 --8<---------- /etc/rc.d/rc.yp -----------------------------------------------
 # Set non-zero to enable yp client functions
@@ -136,13 +136,13 @@ Activer le script et le lancer :
   # chmod +x /etc/rc.d/rc.yp
   # /etc/rc.d/rc.yp start
 
-ProcÃ©der Ã  quelques ajustements dans '/var/yp/Makefile' : 
+Procéder à quelques ajustements dans '/var/yp/Makefile' : 
 
-  > La valeur 'MINGID' passe de '500' Ã  '1'.
+  > La valeur 'MINGID' passe de '500' à '1'.
 
-  > Les valeurs de 'MERGE_PASSWD' et 'MERGE_GROUP' passent de 'true' Ã  'false'.
+  > Les valeurs de 'MERGE_PASSWD' et 'MERGE_GROUP' passent de 'true' à 'false'.
 
-  > L'option 'publickey' doit Ãªtre dÃ©sactivÃ©e.
+  > L'option 'publickey' doit être désactivée.
 
 --8<---------- /var/yp/Makefile ----------------------------------------------
 ...
@@ -168,7 +168,7 @@ Ajouter les utilisateurs :
   # cd /var/yp
   # make
 
-On peut vÃ©rifier si les informations sur un utilisateur ont Ã©tÃ© mises Ã  jour :
+On peut vérifier si les informations sur un utilisateur ont été mises à jour :
 
   # ypmatch <utilisateur> passwd
 
@@ -180,7 +180,7 @@ Nettoyer '/home', qui sera le point de montage pour les partages NFS :
 
   # rmdir /home/ftp
 
-DÃ©marrer '/etc/rc.d/rc.rpc' et essayer de monter manuellement les partages :
+Démarrer '/etc/rc.d/rc.rpc' et essayer de monter manuellement les partages :
 
   # chmod +x /etc/rc.d/rc.rpc
   # /etc/rc.d/rc.rpc start
@@ -188,20 +188,20 @@ DÃ©marrer '/etc/rc.d/rc.rpc' et essayer de monter manuellement les partages :
   # ls /home
   # umount /home
 
-DÃ©finir le montage NFS permanent dans '/etc/fstab' :
+Définir le montage NFS permanent dans '/etc/fstab' :
 
 --8<---------- /etc/fstab ----------------------------------------------------
 ...
 nestor:/home /home nfs rsize=8192,wsize=8192,timeo=14,intr 0 0
 --8<--------------------------------------------------------------------------
 
-SpÃ©cifier le nom de domaine NIS comme sur le serveur :
+Spécifier le nom de domaine NIS comme sur le serveur :
 
 --8<---------- /etc/defaultdomain --------------------------------------------
 microlinux.montpezat
 --8<--------------------------------------------------------------------------
 
-Ã‰diter '/etc/yp.conf' :
+Éditer '/etc/yp.conf' :
 
 --8<---------- /etc/yp.conf --------------------------------------------------
 domain microlinux.montpezat server nestor
@@ -230,8 +230,9 @@ Activer '/etc/rc.d/rc.yp' :
 
   # chmod +x /etc/rc.d/rc.yp
 
-RedÃ©marrer et vÃ©rifier si les utilisateurs peuvent se connecter en init 3.
+Redémarrer et vérifier si les utilisateurs peuvent se connecter en init 3.
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

@@ -2,49 +2,50 @@
 Distcc HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ============
 
-DerniÃ¨re rÃ©vision : 26 janvier 2013
+Dernière révision : 26 janvier 2013
 
-Ce HOWTO dÃ©crit la mise en place d'une grappe de machines sous Slackware pour
-la compilation distribuÃ©e.
+Ce HOWTO décrit la mise en place d'une grappe de machines sous Slackware pour
+la compilation distribuée.
 
-  Â· Introduction
-  Â· Configurer Distcc sur un poste serveur
-  Â· Utiliser Distcc sur un poste client
-  Â· Monitoring
-  Â· Ajouter un cache de compilation
-  Â· Documentation
+  * Introduction
+  * Configurer Distcc sur un poste serveur
+  * Utiliser Distcc sur un poste client
+  * Monitoring
+  * Ajouter un cache de compilation
+  * Documentation
 
 
 Introduction
 ------------
 
-Certaines grosses applications ou bibliothÃ¨ques comme Firefox, Thunderbird, Qt
-ou KDE sont trÃ¨s longues Ã  compiler. Ã€ moins de disposer d'un avion de chasse
-genre Intel Core 7 gavÃ© de RAM, on est condamnÃ© Ã  passer des heures Ã  attendre
+Certaines grosses applications ou bibliothèques comme Firefox, Thunderbird, Qt
+ou KDE sont très longues à compiler. À moins de disposer d'un avion de chasse
+genre Intel Core 7 gavé de RAM, on est condamné à passer des heures à attendre
 la fin de la compilation.
 
-Une solution consiste Ã  configurer la compilation distribuÃ©e avec Distcc.
-L'idÃ©e, c'est de mettre en commun la puissance de calcul de tous les
-processeurs dans le rÃ©seau.
+Une solution consiste à configurer la compilation distribuée avec Distcc.
+L'idée, c'est de mettre en commun la puissance de calcul de tous les
+processeurs dans le réseau.
 
-Le cache de compilation Ccache permet par ailleurs d'accÃ©lÃ©rer les compilations
-rÃ©pÃ©tÃ©es de faÃ§ons significative.
+Le cache de compilation Ccache permet par ailleurs d'accélérer les compilations
+répétées de façons significative.
 
-Petite explication des termes utilisÃ©s :
+Petite explication des termes utilisés :
 
   > La machine "client", c'est celle sur laquelle on effectue la compilation.
-    C'est lÃ  oÃ¹ l'on trouve le code source, le script SlackBuild, etc.
+    C'est là où l'on trouve le code source, le script SlackBuild, etc.
 
   > La ou les machines "serveur" sont celles qui lui viennent en aide pour que
     la compilation aille plus vite.
 
-Attention Ã  bien utiliser la mÃªme architecture sur les machines client et
-serveur et Ã  ne pas mÃ©langer Slackware 32-bits et 64-bits !
+Attention à bien utiliser la même architecture sur les machines client et
+serveur et à ne pas mélanger Slackware 32-bits et 64-bits !
 
-PrÃ©requis
+
+Prérequis
 ---------
 
-Distcc utilise le port 3632 en TCP et en UDP par dÃ©faut. Il faut donc songer Ã 
+Distcc utilise le port 3632 en TCP et en UDP par défaut. Il faut donc songer à
 ouvrir ce port sur les machines faisant office de serveur de compilation si
 l'on utilise un pare-feu.
 
@@ -52,15 +53,15 @@ l'on utilise un pare-feu.
 Configurer Distcc sur un poste serveur
 --------------------------------------
 
-Ã‰diter '/etc/services' et ajouter le service 'distcc' Ã  la fin :
+Éditer '/etc/services' et ajouter le service 'distcc' à la fin :
 
 --8<---------- /etc/services -------------------------------------------------
 ...
-distcc   3632/tcp    #SystÃ¨me de compilation distributÃ©e C/C++
-distcc   3632/udp    #SystÃ¨me de compilation distributÃ©e C/C++
+distcc   3632/tcp    #Système de compilation distributée C/C++
+distcc   3632/udp    #Système de compilation distributée C/C++
 --8<--------------------------------------------------------------------------
 
-Adapater le script de dÃ©marrage suivant :
+Adapater le script de démarrage suivant :
 
 --8<---------- /etc/rc.d/rc.distccd ------------------------------------------
 #!/bin/sh
@@ -105,17 +106,17 @@ case "$1" in
 esac
 --8<--------------------------------------------------------------------------
 
-  > La directive 'allow' spÃ©cifie le rÃ©seau local.
+  > La directive 'allow' spécifie le réseau local.
 
   > La directive 'listen' indique l'adresse IP du serveur.
 
-CrÃ©er un fichier log :
+Créer un fichier log :
 
   # touch /var/log/distccd
   # chown nobody:nogroup /var/log/distccd
 
-Pour que Distcc se lance automatiquement au dÃ©marrage de la machine, il faut
-l'ajouter Ã  'rc.local' :
+Pour que Distcc se lance automatiquement au démarrage de la machine, il faut
+l'ajouter à 'rc.local' :
 
 --8<---------- /etc/rc.d/rc.local --------------------------------------------
 ...
@@ -125,7 +126,7 @@ if [ -x /etc/rc.d/rc.distccd ]; then
 fi
 --8<--------------------------------------------------------------------------
 
-Tant qu'Ã  faire, on peut aussi l'arrÃªter proprement :
+Tant qu'à faire, on peut aussi l'arrêter proprement :
 
 --8<---------- /etc/rc.d/rc.local_shutdown  ----------------------------------
 ...
@@ -135,15 +136,15 @@ if [ -x /etc/rc.d/rc.distccd ]; then
 fi
 --8<--------------------------------------------------------------------------
 
-Rendre le script exÃ©cutable :
+Rendre le script exécutable :
 
   # chmod 0755 /etc/rc.d/rc.distccd 
 
-Lancer le dÃ©mon :
+Lancer le démon :
 
   # /etc/rc.d/rc.distccd start
 
-VÃ©rifier s'il tourne correctement :
+Vérifier s'il tourne correctement :
 
   # ps aux | grep distccd
 
@@ -152,51 +153,51 @@ Utiliser Distcc sur un poste client
 -----------------------------------
 
 Depuis la version 2.0, Distcc utilise le mode "masquerade", qui passe par une
-sÃ©rie de liens symboliques. 
+série de liens symboliques. 
 
-CrÃ©er le rÃ©pertoire "masquerade" :
+Créer le répertoire "masquerade" :
 
-# mkdir -pv /usr/lib/distcc/bin
-mkdir: crÃ©ation du rÃ©pertoire Â«Â /usr/lib/distccÂ Â»
-mkdir: crÃ©ation du rÃ©pertoire Â«Â /usr/lib/distcc/binÂ Â»
-# cd /usr/lib/distcc/bin
+  # mkdir -pv /usr/lib/distcc/bin
+  mkdir: création du répertoire « /usr/lib/distcc »
+  mkdir: création du répertoire « /usr/lib/distcc/bin »
+  # cd /usr/lib/distcc/bin
 
 Identifier les compilateurs :
 
-# which gcc
-/usr/bin/gcc
-# ls -l /usr/bin/gcc
-lrwxrwxrwx 1 root root 9 janv. 24 23:44 /usr/bin/gcc -> gcc-4.7.1
-# which g++
-/usr/bin/g++
-# ls -l /usr/bin/g++
-lrwxrwxrwx 1 root root 13 janv. 24 23:44 /usr/bin/g++ -> g++-gcc-4.7.1
+  # which gcc
+  /usr/bin/gcc
+  # ls -l /usr/bin/gcc
+  lrwxrwxrwx 1 root root 9 janv. 24 23:44 /usr/bin/gcc -> gcc-4.7.1
+  # which g++
+  /usr/bin/g++
+  # ls -l /usr/bin/g++
+  lrwxrwxrwx 1 root root 13 janv. 24 23:44 /usr/bin/g++ -> g++-gcc-4.7.1
 
-CrÃ©er les liens symboliques :
+Créer les liens symboliques :
 
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/c++
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/cc
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/g++
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/g++-gcc-4.7.1
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/gcc
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/gcc-4.7.1
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/c++
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/cc
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/g++
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/g++-gcc-4.7.1
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/gcc
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/gcc-4.7.1
 
 Sur une machine 32-bits :
 
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-c++
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-g++
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-gcc
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-gcc-4.7.1
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-c++
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-g++
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-gcc
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/i486-slackware-linux-gcc-4.7.1
 
 Sur une machine 64-bits :
 
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-c++
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-g++
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-gcc
-# ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-gcc-4.7.1
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-c++
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-g++
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-gcc
+  # ln -s ../../../bin/distcc /usr/lib/distcc/bin/x86_64-slackware-linux-gcc-4.7.1
 
-Pour Ã©viter cette tÃ¢che fastidieuse, on peut utiliser le script
-'mkdistccsymlinks.sh', qu'on trouvera dans le rÃ©pertoire 'tools' :
+Pour éviter cette tâche fastidieuse, on peut utiliser le script
+'mkdistccsymlinks.sh', qu'on trouvera dans le répertoire 'tools' :
 
 --8<---------- mkdistccsymlinks.sh -------------------------------------------
 #!/bin/sh
@@ -243,7 +244,7 @@ Lancer le script :
 
   # ./mkdistccsymlinks.sh
 
-VÃ©rifier si les liens ont Ã©tÃ© crÃ©Ã©s correctement :
+Vérifier si les liens ont été créés correctement :
 
   # ls -l /usr/lib/distcc/bin
   ...
@@ -253,21 +254,21 @@ VÃ©rifier si les liens ont Ã©tÃ© crÃ©Ã©s correctement :
   lrwxrwxrwx 1 root root 19 janv. 26 17:16 gcc -> ../../../bin/distcc
   ...
 
-CrÃ©er le fichier '/etc/distcc/hosts' et indiquer les hÃ´tes disponibles, du plus
+Créer le fichier '/etc/distcc/hosts' et indiquer les hôtes disponibles, du plus
 puissant au moins puissant :
 
 --8<---------- /etc/distcc/hosts ---------------------------------------------
 localhost bernadette raymonde
 --8<--------------------------------------------------------------------------
 
-  > On peut effectuer une sÃ©rie de tests en compilant successivement la mÃªme
-    application avec un hÃ´te diffÃ©rent. Dans ce cas, rÃ©gler NUMJOBS Ã  une
-    valeur plus basse comme 2 ou 4. ChronomÃ©trer les temps de compilation
-    respectifs, puis Ã©crire les hÃ´tes en allant du plus performant vers le
+  > On peut effectuer une série de tests en compilant successivement la même
+    application avec un hôte différent. Dans ce cas, régler NUMJOBS à une
+    valeur plus basse comme 2 ou 4. Chronométrer les temps de compilation
+    respectifs, puis écrire les hôtes en allant du plus performant vers le
     moins performant.
 
-Ajouter '/usr/lib/distcc/bin' en tÃªte dans le PATH et dÃ©finir le nombre de
-tÃ¢ches de compilation simultanÃ©es :
+Ajouter '/usr/lib/distcc/bin' en tête dans le PATH et définir le nombre de
+tâches de compilation simultanées :
 
 --8<---------- /root/.bashrc -------------------------------------------------
 ...
@@ -280,12 +281,12 @@ export PATH NUMJOBS
 Monitoring
 ----------
 
-Lancer une compilation sur le poste client. Dans une deuxiÃ¨me console,
-afficher le journal de la compilation distribuÃ©e en direct. 
+Lancer une compilation sur le poste client. Dans une deuxième console,
+afficher le journal de la compilation distribuée en direct. 
 
   # distccmon-text 2
 
-On doit obtenir quelque chose qui ressemble Ã  ceci :
+On doit obtenir quelque chose qui ressemble à ceci :
 
   ...
   7232  Blocked                                                      [0]
@@ -301,11 +302,11 @@ On doit obtenir quelque chose qui ressemble Ã  ceci :
   ...
 
 Si l'on dispose d'un environnement graphique sur le client, on peut afficher le
-moniteur graphique. Il faut le lancer en tant que root Ã  partir d'un terminal :
+moniteur graphique. Il faut le lancer en tant que root à partir d'un terminal :
 
   # distccmon-gnome
 
-CÃ´tÃ© serveur, on peut afficher le fichier journal en temps rÃ©el :
+Côté serveur, on peut afficher le fichier journal en temps réel :
 
   # tail -f /var/log/distccd
   distccd[13278] cc /root/.ccache/tmp/yop.tmp.buildbox.25986.i 
@@ -317,33 +318,33 @@ CÃ´tÃ© serveur, on peut afficher le fichier journal en temps rÃ©el :
 Ajouter un cache de compilation
 -------------------------------
 
-On peut combiner Distcc et Ccache lorsqu'on recompile souvent les mÃªmes
-applications. LÃ  aussi, on utilisera le mode "masquerade".
+On peut combiner Distcc et Ccache lorsqu'on recompile souvent les mêmes
+applications. Là aussi, on utilisera le mode "masquerade".
 
-CrÃ©er les liens symboliques :
+Créer les liens symboliques :
 
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/c++
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/cc
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/g++
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/g++-gcc-4.7.1
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/gcc
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/gcc-4.7.1
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/c++
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/cc
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/g++
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/g++-gcc-4.7.1
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/gcc
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/gcc-4.7.1
 
 Sur une machine 32-bits :
 
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-c++
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-g++
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-gcc
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-gcc-4.7.1
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-c++
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-g++
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-gcc
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/i486-slackware-linux-gcc-4.7.1
 
 Sur une machine 64-bits :
 
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-c++
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-g++
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-gcc
-# ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-gcc-4.7.1
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-c++
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-g++
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-gcc
+  # ln -s ../../../bin/ccache /usr/lib/ccache/bin/x86_64-slackware-linux-gcc-4.7.1
 
-Alternativement, le script 'mkccachesymlinks.sh' se chargera de le faire Ã 
+Alternativement, le script 'mkccachesymlinks.sh' se chargera de le faire à
 notre place :
 
 --8<---------- mkccachesymlinks.sh -------------------------------------------
@@ -391,11 +392,11 @@ Lancer le script :
 
   # ./mkccachesymlinks.sh
 
-VÃ©rifier les liens nouvellement crÃ©Ã©s :
+Vérifier les liens nouvellement créés :
 
   # ls -l /usr/lib/ccache/bin
 
-Il ne reste plus qu'Ã  ajouter le chemin ver '/usr/lib/ccache/bin' en premier
+Il ne reste plus qu'à ajouter le chemin ver '/usr/lib/ccache/bin' en premier
 dans le PATH, avant 'distcc'.
 
 --8<---------- /root/.bashrc -------------------------------------------------
@@ -405,7 +406,7 @@ NUMJOBS="-j11"
 export PATH NUMJOBS
 --8<--------------------------------------------------------------------------
 
-Afficher la taille maximale et l'Ã©tat du cache :
+Afficher la taille maximale et l'état du cache :
 
   # ccache --show-stats
   cache directory                     /root/.ccache
@@ -428,10 +429,11 @@ Modifier la taille maximale du cache :
 Documentation
 -------------
 
-  Â· http://alphageek.dyndns.org/linux/distcc/
-  Â· man distcc
-  Â· man ccache
+  * http://alphageek.dyndns.org/linux/distcc/ 
+  * man distcc
+  * man ccache
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

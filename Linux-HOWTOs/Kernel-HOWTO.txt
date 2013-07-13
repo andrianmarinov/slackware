@@ -2,46 +2,46 @@
 Kernel HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ============
 
-DerniÃ¨re rÃ©vision : 28 fÃ©vrier 2013
+Dernière révision : 28 février 2013
 
-Ce HOWTO dÃ©crit la recompilation du kernel sous Slackware Linux.
+Ce HOWTO décrit la recompilation du kernel sous Slackware Linux.
 
-Aller dans le rÃ©pertoire qui contient le code source du kernel :
+Aller dans le répertoire qui contient le code source du kernel :
 
   # cd /usr/src/linux
 
 Notons que '/usr/src/linux' est un lien symbolique :
 
   # ls -l /usr/src/linux
-  lrwxrwxrwx 1 root root 12 fÃ©vr. 23 10:45 /usr/src/linux -> linux-3.2.29
+  lrwxrwxrwx 1 root root 12 févr. 23 10:45 /usr/src/linux -> linux-3.2.29
 
 Nettoyer le code source. La syntaxe s'inspire de "Monsieur Propre" :
 
   # make mrproper
 
-RÃ©cupÃ©rer la configuration du kernel courant :
+Récupérer la configuration du kernel courant :
 
   # zcat /proc/config.gz > .config
   # make oldconfig
 
-DÃ©marrer l'interface de configuration du noyau :
+Démarrer l'interface de configuration du noyau :
 
   # make menuconfig
 
-DÃ©finir une version "customisÃ©e" du kernel pour Ã©viter l'Ã©crasement des modules
+Définir une version "customisée" du kernel pour éviter l'écrasement des modules
 du kernel courant par l'installation :
 
   General setup --->
     Local version - append to kernel release
       '-microlinux'
 
-Compiler en dur le systÃ¨me de fichiers de la partition racine :
+Compiler en dur le système de fichiers de la partition racine :
 
 File Systems --->
   <*> The Extended 4 (ext4) filesystem
   [*] JBD2 (ext4) debugging support
 
-Pour personnaliser le logo de dÃ©marrage, Ã©diter une image de 80 x 80 pixels au
+Pour personnaliser le logo de démarrage, éditer une image de 80 x 80 pixels au
 format PNG, en la nommant 'logo.png'. Puis :
 
   # pngtopnm logo.png | ppmquant -fs 223| pnmtoplainpnm > logo_linux_clut224.ppm
@@ -54,7 +54,7 @@ Compiler et installer le kernel et les modules :
   # cp arch/x86/boot/bzImage /boot/vmlinuz-microlinux-3.2.29
   # cp System.map /boot/System.map-microlinux-3.2.29
 
-Ã‰diter LILO.
+Éditer LILO.
 
 ...
 
@@ -62,3 +62,4 @@ Compiler et installer le kernel et les modules :
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

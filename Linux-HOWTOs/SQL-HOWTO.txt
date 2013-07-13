@@ -2,61 +2,61 @@
 SQL HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =========
 
-DerniÃ¨re rÃ©vision : 21 janvier 2013
+Dernière révision : 21 janvier 2013
 
 Ce HOWTO contient un atelier pratique pour apprendre le SQL.
 
-  Â· Apprendre le SQL par la pratique avec SQLCourse
-  Â· Rapatrier les donnÃ©es de SQLCourse
+  * Apprendre le SQL par la pratique avec SQLCourse
+  * Rapatrier les données de SQLCourse
 
-  Â· La commande SELECT 
-  Â· La commande CREATE 
-  Â· La commande INSERT
-  Â· La commande UPDATE
-  Â· La commande DELETE
-  Â· La commande DROP
+  * La commande SELECT 
+  * La commande CREATE 
+  * La commande INSERT
+  * La commande UPDATE
+  * La commande DELETE
+  * La commande DROP
 
-  Â· La commande SELECT revisitÃ©e
+  * La commande SELECT revisitée
   
 
 Apprendre le SQL par la pratique avec SQLCourse
 -----------------------------------------------
 
 Le site SQLCourse propose un excellent tutorial pour se familiariser avec le
-SQL ("Structured Query Language"). Le site propose d'exÃ©cuter les requÃªtes sur
-le serveur. Au lieu de cela, nous allons rapatrier les donnÃ©es sur notre
+SQL ("Structured Query Language"). Le site propose d'exécuter les requêtes sur
+le serveur. Au lieu de cela, nous allons rapatrier les données sur notre
 installation locale de MySQL. 
 
   * http://www.sqlcourse.com
 
 
-Rapatrier les donnÃ©es de SQLCourse
+Rapatrier les données de SQLCourse
 ----------------------------------
 
-CrÃ©er un fichier vide '~/sql/empinfo.txt'. Ouvrir ce fichier et invoquer les
+Créer un fichier vide '~/sql/empinfo.txt'. Ouvrir ce fichier et invoquer les
 commandes suivantes dans Vim:
 
   :set tabstop=12
   :set noexpandtab
 
-  > La premiÃ¨re directive augmente les tabulations et permet d'avoir un tableau
+  > La première directive augmente les tabulations et permet d'avoir un tableau
     plus lisible.
 
-  > La deuxiÃ¨me directive assure que les tabulations qui servent de sÃ©parateurs
-    entre les Ã©lÃ©ments du tableau ne soient pas convertis en espaces par Vim.
+  > La deuxième directive assure que les tabulations qui servent de séparateurs
+    entre les éléments du tableau ne soient pas convertis en espaces par Vim.
 
-Sur le site de SQLCourse, sÃ©lectionner les donnÃ©es de la table 'empinfo', sans
-les en-tÃªtes de table. Il suffit de mettre les donnÃ©es en surbrillance, sans
+Sur le site de SQLCourse, sélectionner les données de la table 'empinfo', sans
+les en-têtes de table. Il suffit de mettre les données en surbrillance, sans
 effectuer un quelconque 'Copier'.
 
 Ensuite, dans 'empinfo.txt' ouvert dans Vim, se mettre en mode Insertion, puis
-coller le texte. On peut s'y prendre de trois maniÃ¨res diffÃ©rentes :
+coller le texte. On peut s'y prendre de trois manières différentes :
 
   1. utiliser les touches [Maj]+[Inser] ;
   2. appuyer sur la mollette de la souris ;
-  3. appuyer simultanÃ©ment sur les boutons droite et gauche de la souris.
+  3. appuyer simultanément sur les boutons droite et gauche de la souris.
 
-VoilÃ  Ã  quoi cela ressemble :
+Voilà à quoi cela ressemble :
 
 --8<--------- ~/sql/empinfo.txt ----------------------------------------------
 John        Jones       99980       45          Payson      Arizona
@@ -72,26 +72,26 @@ Leroy       Brown       32380       22          Pinetop     Arizona
 Elroy       Cleaver     32382       22          Globe       Arizona
 --8<--------------------------------------------------------------------------
 
-En utilisant la fonction de substitution de Vim, on va se dÃ©barrasser de tous
+En utilisant la fonction de substitution de Vim, on va se débarrasser de tous
 les espaces pour ne garder que les tabulations :
 
   :1,$s/\ //g
 
-Veiller Ã©galement Ã  ne pas avoir de ligne vide Ã  la fin.
+Veiller également à ne pas avoir de ligne vide à la fin.
 
-Ouvrir une connexion Ã  la console MySQL :
+Ouvrir une connexion à la console MySQL :
 
   # mysql -u root -p
   Enter password: 
   Welcome to the MySQL monitor.
 
-CrÃ©er la base de donnÃ©es 'sqlcourse' :
+Créer la base de données 'sqlcourse' :
 
   mysql> create database sqlcourse;
   Query OK, 1 row affected (0.00 sec)
 
-CrÃ©er un utilisateur diffÃ©rent de root, et qui aura tous les droits sur la base
-de donnÃ©es nouvellement crÃ©Ã©e :
+Créer un utilisateur différent de root, et qui aura tous les droits sur la base
+de données nouvellement créée :
 
   mysql> grant all on sqlcourse.* to kikinovak@localhost
       -> identified by 'XXXXXXXXX';
@@ -102,16 +102,16 @@ Quitter la console MySQL :
   mysql> quit;
   Bye
 
-Se reconnecter en tant qu'utilisateur "commun mortel" Ã  la console MySQL :
+Se reconnecter en tant qu'utilisateur "commun mortel" à la console MySQL :
 
   $ mysql -u kikinovak -p
   Enter password: 
   Welcome to the MySQL monitor.
 
-  > Si le nom d'utilisateur est identique Ã  l'utilisateur Linux courant, on
+  > Si le nom d'utilisateur est identique à l'utilisateur Linux courant, on
     peut invoquer directement 'mysql -p'.
 
-Afficher les bases de donnÃ©es :
+Afficher les bases de données :
 
   mysql> show databases;
   +--------------------+
@@ -122,12 +122,12 @@ Afficher les bases de donnÃ©es :
   +--------------------+
   2 rows in set (0.00 sec)
 
-Utiliser la base de donnÃ©es 'sqlcourse' :
+Utiliser la base de données 'sqlcourse' :
 
   mysql> use sqlcourse;
   Database changed
 
-CrÃ©er la table 'empinfo' :
+Créer la table 'empinfo' :
 
   mysql> create table empinfo (
       -> first varchar(20),
@@ -138,7 +138,7 @@ CrÃ©er la table 'empinfo' :
       -> state varchar(20));
   Query OK, 0 rows affected (0.07 sec)
 
-VÃ©rifier la table que l'on vient de crÃ©er :
+Vérifier la table que l'on vient de créer :
 
   mysql> describe empinfo;
   +-------+--------------+------+-----+---------+-------+
@@ -153,7 +153,7 @@ VÃ©rifier la table que l'on vient de crÃ©er :
   +-------+--------------+------+-----+---------+-------+
   6 rows in set (0.00 sec)
 
-Si tout est correct, on va pouvoir remplir la table avec les donnÃ©es
+Si tout est correct, on va pouvoir remplir la table avec les données
 recueillies dans notre fichier texte 'empinfo.txt' :
 
   mysql> load data local infile '/home/kikinovak/sql/empinfo.txt'
@@ -161,7 +161,7 @@ recueillies dans notre fichier texte 'empinfo.txt' :
   Query OK, 11 rows affected (0.02 sec)
   Records: 11  Deleted: 0  Skipped: 0  Warnings: 0
 
-VÃ©rifier si l'importation des donnÃ©es s'est correctement effectuÃ©e :
+Vérifier si l'importation des données s'est correctement effectuée :
 
   mysql> select * from empinfo;
   +------------+-----------+-------+------+-------------+------------+
@@ -181,17 +181,17 @@ VÃ©rifier si l'importation des donnÃ©es s'est correctement effectuÃ©e :
   +------------+-----------+-------+------+-------------+------------+
   11 rows in set (0.00 sec)
 
-Ã€ prÃ©sent, on peut attaquer le tutorial.
+À présent, on peut attaquer le tutorial.
 
 
 La commande SELECT
 ------------------
 
-	* http://sqlcourse.com/select.html
+  * http://sqlcourse.com/select.html
 
 Quelques exemples. Afficher :
 
-a) le prÃ©nom, le nom et la ville des employÃ©s dont le prÃ©nom commence par "Er" :
+a) le prénom, le nom et la ville des employés dont le prénom commence par "Er" :
 
   mysql> select first, last, city 
       -> from empinfo 
@@ -204,7 +204,7 @@ a) le prÃ©nom, le nom et la ville des employÃ©s dont le prÃ©nom commence par "Er
   +--------+-----------+------------+
   2 rows in set (0.00 sec)
 
-b) le prÃ©nom et le nom des employÃ©s dont le nom se termine en "s" :
+b) le prénom et le nom des employés dont le nom se termine en "s" :
 
   mysql> select * from empinfo
       -> where last like '%s';
@@ -219,7 +219,7 @@ b) le prÃ©nom et le nom des employÃ©s dont le nom se termine en "s" :
   +---------+----------+-------+------+----------+------------+
   5 rows in set (0.00 sec)
 
-c) les donnÃ©es des employÃ©s dont le prÃ©nom est "Eric" :
+c) les données des employés dont le prénom est "Eric" :
 
   mysql> select * from empinfo
       -> where first = 'Eric';
@@ -230,7 +230,7 @@ c) les donnÃ©es des employÃ©s dont le prÃ©nom est "Eric" :
   +-------+---------+-------+------+----------+------------+
   1 row in set (0.00 sec)
 
-d) le prÃ©nom, le nom et la ville pour tous les employÃ©s :
+d) le prénom, le nom et la ville pour tous les employés :
 
   mysql> select first, last, city
       -> from empinfo;
@@ -251,7 +251,7 @@ d) le prÃ©nom, le nom et la ville pour tous les employÃ©s :
   +-----------+----------+------------+
   11 rows in set (0.00 sec)
 
-e) le nom, la ville et l'Ã¢ge des employÃ©s Ã¢gÃ©s de plus de 30 ans :
+e) le nom, la ville et l'âge des employés âgés de plus de 30 ans :
 
   mysql> select last, city, age
       -> from empinfo
@@ -269,7 +269,7 @@ e) le nom, la ville et l'Ã¢ge des employÃ©s Ã¢gÃ©s de plus de 30 ans :
   +----------+------------+------+
   7 rows in set (0.00 sec)
 
-f) le prÃ©nom, le nom, la ville et l'Ã©tat des employÃ©s dont le prÃ©nom commence
+f) le prénom, le nom, la ville et l'état des employés dont le prénom commence
 par "J" :
 
   mysql> select first, last, city, state
@@ -282,8 +282,8 @@ par "J" :
   +-------+-------+--------+---------+
   1 row in set (0.00 sec)
 
-g) le prÃ©nom, le nom et l'Ã¢ge des employÃ©s dont le nom comporte la chaÃ®ne de
-caractÃ¨res "illia" :
+g) le prénom, le nom et l'âge des employés dont le nom comporte la chaîne de
+caractères "illia" :
 
   mysql> select first, last, age
       -> from empinfo
@@ -301,20 +301,20 @@ Exercice
 
 Afficher :
 
-a) le prÃ©nom et l'Ã¢ge de tous les employÃ©s.
+a) le prénom et l'âge de tous les employés.
 
-b) le prÃ©nom, le nom et la ville de tous ceux qui n'habitent pas Ã  Payson.
+b) le prénom, le nom et la ville de tous ceux qui n'habitent pas à Payson.
 
-c) les donnÃ©es de tous ceux qui ont plus de 40 ans.
+c) les données de tous ceux qui ont plus de 40 ans.
 
-d) le prÃ©nom et le nom de tous ceux dont le nom de famille se termine en "ay".
+d) le prénom et le nom de tous ceux dont le nom de famille se termine en "ay".
 
-e) les donnÃ©es de toutes celles dont le prÃ©nom est "Mary".
+e) les données de toutes celles dont le prénom est "Mary".
 
-f) les donnÃ©es de toutes celles dont le prÃ©nom contient "Mary".
+f) les données de toutes celles dont le prénom contient "Mary".
 
 
-CorrigÃ©
+Corrigé
 -------
 
 a. mysql> select first, age
@@ -401,9 +401,9 @@ f. mysql> select * from empinfo
 La commande CREATE
 ------------------
 
-	* http://sqlcourse.com/create.html
+  * http://sqlcourse.com/create.html
 
-MySQL dÃ©clare les variables numÃ©riques diffÃ©remment. On Ã©crira donc :
+MySQL déclare les variables numériques différemment. On écrira donc :
 
   mysql> create table employee (
       -> first varchar(15),
@@ -429,17 +429,17 @@ MySQL dÃ©clare les variables numÃ©riques diffÃ©remment. On Ã©crira donc :
 Exercice
 --------
 
-Vous venez de crÃ©er une entreprise. C'est le moment d'embaucher du monde. Vous
+Vous venez de créer une entreprise. C'est le moment d'embaucher du monde. Vous
 souhaitez saisir quelques infos dans un tableau, comme par exemple :
 
-	* le prÃ©nom (first)
-	* le nom (last)
-	* la fonction de l'employÃ© (title)
-	* son Ã¢ge (age)
-	* son salaire (salary)
+  * le prénom (first)
+  * le nom (last)
+  * la fonction de l'employé (title)
+  * son âge (age)
+  * son salaire (salary)
 
 
-CorrigÃ©
+Corrigé
 -------
 
   mysql> create table myemployees (
@@ -464,9 +464,9 @@ CorrigÃ©
 La commande INSERT
 ------------------
 
-	* http://sqlcourse.com/insert.html
+  * http://sqlcourse.com/insert.html
 
-Quelques exemples. Avec la syntaxe complÃ¨te :
+Quelques exemples. Avec la syntaxe complète :
 
   mysql> insert into employee
       -> (first, last, age, address, city, state)
@@ -480,7 +480,7 @@ Quelques exemples. Avec la syntaxe complÃ¨te :
   | Luke  | Duke |   45 | 2130 Boars Nest | Hazard Co | Georgia | 
   +-------+------+------+-----------------+-----------+---------+
 
-Avec la syntaxe abrÃ©gÃ©e :
+Avec la syntaxe abrégée :
 
   mysql> insert into employee
       -> values
@@ -490,33 +490,33 @@ Avec la syntaxe abrÃ©gÃ©e :
 Exercice
 --------
 
-a) Saisir les donnÃ©es des trois employÃ©s suivants dans la table 'myemployees' :
+a) Saisir les données des trois employés suivants dans la table 'myemployees' :
 
-	Â· Jonie Weber, Secretary, 28, 19500.00
-	Â· Potsy Weber, Programmer, 32, 45300.00
-	Â· Dirk Smith, Programmer II, 45, 75020.00
+  * Jonie Weber, Secretary, 28, 19500.00
+  * Potsy Weber, Programmer, 32, 45300.00
+  * Dirk Smith, Programmer II, 45, 75020.00
 
 Afficher :
 
 b) toutes les infos pour tout le monde.
 
-c) toutes les infos de ceux qui ont un salaire supÃ©rieur Ã  30.000.
+c) toutes les infos de ceux qui ont un salaire supérieur à 30.000.
 
-d) le prÃ©nom et le nom de tous ceux qui ont moins de 30 ans.
+d) le prénom et le nom de tous ceux qui ont moins de 30 ans.
 
-e) le prÃ©nom, le nom et le salaire de tous ceux dont le titre contient
+e) le prénom, le nom et le salaire de tous ceux dont le titre contient
 "Programmer".
 
 f) toutes les infos de ceux dont le nom contient "ebe".
 
-g) le prÃ©nom de tous ceux dont le prÃ©nom est "Potsy".
+g) le prénom de tous ceux dont le prénom est "Potsy".
 
 h) toutes les infos de ceux qui ont plus de 80 ans.
 
 i) toutes les infos de ceux dont le nom se termine en "ith".
 
 
-CorrigÃ©
+Corrigé
 -------
 
 a) mysql> insert into myemployees
@@ -561,37 +561,37 @@ i) mysql> select * from myemployees
 La commande UPDATE
 ------------------
 
-	* http://sqlcourse.com/update.html
+  * http://sqlcourse.com/update.html
 
 
 Exercice
 --------
 
-Ajouter une entrÃ©e Ã  la table 'myemployees' :
+Ajouter une entrée à la table 'myemployees' :
 
   mysql> insert into myemployees
       -> values
       -> ('Bob', 'Williams', 'Assistant', 48, 60300);
 
-a) Jonie Weber vient d'Ã©pouser Bob Williams. Elle a changÃ© son nom en
+a) Jonie Weber vient d'épouser Bob Williams. Elle a changé son nom en
 Weber-Williams.
 
-b) C'est l'anniversaire de Dirk Smith. Son Ã¢ge a augmentÃ© d'une annÃ©e.
+b) C'est l'anniversaire de Dirk Smith. Son âge a augmenté d'une année.
 
-c) Toutes les secrÃ©taires sont dorÃ©navant affublÃ©es du titre "Assistant".
+c) Toutes les secrétaires sont dorénavant affublées du titre "Assistant".
 
-d) Tous les employÃ©s qui gagnent moins de 30.000 ont droit Ã  une augmentation
+d) Tous les employés qui gagnent moins de 30.000 ont droit à une augmentation
 de 3.500.
 
-e) Tous les employÃ©s qui gagnent plus de 33.500 ont droit Ã  une augmentation de
+e) Tous les employés qui gagnent plus de 33.500 ont droit à une augmentation de
 4.500.
 
-f) Tous les employÃ©s "Programmer II" sont promus "Programmer III".
+f) Tous les employés "Programmer II" sont promus "Programmer III".
 
-g) Tous les employÃ©s "Programmer" sont promus "Programmer II".
+g) Tous les employés "Programmer" sont promus "Programmer II".
 
 
-CorrigÃ©
+Corrigé
 -------
 
 a) mysql> update myemployees
@@ -635,19 +635,19 @@ g) mysql> update myemployees
 La commande DELETE
 ------------------
 
-	* http://sqlcourse.com/delete.html
+  * http://sqlcourse.com/delete.html
 
 
 Exercice
 --------
 
-a) Jonie Weber-Williams vient de dÃ©missionner. Supprimer ses infos.
+a) Jonie Weber-Williams vient de démissionner. Supprimer ses infos.
 
-b) L'entreprise doit serrer la ceinture. Supprimer tous les employÃ©s qui
+b) L'entreprise doit serrer la ceinture. Supprimer tous les employés qui
 gagnent plus de 70.000 dollars.
 
 
-CorrigÃ©
+Corrigé
 -------
 
 a) mysql> delete from myemployees
@@ -664,7 +664,7 @@ b) mysql> delete from myemployees
 La commande DROP
 ----------------
 
-	* http://sqlcourse.com/drop.html
+  * http://sqlcourse.com/drop.html
 
 
 Exercice
@@ -673,7 +673,7 @@ Exercice
 Effacer la table 'myemployees'.
 
 
-CorrigÃ©
+Corrigé
 -------
 
   mysql> drop table myemployees;
@@ -681,3 +681,4 @@ CorrigÃ©
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

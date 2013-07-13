@@ -2,24 +2,24 @@
 DNS HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =========
 
-DerniÃ¨re rÃ©vision : 19 janvier 2013
+Dernière révision : 19 janvier 2013
 
-Ce HOWTO dÃ©crit la mise en place d'un serveur DNS avec BIND sur un serveur
+Ce HOWTO décrit la mise en place d'un serveur DNS avec BIND sur un serveur
 Slackware.
 
-  Â· GÃ©nÃ©ralitÃ©s et prÃ©requis
-  Â· Serveur cache DNS
-  Â· Utiliser le serveur cache DNS
-  Â· Serveur maÃ®tre primaire d'un rÃ©seau local
-  Â· Serveur maÃ®tre primaire sur un serveur dÃ©diÃ© Dedibox SC
+  * Généralités et prérequis
+  * Serveur cache DNS
+  * Utiliser le serveur cache DNS
+  * Serveur maître primaire d'un réseau local
+  * Serveur maître primaire sur un serveur dédié Dedibox SC
 
 
-GÃ©nÃ©ralitÃ©s et prÃ©requis
+Généralités et prérequis
 ------------------------
 
-Le systÃ¨me de noms de domaine ou DNS ("Domain Name System") permet d'Ã©tablir
-une correspondance entre les adresses IP et les noms de domaine. Le DNS Ã©vite
-ainsi d'avoir Ã  se rappeler des adresses IP.
+Le système de noms de domaine ou DNS ("Domain Name System") permet d'établir
+une correspondance entre les adresses IP et les noms de domaine. Le DNS évite
+ainsi d'avoir à se rappeler des adresses IP.
 
 Pare-feu : ouvrir le port 53 en TCP et en UDP.
 
@@ -27,22 +27,22 @@ Pare-feu : ouvrir le port 53 en TCP et en UDP.
 Serveur cache DNS
 -----------------
 
-La configuration par dÃ©faut de BIND alloue un serveur de cache. Outre le
+La configuration par défaut de BIND alloue un serveur de cache. Outre le
 fichier de configuration principal '/etc/named.conf', on trouvera donc une
-sÃ©rie de fichiers dans '/var/named/caching-example'. On va remonter ces quatre
-fichiers d'un cran, dans le rÃ©pertoire canonique '/var/named' :
+série de fichiers dans '/var/named/caching-example'. On va remonter ces quatre
+fichiers d'un cran, dans le répertoire canonique '/var/named' :
 
   # cd /var/named
   # mv -v caching-example/* .
-  Â«Â caching-example/localhost.zoneÂ Â» -> Â«Â ./localhost.zoneÂ Â»
-  Â«Â caching-example/named.caÂ Â» -> Â«Â ./named.caÂ Â»
-  Â«Â caching-example/named.localÂ Â» -> Â«Â ./named.localÂ Â»
-  Â«Â caching-example/named.rootÂ Â» -> Â«Â ./named.rootÂ Â»
+  « caching-example/localhost.zone » -> « ./localhost.zone »
+  « caching-example/named.ca » -> « ./named.ca »
+  « caching-example/named.local » -> « ./named.local »
+  « caching-example/named.root » -> « ./named.root »
   # rmdir caching-example
 
-Ce changement devra se reflÃ©ter dans les trois stances respectives de
-'/etc/named.conf', oÃ¹ il faudra rectifier le chemin vers les fichiers de
-configuration en supprimant le rÃ©pertoire 'caching-example' :
+Ce changement devra se refléter dans les trois stances respectives de
+'/etc/named.conf', où il faudra rectifier le chemin vers les fichiers de
+configuration en supprimant le répertoire 'caching-example' :
 
 --8<---------- /etc/named.conf -----------------------------------------------
 options {
@@ -67,9 +67,9 @@ zone "0.0.127.in-addr.arpa" IN {
 };
 --8<--------------------------------------------------------------------------
 
-Ã€ partir de lÃ , il suffit d'ajouter les DNS du FAI. En passant, on pourra
-Ã©galement spÃ©cifier l'utilisation du port 53 en dÃ©commentant l'option
-'query-source', pour Ã©viter les ennuis de pare-feu :
+À partir de là, il suffit d'ajouter les DNS du FAI. En passant, on pourra
+également spécifier l'utilisation du port 53 en décommentant l'option
+'query-source', pour éviter les ennuis de pare-feu :
 
 --8<---------- /etc/named.conf -----------------------------------------------
 options {
@@ -84,7 +84,7 @@ options {
 --8<--------------------------------------------------------------------------
 
   > Gare aux erreurs de syntaxe provenant des accollades et des points-virgule
-    oubliÃ©s !
+    oubliés !
 
 Alternativement, on peut utiliser les serveurs DNS publics de Google :
 
@@ -100,21 +100,21 @@ options {
 ...
 --8<--------------------------------------------------------------------------
 
-Activer le script de dÃ©marrage de BIND :
+Activer le script de démarrage de BIND :
 
   # chmod 0755 /etc/rc.d/rc.bind
 
-GÃ©rer le dÃ©marrage de BIND :
+Gérer le démarrage de BIND :
 
   # /etc/rc.d/rc.bind start|stop|reload|restart|status
 
-Indiquer au serveur qu'il doit dÃ©sormais utiliser son propre DNS :
+Indiquer au serveur qu'il doit désormais utiliser son propre DNS :
 
 --8<---------- /etc/resolv.conf ----------------------------------------------
 nameserver 127.0.0.1
 --8<--------------------------------------------------------------------------
 
-VÃ©rifier que le serveur Ã©coute bien sur le port 53 en utilisant 'dig' sur
+Vérifier que le serveur écoute bien sur le port 53 en utilisant 'dig' sur
 l'interface loopback :
 
   # dig -x 127.0.0.1
@@ -124,15 +124,15 @@ On doit obtenir quelque chose comme ceci :
   ;; Query time: 2 msec
   ;; SERVER: 127.0.0.1#53(127.0.0.1)
 
-ExÃ©cuter 'dig' sur un domaine extÃ©rieur pour vÃ©rifier le temps de requÃªte :
+Exécuter 'dig' sur un domaine extérieur pour vérifier le temps de requête :
 
   # dig slackware.com
 
-Noter le temps de rÃ©ponse en fin de rÃ©sultat :
+Noter le temps de réponse en fin de résultat :
 
   ;; Query time: 61 msec
 
-Ce temps devrait Ãªtre nettement plus court aprÃ¨s une deuxiÃ¨me invocation de
+Ce temps devrait être nettement plus court après une deuxième invocation de
 'dig' :
 
   ;; Query time: 2 msec
@@ -154,7 +154,7 @@ Si c'est la machine locale :
 nameserver 127.0.0.1
 --8<--------------------------------------------------------------------------
 
-Sur un serveur de rÃ©seau local, on songera Ã  renseigner l'IP du DNS local dans
+Sur un serveur de réseau local, on songera à renseigner l'IP du DNS local dans
 la configuration du serveur DHCP :
 
 --8<---------- /etc/dhcpd.conf -----------------------------------------------
@@ -162,13 +162,13 @@ option domain-name-servers 192.168.2.1;
 --8<--------------------------------------------------------------------------
 
 
-Serveur maÃ®tre primaire d'un rÃ©seau local
+Serveur maître primaire d'un réseau local
 -----------------------------------------
 
 Dans cet exemple, nous configurons BIND comme serveur primaire du domaine
 "bidon" 'microlinux.montpezat'.
 
-Pour ajouter une zone DNS Ã  BIND afin de le transformer en serveur maÃ®tre
+Pour ajouter une zone DNS à BIND afin de le transformer en serveur maître
 primaire, il faut tout d'abord ajouter une stance dans '/etc/named.conf' :
 
 --8<---------- /etc/named.conf -----------------------------------------------
@@ -179,13 +179,13 @@ zone "microlinux.montpezat" {
 };
 --8<--------------------------------------------------------------------------
 
-On pourra partir du fichier existant 'localhost.zone' pour crÃ©er
+On pourra partir du fichier existant 'localhost.zone' pour créer
 'zone.microlinux.montpezat' :
 
   # cd /var/named
   # cp localhost.zone zone.microlinux.montpezat
 
-Le fichier 'zone.microlinux.montpezat' devra Ãªtre Ã©ditÃ© comme ceci :
+Le fichier 'zone.microlinux.montpezat' devra être édité comme ceci :
 
 --8<---------- /var/named/zone.microlinux.montpezat --------------------------
 ; zone.microlinux.montpezat
@@ -204,78 +204,78 @@ bernadette     IN A 192.168.2.3
 raymonde       IN A 192.168.2.4
 --8<--------------------------------------------------------------------------
 
-  > La directive '$TTL' ("Time To Live") dÃ©finit le temps en secondes qu'un
-    enregistrement pourra Ãªtre gardÃ© dans le cache par un autre serveur de
+  > La directive '$TTL' ("Time To Live") définit le temps en secondes qu'un
+    enregistrement pourra être gardé dans le cache par un autre serveur de
     noms.
 
-  > La directive '$ORIGIN' dÃ©finit le nom de domaine automatiquement ajoutÃ© Ã 
-    tous les noms de domaine incomplets (c'est-Ã -dire "non qualifiÃ©s") dÃ©finis
+  > La directive '$ORIGIN' définit le nom de domaine automatiquement ajouté à
+    tous les noms de domaine incomplets (c'est-à-dire "non qualifiés") définis
     dans un enregistrement DNS. Le nom de domaine est toujours un FQDN ("Fully
-    Qualified Domain Name") et se termine en consÃ©quence par un point.
+    Qualified Domain Name") et se termine en conséquence par un point.
 
-  > L'enregistrement 'SOA' ("Start Of Authority") dÃ©finit les principales
-    caractÃ©ristiques pour la zone ou le domaine avec un certain nombre de
-    paramÃ¨tres.
+  > L'enregistrement 'SOA' ("Start Of Authority") définit les principales
+    caractéristiques pour la zone ou le domaine avec un certain nombre de
+    paramètres.
 
-  > Le symbole '@' se substitue Ã  la valeur de '$ORIGIN', concrÃ¨tement Ã 
+  > Le symbole '@' se substitue à la valeur de '$ORIGIN', concrètement à
     'microlinux.montpezat.'
 
-  > 'IN' dÃ©finit la classe Internet. D'autres valeurs existent, mais elles sont
-    rarement utilisÃ©es.
+  > 'IN' définit la classe Internet. D'autres valeurs existent, mais elles sont
+    rarement utilisées.
 
-  > 'ns.microlinux.montpezat.' dÃ©finit le serveur de noms primaire pour la
-    zone, qui doit Ã©galement Ãªtre dÃ©fini par un enregistrement 'NS'. 
+  > 'ns.microlinux.montpezat.' définit le serveur de noms primaire pour la
+    zone, qui doit également être défini par un enregistrement 'NS'. 
 
-  > 'hostmaster.microlinux.montpezat' dÃ©finit l'adresse mail de
-    l'administrateur de la zone. L'adresse 'hostmaster' est recommandÃ©e, mais
-    n'importe quelle adresse mail valide peut Ãªtre dÃ©finie ici. Ã‰tant donnÃ© que
-    le symbole '@' a une signification spÃ©cifique dans le contexte, on utilise
-    les points comme sÃ©parateurs, ce qui explique la syntaxe bizarre. L'adresse
-    mail dÃ©finie ici est donc 'hostmaster@microlinux.montpezat'. 
+  > 'hostmaster.microlinux.montpezat' définit l'adresse mail de
+    l'administrateur de la zone. L'adresse 'hostmaster' est recommandée, mais
+    n'importe quelle adresse mail valide peut être définie ici. Étant donné que
+    le symbole '@' a une signification spécifique dans le contexte, on utilise
+    les points comme séparateurs, ce qui explique la syntaxe bizarre. L'adresse
+    mail définie ici est donc 'hostmaster@microlinux.montpezat'. 
 
-  > '2012080300' dÃ©finit le numÃ©ro de sÃ©rie associÃ© Ã  la zone. Par convention,
-    on utilise le format 'aaaammjjss'. Le numÃ©ro de sÃ©rie doit IMPÃ‰RATIVEMENT
-    Ãªtre mis Ã  jour Ã  chaque fois que l'on modifie le domaine. 
+  > '2012080300' définit le numéro de série associé à la zone. Par convention,
+    on utilise le format 'aaaammjjss'. Le numéro de série doit IMPÉRATIVEMENT
+    être mis à jour à chaque fois que l'on modifie le domaine. 
 
-  > La valeur 'refresh' contrÃ´le la mise Ã  jour des informations du serveur de
+  > La valeur 'refresh' contrôle la mise à jour des informations du serveur de
     noms esclave de la zone. Les valeurs typiques se situent entre 3 heures
     (10800) et 24 heures (86400). 
   
-  > La valeur 'retry' dÃ©finit le temps d'attente avant une deuxiÃ¨me tentative
-    lorsque le serveur de noms esclave n'arrive pas Ã  contacter le serveur
-    maÃ®tre pour rafraÃ®chir les informations. Les valeurs typiques se situent
+  > La valeur 'retry' définit le temps d'attente avant une deuxième tentative
+    lorsque le serveur de noms esclave n'arrive pas à contacter le serveur
+    maître pour rafraîchir les informations. Les valeurs typiques se situent
     entre 10 minutes (600) et 60 minutes (3600). 
 
-  > La valeur 'expiry' dÃ©finit le laps de temps au bout duquel les
-    enregistrements de zone sont considÃ©rÃ©s comme ne faisant plus autoritÃ©. On
-    choisira une valeur assez Ã©levÃ©e, situÃ©e entre une semaine (604800) Ã  trois
+  > La valeur 'expiry' définit le laps de temps au bout duquel les
+    enregistrements de zone sont considérés comme ne faisant plus autorité. On
+    choisira une valeur assez élevée, située entre une semaine (604800) à trois
     semaines (1814400). 
 
-  > La valeur 'minimum' dÃ©finit le laps de temps durant lequel des rÃ©ponses
-    nÃ©gatives ('NXDOMAIN') peuvent Ãªtre gardÃ©es en cache par le serveur de noms
+  > La valeur 'minimum' définit le laps de temps durant lequel des réponses
+    négatives ('NXDOMAIN') peuvent être gardées en cache par le serveur de noms
     esclave. Cette valeur se situera entre 0 et 3 heures (10800). 
 
-  > L'enregistrement 'NS' ("NS Resource Record") dÃ©finit le ou les serveurs de
+  > L'enregistrement 'NS' ("NS Resource Record") définit le ou les serveurs de
     noms pour le domaine ou la zone. 
 
-  > L'enregistrement 'A' ("A Resource Record") dÃ©finit l'adresse IPv4 d'un hÃ´te
+  > L'enregistrement 'A' ("A Resource Record") définit l'adresse IPv4 d'un hôte
     du domaine ou de la zone. 
 
-VÃ©rifier la dÃ©finition correcte de la zone :
+Vérifier la définition correcte de la zone :
 
   # named-checkzone microlinux.montpezat /var/named/zone.microlinux.montpezat 
   zone microlinux.montpezat/IN: loaded serial 2012080300
   OK
 
-Ã€ chaque fois que l'on modifie le fichier de zone, on doit obligatoirement
-incrÃ©menter le numÃ©ro de sÃ©rie. Ne pas oublier de redÃ©marrer BIND aprÃ¨s chaque
+À chaque fois que l'on modifie le fichier de zone, on doit obligatoirement
+incrémenter le numéro de série. Ne pas oublier de redémarrer BIND après chaque
 modification :
 
   # /etc/rc.d/rc.bind restart
 
-Maintenant que la zone est configurÃ©e pour rÃ©soudre les noms en adresses IP, il
-est nÃ©cessaire de paramÃ©trer la zone de recherche inverse, qui permet de
-rÃ©soudre les adresses IP en noms.
+Maintenant que la zone est configurée pour résoudre les noms en adresses IP, il
+est nécessaire de paramétrer la zone de recherche inverse, qui permet de
+résoudre les adresses IP en noms.
 
 Modifier '/etc/named.conf' et ajouter la stance suivante :
 
@@ -288,13 +288,13 @@ zone "2.168.192.in-addr.arpa" {
 };
 --8<--------------------------------------------------------------------------
 
-CrÃ©er le fichier '/var/named/revp.192.168.2'. LÃ  aussi, on pourra
-Ã©ventuellement partir d'un fichier existantÂ :
+Créer le fichier '/var/named/revp.192.168.2'. Là aussi, on pourra
+éventuellement partir d'un fichier existant :
 
   # cd /var/named
   # cp localhost.zone revp.192.168.2
 
-Le fichier '/var/named/revp.192.168.2' devra Ãªtre Ã©ditÃ© comme ceciÂ :
+Le fichier '/var/named/revp.192.168.2' devra être édité comme ceci :
 
 --8<---------- /var/named/revp.192.168.2 -------------------------------------
 ; revp.192.168.2 
@@ -314,28 +314,28 @@ $ORIGIN 2.168.192.IN-ADDR.ARPA.
 --8<--------------------------------------------------------------------------
 
   > Un enregistrement 'PTR' ("PTR Resource Record") fait pointer une adresse
-    IPv4 vers un hÃ´te particulier du domaine ou de la zone, Ã  l'inverse de
+    IPv4 vers un hôte particulier du domaine ou de la zone, à l'inverse de
     l'enregistrement 'A' ("A Resource Record") qui fait pointer un nom vers une
     adresse IPv4. 
 
-  > Pour crÃ©er le nom de domaine ("IN-ADDR.ARPA Reverse-Mapping Domain"), il
-    faut inverser l'ordre de lecture de l'adresse at construire la hiÃ©rarchie
-    sous le nom de domaine spÃ©cial 'IN-ADDR.ARPA.'
+  > Pour créer le nom de domaine ("IN-ADDR.ARPA Reverse-Mapping Domain"), il
+    faut inverser l'ordre de lecture de l'adresse at construire la hiérarchie
+    sous le nom de domaine spécial 'IN-ADDR.ARPA.'
 
-  > 'IN-ADDR.ARPA' pourrait trÃ¨s bien Ãªtre Ã©crit 'in-addr.arpa', puisque les
-    noms de domaine sont insensibles Ã  la casse. C'est par convention qu'on
-    l'Ã©crit en majuscules.
+  > 'IN-ADDR.ARPA' pourrait très bien être écrit 'in-addr.arpa', puisque les
+    noms de domaine sont insensibles à la casse. C'est par convention qu'on
+    l'écrit en majuscules.
 
-  > Ã€ chaque enregistrement 'A' que l'on a configurÃ© dans
+  > À chaque enregistrement 'A' que l'on a configuré dans
     'zone.microlinux.montpezat' doit correspondre un enregistrement 'PTR' dans
     'revp.192.168.2'.
 
-AprÃ¨s avoir crÃ©Ã© le fichier de zone de recherche inverse, il ne reste plus qu'Ã 
-redÃ©marrer BIND :
+Après avoir créé le fichier de zone de recherche inverse, il ne reste plus qu'à
+redémarrer BIND :
 
   # /etc/rc.d/rc.bind restart
 
-Sur le serveur, '/etc/resolv' devra Ãªtre Ã©ditÃ© comme ceci :
+Sur le serveur, '/etc/resolv' devra être édité comme ceci :
 
 --8<----------- /etc/resolv.conf ---------------------------------------------
 # /etc/resolv.conf
@@ -345,24 +345,24 @@ nameserver 127.0.0.1
 --8<--------------------------------------------------------------------------
 
 
-Serveur maÃ®tre primaire sur un serveur dÃ©diÃ© Dedibox SC
+Serveur maître primaire sur un serveur dédié Dedibox SC
 -------------------------------------------------------
 
-Dans l'exemple, le nom de domaine 'osteo-sommieres.fr' sera rÃ©servÃ© au bureau
+Dans l'exemple, le nom de domaine 'osteo-sommieres.fr' sera réservé au bureau
 d'enregistrement ("registrar") BookMyName :
 
   * https://www.bookmyname.com
 
-La configuration DNS correspondante sera effectuÃ©e sur un serveur dÃ©diÃ© du
+La configuration DNS correspondante sera effectuée sur un serveur dédié du
 style Dedibox SC.
 
-Ã‰diter '/etc/named.conf' en renseignant les serveurs DNS primaire et secondaire
+Éditer '/etc/named.conf' en renseignant les serveurs DNS primaire et secondaire
 d'Online :
 
 --8<---------- /etc/named.conf -----------------------------------------------
 options {
-	directory "/var/named";
-	query-source address * port 53;
+  directory "/var/named";
+  query-source address * port 53;
   forwarders {
     88.191.254.60;
     88.191.254.70;
@@ -371,7 +371,7 @@ options {
 ...
 --8<--------------------------------------------------------------------------
 
-Ajouter une stance correspondant Ã  la zone :
+Ajouter une stance correspondant à la zone :
 
 --8<---------- /etc/named.conf -----------------------------------------------
 ...
@@ -386,13 +386,13 @@ zone "osteo-sommieres.fr" {
   > La directive 'allow-transfer' autorise le transfert de la zone vers le
     serveur DNS secondaire d'Online, en l'occurrence 'nssec.online.net'. 
 
-  > Pour dÃ©finir un DNS secondaire et en savoir plus, aller dans la console
+  > Pour définir un DNS secondaire et en savoir plus, aller dans la console
     Online > Administrer > DNS secondaires.
 
-  > La prÃ©sence d'un serveur DNS secondaire est nÃ©cessaire pour les noms de
+  > La présence d'un serveur DNS secondaire est nécessaire pour les noms de
     domaine en ".fr".
 
-Ã€ prÃ©sent, on peut Ã©diter le fichier de zone
+À présent, on peut éditer le fichier de zone
 '/var/named/zone.osteo-sommieres.fr' :
 
 --8<---------- /var/named/zone.osteo-sommieres.fr ----------------------------
@@ -415,24 +415,25 @@ www     CNAME               osteo-sommieres.fr.
 ftp     CNAME               osteo-sommieres.fr.
 --8<--------------------------------------------------------------------------
 
-VÃ©rifier la dÃ©finition correcte de la zone :
+Vérifier la définition correcte de la zone :
 
   # named-checkzone osteo-sommieres.fr /var/named/zone.osteo-sommieres.fr 
   zone osteo-sommieres.fr/IN: loaded serial 42
   OK
 
-Dans l'interface de gestion de BookMyName (entrÃ©e de menu 'GÃ©rer'), il faudra
-indiquer qu'on gÃ¨re nous-mÃªmes notre propre DNS. Pour ce faire, cliquer sur le
+Dans l'interface de gestion de BookMyName (entrée de menu 'Gérer'), il faudra
+indiquer qu'on gère nous-mêmes notre propre DNS. Pour ce faire, cliquer sur le
 nom de domaine dans la liste des noms de domaine, puis sur 'Modifier' dans
-l'entrÃ©e de menu 'Vos DNS' :
+l'entrée de menu 'Vos DNS' :
 
   Serveur DNS              Adresse IPv4 ou IPv6
   ----------------------------------------------
   ns.osteo-sommieres.fr    88.191.137.75
   nssec.online.net        
 
-  > Dans la deuxiÃ¨me ligne, l'adresse IP correspondant Ã  nssec.online.net est
+  > Dans la deuxième ligne, l'adresse IP correspondant à nssec.online.net est
     facultative.
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

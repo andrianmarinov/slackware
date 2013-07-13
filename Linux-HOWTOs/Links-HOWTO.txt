@@ -2,38 +2,38 @@
 Links HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ===========
 
-DerniÃ¨re rÃ©vision : 8 janvier 2013
+Dernière révision : 8 janvier 2013
 
-Ce HOWTO dÃ©crit l'utilisation des navigateurs Links et Lynx pour naviguer sur
-Internet et tÃ©lÃ©charger des fichiers en mode texte, en l'absence d'interface
+Ce HOWTO décrit l'utilisation des navigateurs Links et Lynx pour naviguer sur
+Internet et télécharger des fichiers en mode texte, en l'absence d'interface
 graphique.
 
-  Â· Introduction
-  Â· Ouvrir une URL
-  Â· Naviguer
-  Â· Afficher du contenu
-  Â· TÃ©lÃ©charger un fichier 
-  Â· Quitter Links
-  Â· L'alternative Lynx
+  * Introduction
+  * Ouvrir une URL
+  * Naviguer
+  * Afficher du contenu
+  * Télécharger un fichier 
+  * Quitter Links
+  * L'alternative Lynx
 
 
 Introduction
 ------------
 
-Links est un navigateur web en mode texte, Ã  l'ergonomie trÃ¨s rudimentaire. Il
-utilise le clavier comme seule interface et ne gÃ¨re pas la souris. Il ne prend
-pas en compte non plus certaines fonctionnalitÃ©s avancÃ©es du web, comme le
-JavaScript, les images, les vidÃ©os, etc. On Ã©vitera donc de l'utiliser pour
+Links est un navigateur web en mode texte, à l'ergonomie très rudimentaire. Il
+utilise le clavier comme seule interface et ne gère pas la souris. Il ne prend
+pas en compte non plus certaines fonctionnalités avancées du web, comme le
+JavaScript, les images, les vidéos, etc. On évitera donc de l'utiliser pour
 naviguer sur Internet au quotidien.
 
-En contrepartie, Links pourra nous Ãªtre utile lorsque nous travaillons sur une
-machine dÃ©pourvue d'interface graphique, comme par exemple un serveur Linux.
+En contrepartie, Links pourra nous être utile lorsque nous travaillons sur une
+machine dépourvue d'interface graphique, comme par exemple un serveur Linux.
 Sur une machine sous Slackware, nous pourrons nous en servir pour :
 
-  Â· aller sur le site http://www.slackware.com et lire le 'ChangeLog' ;
-  Â· tÃ©lÃ©charger manuellement des paquets sur http://mirrors.slackware.com ;
-  Â· rÃ©cupÃ©rer des scripts SlackBuild sur http://slackbuilds.org ;
-  Â· rÃ©cupÃ©rer le code source d'un paquet que nous souhaitons compiler.
+  * aller sur le site http://www.slackware.com et lire le 'ChangeLog' ;
+  * télécharger manuellement des paquets sur http://mirrors.slackware.com ;
+  * récupérer des scripts SlackBuild sur http://slackbuilds.org ;
+  * récupérer le code source d'un paquet que nous souhaitons compiler.
 
 
 Ouvrir une URL
@@ -52,37 +52,37 @@ Ou encore :
 Naviguer
 --------
 
-La navigation sur une page web se fait de maniÃ¨re trÃ¨s rudimentaire. 
+La navigation sur une page web se fait de manière très rudimentaire. 
 
-  > La touche [FlÃ¨cheBas] permet de sauter d'un lien Ã  un autre, dans l'ordre
-    oÃ¹ ils se prÃ©sentent sur la page.
+  > La touche [FlècheBas] permet de sauter d'un lien à un autre, dans l'ordre
+    où ils se présentent sur la page.
 
-  > [FlÃ¨cheHaut] fait revenir vers le lien prÃ©cÃ©dent.
+  > [FlècheHaut] fait revenir vers le lien précédent.
 
-  > Pour suivre un lien, appuyez sur [EntrÃ©e] lorsque vous Ãªtes dessus.
+  > Pour suivre un lien, appuyez sur [Entrée] lorsque vous êtes dessus.
 
-  > [FlÃ¨cheGauche] permet de revenir Ã  la page prÃ©cÃ©dente.
+  > [FlècheGauche] permet de revenir à la page précédente.
 
   > Sur une page longue, on peut chercher un lien et/ou du contenu en utilisant
     la touche [/]. Une interface 'Search for text' s'affiche, et il suffit de
-    saisir la chaÃ®ne de caractÃ¨res recherchÃ©e.
+    saisir la chaîne de caractères recherchée.
 
 
 Afficher du contenu
 -------------------
 
 Les fichiers texte simple (README, ChangeLog.txt, HOWTOs, etc.) seront
-directement affichÃ©s dans Links. LÃ  aussi, la touche [FlÃ¨cheGauche] permettra de
-quitter le document et revenir Ã  la page prÃ©cÃ©dente.
+directement affichés dans Links. Là aussi, la touche [FlècheGauche] permettra de
+quitter le document et revenir à la page précédente.
 
 
-TÃ©lÃ©charger un fichier
+Télécharger un fichier
 ----------------------
 
-Pour tÃ©lÃ©charger un fichier, utiliser la touche [D] (comme 'Download').
-VÃ©rifier le nom du fichier tÃ©lÃ©chargÃ© et confirmer par 'OK'. Une barre de
-progressions s'affiche alors. Le paquet tÃ©lÃ©chargÃ© est enregistrÃ© dans le
-rÃ©pertoire courant, c'est-Ã -dire celui Ã  partir duquel on a lancÃ© Links.
+Pour télécharger un fichier, utiliser la touche [D] (comme 'Download').
+Vérifier le nom du fichier téléchargé et confirmer par 'OK'. Une barre de
+progressions s'affiche alors. Le paquet téléchargé est enregistré dans le
+répertoire courant, c'est-à-dire celui à partir duquel on a lancé Links.
 
 
 Quitter Links
@@ -94,7 +94,7 @@ Sortir de Links en utilisant la touche [Q] comme 'Quitter' et confirmer.
 L'alternative Lynx
 ------------------
 
-Le navigateur Lynx fonctionne Ã  peu de choses prÃ¨s comme Links, au dÃ©tail prÃ¨s
+Le navigateur Lynx fonctionne à peu de choses près comme Links, au détail près
 qu'il utilise des couleurs, ce qui facilite la navigation notamment pour
 distinguer les liens :
 
@@ -103,3 +103,4 @@ distinguer les liens :
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

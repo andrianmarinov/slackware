@@ -2,17 +2,17 @@
 DHCP HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ==========
 
-DerniÃ¨re rÃ©vision : 8 janvier 2013
+Dernière révision : 8 janvier 2013
 
-Ce HOWTO dÃ©crit la mise en place d'un serveur DHCP sur un serveur de rÃ©seau
+Ce HOWTO décrit la mise en place d'un serveur DHCP sur un serveur de réseau
 local Slackware.
 
-  Â· PrÃ©requis
-  Â· Configuration
-  Â· DÃ©marrage et utilisation
+  * Prérequis
+  * Configuration
+  * Démarrage et utilisation
 
 
-PrÃ©requis
+Prérequis
 ---------
 
 Pare-feu : ouvrir le port 67 en UDP.
@@ -59,31 +59,31 @@ host raymonde {
 --8<--------------------------------------------------------------------------
 
   > L'option 'authoritative' indique qu'il s'agit du serveur DHCP "officiel" du
-    rÃ©seau local.
+    réseau local.
 
-  > Les options 'default-lease-time' et 'max-lease-time' dÃ©finissent la pÃ©riode
-    de validitÃ© des adresses IP. Dans l'exemple, c'est un jour, c'est-Ã -dire
-    86.400 secondes. PassÃ© ce dÃ©lai, les clients devront envoyer une nouvelle
-    requÃªte pour leurs paramÃ¨tres, ce qui se fait automatiquement.
+  > Les options 'default-lease-time' et 'max-lease-time' définissent la période
+    de validité des adresses IP. Dans l'exemple, c'est un jour, c'est-à-dire
+    86.400 secondes. Passé ce délai, les clients devront envoyer une nouvelle
+    requête pour leurs paramètres, ce qui se fait automatiquement.
 
-  > Les options 'broadcast-address' et 'subnet-mask' dÃ©crivent le segment de
-    rÃ©seau auquel le serveur DHCP fournit des donnÃ©es.
+  > Les options 'broadcast-address' et 'subnet-mask' décrivent le segment de
+    réseau auquel le serveur DHCP fournit des données.
 
   > L'option 'routers' indique l'adresse de la machine devant servir de
-    passerelle pour le rÃ©seau local.
+    passerelle pour le réseau local.
 
   > L'option 'domain-name-servers' fournit une liste de serveurs DNS. Il peut y
-    en avoir trois au maximum, sÃ©parÃ©s par des virgules. Ces adresses seront
+    en avoir trois au maximum, séparés par des virgules. Ces adresses seront
     transmises aux postes clients.
 
-  > L'option 'domain-name' fournit le nom de domaine qui sera Ã©crit dans le
-    fichier '/etc/resolv.conf' du client, Ã  la ligne 'domain'. Cela permet
-    d'utiliser les formes brÃ¨ves des noms d'hÃ´tes.
+  > L'option 'domain-name' fournit le nom de domaine qui sera écrit dans le
+    fichier '/etc/resolv.conf' du client, à la ligne 'domain'. Cela permet
+    d'utiliser les formes brèves des noms d'hôtes.
 
-  > L'option 'domain-search' fournit le nom de domaine qui sera Ã©crit dans le
-    fichier '/etc/resolv.conf' du client, Ã  la ligne 'search'. 
+  > L'option 'domain-search' fournit le nom de domaine qui sera écrit dans le
+    fichier '/etc/resolv.conf' du client, à la ligne 'search'. 
 
-Si l'on utilise les DNS du FAI, la ligne correspondante ressemblera Ã  ceci :
+Si l'on utilise les DNS du FAI, la ligne correspondante ressemblera à ceci :
 
 --8<---------- /etc/dhcpd.conf -----------------------------------------------
 ...
@@ -91,7 +91,7 @@ option domain-name-servers 195.5.209.150, 194.79.128.150;
 ...
 --8<--------------------------------------------------------------------------
 
-Si l'on souhaite attribuer une adresse IP et un nom d'hÃ´te fixe Ã  un portable
+Si l'on souhaite attribuer une adresse IP et un nom d'hôte fixe à un portable
 que l'on connecte aussi bien par le wifi que par une connexion filaire, on peut
 utiliser l'astuce suivante :
 
@@ -112,10 +112,10 @@ host buzz-wireless {
 --8<--------------------------------------------------------------------------
 
 
-DÃ©marrage et utilisation
+Démarrage et utilisation
 ------------------------
 
-CrÃ©er un script de dÃ©marrage :
+Créer un script de démarrage :
 
 --8<---------- /etc/rc.d/rc.dhcpd --------------------------------------------
 #!/bin/sh
@@ -174,14 +174,14 @@ esac
 exit 0
 --8<--------------------------------------------------------------------------
 
-  > Au dÃ©but du script, il faudra songer Ã  spÃ©cifier l'interface rÃ©seau que
+  > Au début du script, il faudra songer à spécifier l'interface réseau que
     l'on souhaite utiliser : eth0, eth1, etc.
 
-Rendre le script exÃ©cutable :
+Rendre le script exécutable :
 
   # chmod 0755 /etc/rc.d/rc.dhcpd
 
-DÃ©finir le lancement automatique du serveur au dÃ©marrage :
+Définir le lancement automatique du serveur au démarrage :
 
 --8<---------- /etc/rc.d/rc.local --------------------------------------------
 ...
@@ -191,7 +191,7 @@ if [ -x /etc/rc.d/rc.dhcpd ]; then
 fi
 --8<--------------------------------------------------------------------------
 
-On peut aussi dÃ©finir un arrÃªt plus propre, tant qu'Ã  faire :
+On peut aussi définir un arrêt plus propre, tant qu'à faire :
 
 --8<---------- /etc/rc.d/rc.local_shutdown -----------------------------------
 # /etc/rc.d/rc.local_shutdown
@@ -207,3 +207,4 @@ fi
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

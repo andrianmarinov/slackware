@@ -2,24 +2,24 @@
 USB Install HOWTO (c) Nicolas Kovacs, <info@microlinux.fr>
 =================
 
-DerniÃ¨re rÃ©vision : 7 janvier 2013
+Dernière révision : 7 janvier 2013
 
-Ce HOWTO dÃ©crit l'installation de Slackware sur une machine dÃ©pourvue de
-lecteur optique, par le biais d'une clÃ© USB.
+Ce HOWTO décrit l'installation de Slackware sur une machine dépourvue de
+lecteur optique, par le biais d'une clé USB.
 
-  Â· Confectionner la clÃ© USB
-  Â· Utiliser la clÃ© USB
+  * Confectionner la clé USB
+  * Utiliser la clé USB
 
 
-Confectionner la clÃ© USB
+Confectionner la clé USB
 ------------------------
 
-Guetter les messages systÃ¨me pour identifier le fichier de pÃ©riphÃ©rique
-correspondant Ã  la clÃ© USB :
+Guetter les messages système pour identifier le fichier de périphérique
+correspondant à la clé USB :
 
   # tail -f /var/log/messages
 
-Remettre Ã  zÃ©ro la table de partitions :
+Remettre à zéro la table de partitions :
 
   # dd if=/dev/zero of=/dev/sdX bs=512 count=64
 
@@ -28,7 +28,7 @@ Monter le DVD d'installation de Slackware.
   # cd /mnt/cdrom/usb-and-pxe-installers
   # sh usbimg2disk.sh -f -i usbboot.img -o /dev/sdb -L SLACK32
 
-Si c'est un systÃ¨me Slackware 64 :
+Si c'est un système Slackware 64 :
 
   # sh usbimg2disk.sh -f -i usbboot.img -o /dev/sdb -L SLACK64
 
@@ -40,12 +40,12 @@ Si c'est un systÃ¨me Slackware 64 :
   # FDISK OUTPUT:
   Le disque /dev/sdb ne contient pas une table de partitions valable
   
-  Disque /dev/sdbÂ : 8015Â Mo, 8015282176Â octets
-  247 tÃªtes, 62 secteurs/piste, 1022 cylindres, total 15654848 secteurs
-  UnitÃ©s = secteurs de 1 * 512 = 512 octets
-  Taille de secteur (logique / physique)Â : 512Â octets / 512Â octets
-  taille d'E/S (minimale / optimale)Â : 512Â octets / 512Â octets
-  Identifiant de disqueÂ : 0x00000000
+  Disque /dev/sdb : 8015 Mo, 8015282176 octets
+  247 têtes, 62 secteurs/piste, 1022 cylindres, total 15654848 secteurs
+  Unités = secteurs de 1 * 512 = 512 octets
+  Taille de secteur (logique / physique) : 512 octets / 512 octets
+  taille d'E/S (minimale / optimale) : 512 octets / 512 octets
+  Identifiant de disque : 0x00000000
   ***                                                       ***
   *** If this is the wrong drive, then press CONTROL-C now! ***
   ***                                                       ***
@@ -61,38 +61,39 @@ Si c'est un systÃ¨me Slackware 64 :
 
 Explication des options :
 
-  Â· '-f' formatte la clÃ© USB
-  Â· '-i' spÃ©cifie le fichier 'usbboot.img'
-  Â· '-o' dÃ©signe le fichier de pÃ©riphÃ©rique de la clÃ© USB
-  Â· '-L' dÃ©finit le label de la clÃ© (SLACK32 ou SLACK64)
+  * '-f' formatte la clé USB
+  * '-i' spécifie le fichier 'usbboot.img'
+  * '-o' désigne le fichier de périphérique de la clé USB
+  * '-L' définit le label de la clé (SLACK32 ou SLACK64)
 
-Enlever et rÃ©insÃ©rer la clÃ©. En utilisant un gestionnaire de fichiers
-graphique, copier le contenu du DVD d'installation sur la clÃ©. Pour gagner du
-temps et de la place, on peut faire l'impasse sur les rÃ©pertoires 'extra/',
+Enlever et réinsérer la clé. En utilisant un gestionnaire de fichiers
+graphique, copier le contenu du DVD d'installation sur la clé. Pour gagner du
+temps et de la place, on peut faire l'impasse sur les répertoires 'extra/',
 'pasture/', 'slackbook/', 'source/' et 'testing/'. Si Thunar ou Dolphin
-affichent un message d'erreur concernant la crÃ©ation de liens symboliques, il
+affichent un message d'erreur concernant la création de liens symboliques, il
 suffit de les "Ignorer toujours".
 
-  > En passant, si l'on dispose d'un rÃ©pertoire 'tagfiles/', c'est le moment de
-    le copier Ã  la racine de la clÃ©.
+  > En passant, si l'on dispose d'un répertoire 'tagfiles/', c'est le moment de
+    le copier à la racine de la clé.
 
 
-Utiliser la clÃ© USB
+Utiliser la clé USB
 -------------------
 
-Pour l'installation, on pourra crÃ©er un rÃ©pertoire 'disk/' et monter la clÃ©
+Pour l'installation, on pourra créer un répertoire 'disk/' et monter la clé
 dessus. Par exemple :
 
   # mkdir /disk
   # mount /dev/sdb1 /disk
 
-Dans l'installateur, il faudra sÃ©lectionner l'option 'Install from a
+Dans l'installateur, il faudra sélectionner l'option 'Install from a
 pre-mounted directory' et fournir '/disk/slackware' ou '/disk/slackware64'
-comme rÃ©pertoire source.
+comme répertoire source.
 
-Si l'on a copiÃ© 'tagfiles/' Ã  la racine de la clÃ©, le chemin vers les tagfiles
+Si l'on a copié 'tagfiles/' à la racine de la clé, le chemin vers les tagfiles
 sera donc '/disk/tagfiles'.
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

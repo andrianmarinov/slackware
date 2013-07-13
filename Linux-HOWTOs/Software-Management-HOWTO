@@ -2,85 +2,85 @@
 Software Management HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =========================
 
-DerniÃ¨re rÃ©vision : 7 janvier 2013
+Dernière révision : 7 janvier 2013
 
-Ce HOWTO dÃ©crit l'installation, la mise Ã  jour, la construction et la
+Ce HOWTO décrit l'installation, la mise à jour, la construction et la
 suppression de paquets logiciels sous Slackware.
 
-  Â· Anatomie d'un paquet Slackware
-  Â· GÃ©rer les paquets Slackware avec les outils traditionnels
-    Â· Installer un paquet 
-    Â· VÃ©rifier si un paquet est installÃ©
-    Â· Supprimer un paquet 
-    Â· Mettre Ã  jour un paquet 
-    Â· En savoir plus sur le contenu d'un paquet
-  Â· GÃ©rer les paquets Slackware avec 'slackpkg'
-    Â· Configuration initiale 
-    Â· Installer des paquets 
-    Â· Supprimer des paquets 
-    Â· Mettre Ã  jour des paquets 
-    Â· Rechercher des paquets ou des fichiers individuels
-    Â· Faire le mÃ©nage 
-  Â· Recompiler des paquets officiels
-    Â· Fabriquer un paquet Ã  partir du code source
-    Â· Modifier un paquet officiel
-    Â· Choisir les options de compilation
-  Â· Compiler des paquets tiers
-    Â· Compiler des paquets Ã  partir des scripts de SlackBuilds.org
-    Â· GÃ©rer les dÃ©pendances de paquets
-  Â· GÃ©rer les paquets tiers confortablement avec 'sbopkg'
-    Â· Installer 'sbopkg'
-    Â· Utiliser 'sbopkg'
-  Â· Installer des paquets tiers prÃ©compilÃ©s
-    Â· Les paquets fournis par Eric Hameleers
-  Â· Documentation
-    Â· Pages man
-    Â· Articles en ligne
-    Â· Livres
+  * Anatomie d'un paquet Slackware
+  * Gérer les paquets Slackware avec les outils traditionnels
+    * Installer un paquet 
+    * Vérifier si un paquet est installé
+    * Supprimer un paquet 
+    * Mettre à jour un paquet 
+    * En savoir plus sur le contenu d'un paquet
+  * Gérer les paquets Slackware avec 'slackpkg'
+    * Configuration initiale 
+    * Installer des paquets 
+    * Supprimer des paquets 
+    * Mettre à jour des paquets 
+    * Rechercher des paquets ou des fichiers individuels
+    * Faire le ménage 
+  * Recompiler des paquets officiels
+    * Fabriquer un paquet à partir du code source
+    * Modifier un paquet officiel
+    * Choisir les options de compilation
+  * Compiler des paquets tiers
+    * Compiler des paquets à partir des scripts de SlackBuilds.org
+    * Gérer les dépendances de paquets
+  * Gérer les paquets tiers confortablement avec 'sbopkg'
+    * Installer 'sbopkg'
+    * Utiliser 'sbopkg'
+  * Installer des paquets tiers précompilés
+    * Les paquets fournis par Eric Hameleers
+  * Documentation
+    * Pages man
+    * Articles en ligne
+    * Livres
 
 
 Anatomie d'un paquet Slackware
 ------------------------------
 
-Un paquet Slackware est une simple archive compressÃ©e au format TGZ ou TXZ qui
+Un paquet Slackware est une simple archive compressée au format TGZ ou TXZ qui
 contient :
 
-  Â· l'arborescence des rÃ©pertoires et des fichiers ;
-  Â· les scripts post-installation ;
-  Â· la description du paquet.
+  * l'arborescence des répertoires et des fichiers ;
+  * les scripts post-installation ;
+  * la description du paquet.
 
-Le nom de chaque paquet fournit une sÃ©rie d'informations :
+Le nom de chaque paquet fournit une série d'informations :
 
-  Â· le nom de l'application ;
-  Â· la version de l'application ;
-  Â· l'architecture du paquet ;
-  Â· le numÃ©ro de build. 
+  * le nom de l'application ;
+  * la version de l'application ;
+  * l'architecture du paquet ;
+  * le numéro de build. 
 
 Exemples :
 
-  Â· emacs-24.2-i486-1
-  Â· mozilla-firefox-15.0.1-i486-1
-  Â· vim-7.3.645-x86_64-1
+  * emacs-24.2-i486-1
+  * mozilla-firefox-15.0.1-i486-1
+  * vim-7.3.645-x86_64-1
 
 
-GÃ©rer les paquets Slackware avec les outils traditionnels
+Gérer les paquets Slackware avec les outils traditionnels
 ---------------------------------------------------------
 
-Depuis les toutes premiÃ¨res versions, Slackware fournit une collection d'outils
-simples - les 'pkgtools' - qui permettent d'installer, de mettre Ã  jour et de
+Depuis les toutes premières versions, Slackware fournit une collection d'outils
+simples - les 'pkgtools' - qui permettent d'installer, de mettre à jour et de
 supprimer des paquets logiciels :
 
-  Â· installpkg
-  Â· removepkg 
-  Â· upgradepkg
-  Â· explodepkg
-  Â· makepkg
+  * installpkg
+  * removepkg 
+  * upgradepkg
+  * explodepkg
+  * makepkg
 
 
   Installer un paquet
   -------------------
 
-Installer l'Ã©diteur Emacs Ã  partir du DVD d'installation :
+Installer l'éditeur Emacs à partir du DVD d'installation :
 
   # mount /dev/cdrom /mnt/cdrom
   # cd /mnt/cdrom/slackware/e
@@ -105,69 +105,69 @@ Installer l'Ã©diteur Emacs Ã  partir du DVD d'installation :
   > Si l'on utilise le jeu de CDs, Emacs se trouve sur le 1er CD-Rom.
 
 
-  VÃ©rifier si un paquet est installÃ©
+  Vérifier si un paquet est installé
   ----------------------------------
 
-L'installation du paquet a crÃ©Ã© une entrÃ©e dans '/var/log/packages' :
+L'installation du paquet a créé une entrée dans '/var/log/packages' :
 
   # ls /var/log/packages/em*
   /var/log/packages/emacs-24.2-i486-1
 
-Pour savoir si un paquet est installÃ©, il suffit de vÃ©rifier s'il dispose d'une
-entrÃ©e correspondante dans '/var/log/packages'. 
+Pour savoir si un paquet est installé, il suffit de vérifier s'il dispose d'une
+entrée correspondante dans '/var/log/packages'. 
 
 Exemple :
 
   # ls /var/log/packages/*firefox*
   /var/log/packages/mozilla-firefox-15.0.1-i486-1
 
-  > Firefox est installÃ© sur le systÃ¨me, dans la version 15.0.1.
+  > Firefox est installé sur le système, dans la version 15.0.1.
 
 Autre exemple :
 
   # ls /var/log/packages/kdebase*
-  /bin/ls: impossible d'accÃ©der Ã  /var/log/packages/kdebase*: Aucun fichier ou
+  /bin/ls: impossible d'accéder à /var/log/packages/kdebase*: Aucun fichier ou
   dossier de ce type
   
-  > Aucun paquet 'kdebase-*' n'est installÃ©.
+  > Aucun paquet 'kdebase-*' n'est installé.
  
 
   Supprimer un paquet
   -------------------
 
-Pour supprimer un paquet installÃ©, on utilise 'removepkg'. Il suffit de donner
+Pour supprimer un paquet installé, on utilise 'removepkg'. Il suffit de donner
 le nom du paquet en argument. 
 
 Exemple :
 
   # removepkg emacs
 
-On peut Ã©galement fournir le nom complet en argument. Dans ce cas, il vaut
-mieux invoquer la commande en se plaÃ§ant dans '/var/log/packages' et en
-utilisant la complÃ©tion automatique :
+On peut également fournir le nom complet en argument. Dans ce cas, il vaut
+mieux invoquer la commande en se plaçant dans '/var/log/packages' et en
+utilisant la complétion automatique :
 
   # cd /var/log/packages
   # removepkg emacs-24.2-i486-1
 
 
-  Mettre Ã  jour un paquet
+  Mettre à jour un paquet
   -----------------------
 
-Slackware fournit des mises Ã  jour de sÃ©curitÃ© des paquets pour chaque version.
-Pour se renseigner sur les derniÃ¨res actualitÃ©s autour des mises Ã  jour,
+Slackware fournit des mises à jour de sécurité des paquets pour chaque version.
+Pour se renseigner sur les dernières actualités autour des mises à jour,
 visiter le site officiel :
   
   # links www.slackware.com
 
   1. Suivre le lien 'ChangeLogs'.
   
-  2. RepÃ©rer 'Slackware-stable ChangeLog'.
+  2. Repérer 'Slackware-stable ChangeLog'.
 
-  3. Lire le fichier 'ChangeLog.txt' correspondant Ã  l'architecture du systÃ¨me.
+  3. Lire le fichier 'ChangeLog.txt' correspondant à l'architecture du système.
 
-On pourra Ã©galement utiliser le navigateur Links pour rÃ©cupÃ©rer les mises Ã 
-jour manuellement. Avant de lancer Links, crÃ©er un rÃ©pertoire '/root/updates'
-dans lequel on rangera les mises Ã  jour :
+On pourra également utiliser le navigateur Links pour récupérer les mises à
+jour manuellement. Avant de lancer Links, créer un répertoire '/root/updates'
+dans lequel on rangera les mises à jour :
 
   # cd
   # mkdir updates
@@ -176,14 +176,14 @@ dans lequel on rangera les mises Ã  jour :
 
   1. Suivre le lien 'Slackware File Tree'.
   
-  2. RepÃ©rer le rÃ©pertoire correspondant Ã  la version et Ã  l'architecture du
-  systÃ¨me.
+  2. Repérer le répertoire correspondant à la version et à l'architecture du
+  système.
   
-  3. Aller dans le rÃ©pertoire 'patches/packages'.
+  3. Aller dans le répertoire 'patches/packages'.
 
-  4. TÃ©lÃ©charger les mises Ã  jour disponibles.
+  4. Télécharger les mises à jour disponibles.
   
-Quitter Links et installer les mises Ã  jour comme ceci :
+Quitter Links et installer les mises à jour comme ceci :
 
   # upgradepkg bind-9.9.1_P4-i486-1_slack14.0.txz
 
@@ -222,7 +222,7 @@ Autre exemple :
   En savoir plus sur le contenu d'un paquet
   -----------------------------------------
 
-Ã€ chaque paquet installÃ© correspond une entrÃ©e dans '/var/log/packages'. Il
+À chaque paquet installé correspond une entrée dans '/var/log/packages'. Il
 s'agit de simples fichiers texte qui nous renseignent sur le contenu d'un
 paquet. Par exemple :
 
@@ -259,24 +259,24 @@ paquet. Par exemple :
   ...
 
 
-GÃ©rer les paquets Slackware avec 'slackpkg'
+Gérer les paquets Slackware avec 'slackpkg'
 -------------------------------------------
 
-L'utilitaire 'slackpkg' a Ã©tÃ© officiellement inclus dans Slackware depuis la
-version 13.0. Il permet de gÃ©rer les paquets Slackware de maniÃ¨re beaucoup plus
+L'utilitaire 'slackpkg' a été officiellement inclus dans Slackware depuis la
+version 13.0. Il permet de gérer les paquets Slackware de manière beaucoup plus
 confortable. 
 
 Deux mises en garde s'imposent :
 
-  1. Seuls les paquets officiels sont gÃ©rÃ©s par 'slackpkg'. 
+  1. Seuls les paquets officiels sont gérés par 'slackpkg'. 
 
-  2. La gestion des dÃ©pendances reste toujours Ã  la charge de l'administrateur.
+  2. La gestion des dépendances reste toujours à la charge de l'administrateur.
 
 
   Configuration initiale
   ----------------------
 
-Ã‰diter '/etc/slackpkg/mirrors' et dÃ©commenter UNE SEULE source de paquets au
+Éditer '/etc/slackpkg/mirrors' et décommenter UNE SEULE source de paquets au
 choix, par exemple :
 
 --8<---------- /etc/slackpkg/mirrors -----------------------------------------
@@ -286,13 +286,13 @@ ftp://mirror.ovh.net/mirrors/ftp.slackware.com/slackware-14.0/
 # http://mirror.ovh.net/mirrors/ftp.slackware.com/slackware-14.0/
 --8<--------------------------------------------------------------------------
 
-  > Attention Ã  ne pas se tromper de section et Ã  ne pas utiliser un site
+  > Attention à ne pas se tromper de section et à ne pas utiliser un site
     miroir de Slackware-current, sous peine de se retrouver avec la version de
-    dÃ©veloppement de Slackware !
+    développement de Slackware !
 
-Si l'on prÃ©fÃ¨re gÃ©rer les paquets localement et faire fi des mises Ã  jour, on
-peut Ã©galement utiliser le DVD d'installation comme source de paquets. Dans ce
-cas, on modifiera le point de montage dÃ©fini par dÃ©faut :
+Si l'on préfère gérer les paquets localement et faire fi des mises à jour, on
+peut également utiliser le DVD d'installation comme source de paquets. Dans ce
+cas, on modifiera le point de montage défini par défaut :
 
 --8<---------- /etc/slackpkg/mirrors -----------------------------------------
 ...
@@ -307,15 +307,15 @@ Ne pas oublier de monter le DVD avant chaque invocation de 'slackpkg' :
 
   # mount /dev/cdrom /mnt/cdrom
 
-Mettre Ã  jour les informations sur les paquets disponibles :
+Mettre à jour les informations sur les paquets disponibles :
 
   # slackpkg update
 
-  > Notez bien que cette commande n'installe pas de mises Ã  jour de paquets.
+  > Notez bien que cette commande n'installe pas de mises à jour de paquets.
     Elle synchronise seulement les informations sur ce que l'on PEUT installer. 
 
-  > Avant de rechercher, d'installer ou de mettre Ã  jour un paquet, c'est une
-    bonne idÃ©e d'invoquer 'slackpkg update' pour Ãªtre sÃ»r d'avoir des infos Ã 
+  > Avant de rechercher, d'installer ou de mettre à jour un paquet, c'est une
+    bonne idée d'invoquer 'slackpkg update' pour être sûr d'avoir des infos à
     jour sur les paquets disponibles.
 
 
@@ -326,14 +326,14 @@ Exemple avec un seul paquet :
 
   # slackpkg install mplayerplug-in
 
-Il suffit de confirmer l'installation dans l'Ã©cran subsÃ©quent, et le paquet est
-directement rÃ©cupÃ©rÃ© et installÃ©.
+Il suffit de confirmer l'installation dans l'écran subséquent, et le paquet est
+directement récupéré et installé.
 
-On peut Ã©galement fournir plusieurs paquets en argument :
+On peut également fournir plusieurs paquets en argument :
 
   # slackpkg install mplayerplug-in bittorrent
 
-Les groupes de paquets sont Ã©galement gÃ©rÃ©s :
+Les groupes de paquets sont également gérés :
 
   # slackpkg install kde
 
@@ -349,13 +349,13 @@ Exemple avec un seul paquet :
 
   # slackpkg remove mplayerplug-in
  
-LÃ  aussi, il suffit de confirmer la suppression dans l'Ã©cran rÃ©capitulatif.
+Là aussi, il suffit de confirmer la suppression dans l'écran récapitulatif.
 
-Supprimer plusieurs paquets Ã  la fois :
+Supprimer plusieurs paquets à la fois :
 
   # slackpkg remove mplayerplug-in bittorrent
 
-Les groupes de paquets sont Ã©galement gÃ©rÃ©s pour la suppression :
+Les groupes de paquets sont également gérés pour la suppression :
 
   # slackpkg remove kde
 
@@ -364,19 +364,19 @@ Ou encore :
   # slackpkg remove xfce
 
 
-  Mettre Ã  jour des paquets
+  Mettre à jour des paquets
   -------------------------
 
-Lorsqu'une mise Ã  jour est disponible pour un paquet, on peut l'installer comme
+Lorsqu'une mise à jour est disponible pour un paquet, on peut l'installer comme
 ceci :
 
   # slackpkg upgrade iptables
 
-De mÃªme pour plusieurs paquets :
+De même pour plusieurs paquets :
 
   # slackpkg upgrade mozilla-firefox mozilla-thunderbird
 
-Dans la pratique quotidienne, on mettra Ã  jour l'intÃ©gralitÃ© du systÃ¨me :
+Dans la pratique quotidienne, on mettra à jour l'intégralité du système :
 
   # slackpkg upgrade-all
 
@@ -384,22 +384,22 @@ Dans la pratique quotidienne, on mettra Ã  jour l'intÃ©gralitÃ© du systÃ¨me :
   Rechercher des paquets ou des fichiers individuels
   --------------------------------------------------
 
-Rechercher un paquet spÃ©cifique :
+Rechercher un paquet spécifique :
 
   # slackpkg search k3b    
   Looking for k3b in package list. Please wait... DONE
   The list below shows all packages with name matching "k3b".
   [uninstalled] - k3b-2.0.2_20120226.git-i486-1
 
-Si le paquet est dÃ©jÃ  installÃ©, on obtiendra le rÃ©sultat suivant :
+Si le paquet est déjà installé, on obtiendra le résultat suivant :
 
   # slackpkg search Terminal
   Looking for Terminal in package list. Please wait... DONE
   The list below shows all packages with name matching "Terminal".
   [ installed ] - Terminal-0.4.8-i486-1
 
-On peut Ã©galement chercher des fichiers individuels, ce qui affichera le cas
-Ã©chÃ©ant le ou les paquets contenant le fichier en question :
+On peut également chercher des fichiers individuels, ce qui affichera le cas
+échéant le ou les paquets contenant le fichier en question :
 
   # slackpkg file-search libncurses.so
   Looking for libncurses.so in package list. Please wait... DONE
@@ -426,7 +426,7 @@ Si l'on veut en savoir plus sur le contenu d'un paquet :
   mesa:
 
 
-  Faire le mÃ©nage
+  Faire le ménage
   ---------------
 
 Supprimer tous les paquets tiers qui ne font pas partie de la distribution
@@ -434,11 +434,11 @@ officielle :
 
   # slackpkg clean-system
 
-Dans l'Ã©cran rÃ©capitulatif, il suffit de dÃ©sÃ©lectionner les paquets que l'on
+Dans l'écran récapitulatif, il suffit de désélectionner les paquets que l'on
 souhaite garder.
 
-On peut Ã©galement se servir de 'slackpkg' pour rÃ©parer un paquet endommagÃ©.
-Admettons que j'aie accidentellement supprimÃ© le fichier '/usr/bin/glxgears'.
+On peut également se servir de 'slackpkg' pour réparer un paquet endommagé.
+Admettons que j'aie accidentellement supprimé le fichier '/usr/bin/glxgears'.
 Dans un premier temps, il me faut rechercher le paquet qui le contient :
 
   # slackpkg file-search glxgears
@@ -446,7 +446,7 @@ Dans un premier temps, il me faut rechercher le paquet qui le contient :
   The list below shows the packages that contains "glxgears" file.
   [ installed ] - mesa-8.0.4-i486-1
 
-Ã€ partir de lÃ , il me suffit de rÃ©installer le paquet en question :
+À partir de là, il me suffit de réinstaller le paquet en question :
 
   # slackpkg reinstall mesa
 
@@ -454,23 +454,23 @@ Dans un premier temps, il me faut rechercher le paquet qui le contient :
 Recompiler des paquets officiels
 --------------------------------
 
-Slackware fournit le code source de l'ensemble du systÃ¨me dans le rÃ©pertoire
-'source'. Ã€ chaque paquet du systÃ¨me correspond un rÃ©pertoire source. Ces
-rÃ©pertoires source contiennent gÃ©nÃ©ralement :
+Slackware fournit le code source de l'ensemble du système dans le répertoire
+'source'. À chaque paquet du système correspond un répertoire source. Ces
+répertoires source contiennent généralement :
 
-  Â· le code source de l'application ou de la bibliothÃ¨que en question ;
-  Â· sa recette de fabrication sous forme de fichier '*.SlackBuild' ;
-  Â· le descriptif du paquet, nommÃ© 'slack-desc' ;
-  Â· parfois, un fichier post-installation nommÃ© 'doinst.sh' ;
-  Â· d'autres fichiers comme les patches, les entrÃ©es de menu, etc.
+  * le code source de l'application ou de la bibliothèque en question ;
+  * sa recette de fabrication sous forme de fichier '*.SlackBuild' ;
+  * le descriptif du paquet, nommé 'slack-desc' ;
+  * parfois, un fichier post-installation nommé 'doinst.sh' ;
+  * d'autres fichiers comme les patches, les entrées de menu, etc.
 
 
-  Fabriquer un paquet Ã  partir du code source
+  Fabriquer un paquet à partir du code source
   -------------------------------------------
 
-Dans l'exemple ci-dessous, nous allons compiler l'application Terminal Ã  partir
-des sources fournies par Slackware. Au prÃ©alable, il faut donc dÃ©sinstaller le
-paquet correspondant s'il est installÃ© :
+Dans l'exemple ci-dessous, nous allons compiler l'application Terminal à partir
+des sources fournies par Slackware. Au préalable, il faut donc désinstaller le
+paquet correspondant s'il est installé :
 
   # removepkg Terminal
 
@@ -478,12 +478,12 @@ Choisir un endroit pour ranger le code source et les scripts, par exemple :
 
   # cd
   # mkdir -pv source/Terminal
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â sourceÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â source/TerminalÂ Â»
+  mkdir: création du répertoire « source »
+  mkdir: création du répertoire « source/Terminal »
   # cd source/Terminal/
   # links mirrors.slackware.com
 
-RÃ©cupÃ©rer le contenu de 'source/xfce/Terminal' sur un miroir de Slackware.
+Récupérer le contenu de 'source/xfce/Terminal' sur un miroir de Slackware.
 
 Au total, on a :
 
@@ -493,18 +493,18 @@ Au total, on a :
   -rw-r--r-- 1 root root 1,4M nov.  24 15:11 Terminal-0.4.8.tar.xz
   -rw-r--r-- 1 root root 3,6K nov.  24 15:10 Terminal.SlackBuild
 
-Rendre le fichier 'Terminal.SlackBuild' exÃ©cutable et lancer la construction du
+Rendre le fichier 'Terminal.SlackBuild' exécutable et lancer la construction du
 paquet :
 
   # chmod +x Terminal.SlackBuild
   # ./Terminal.SlackBuild
 
-Le script lance alors la construction du paquet. L'opÃ©ration se termine par le
+Le script lance alors la construction du paquet. L'opération se termine par le
 message suivant :
 
   Slackware package /tmp/Terminal-0.4.8-i486-1.txz created.
 
-Il ne reste plus qu'Ã  installer ce paquet :
+Il ne reste plus qu'à installer ce paquet :
 
   # installpkg /tmp/Terminal-0.4.8-i486-1.txz
 
@@ -512,25 +512,25 @@ Il ne reste plus qu'Ã  installer ce paquet :
   Modifier un paquet officiel
   ---------------------------
 
-L'intÃ©rÃªt de recompiler un paquet officiel, c'est de pouvoir le modifier, par
-exemple en ajoutant ou en retirant certaines fonctionnalitÃ©s. Dans l'exemple
+L'intérêt de recompiler un paquet officiel, c'est de pouvoir le modifier, par
+exemple en ajoutant ou en retirant certaines fonctionnalités. Dans l'exemple
 suivant, nous allons recompiler le paquet 'audacious-plugins' pour modifier le
 lecteur audio Audacious. Celui-ci comporte deux interfaces graphiques au choix,
 et nous allons en supprimer une.
 
-Pour commencer, supprimer le paquet s'il est installÃ© :
+Pour commencer, supprimer le paquet s'il est installé :
 
   # removepkg audacious-plugins
   
-Ensuite, crÃ©er un endroit pour ranger le code source :
+Ensuite, créer un endroit pour ranger le code source :
 
   # cd /root/source
   # mkdir audacious-plugins
   # cd audacious-plugins
   # links mirrors.slackware.com 
 
-RÃ©cupÃ©rer le contenu du rÃ©pertoire 'source/xap/audacious-plugins' et rendre le
-script 'audacious-plugins.SlackBuild' exÃ©cutable :
+Récupérer le contenu du répertoire 'source/xap/audacious-plugins' et rendre le
+script 'audacious-plugins.SlackBuild' exécutable :
 
   # chmod +x audacious-plugins.SlackBuild
   # ls -lh
@@ -539,7 +539,7 @@ script 'audacious-plugins.SlackBuild' exÃ©cutable :
   -rwxr-xr-x 1 root root 4,0K nov.  24 15:28 audacious-plugins.SlackBuild*
   -rw-r--r-- 1 root root  892 nov.  24 15:28 slack-desc
 
-Maintenant, Ã©diter le SlackBuild et ajouter une option :
+Maintenant, éditer le SlackBuild et ajouter une option :
 
 --8<---------- audacious-plugins.SlackBuild ----------------------------------
 ...
@@ -560,7 +560,7 @@ CXXFLAGS="$SLKCFLAGS" \
 ...
 --8<--------------------------------------------------------------------------
 
-Il ne reste plus qu'Ã  construire et installer le paquet :
+Il ne reste plus qu'à construire et installer le paquet :
 
   # ./audacious-plugins.SlackBuild
   ...
@@ -571,12 +571,12 @@ Il ne reste plus qu'Ã  construire et installer le paquet :
   Choisir les options de compilation
   ----------------------------------
 
-Le script de configuration des sources (plus exactement la ligne Ã  rallonge qui
-commence par './configure' dans le SlackBuild) affiche souvent un rÃ©sumÃ© des
-options activÃ©es ou dÃ©sactivÃ©es.
+Le script de configuration des sources (plus exactement la ligne à rallonge qui
+commence par './configure' dans le SlackBuild) affiche souvent un résumé des
+options activées ou désactivées.
 
-Pour interrompre le processus de construction du paquet et afficher ce rÃ©sumÃ©,
-on peut temporairement Ã©diter le SlackBuild comme ceci :
+Pour interrompre le processus de construction du paquet et afficher ce résumé,
+on peut temporairement éditer le SlackBuild comme ceci :
 
 --8<---------- audacious-plugins.SlackBuild ----------------------------------
 ...
@@ -602,7 +602,7 @@ make install DESTDIR=$PKG || exit 1
 ... 
 --8<--------------------------------------------------------------------------
 
-Lancer le script, qui affichera un rÃ©sumÃ© de la configuration au bout de
+Lancer le script, qui affichera un résumé de la configuration au bout de
 quelques secondes :
 
   # ./audacious-plugins.SlackBuild
@@ -616,7 +616,7 @@ quelques secondes :
   GTK (gtkui):                            yes
   Winamp Classic (skins):                 yes
 
-Les options de configuration sont toutes fournies par le code source lui-mÃªme :
+Les options de configuration sont toutes fournies par le code source lui-même :
 
   # tar xvf audacious-plugins-3.3.1.tar.xz
   # cd audacious-plugins-3.3.1
@@ -630,17 +630,17 @@ Les options de configuration sont toutes fournies par le code source lui-mÃªme :
 
 Deux remarques :
 
-  > Le script se charge dÃ©jÃ  de dÃ©compresser les sources automatiquement dans
-    '/tmp'. On peut donc trÃ¨s bien invoquer './configure --help | less' Ã 
-    partir de ce rÃ©pertoire, sans dÃ©compresser les sources dans le rÃ©pertoire
+  > Le script se charge déjà de décompresser les sources automatiquement dans
+    '/tmp'. On peut donc très bien invoquer './configure --help | less' à
+    partir de ce répertoire, sans décompresser les sources dans le répertoire
     courant.
 
-  > L'activation de certaines fonctionnalitÃ©s comme par exemple la gestion de
-    certains formats audio propriÃ©taires dÃ©pend de la prÃ©sence de certaines
-    bibliothÃ¨ques sur le systÃ¨me.
+  > L'activation de certaines fonctionnalités comme par exemple la gestion de
+    certains formats audio propriétaires dépend de la présence de certaines
+    bibliothèques sur le système.
 
 Une fois qu'on a choisi toutes les options de configuration, il ne reste plus
-qu'Ã  supprimer la commande 'exit 1' du script et lancer la compilation et
+qu'à supprimer la commande 'exit 1' du script et lancer la compilation et
 l'installation :
 
   # ./audacious-plugins.SlackBuild
@@ -652,54 +652,54 @@ l'installation :
 Compiler des paquets tiers
 --------------------------
 
-ComparÃ© Ã  des distributions comme Ubuntu ou Debian, Slackware n'offre qu'un
-choix de paquets relativement limitÃ©. On en arrivera trÃ¨s vite au point de
-vouloir installer une application ou une bibliothÃ¨que qui n'est pas fournie par
+Comparé à des distributions comme Ubuntu ou Debian, Slackware n'offre qu'un
+choix de paquets relativement limité. On en arrivera très vite au point de
+vouloir installer une application ou une bibliothèque qui n'est pas fournie par
 la distribution. Dans ce cas, que faire ?
 
 Le portail SlackBuilds.org (http://slackbuilds.org) sera sans doute la
 meilleure adresse pour trouver des paquets tiers. Attention, SlackBuilds.org
-n'est PAS un dÃ©pÃ´t de paquets binaires. Il s'agit plutÃ´t d'une collection
-extrÃªmement bien fournie de scripts de compilation dÃ»ment soignÃ©s et testÃ©s,
-qui vous permettent de compiler Ã  peu prÃ¨s n'importe quel paquet Slackware en
+n'est PAS un dépôt de paquets binaires. Il s'agit plutôt d'une collection
+extrêmement bien fournie de scripts de compilation dûment soignés et testés,
+qui vous permettent de compiler à peu près n'importe quel paquet Slackware en
 un tournemain. 
 
   
-  Compiler des paquets Ã  partir des scripts de SlackBuilds.org
+  Compiler des paquets à partir des scripts de SlackBuilds.org
   ------------------------------------------------------------
 
-Dans l'exemple, nous allons compiler et installer le paquet 'cowsay' Ã  partir
+Dans l'exemple, nous allons compiler et installer le paquet 'cowsay' à partir
 des scripts fournis par SlackBuilds.org. 
 
-Aller dans l'environnement de construction de paquets que nous avons dÃ©fini
+Aller dans l'environnement de construction de paquets que nous avons défini
 plus haut :
 
   # cd /root/source
 
-Ã€ partir de lÃ , tÃ©lÃ©charger :
+À partir de là, télécharger :
 
-  1. l'archive compressÃ©e contenant les scripts pour construire le paquet ;
-  2. l'archive compressÃ©e contenant le code source du paquet. 
+  1. l'archive compressée contenant les scripts pour construire le paquet ;
+  2. l'archive compressée contenant le code source du paquet. 
 
-ConcrÃ¨tement :
+Concrètement :
 
   # links slackbuilds.org
 
-  1. Dans le champ de recherche en haut Ã  gauche, taper 'cowsay', placer le
-  curseur sur 'Search' et confirmer par [EntrÃ©e]. 
+  1. Dans le champ de recherche en haut à gauche, taper 'cowsay', placer le
+  curseur sur 'Search' et confirmer par [Entrée]. 
 
-  2. Dans la page des rÃ©sultats de la recherche, suivre le lien 'cowsay'.
+  2. Dans la page des résultats de la recherche, suivre le lien 'cowsay'.
 
-  3. Sur la page de 'cowsay', tÃ©lÃ©charger le SlackBuild (cowsay.tar.gz) et le
+  3. Sur la page de 'cowsay', télécharger le SlackBuild (cowsay.tar.gz) et le
   code source (cowsay-3.03.tar.gz) et quitter Lynx.
 
-Voici nos deux archives tÃ©lÃ©chargÃ©es :
+Voici nos deux archives téléchargées :
 
   # ls -l cowsay*
   -rw-r--r-- 1 root root 15136 nov.  25 08:14 cowsay-3.03.tar.gz
   -rw-r--r-- 1 root root  2855 nov.  25 08:14 cowsay.tar.gz
 
-DÃ©compresser l'archive contenant les scripts :
+Décompresser l'archive contenant les scripts :
 
   # tar xvzf cowsay.tar.gz 
   cowsay/
@@ -709,15 +709,15 @@ DÃ©compresser l'archive contenant les scripts :
   cowsay/cowsay.SlackBuild
   cowsay/cowsay.info
 
-Ã€ la limite, on peut faire un peu de mÃ©nage et supprimer l'archive qui ne sert
-plus Ã  rien :
+À la limite, on peut faire un peu de ménage et supprimer l'archive qui ne sert
+plus à rien :
 
   # rm -f cowsay.tar.gz
 
-Puis, dÃ©placer le code source dans le rÃ©pertoire nouvellement crÃ©Ã© :
+Puis, déplacer le code source dans le répertoire nouvellement créé :
 
   # mv -v cowsay-3.03.tar.gz cowsay/
-  Â«Â cowsay-3.03.tar.gzÂ Â» -> Â«Â cowsay/cowsay-3.03.tar.gzÂ Â»
+  « cowsay-3.03.tar.gz » -> « cowsay/cowsay-3.03.tar.gz »
 
 Voici ce que l'on doit avoir :
 
@@ -730,8 +730,8 @@ Voici ce que l'on doit avoir :
   |-- README
   `-- slack-desc
 
-Changer dans le rÃ©pertoire, vÃ©rifier Ã©ventuellement si le script
-'cowsay.SlackBuild' est bien exÃ©cutable, puis exÃ©cuter ce script pour lancer la
+Changer dans le répertoire, vérifier éventuellement si le script
+'cowsay.SlackBuild' est bien exécutable, puis exécuter ce script pour lancer la
 construction du paquet :
 
   # cd cowsay/
@@ -740,18 +740,18 @@ construction du paquet :
   # ./cowsay.SlackBuild
   ...
 
-LÃ  encore, si tout se passe bien, l'opÃ©ration produit un paquet dans '/tmp', et
-plus exactement dans le rÃ©pertoire '$OUTPUT' dÃ©fini par le script :
+Là encore, si tout se passe bien, l'opération produit un paquet dans '/tmp', et
+plus exactement dans le répertoire '$OUTPUT' défini par le script :
 
   ...
   Slackware package /tmp/cowsay-3.03-noarch-1_SBo.tgz created.
 
-Il ne reste qu'Ã  installer ce paquet avec 'installpkg' :
+Il ne reste qu'à installer ce paquet avec 'installpkg' :
 
   # installpkg /tmp/cowsay-3.03-noarch-1_SBo.tgz 
-  # cowsay Et voilÃ  !
+  # cowsay Et voilà !
    _____________ 
-  < Et voilÃ  ! >
+  < Et voilà ! >
    ------------- 
           \   ^__^
            \  (oo)\_______
@@ -760,15 +760,15 @@ Il ne reste qu'Ã  installer ce paquet avec 'installpkg' :
                   ||     ||
 
 
-  GÃ©rer les dÃ©pendances de paquets
+  Gérer les dépendances de paquets
   --------------------------------
 
-Certains paquets nÃ©cessitent la prÃ©sence d'autres paquets sur le systÃ¨me pour
+Certains paquets nécessitent la présence d'autres paquets sur le système pour
 compiler ("build dependencies") et/ou fonctionner ("runtime dependencies")
-correctement. Dans certains cas, un paquet requis peut lui-mÃªme dÃ©pendre
+correctement. Dans certains cas, un paquet requis peut lui-même dépendre
 d'autres paquets, et ainsi de suite. 
 
-Ã€ titre d'exemple, jetons un oeil sur la page de 'libgnomeprint' de
+À titre d'exemple, jetons un oeil sur la page de 'libgnomeprint' de
 SlackBuilds.org. La description du paquet est suivie d'un avertissement :
 
   'This requires: libgnomecups.'
@@ -782,36 +782,36 @@ PRGNAM="libgnomeprint"
 VERSION="2.18.8"
 HOMEPAGE="http://www.gnome.org"
 ...
-REQUIRES="libgnomecups" ----> dÃ©pendances du paquet
+REQUIRES="libgnomecups" ----> dépendances du paquet
 ...
 --8<--------------------------------------------------------------------------
 
-  > Le champ 'REQUIRES' a Ã©tÃ© introduit depuis Slackware 14.0.
+  > Le champ 'REQUIRES' a été introduit depuis Slackware 14.0.
 
 Cela signifie tout simplement qu'avant de construire le paquet 'libgnomeprint',
-nous devons impÃ©rativement construire et installer le paquet 'libgnomecups'.
+nous devons impérativement construire et installer le paquet 'libgnomecups'.
 
-En dehors des dÃ©pendances requises, un paquet peut Ã©galement prÃ©senter des
-dÃ©pendances optionnelles, qui ajoutent certaines fonctionnalitÃ©s. L'Ã©diteur
-Leafpad, par exemple, peut Ãªtre construit avec les dÃ©pendances optionnelles
+En dehors des dépendances requises, un paquet peut également présenter des
+dépendances optionnelles, qui ajoutent certaines fonctionnalités. L'éditeur
+Leafpad, par exemple, peut être construit avec les dépendances optionnelles
 'libgnomeprint' et 'libgnomeprintui'.
 
-GÃ©rer les paquets tiers confortablement avec 'sbopkg'
+Gérer les paquets tiers confortablement avec 'sbopkg'
 -----------------------------------------------------
 
-L'outil 'sbopkg' est une application tierce qui facilite Ã©normÃ©ment la
-construction et l'installation de paquets tiers Ã  partir des scripts de
+L'outil 'sbopkg' est une application tierce qui facilite énormément la
+construction et l'installation de paquets tiers à partir des scripts de
 SlackBuilds.org. 
 
 
   Installer 'sbopkg'
   ------------------
 
-Aller sur le site http://sbopkg.org et tÃ©lÃ©charger le paquet.
+Aller sur le site http://sbopkg.org et télécharger le paquet.
 
   # links sbopkg.org
 
-Suivre le lien 'Downloads' et tÃ©lÃ©charger le 'Package'. Puis :
+Suivre le lien 'Downloads' et télécharger le 'Package'. Puis :
 
   # installpkg sbopkg-0.36.0-noarch-1_cng.tgz
 
@@ -820,7 +820,7 @@ Suivre le lien 'Downloads' et tÃ©lÃ©charger le 'Package'. Puis :
   -----------------
 
 Lancer 'sbopkg' en invoquant son nom en tant que root. Au premier lancement,
-'sbopkg' propose de crÃ©er une sÃ©rie de rÃ©pertoires nÃ©cessaires pour son
+'sbopkg' propose de créer une série de répertoires nécessaires pour son
 fonctionnement. Confirmer avec la touche [C] :
 
   # sbopkg
@@ -838,10 +838,10 @@ fonctionnement. Confirmer avec la touche [C] :
   
   (C)reate or (A)bort?: 
 
-La premiÃ¨re chose Ã  faire, c'est de synchroniser 'sbopkg' avec le contenu de
+La première chose à faire, c'est de synchroniser 'sbopkg' avec le contenu de
 SlackBuilds.org avec l'option 'Sync with the remote repository'. C'est une
-bonne idÃ©e de lancer une synchronisation avant toute installation. Une fois que
-la synchronisation est terminÃ©e ('***SYNC COMPLETE***'), confirmez simplement.
+bonne idée de lancer une synchronisation avant toute installation. Une fois que
+la synchronisation est terminée ('***SYNC COMPLETE***'), confirmez simplement.
   
 Dans l'exemple, nous allons installer l'utilitaire 'unrar'.
 
@@ -849,63 +849,63 @@ Dans l'exemple, nous allons installer l'utilitaire 'unrar'.
 
   2. Dans le champ de recherche, tapez 'unrar'.
 
-  3. Dans la fenÃªtre des rÃ©sultat, sÃ©lectionnez la ligne 'system/unrar'.
+  3. Dans la fenêtre des résultat, sélectionnez la ligne 'system/unrar'.
 
-  4. L'Ã©cran subsÃ©quent vous permet d'effectuer toute une sÃ©rie d'opÃ©rations.
-  Vous pouvez par exemple visualiser le fichier 'unrar.info' pour vÃ©rifier s'il
-  n'y a pas de dÃ©pendances externes (il n'y en a pas). 
+  4. L'écran subséquent vous permet d'effectuer toute une série d'opérations.
+  Vous pouvez par exemple visualiser le fichier 'unrar.info' pour vérifier s'il
+  n'y a pas de dépendances externes (il n'y en a pas). 
 
   5. Construisez le paquet avec 'Process - Download/build/install unrar'.
 
   6. Confirmez simplement 'Install - Download, build and install'.
 
-  7. DÃ©marrez l'opÃ©ration avec 'Start'.
+  7. Démarrez l'opération avec 'Start'.
 
-Si tout s'est bien passÃ©, 'sbopkg' construit et installe automatiquement le
+Si tout s'est bien passé, 'sbopkg' construit et installe automatiquement le
 paquet. Appuyez sur n'importe quelle touche pour revenir dans 'sbopkg'.
 
 
-Installer des paquets tiers prÃ©compilÃ©s
+Installer des paquets tiers précompilés
 ---------------------------------------
 
-Certains sites proposent des paquets tiers prÃ©compilÃ©s pour Slackware. En rÃ¨gle
-gÃ©nÃ©rale, il vaut toujours mieux compiler ses propres paquets, ne serait-ce que
-pour de simples raisons de sÃ©curitÃ©. AprÃ¨s tout, on peut mettre tout et
+Certains sites proposent des paquets tiers précompilés pour Slackware. En règle
+générale, il vaut toujours mieux compiler ses propres paquets, ne serait-ce que
+pour de simples raisons de sécurité. Après tout, on peut mettre tout et
 n'importe quoi dans un paquet et lui donner le nom qu'on veut.
 
 
   Les paquets fournis par Eric Hameleers
   --------------------------------------
 
-Une exception peut Ãªtre faite pour les paquets fournis par Eric Hameleers,
-dÃ©veloppeur Slackware connu sous le nom de "AlienBob". Eric fournit de nombreux
-paquets tiers trÃ¨s populaires parmi la communautÃ© Slackware, notamment les
-"usines Ã  gaz" comme KDE ou LibreOffice qui nÃ©cessitent des heures voire des
-journÃ©es entiÃ¨res de compilation.
+Une exception peut être faite pour les paquets fournis par Eric Hameleers,
+développeur Slackware connu sous le nom de "AlienBob". Eric fournit de nombreux
+paquets tiers très populaires parmi la communauté Slackware, notamment les
+"usines à gaz" comme KDE ou LibreOffice qui nécessitent des heures voire des
+journées entières de compilation.
 
-Versions rÃ©centes de KDE :
+Versions récentes de KDE :
 
-  Â· http://alien.slackbook.org/ktown/
+  * http://alien.slackbook.org/ktown/
 
-Les derniÃ¨res versions de LibreOffice :
+Les dernières versions de LibreOffice :
 
-  Â· http://taper.alienbase.nl/mirrors/people/alien/slackbuilds/libreoffice/
+  * http://taper.alienbase.nl/mirrors/people/alien/slackbuilds/libreoffice/
 
 OpenJDK :
 
-  Â· http://taper.alienbase.nl/mirrors/people/alien/slackbuilds/openjdk/
+  * http://taper.alienbase.nl/mirrors/people/alien/slackbuilds/openjdk/
 
 VLC :
 
-  Â· http://taper.alienbase.nl/mirrors/people/alien/restricted_slackbuilds/vlc/
+  * http://taper.alienbase.nl/mirrors/people/alien/restricted_slackbuilds/vlc/
 
-Paquets de compatibilitÃ© 32-bit pour Slackware64 :
+Paquets de compatibilité 32-bit pour Slackware64 :
 
-  Â· http://www.slackware.com/~alien/multilib/
+  * http://www.slackware.com/~alien/multilib/
 
-Visitez le blog d'Eric pour Ãªtre au courant des derniÃ¨res nouveautÃ©s :
+Visitez le blog d'Eric pour être au courant des dernières nouveautés :
 
-  Â· http://alien.slackbook.org/blog/
+  * http://alien.slackbook.org/blog/
 
 
 Documentation
@@ -913,25 +913,26 @@ Documentation
 
 Pages man :
 
-  Â· installpkg(8)
-  Â· upgradepkg(8)
-  Â· removepkg(8) 
-  Â· slackpkg(8)
-  Â· sbopkg(8)
-  Â· sbopkg.conf(8)
+  * installpkg(8)
+  * upgradepkg(8)
+  * removepkg(8) 
+  * slackpkg(8)
+  * sbopkg(8)
+  * sbopkg.conf(8)
 
 Articles en ligne :
 
-  Â· http://docs.slackware.com/slackbook:package_management
-  Â· http://www.linux.com/learn/tutorials/261878-intro-to-slackware-package-management
-  Â· http://slackbuilds.org/howto/
-  Â· http://archive09.linux.com/feature/148826
+  * http://docs.slackware.com/slackbook:package_management
+  * http://www.linux.com/learn/tutorials/261878-intro-to-slackware-package-management
+  * http://slackbuilds.org/howto/
+  * http://archive09.linux.com/feature/148826
 
 Livres :
 
-  Â· Linux Cookbook, Carla Schroder, Installing and Managing Software, 14-15 
-  Â· ibid., Installing Programs from Source Code, 55-57
+  * Linux Cookbook, Carla Schroder, Installing and Managing Software, 14-15 
+  * ibid., Installing Programs from Source Code, 55-57
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

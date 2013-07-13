@@ -2,25 +2,25 @@
 ProMAX HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ============
 
-DerniÃ¨re rÃ©vision : 23 janvier 2013
+Dernière révision : 23 janvier 2013
 
-Ce HOWTO dÃ©crit l'installation de ProMAX 2D et de SeisSpace sur Red Hat
+Ce HOWTO décrit l'installation de ProMAX 2D et de SeisSpace sur Red Hat
 Enterprise Linux Workstation 5.8 64-bit.
 
-  Â· Obtenir Red Hat Enterprise Linux Workstation 5.8 64-bit
-  Â· Installer Red Hat Enterprise Linux Workstation 5.8 64-bit
-  Â· Installer les Additions InvitÃ© sur un systÃ¨me virtualisÃ©
-  Â· Configuration initiale de RHEL WS
-  Â· Paquets supplÃ©mentaires
-  Â· Configuration de l'affichage
-  Â· Peaufinage de l'environnement
-  Â· Obtenir ProMAX 2D et SeisSpace
-  Â· Installation initiale de ProMAX 2D
-  Â· Mise Ã  jour initiale
-  Â· Configurer le gestionnaire de licence
-  Â· Configuration initiale de ProMAX 2D
-  Â· SeisSpace
-  Â· Affichage 8-bits avec VNC
+  * Obtenir Red Hat Enterprise Linux Workstation 5.8 64-bit
+  * Installer Red Hat Enterprise Linux Workstation 5.8 64-bit
+  * Installer les Additions Invité sur un système virtualisé
+  * Configuration initiale de RHEL WS
+  * Paquets supplémentaires
+  * Configuration de l'affichage
+  * Peaufinage de l'environnement
+  * Obtenir ProMAX 2D et SeisSpace
+  * Installation initiale de ProMAX 2D
+  * Mise à jour initiale
+  * Configurer le gestionnaire de licence
+  * Configuration initiale de ProMAX 2D
+  * SeisSpace
+  * Affichage 8-bits avec VNC
 
 
 Obtenir Red Hat Enterprise Linux Workstation 5.8 64-bit
@@ -28,56 +28,56 @@ Obtenir Red Hat Enterprise Linux Workstation 5.8 64-bit
 
   * http://rhn.redhat.com
 
-En haut Ã  droite de la page, suivre le lien 'Customer Portal'. Sur la page
-subsÃ©quente, lorsqu'on survole l'onglet 'TÃ©lÃ©chargements', la rubrique 'Red Hat
-Enterprise Linux' affiche un autre lien 'TÃ©lÃ©chargements'.
+En haut à droite de la page, suivre le lien 'Customer Portal'. Sur la page
+subséquente, lorsqu'on survole l'onglet 'Téléchargements', la rubrique 'Red Hat
+Enterprise Linux' affiche un autre lien 'Téléchargements'.
 
-Dans la liste des tÃ©lÃ©chargements disponibles, c'est 'Red Hat Enterprise
-Desktop (v. 5 for 64-bit x86_64) qui nous intÃ©resse. Ne pas dÃ©plier ce lien,
-mais cliquer directement dessus. Ensuite, tÃ©lÃ©charger les deux images ISO
+Dans la liste des téléchargements disponibles, c'est 'Red Hat Enterprise
+Desktop (v. 5 for 64-bit x86_64) qui nous intéresse. Ne pas déplier ce lien,
+mais cliquer directement dessus. Ensuite, télécharger les deux images ISO
 'Binary DVD 1' et 'Binary DVD 2'.
 
 
 Installer Red Hat Enterprise Linux Workstation 5.8 64-bit
 ---------------------------------------------------------
 
-Rien de particulier Ã  signaler pour l'installation de RHEL WS 5.8. Quelques
-consignes Ã  respecter cependant :
+Rien de particulier à signaler pour l'installation de RHEL WS 5.8. Quelques
+consignes à respecter cependant :
 
-  > Saisir le numÃ©ro d'installation, sans quoi on se retrouve avec un poste de
-    travail rÃ©duit.
+  > Saisir le numéro d'installation, sans quoi on se retrouve avec un poste de
+    travail réduit.
 
-  > RÃ©seau : 'DHCP'.
+  > Réseau : 'DHCP'.
 
-  > Nom d'hÃ´te dÃ©fini manuellement : 'localhost.localdomain'.
+  > Nom d'hôte défini manuellement : 'localhost.localdomain'.
 
-  > Ensembles de logiciels : 'MultimÃ©dia', 'Bureau' et 'DÃ©veloppement
+  > Ensembles de logiciels : 'Multimédia', 'Bureau' et 'Développement
     logiciel'.
 
-  > Pare-feu : dÃ©sactivÃ©.
+  > Pare-feu : désactivé.
 
-  > SELinux : dÃ©sactivÃ©.
+  > SELinux : désactivé.
 
   > Kdump : ne pas activer.
 
-  > CrÃ©er un utilisateur 'promax'.
+  > Créer un utilisateur 'promax'.
 
 
-Installer les Additions InvitÃ© sur un systÃ¨me virtualisÃ©
+Installer les Additions Invité sur un système virtualisé
 --------------------------------------------------------
 
-VÃ©rifier si l'on dispose des prÃ©requis :
+Vérifier si l'on dispose des prérequis :
 
   # rpm -q gcc kernel-devel
   gcc-4.1.2-52.el5
   kernel-devel-2.6.18-308.el5
 
-PÃ©riphÃ©riques > Installer les Additions InvitÃ©.
+Périphériques > Installer les Additions Invité.
 
   # cd /media/VBOXADDITIONS_4.1.10_76795
   # sh VBoxLinuxAdditions.run
 
-RedÃ©marrer en mode Plein Ã‰cran.
+Redémarrer en mode Plein Écran.
 
 
 Configuration initiale de RHEL WS
@@ -85,59 +85,59 @@ Configuration initiale de RHEL WS
 
 Peaufiner la configuration de Nautilus et de Gnome Terminal.
 
-DÃ©sactiver les services superflus :
+Désactiver les services superflus :
 
   # ntsysv --level 2345
 
-  Â· bluetooth
-  Â· firstboot
-  Â· gpm
-  Â· ip6tables
-  Â· iptables
-  Â· kudzu
-  Â· lvm2-monitor
-  Â· mdmonitor
-  Â· rhnsd
-  Â· rhsmcertd
-  Â· sendmail
-  Â· yum-updatesd
+  * bluetooth
+  * firstboot
+  * gpm
+  * ip6tables
+  * iptables
+  * kudzu
+  * lvm2-monitor
+  * mdmonitor
+  * rhnsd
+  * rhsmcertd
+  * sendmail
+  * yum-updatesd
 
-Si l'on a dÃ©cidÃ© de se passer de RHN, on peut dÃ©sinstaller le 'Subscription
-Manager' pour Ã©viter les notifications agaÃ§antes :
+Si l'on a décidé de se passer de RHN, on peut désinstaller le 'Subscription
+Manager' pour éviter les notifications agaçantes :
 
   # rpm -qa | grep subscription-manager | xargs rpm -e
 
 
-Paquets supplÃ©mentaires
+Paquets supplémentaires
 -----------------------
 
 Monter le premier DVD d'installation et installer les paquets suivants :
 
-  Â· yum-fastestmirror
-  Â· libXp (32-bits et 64-bits)
-  Â· openmotif22 (32-bits et 64-bits)
-  Â· compat-libf2c-34 (32-bits et 64-bits)
-  Â· compat-readline43 (32-bits et 64-bits)
-  Â· sharutils
-  Â· ncompress
-  Â· vnc
+  * yum-fastestmirror
+  * libXp (32-bits et 64-bits)
+  * openmotif22 (32-bits et 64-bits)
+  * compat-libf2c-34 (32-bits et 64-bits)
+  * compat-readline43 (32-bits et 64-bits)
+  * sharutils
+  * ncompress
+  * vnc
 
 
 Configuration de l'affichage
 ----------------------------
 
-Configurer la carte NVidia avec les drivers propriÃ©taires de ELRepo.
+Configurer la carte NVidia avec les drivers propriétaires de ELRepo.
 
   # rpm --import http://elrepo.org/RPM-GPG-KEY-elrepo.org
   # rpm -Uvh http://elrepo.org/elrepo-release-5-3.el5.elrepo.noarch.rpm
   # yum check-update  
   # yum install nvidia-x11-drv
 
-Passer au niveau d'exÃ©cution 3 :
+Passer au niveau d'exécution 3 :
 
   # init 3
 
-GÃ©nÃ©rer '/etc/X11/xorg.conf' :
+Générer '/etc/X11/xorg.conf' :
 
   # nvidia-xconfig
 
@@ -145,30 +145,30 @@ Se reconnecter en tant que 'promax' et lancer X manuellement :
 
   $ startx
 
-VÃ©rifier si le driver fonctionne correctement :
+Vérifier si le driver fonctionne correctement :
 
   $ glxinfo | head -n 3
   name of display: :0.0
   display: :0  screen: 0
   direct rendering: Yes
 
-Si tout s'est bien passÃ©, on peut procÃ©der Ã  la configuration du deuxiÃ¨me
-moniteur. Repasser au niveau d'exÃ©cution 3 et lancer l'utilitaire de
+Si tout s'est bien passé, on peut procéder à la configuration du deuxième
+moniteur. Repasser au niveau d'exécution 3 et lancer l'utilitaire de
 configuration comme ceci :
 
   # nvidia-xconfig --twinview
 
-LÃ  aussi, tester en tant qu'utilisateur simple. On pourra Ã©ventuellement se
+Là aussi, tester en tant qu'utilisateur simple. On pourra éventuellement se
 servir de l'utilitaire graphique pour peaufiner la configuration. Dans ce cas,
 il faudra ouvrir un terminal graphique et le lancer en tant que root :
 
   # nvidia-settings
 
-Ã€ partir de lÃ , choisir un fond d'Ã©cran adaptÃ© au mode double Ã©cran.
+À partir de là, choisir un fond d'écran adapté au mode double écran.
 
-Suite Ã  la configuration de TwinView, les touches accentuÃ©es peuvent ne plus
-fonctionner correctement. Pour remÃ©dier Ã  cela, il faut corriger l'entrÃ©e
-correspondante dans '/etc/X11/xorg.conf' Ã  la main. Par exemple :
+Suite à la configuration de TwinView, les touches accentuées peuvent ne plus
+fonctionner correctement. Pour remédier à cela, il faut corriger l'entrée
+correspondante dans '/etc/X11/xorg.conf' à la main. Par exemple :
 
 --8<---------- /etc/X11/xorg.conf --------------------------------------------
     ...
@@ -181,7 +181,7 @@ correspondante dans '/etc/X11/xorg.conf' Ã  la main. Par exemple :
 Peaufinage de l'environnement
 -----------------------------
 
-VÃ©rifier si '/etc/hosts' ressemble bien Ã  ceci :
+Vérifier si '/etc/hosts' ressemble bien à ceci :
 
 --8<---------- /etc/hosts ----------------------------------------------------
 127.0.0.1   localhost.localdomain localhost
@@ -189,8 +189,8 @@ VÃ©rifier si '/etc/hosts' ressemble bien Ã  ceci :
 --8<--------------------------------------------------------------------------
 
 Autoriser les connexions TCP au serveur graphique. Le plus facile, c'est
-d'ouvrir la configuration de GDM et de dÃ©cocher 'Refuser les connexions TCP au
-serveur X' dans l'onglet 'SÃ©curitÃ©'. Cette option nÃ©cessitera un redÃ©marrage du
+d'ouvrir la configuration de GDM et de décocher 'Refuser les connexions TCP au
+serveur X' dans l'onglet 'Sécurité'. Cette option nécessitera un redémarrage du
 serveur graphique. 
 
 Modifier quelques permissions de fichiers dans '/etc/profile.d' :
@@ -208,8 +208,8 @@ Modifier quelques permissions de fichiers dans '/etc/profile.d' :
   -r-------- 1 root root 218 sept.  9  2004 krb5-workstation.csh
   -r-------- 1 root root 229 janv. 19  2006 krb5-workstation.sh
 
-ProMAX 2D ne supporte pas l'encodage UTF-8. Il faut donc impÃ©rativement dÃ©finir
-'en_US' comme locale, sous peine de se retrouver confrontÃ© Ã  une floppÃ©e de
+ProMAX 2D ne supporte pas l'encodage UTF-8. Il faut donc impérativement définir
+'en_US' comme locale, sous peine de se retrouver confronté à une floppée de
 bugs inexplicables :
 
 --8<---------- /etc/sysconfig/i18n -------------------------------------------
@@ -217,7 +217,7 @@ LANG="en_US"
 SYSFONT="latarcyrheb-sun16"
 --8<--------------------------------------------------------------------------
 
-Ajouter quelques nouveaux services Ã  la fin de '/etc/services' :
+Ajouter quelques nouveaux services à la fin de '/etc/services' :
 
 --8<---------- /etc/services -------------------------------------------------
 ...
@@ -236,15 +236,15 @@ Obtenir ProMAX 2D et SeisSpace
 
 Fichiers d'installation ProMAX 2D :
 
-  Â· ProMAX SeisSpace Lx64 5000.0.3.0 (Release, 973 MB)
-  Â· ProMAX SeisSpace Lx64 5000.0.3.1 (Patch, 85 MB)
-  Â· ProMAX SeisSpace Lx64 5000.0.3.2 (Patch, 48 MB)
-  Â· ProMAX SeisSpace Lx64 5000.0.3.3 (Patch, 19 MB)
+  * ProMAX SeisSpace Lx64 5000.0.3.0 (Release, 973 MB)
+  * ProMAX SeisSpace Lx64 5000.0.3.1 (Patch, 85 MB)
+  * ProMAX SeisSpace Lx64 5000.0.3.2 (Patch, 48 MB)
+  * ProMAX SeisSpace Lx64 5000.0.3.3 (Patch, 19 MB)
 
-Fichiers d'installation SeisSpaceÂ :
+Fichiers d'installation SeisSpace :
 
-  Â· ProMAX SeisSpace Lx64 5000.0.8.0 (Release, 908 MB)
-  Â· ProMAX SeisSpace Tutorials 5000.0.3.0 (Release, 1 GB)
+  * ProMAX SeisSpace Lx64 5000.0.8.0 (Release, 908 MB)
+  * ProMAX SeisSpace Tutorials 5000.0.3.0 (Release, 1 GB)
 
 
 Installation initiale de ProMAX 2D
@@ -253,7 +253,7 @@ Installation initiale de ProMAX 2D
 Le fichier d'installation de ProMAX 2D (version 5000.0.3.0), c'est
 'PMSSDC_5000_0_3_0_RlsLx64.tar'.
 
-Ranger l'archive dans le rÃ©pertoire utilisateur avant de la dÃ©ballerÂ :
+Ranger l'archive dans le répertoire utilisateur avant de la déballer :
 
   $ tar xvf PMSSDC_5000_0_3_0_RlsLx64.tar
   PMSSDC_5000_0_3_0_RlsLx64.bin
@@ -261,7 +261,7 @@ Ranger l'archive dans le rÃ©pertoire utilisateur avant de la dÃ©ballerÂ :
   -rwxrwxr-x 1 promax promax 1020830699 Jan 16  2011 PMSSDC_5000_0_3_0_RlsLx64.bin
   -rw-r--r-- 1 promax promax 1020832256 Mar 28  2011 PMSSDC_5000_0_3_0_RlsLx64.tar
  
-Lancer le programme d'installationÂ :
+Lancer le programme d'installation :
 
   $ ./PMSSDC_5000_0_3_0_RlsLx64.bin
 
@@ -270,20 +270,20 @@ Lancer le programme d'installationÂ :
   > Ignorer le chemin d'installation d'Openworks et simplement cliquer sur
     'Next'.
 
-  > L'Ã©cran subsÃ©quent indique qu'Openworks n'a pas Ã©tÃ© trouvÃ©. SÃ©lectionner
+  > L'écran subséquent indique qu'Openworks n'a pas été trouvé. Sélectionner
     'Continue, post-install scripts may fail'.
 
-  > RÃ©pertoire d'installationÂ : '/home/promax'
+  > Répertoire d'installation : '/home/promax'
 
-  > Mode d'installationÂ : 'Typical'
+  > Mode d'installation : 'Typical'
 
-CrÃ©er un rÃ©pertoire 'logs' et ranger le journal d'installation dedansÂ :
+Créer un répertoire 'logs' et ranger le journal d'installation dedans :
 
   $ mkdir -m 0775 logs
   $ mv ProMax_SeisSpace_5000.0.3.0_InstallLog.log logs/
 
 Au passage, on peut jeter un oeil dans le journal de l'installation, qui se
-prÃ©sente comme ceciÂ :
+présente comme ceci :
 
   Summary
   -------
@@ -294,23 +294,23 @@ prÃ©sente comme ceciÂ :
   0 FatalErrors
   ...
 
-Supprimer les fichiers de l'installateur pour faire un peu de mÃ©nageÂ :
+Supprimer les fichiers de l'installateur pour faire un peu de ménage :
 
   $ rm -f PMSSDC_5000_0_3_0_RlsLx64.*
 
 
-Mise Ã  jour initiale
+Mise à jour initiale
 --------------------
 
-Ranger les trois fichiers patchs tÃ©lÃ©chargÃ©s dans le rÃ©pertoire
+Ranger les trois fichiers patchs téléchargés dans le répertoire
 '~/ProMAX/install'.
 
-DÃ©finir la variable d'environnement 'INSTALL_DIR', comme ceciÂ :
+Définir la variable d'environnement 'INSTALL_DIR', comme ceci :
 
   $ export INSTALL_DIR=/home/promax
 
-Ensuite, appliquer successivement les patchs. On apprÃ©ciera au passage
-l'inconsistance des formatsÂ :
+Ensuite, appliquer successivement les patchs. On appréciera au passage
+l'inconsistance des formats :
 
   $ cd ProMAX/install/
   $ chmod 0755 PMSSDC_5000_0_3_*.sh
@@ -338,7 +338,7 @@ l'inconsistance des formatsÂ :
   ##############################################################################
   ...
 
-Ranger les logs rÃ©sultants Ã  l'endroit appropriÃ©Â :
+Ranger les logs résultants à l'endroit approprié :
 
   $ mv *.log ~/logs/
 
@@ -346,13 +346,13 @@ Ranger les logs rÃ©sultants Ã  l'endroit appropriÃ©Â :
 Configurer le gestionnaire de licence
 -------------------------------------
 
-Ranger le fichier de licence 'license.dat' dans un endroit appropriÃ©, par
+Ranger le fichier de licence 'license.dat' dans un endroit approprié, par
 exemple '~/.license/' :
 
   $ mkdir ~/.license
   $ mv license.dat ~/.license/
 
-VoilÃ  comment se prÃ©sentent les deux premiÃ¨res lignes de ce fichierÂ :
+Voilà comment se présentent les deux premières lignes de ce fichier :
 
 --8<---------- ~/.license/license.dat ----------------------------------------
 SERVER localhost 68b599e2d9ab 2013
@@ -360,20 +360,20 @@ DAEMON licsrv /etc/licsrv /etc/licsrv.opt
 ...
 --8<--------------------------------------------------------------------------
 
-  > Sur la premiÃ¨re ligne, il faut vÃ©rifier si le nom d'hÃ´te et l'adresse MAC
-    correspondent effectivement Ã  la machine.
+  > Sur la première ligne, il faut vérifier si le nom d'hôte et l'adresse MAC
+    correspondent effectivement à la machine.
 
-  > Sur la deuxiÃ¨me ligne, il faudra indiquer le chemin complet vers le serveur
+  > Sur la deuxième ligne, il faudra indiquer le chemin complet vers le serveur
     de licence 'licsrv'.
 
   > On pourra supprimer 'licsrv.opt'.
 
-Chercher l'emplacement de 'licsrv'Â :
+Chercher l'emplacement de 'licsrv' :
 
   $ find ~ -name 'licsrv'
   /home/promax/ProMAX/linux64/bin/flexlm/licsrv
 
-Ã‰diter 'license.dat' en consÃ©quenceÂ :
+Éditer 'license.dat' en conséquence :
 
 --8<---------- ~/.license/license.dat ----------------------------------------
 SERVER localhost 68b599e2d9ab 2013
@@ -381,18 +381,18 @@ DAEMON licsrv /home/promax/ProMAX/linux64/bin/flexlm/licsrv
 ...
 --8<--------------------------------------------------------------------------
 
-Essayer de dÃ©marrer le serveur de licence Ã  la mainÂ :
+Essayer de démarrer le serveur de licence à la main :
 
   $ find . -name 'lmgrd'
   ./ProMAX/linux64/bin/flexlm/lmgrd
   $ cd ProMAX/linux64/bin/flexlm/
   $ ./lmgrd -c ~/.license/license.dat > ~/logs/license.log
 
-Afficher le rÃ©sultat de l'opÃ©rationÂ :
+Afficher le résultat de l'opération :
 
   $ less ~/logs/license.log
 
-On doit obtenir quelque chose comme ceciÂ :
+On doit obtenir quelque chose comme ceci :
 
   ...
   16:40:11 (lmgrd) Started licsrv (internet tcp_port 60731 pid 11920)
@@ -402,12 +402,12 @@ On doit obtenir quelque chose comme ceciÂ :
   16:40:11 (lmgrd) licsrv using TCP-port 60731
   ...
 
-Si tout s'est bien passÃ©, on peut ajouter une entrÃ©e correspondante dans
+Si tout s'est bien passé, on peut ajouter une entrée correspondante dans
 '/etc/rc.d/rc.local' pour lancer le serveur de licence automatiquement au
-dÃ©marrage de la machineÂ :
+démarrage de la machine :
 
 --8<---------- /etc/rc.d/rc.local --------------------------------------------
-# DÃ©marrer le serveur de licence LAM pour ProMAX
+# Démarrer le serveur de licence LAM pour ProMAX
 /home/promax/ProMAX/linux64/bin/flexlm/lmgrd \
  -c /home/promax/.license/license.dat > /home/promax/logs/license.log
 --8<--------------------------------------------------------------------------
@@ -416,11 +416,11 @@ dÃ©marrage de la machineÂ :
 Configuration initiale de ProMAX 2D
 -----------------------------------
 
-CrÃ©er un rÃ©pertoire pour les donnÃ©esÂ :
+Créer un répertoire pour les données :
 
   $ mkdir ~/Data
 
-DÃ©finir quelques variables d'environnement dans '~/.bashrc'Â :
+Définir quelques variables d'environnement dans '~/.bashrc' :
 
 --8<---------- ~/.bashrc -----------------------------------------------------
 export DISPLAY=localhost:0
@@ -429,8 +429,8 @@ export PROMAX_DATA_HOME=/home/promax/Data
 export LM_LICENSE_FILE=/home/promax/.license/license.dat
 --8<--------------------------------------------------------------------------
 
-CrÃ©er un lanceur pour l'application en Ã©ditant
-'/usr/share/applications/promax.desktop'Â :
+Créer un lanceur pour l'application en éditant
+'/usr/share/applications/promax.desktop' :
 
 --8<---------- /usr/share/applications/promax.desktop ------------------------
 [Desktop Entry]
@@ -449,52 +449,52 @@ StartupNotify=true
 SeisSpace
 ---------
 
-L'installation initiale de SeisSpace s'effectue de maniÃ¨re similaire. Il n'y a
-pas de patchs Ã  installer.
+L'installation initiale de SeisSpace s'effectue de manière similaire. Il n'y a
+pas de patchs à installer.
 
   $ tar xvzf PMSS_5000_8_0_0_RlsLx64.tgz
   $ ./PMSS_5000_8_0_0_RlsLx64.bin
 
-RÃ©pondre aux questions de l'installateur comme on l'a fait plus haut.
+Répondre aux questions de l'installateur comme on l'a fait plus haut.
 
   $ mkdir -m 0775 logs
   $ mv ProMax_SeisSpace_InstallLog.log logs/
 
-Faire un brin de mÃ©nageÂ :
+Faire un brin de ménage :
 
   $ rm -f PMSS_5000_8_0_0_RlsLx64.*
 
-Ã‰diter '~/SeisSpace/etc/sitemgr' et renseigner l'emplacement par dÃ©faut des
-logsÂ :
+Éditer '~/SeisSpace/etc/sitemgr' et renseigner l'emplacement par défaut des
+logs :
 
 --8<---------- ~/SeisSpace/etc/sitemgr ---------------------------------------
 export PROWESS_LOGDIR=/home/promax/logs
 --8<--------------------------------------------------------------------------
 
-Renseigner quelques variables dans '~/SeisSpace/etc/SSclient'Â :
+Renseigner quelques variables dans '~/SeisSpace/etc/SSclient' :
 
 --8<---------- ~/SeisSpace/etc/SSclient --------------------------------------
 export PROWESS_HOST=${PROWESS_HOST:-localhost}
 export LM_LICENSE_FILE=${LM_LICENSE_FILE:-/home/promax/.license/license.dat}
 --8<--------------------------------------------------------------------------
 
-Configurer l'emplacement par dÃ©faut des donnÃ©es Ã  partir de SeisSpace.
+Configurer l'emplacement par défaut des données à partir de SeisSpace.
 
 Configurer le serveur de licence comme on l'a fait pour ProMAX 2D.
 
-Lancer SeisSpace manuellementÂ :
+Lancer SeisSpace manuellement :
 
   $ cd SeisSpace/etc
   $ ./sitemgr start
   $ ./SSclient
 
-Le lancement du Site Manager sera dÃ©fini dans '/etc/rc.d/rc.local'Â :
+Le lancement du Site Manager sera défini dans '/etc/rc.d/rc.local' :
 
 --8<---------- /etc/rc.d/rc.local --------------------------------------------
 /home/promax/SeisSpace/etc/sitemgr start
 --8<--------------------------------------------------------------------------
 
-Le lanceur '/usr/share/applications/seisspace.desktop' ressemblera Ã  ceciÂ :
+Le lanceur '/usr/share/applications/seisspace.desktop' ressemblera à ceci :
 
 --8<---------- /usr/share/applications/seisspace.desktop ---------------------
 [Desktop Entry]
@@ -513,17 +513,17 @@ StartupNotify=true
 Affichage 8-bits avec VNC
 -------------------------
 
-Certains modules obsolÃ¨tes de ProMAX 2D nÃ©cessitent une configuration tout
-aussi pathologiquement obsolÃ¨te pour l'affichage 8-bits.
+Certains modules obsolètes de ProMAX 2D nécessitent une configuration tout
+aussi pathologiquement obsolète pour l'affichage 8-bits.
 
-Ã‰diter '/etc/sysconfig/vncservers'Â :
+Éditer '/etc/sysconfig/vncservers' :
 
 --8<---------- /etc/sysconfig/vncservers -------------------------------------
 VNCSERVERS="2:promax"
 VNCSERVERARGS[2]="-cc 3 -depth 8 -geometry 1260x1000"
 --8<--------------------------------------------------------------------------
 
-DÃ©finir un mot de passe VNC pour l'utilisateurÂ :
+Définir un mot de passe VNC pour l'utilisateur :
 
   # su - promax
   $ vncpasswd
@@ -531,15 +531,15 @@ DÃ©finir un mot de passe VNC pour l'utilisateurÂ :
   Verify: ******
   $ exit
 
-Lancer le serveur VNCÂ :
+Lancer le serveur VNC :
 
   # service vncserver start
 
-DÃ©finir le lancement automatique au dÃ©marrageÂ :
+Définir le lancement automatique au démarrage :
 
   # chkconfig vncserver on
   
-Ensuite, Ã©diter '~/.vnc/xstartup'Â :
+Ensuite, éditer '~/.vnc/xstartup' :
 
 --8<---------- ~/.vnc/xstartup -----------------------------------------------
 [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
@@ -548,16 +548,17 @@ Ensuite, Ã©diter '~/.vnc/xstartup'Â :
 exec gnome-session &
 --8<--------------------------------------------------------------------------
 
-Chaque modification de ce fichier nÃ©cessite un redÃ©marrage du serveur VNCÂ :
+Chaque modification de ce fichier nécessite un redémarrage du serveur VNC :
 
   # service vncserver restart
 
 Pour se connecter, on utilisera VNC Viewer :
 
-  > VNC ServerÂ : 'localhost:2'
+  > VNC Server : 'localhost:2'
 
-  > PasswordÂ : '******' (celui que l'on a dÃ©fini plus haut avec 'vncpasswd')
+  > Password : '******' (celui que l'on a défini plus haut avec 'vncpasswd')
 
 
 ----------------------------------------------------------------------------- 
 # vim: syntax=txt
+# vim: set encoding=latin1

@@ -2,22 +2,22 @@
 Ghost4Linux HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =================
 
-DerniÃ¨re rÃ©vision : 1er fÃ©vrier 2012
+Dernière révision : 1er février 2012
 
-Ce HOWTO dÃ©crit l'utilisation de Ghost4Linux.
+Ce HOWTO décrit l'utilisation de Ghost4Linux.
 
-  Â· Introduction
-  Â· Obtenir G4L
-  Â· Utiliser G4L
-  Â· RÃ©duire la taille de l'image
+  * Introduction
+  * Obtenir G4L
+  * Utiliser G4L
+  * Réduire la taille de l'image
 
 
 Introduction
 ------------
 
 G4L (Ghost4Linux) est un outil de clonage de disques et de partitions. Les
-images disque peuvent Ãªtre compressÃ©es et transfÃ©rÃ©es sur un serveur FTP local
-ou clonÃ©es localement.
+images disque peuvent être compressées et transférées sur un serveur FTP local
+ou clonées localement.
 
 
 Obtenir G4L
@@ -27,9 +27,9 @@ Aller sur la page du projet :
 
   * http://sourceforge.net/projects/g4l/
 
-TÃ©lÃ©charger l'image ISO de G4L :
+Télécharger l'image ISO de G4L :
 
-  Â· g4l-v0.43.iso
+  * g4l-v0.43.iso
 
 Graver cette image sur un CD-Rom.
 
@@ -37,14 +37,14 @@ Graver cette image sur un CD-Rom.
 Utiliser G4L
 ------------
 
-Au dÃ©marrage, booter sur le kernel par dÃ©faut en appuyant sur la touche
-[EntrÃ©e].
+Au démarrage, booter sur le kernel par défaut en appuyant sur la touche
+[Entrée].
 
-Confirmer simplement la sÃ©rie de messages de dÃ©marrage.
+Confirmer simplement la série de messages de démarrage.
 
 Choisir une disposition clavier : fr/fr-latin1.bmap pour un clavier AZERTY.
 
-Dans l'Ã©cran d'accueil, lancer G4L :
+Dans l'écran d'accueil, lancer G4L :
 
   > g4l
 
@@ -54,54 +54,55 @@ Options :
 
   Network use - Backup/restore to/from network (FTP)
 
-On arrive Ã  l'Ã©cran principal de G4L.
+On arrive à l'écran principal de G4L.
 
-  > VÃ©rifier si l'adresse IP est correctement dÃ©finie.
+  > Vérifier si l'adresse IP est correctement définie.
 
-  > Renseigner le nom d'hÃ´te ou l'adresse IP du serveur FTP local.
+  > Renseigner le nom d'hôte ou l'adresse IP du serveur FTP local.
 
   > Renseigner le nom d'utilisateur et le mot de passe pour se connecter au
     serveur FTP : 'utilisateur:mot_de_passe'.
 
-  > SÃ©lectionner un nom suffisamment parlant pour l'image disque, par exemple
+  > Sélectionner un nom suffisamment parlant pour l'image disque, par exemple
     'windows-xp-ibm-thinkcentre' ou 'slackware64-14.0-portable-vostro'.
 
-  > Garder la compression par dÃ©faut.
+  > Garder la compression par défaut.
 
 
 Envoyer l'image disque sur le serveur FTP :
 
   > 'Backup drive to FTP server
 
-  L'Ã©cran subsÃ©quent affiche l'ensemble des disques et des partitions.
-  SÃ©lectionner le disque en entier que l'on souhaite cloner, par exemple 'hda',
-  et confirmer le rÃ©capitulatif.
+  L'écran subséquent affiche l'ensemble des disques et des partitions.
+  Sélectionner le disque en entier que l'on souhaite cloner, par exemple 'hda',
+  et confirmer le récapitulatif.
 
-RÃ©cupÃ©rer une image depuis le serveur FTP :
+Récupérer une image depuis le serveur FTP :
 
   > Restore drive from FTP server
 
-  LÃ  aussi, sÃ©lectionner un disque en entier.
+  Là aussi, sélectionner un disque en entier.
 
-Remarque : G4L se charge entiÃ¨rement dans la RAM. On peut donc enlever le
-CD-Rom pendant le dÃ©roulement des opÃ©rations.
+Remarque : G4L se charge entièrement dans la RAM. On peut donc enlever le
+CD-Rom pendant le déroulement des opérations.
 
 
-RÃ©duire la taille de l'image
+Réduire la taille de l'image
 ----------------------------
 
-Pour rÃ©duire au maximum la taille de l'image disque, on peut Ã©crire des zÃ©ros
-sur la partie non utilisÃ©e par le systÃ¨me :
+Pour réduire au maximum la taille de l'image disque, on peut écrire des zéros
+sur la partie non utilisée par le système :
 
   # dd if=/dev/zero of=/0bits bs=20M ; rm -f /0bits
 
-  > L'option 'bs' signifie 'blocksize' et dÃ©signe la taille des blocs Ã©crits
+  > L'option 'bs' signifie 'blocksize' et désigne la taille des blocs écrits
     sur le disque.
 
-Sur un systÃ¨me Windows, c'est l'utilitaire 'nullfile.exe' qui permet de rÃ©duire
+Sur un système Windows, c'est l'utilitaire 'nullfile.exe' qui permet de réduire
 l'image du disque.
 
   * http://www.feyrer.de/g4u/nullfile-1.02.exe
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1
