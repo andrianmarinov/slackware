@@ -2,27 +2,27 @@
 Desktop HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =============
 
-DerniÃ¨re rÃ©vision : 3 juillet 2013
+Dernière révision : 3 juillet 2013
 
-Ce HOWTO dÃ©crit l'installation d'un poste de travail Microlinux Entreprise basÃ©
+Ce HOWTO décrit l'installation d'un poste de travail Microlinux Entreprise basé
 sur Slackware 14.0.
 
 
-  * DÃ©marrage et choix du clavier
-  * RÃ©cupÃ©rer les tagfiles
+  * Démarrage et choix du clavier
+  * Récupérer les tagfiles
   * Partitionner le disque dur
   * Formater le disque dur
   * Choisir ce qu'on va installer
   * Configurer LILO
   * Configurer la souris
-  * Configurer le rÃ©seau et les services au dÃ©marrage
+  * Configurer le réseau et les services au démarrage
   * Configurer l'horloge et le fuseau horaire
-  * Choisir un gestionnaire de fenÃªtres
-  * Avant de redÃ©marrer
-  * Peaufiner la configuration rÃ©seau
-  * RÃ©cupÃ©rer les scripts Microlinux
+  * Choisir un gestionnaire de fenêtres
+  * Avant de redémarrer
+  * Peaufiner la configuration réseau
+  * Récupérer les scripts Microlinux
   * Configurer 'slackpkg'
-  * Ã‰laguer le systÃ¨me de base
+  * Élaguer le système de base
   * Installer la collection de paquets MLED
   * Installer les paquets Multilib
   * Nettoyer le menu des applications
@@ -30,53 +30,53 @@ sur Slackware 14.0.
   * Nettoyer une installation existante
 
 
-DÃ©marrage et choix du clavier
+Démarrage et choix du clavier
 -----------------------------
  
-Options de dÃ©marrage :
+Options de démarrage :
 
   * 'hugesmp.s' -> 32bit
   * 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
-  * 'vga=788'   -> Ã©cran normal
-  * 'vga=791'   -> grand Ã©cran
+  * 'vga=788'   -> écran normal
+  * 'vga=791'   -> grand écran
 
-Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY franÃ§ais.
+Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY français.
 
 
-RÃ©cupÃ©rer les tagfiles
+Récupérer les tagfiles
 ----------------------
 
-Les tagfiles sont une sÃ©rie de fichiers texte qui dÃ©finissent le statut d'un
-paquet. Un paquet marquÃ© 'ADD' sera installÃ©, un paquet marquÃ© 'SKP' ne le sera
-pas. Cette procÃ©dure permet d'Ã©viter la sÃ©lection manuelle des paquets.
+Les tagfiles sont une série de fichiers texte qui définissent le statut d'un
+paquet. Un paquet marqué 'ADD' sera installé, un paquet marqué 'SKP' ne le sera
+pas. Cette procédure permet d'éviter la sélection manuelle des paquets.
 
-Activer le rÃ©seau, par exemple :
+Activer le réseau, par exemple :
 
   root@slackware:/# dhcpcd eth0
 
-L'environnement d'installation de Slackware contient dÃ©jÃ  un rÃ©pertoire '/tag',
-censÃ© recevoir l'arborescence des tagfiles :
+L'environnement d'installation de Slackware contient déjà un répertoire '/tag',
+censé recevoir l'arborescence des tagfiles :
 
   # cd /tag
 
-RÃ©cupÃ©rer les tagfiles du serveur de Microlinux :
+Récupérer les tagfiles du serveur de Microlinux :
 
   wget http://www.microlinux.fr/slackware/MLED-14.0-32bit/tagfiles.tar.gz
 
-  /!\ Les jeux de tagfiles dans les sous-rÃ©pertoires 32-bit et 64-bit sont des
+  /!\ Les jeux de tagfiles dans les sous-répertoires 32-bit et 64-bit sont des
   liens symboliques et de fait identiques.
 
-DÃ©compresser l'archive :
+Décompresser l'archive :
 
   # tar xvzf MLED-14.0.tar.gz
 
-Si tout s'est bien passÃ©, le rÃ©pertoire '/tag' contient une sÃ©rie de
-rÃ©pertoires correspondant aux groupes de paquets Slackware :
+Si tout s'est bien passé, le répertoire '/tag' contient une série de
+répertoires correspondant aux groupes de paquets Slackware :
 
   root@slackware:/tag# ls
   a/ ap/ d/ e/ f/ k/ kde/ kdei/ l/ n/ t/ tcl/ x/ xap/ xfce/ y/
 
-Ã€ prÃ©sent, on peut lancer l'installateur :
+À présent, on peut lancer l'installateur :
 
   root@slackware:/tag# setup
 
@@ -84,7 +84,7 @@ rÃ©pertoires correspondant aux groupes de paquets Slackware :
 Partitionner le disque dur
 --------------------------
 
-Remettre les tables de partitions Ã  zÃ©ro :
+Remettre les tables de partitions à zéro :
 
   # dd if=/dev/zero of=/dev/sda bs=512 count=64
 
@@ -92,16 +92,16 @@ Partitionner le disque :
 
   # cfdisk /dev/sda
 
-SchÃ©ma de partitionnement :
+Schéma de partitionnement :
 
-  * une partition pour /boot, de 100 Mo, formatÃ© en ext2
-  * une partition swap, Ã©gale Ã  la quantitÃ© de RAM disponible
-  * une partition principale, formatÃ©e en ext4
+  * une partition pour /boot, de 100 Mo, formaté en ext2
+  * une partition swap, égale à la quantité de RAM disponible
+  * une partition principale, formatée en ext4
 
-  > Si l'on dispose de moins de 512 Mo de RAM, la swap sera Ã©gale Ã  deux fois
-    la quantitÃ© de RAM.
+  > Si l'on dispose de moins de 512 Mo de RAM, la swap sera égale à deux fois
+    la quantité de RAM.
 
-  > Si l'on a au moins 512 Mo de RAM, la swap sera Ã©gale Ã  la quantitÃ© de RAM.
+  > Si l'on a au moins 512 Mo de RAM, la swap sera égale à la quantité de RAM.
 
   > La partition swap sera de type 'Linux swap' (code 82).
 
@@ -111,35 +111,35 @@ SchÃ©ma de partitionnement :
 Formater le disque dur
 ----------------------
 
-Toutes les opÃ©rations de formatage s'effectuent sans la recherche mÃ©ticuleuse
-de secteurs dÃ©fectueux.
+Toutes les opérations de formatage s'effectuent sans la recherche méticuleuse
+de secteurs défectueux.
 
   /!\ L'installateur Slackware requiert de partitionner la partition principale
   en premier !
 
 Consignes pour le formatage :
 
-  > systÃ¨me de fichiers ext2 pour '/boot'
+  > système de fichiers ext2 pour '/boot'
 
-  > systÃ¨me de fichiers ext4 pour les autres : '/', '/home', ...
+  > système de fichiers ext4 pour les autres : '/', '/home', ...
 
 
 Choisir ce qu'on va installer
 -----------------------------
 
-Installer Ã  partir du CD-Rom ou du DVD Slackware.
+Installer à partir du CD-Rom ou du DVD Slackware.
 
 Rechercher le lecteur CD-Rom ou DVD.
 
-PACKAGE SERIES SELECTION: accepter la sÃ©lection par dÃ©faut, puisque le profil
-de l'installation sera dÃ©fini par les tagfiles.
+PACKAGE SERIES SELECTION: accepter la sélection par défaut, puisque le profil
+de l'installation sera défini par les tagfiles.
 
 SELECT PROMPTING MODE: 'tagpath', puis indiquer le chemin vers les tagfiles.
 
   /!\ Si l'on ne peut pas utiliser les tagfiles pour une raison ou pour une
-  autre, on peut toujours dÃ©sÃ©lectionner les groupes E, KDE et XAP, installer
+  autre, on peut toujours désélectionner les groupes E, KDE et XAP, installer
   les groupes A, AP, D, F, K, L, N, T, TCL, X, XFCE et Y et peaufiner
-  l'installation de base aprÃ¨s coup.
+  l'installation de base après coup.
 
 
 Configurer LILO
@@ -156,12 +156,12 @@ OPTIONAL LILO append="<kernel parameters>" LINE :
 
   * 'nomodeset quiet ipv6.disable=1' 
   * 'quiet ipv6.disable=1 video=1366x768' (carte Intel)
-  * rÃ©solutions courantes : 800x600, 1024x768, 1366x768
+  * résolutions courantes : 800x600, 1024x768, 1366x768
 
-USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problÃ¨mes
-avec certains utilitaires en mode console, il n'empÃªche qu'il est dorÃ©navant
-Ã©tabli comme standard un peu partout. Le choix par dÃ©faut 'No' s'explique
-uniquement par un excÃ¨s de prudence de la part du distributeur.
+USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problèmes
+avec certains utilitaires en mode console, il n'empêche qu'il est dorénavant
+établi comme standard un peu partout. Le choix par défaut 'No' s'explique
+uniquement par un excès de prudence de la part du distributeur.
 
 SELECT LILO DESTINATION : 'MBR - Install to Master Boot Record'
 
@@ -172,21 +172,21 @@ Configurer la souris
 MOUSE CONFIGURATION : 'imps2- Microsoft PS/2 Intellimouse'
 
   > La configuration de la souris ne concerne que son utilisation en mode
-    console, avec GPM. On peut simplement accepter le choix par dÃ©faut, qui
-    correspond Ã  toutes les souris modernes.
+    console, avec GPM. On peut simplement accepter le choix par défaut, qui
+    correspond à toutes les souris modernes.
 
 GPM CONFIGURATION : 'No'. Le service GPM permet de copier/coller du texte avec
-la souris en mode console. Ã‰tant donnÃ© que nous nous servons de Vim pour cela,
-nous dÃ©cidons de ne pas le dÃ©marrer.
+la souris en mode console. Étant donné que nous nous servons de Vim pour cela,
+nous décidons de ne pas le démarrer.
 
 
-Configurer le rÃ©seau et les services au dÃ©marrage
+Configurer le réseau et les services au démarrage
 -------------------------------------------------
 
 CONFIGURE NETWORK: 'Yes'
 
-ENTER HOSTNAME : il s'agit de choisir un nom d'hÃ´te pour la machine.
-Choisissez-en un Ã  votre convenance et Ã©crivez-le en minuscules, comme ceci :
+ENTER HOSTNAME : il s'agit de choisir un nom d'hôte pour la machine.
+Choisissez-en un à votre convenance et écrivez-le en minuscules, comme ceci :
   
   * 'slackbox'
   * 'alphamule'
@@ -203,21 +203,21 @@ machine, comme par exemple :
   * 'crpconsulting.montpellier'
   *  etc.
 
-  /!\ Sur un poste de travail dont le nom d'hÃ´te est gÃ©rÃ© de faÃ§on centralisÃ©e
+  /!\ Sur un poste de travail dont le nom d'hôte est géré de façon centralisée
   par le serveur DHCP, on choisira 'localhost' et 'localdomain'. 
 
 CONFIGURATION TYPE FOR '<machine.domaine>' : selon le contexte, on choisira
-'static IP' ou 'DHCP' pour une connexion cablÃ©e sur un serveur ou un poste de
+'static IP' ou 'DHCP' pour une connexion cablée sur un serveur ou un poste de
 travail. Sur un ordinateur portable qui fonctionne alternativement avec une
-connexion wifi ou cablÃ©e ou en mode "nomade", on prÃ©fÃ©rera 'NetworkManager',
-une application qui gÃ¨re la connexion "automagique" du rÃ©seau. 
+connexion wifi ou cablée ou en mode "nomade", on préférera 'NetworkManager',
+une application qui gère la connexion "automagique" du réseau. 
 
-SET DHCP HOSTNAME : nom d'hÃ´te DHCP Ã  envoyer au FAI pour une connexion.
+SET DHCP HOSTNAME : nom d'hôte DHCP à envoyer au FAI pour une connexion.
 Laisser vide tout simplement.
 
 CONFIRM STARTUP SERVICES TO RUN :
 
-  [*] rc.fuse       -> laisser la sÃ©lection telle quelle
+  [*] rc.fuse       -> laisser la sélection telle quelle
   [*] rc.inetd
   [*] rc.messagebus
   [*] rc.syslog
@@ -229,52 +229,52 @@ Configurer l'horloge et le fuseau horaire
 
 HARDWARE CLOCK SET TO UTC ? 'YES - Hardware clock is set to UTC'
 
-  /!\ Le seul cas de figure oÃ¹ l'on optera pour 'local time', c'est dans un
-  scÃ©nario de double boot avec Windows, pour Ã©viter que ce dernier ne dÃ©rÃ¨gle
-  l'horloge Ã  chaque redÃ©marrage.
+  /!\ Le seul cas de figure où l'on optera pour 'local time', c'est dans un
+  scénario de double boot avec Windows, pour éviter que ce dernier ne dérègle
+  l'horloge à chaque redémarrage.
 
 TIMEZONE CONFIGURATION : 'Europe/Paris'
 
 
-Choisir un gestionnaire de fenÃªtres
+Choisir un gestionnaire de fenêtres
 -----------------------------------
 
 SELECT DEFAULT WINDOW MANAGER FOR X : 'xinitrc.twm'
 
-  /!\ Peu importe ce que l'on sÃ©lectionne ici. Un peu plus loin, on installera
-  Fluxbox pour configurer le serveur graphique plus aisÃ©ment qu'avec cette
+  /!\ Peu importe ce que l'on sélectionne ici. Un peu plus loin, on installera
+  Fluxbox pour configurer le serveur graphique plus aisément qu'avec cette
   immonde bouse TWM.
 
 
-Avant de redÃ©marrer
+Avant de redémarrer
 -------------------
 
 Quitter l'installateur ('EXIT') et construire un Initrd avant le premier
-redÃ©marrage.
+redémarrage.
 
   # chroot /mnt
 
-Voir le Generic-Kernel-HOWTO et le LILO-HOWTO pour les dÃ©tails.
+Voir le Generic-Kernel-HOWTO et le LILO-HOWTO pour les détails.
 
-Quitter l'environnement chrootÃ© et redÃ©marrer :
+Quitter l'environnement chrooté et redémarrer :
 
   # exit
   # reboot
 
 
-Peaufiner la configuration rÃ©seau
+Peaufiner la configuration réseau
 ---------------------------------
 
-AprÃ¨s le premier redÃ©marrage, corriger la configuration de l'installateur dans
-'/etc/hosts' si l'on gÃ¨re les noms d'hÃ´te de faÃ§on centralisÃ©e :
+Après le premier redémarrage, corriger la configuration de l'installateur dans
+'/etc/hosts' si l'on gère les noms d'hôte de façon centralisée :
 
 --8<---------- /etc/hosts ----------------------------------------------------
 127.0.0.1     localhost.localdomain localhost
 --8<--------------------------------------------------------------------------
 
 Si l'on vient d'installer Slackware sur un portable avec le wifi mais sans
-cable Ethernet, on peut Ã©diter '/etc/rc.d/rc.inet1.conf' pour une connexion
-provisoire. Une connexion WEP ressemblera Ã  ceci, par exemple :
+cable Ethernet, on peut éditer '/etc/rc.d/rc.inet1.conf' pour une connexion
+provisoire. Une connexion WEP ressemblera à ceci, par exemple :
 
 --8<---------- /etc/rc.d/rc.inet1.conf ---------------------------------------
 # Config information for eth1:
@@ -286,14 +286,14 @@ WLAN_ESSID[1]="monessid"
 WLAN_KEY[1]="d5ad1f04acf048ec2d0b1c80c7"
 --8<--------------------------------------------------------------------------
 
-  /!\ Ã‰diter la configuration avec l'option ':set nobackup' dans Vim, pour
-  Ã©viter de se retrouver avec une sÃ©rie de fichiers de sauvegarde '*.conf~'.
+  /!\ Éditer la configuration avec l'option ':set nobackup' dans Vim, pour
+  éviter de se retrouver avec une série de fichiers de sauvegarde '*.conf~'.
 
 
-RÃ©cupÃ©rer les scripts Microlinux
+Récupérer les scripts Microlinux
 --------------------------------
 
-Les scripts sont stockÃ©s dans un dÃ©pÃ´t Github :
+Les scripts sont stockés dans un dépôt Github :
 
   # cd
   # git clone https://github.com/kikinovak/slackware
@@ -302,15 +302,15 @@ Les scripts sont stockÃ©s dans un dÃ©pÃ´t Github :
 Configurer 'slackpkg'
 ---------------------
 
-TÃ©lÃ©charger l'extension 'slackpkg+' pour 'slackpkg'. C'est un outil fort
-pratique pour gÃ©rer les dÃ©pÃ´ts de paquets tiers comme MLED :
+Télécharger l'extension 'slackpkg+' pour 'slackpkg'. C'est un outil fort
+pratique pour gérer les dépôts de paquets tiers comme MLED :
 
   # links http://slakfinder.org/slackpkg+
 
-RÃ©cupÃ©rer le paquet dans le rÃ©pertoire 'pkg/' et l'installer.
+Récupérer le paquet dans le répertoire 'pkg/' et l'installer.
 
-Ã‰diter '/etc/slackpkg/mirrors' et choisir un miroir de tÃ©lÃ©chargement en
-fonction de l'emplacement gÃ©ographique. Par exemple :
+Éditer '/etc/slackpkg/mirrors' et choisir un miroir de téléchargement en
+fonction de l'emplacement géographique. Par exemple :
 
 --8<---------- /etc/slackpkg/mirrors -----------------------------------------
 ...
@@ -348,72 +348,72 @@ MIRRORPLUS['microlinux']=http://www.microlinux.fr/slackware/MLED-14.0-64bit/
 MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
 
-Eric Hameleers a la gentillesse de fournir un miroir pour le dÃ©pÃ´t Microlinux,
+Eric Hameleers a la gentillesse de fournir un miroir pour le dépôt Microlinux,
 que l'on peut donc configurer alternativement :
 
   * http://taper.alienbase.nl/mirrors/people/kikinovak/
 
-Mettre Ã  jour les clÃ©s GPG :
+Mettre à jour les clés GPG :
 
   # slackpkg update gpg
 
-Mettre Ã  jour les informations sur les paquets disponibles :
+Mettre à jour les informations sur les paquets disponibles :
 
   # slackpkg update
 
 
-Ã‰laguer le systÃ¨me de base
+Élaguer le système de base
 --------------------------
 
-Si l'on n'a pas utilisÃ© les tagfiles pour l'installation du systÃ¨me de base, le
-moment est venu de rattraper le peaufinage du systÃ¨me de base. Le rÃ©pertoire
+Si l'on n'a pas utilisé les tagfiles pour l'installation du système de base, le
+moment est venu de rattraper le peaufinage du système de base. Le répertoire
 'tools/' contient un script simple 'trim-desktop-base.sh' qui s'occupe
 essentiellement de deux choses :
 
-  1. installer les paquets de base nÃ©cessaires
+  1. installer les paquets de base nécessaires
   2. supprimer les paquets superflus
 
 Le script utilise 'slackpkg', il faut donc s'assurer de l'avoir correctement
-configurÃ©.
+configuré.
 
   # cd slackware/MLED-14.0-32bit/tools
   # ./trim-desktop-base.sh
 
-  /!\ Cette derniÃ¨re commande installe une sÃ©rie de paquets, notamment une
-  poignÃ©e d'applications du groupe XAP. Elle en supprime aussi quelques-uns,
-  comme par exemple les polices de caractÃ¨res inutiles du groupe X. Pour plus
-  de dÃ©tails, jeter un oeil sur les fichiers 'desktop-base-add' et
-  'desktop-base-remove' dans le rÃ©pertoire 'tools/pkglists'.
+  /!\ Cette dernière commande installe une série de paquets, notamment une
+  poignée d'applications du groupe XAP. Elle en supprime aussi quelques-uns,
+  comme par exemple les polices de caractères inutiles du groupe X. Pour plus
+  de détails, jeter un oeil sur les fichiers 'desktop-base-add' et
+  'desktop-base-remove' dans le répertoire 'tools/pkglists'.
 
 
 Installer la collection de paquets MLED
 ---------------------------------------
 
-Utilisez le script 'install-MLED.sh' dans le rÃ©pertoire 'tools/' :
+Utilisez le script 'install-MLED.sh' dans le répertoire 'tools/' :
 
   # cd tools/
   # ./install-MLED.sh
 
-Ce script lit les informations contenues dans le fichier 'packages-MLED' situÃ©
-dans le rÃ©pertoire 'pkglists' et installe "Ã  la louche" l'ensemble des paquets
+Ce script lit les informations contenues dans le fichier 'packages-MLED' situé
+dans le répertoire 'pkglists' et installe "à la louche" l'ensemble des paquets
 contenus dans cette liste, en utilisant 'slackpkg'.
 
-  /!\ De temps en temps, de nouveaux paquets sont ajoutÃ©s Ã  MLED. Pour rester Ã 
-  jour avec votre installation, il vous suffit de rÃ©invoquer le script
-  'install-MLED.sh'. Au prÃ©alable, il vous faudra bien Ã©videmment mettre Ã  jour
-  le contenu du dÃ©pÃ´t Github. Pour ce faire, allez Ã  la racine des fichiers
-  tÃ©lÃ©chargÃ©s ('/root/slackware' dans l'exemple') et invoquez 'git pull'.
+  /!\ De temps en temps, de nouveaux paquets sont ajoutés à MLED. Pour rester à
+  jour avec votre installation, il vous suffit de réinvoquer le script
+  'install-MLED.sh'. Au préalable, il vous faudra bien évidemment mettre à jour
+  le contenu du dépôt Github. Pour ce faire, allez à la racine des fichiers
+  téléchargés ('/root/slackware' dans l'exemple') et invoquez 'git pull'.
 
 
 Installer les paquets Multilib
 ------------------------------
 
-Sur Slackware64, vous voudrez peut-Ãªtre ajouter des applications comme
+Sur Slackware64, vous voudrez peut-être ajouter des applications comme
 VirtualBox, Wine ou Skype, etc. Dans ce cas, il faudra installer la couche de
-compatibilitÃ© 32-bits fournie par Eric Hameleers. Le plugin 'slackpkg+' rend
-cette tÃ¢che extrÃªmement facile.
+compatibilité 32-bits fournie par Eric Hameleers. Le plugin 'slackpkg+' rend
+cette tâche extrêmement facile.
 
-Dans un premier temps, ajoutez le dÃ©pÃ´t Multilib :
+Dans un premier temps, ajoutez le dépôt Multilib :
 
 --8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
 ...
@@ -422,7 +422,7 @@ MIRRORPLUS['multilib']=http://taper.alienbase.nl/mirrors/people/alien/multilib/1
 ...
 --8<--------------------------------------------------------------------------
 
-Le dÃ©pÃ´t Multilib est prioritaire par rapport aux paquets Slackware officiels :
+Le dépôt Multilib est prioritaire par rapport aux paquets Slackware officiels :
 
 --8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
 ...
@@ -430,7 +430,7 @@ PKGS_PRIORITY=( ... multilib:.* )
 ...
 --8<--------------------------------------------------------------------------
 
-Voici Ã  quoi ressemble notre fichier de configuration au total :
+Voici à quoi ressemble notre fichier de configuration au total :
 
 --8<---------- /etc/slackpkg/slackpkgplus.conf -------------------------------
 # /etc/slackpkg/slackpkgplus.conf
@@ -442,17 +442,17 @@ MIRRORPLUS['multilib']=http://taper.alienbase.nl/mirrors/people/alien/multilib/1
 MIRRORPLUS['slackpkgplus']=http://slakfinder.org/slackpkg+/
 --8<--------------------------------------------------------------------------
 
-Mettez Ã  jour le systÃ¨me :
+Mettez à jour le système :
 
   # slackpkg update gpg
   # slackpkg update
   # slackpkg upgrade-all
 
-  /!\ Cette derniÃ¨re commande remplacera tous les paquets gcc-* et glibc-*
+  /!\ Cette dernière commande remplacera tous les paquets gcc-* et glibc-*
   standard par les versions Multilib fournies par Eric.
 
-Ã€ prÃ©sent, installez la panoplie complÃ¨te de paquets de compatibilitÃ© 32-bits.
-Cette opÃ©ration peut Ãªtre effectuÃ©e tout simplement comme ceci :
+À présent, installez la panoplie complète de paquets de compatibilité 32-bits.
+Cette opération peut être effectuée tout simplement comme ceci :
 
   # slackpkg install compat32
 
@@ -460,29 +460,29 @@ Cette opÃ©ration peut Ãªtre effectuÃ©e tout simplement comme ceci :
 Nettoyer le menu des applications
 ---------------------------------
 
-Le rÃ©pertoire 'tools/' contient entre autres choses un script 'cleanmenu'. Son
-rÃ´le est de nettoyer et de simplifier les entrÃ©es du menu des applications,
+Le répertoire 'tools/' contient entre autres choses un script 'cleanmenu'. Son
+rôle est de nettoyer et de simplifier les entrées du menu des applications,
 afin que Mme Michu s'y retrouve. Lancer ce script :
 
   # cd tools/
   # ./cleanmenu
 
-  /!\ Le script remplace une bonne partie des fichiers '*.desktop' situÃ©s dans
-  '/usr/share/applications' et autres emplacements par des entrÃ©es de menu
-  "maison". Pour l'instant, ces fichiers ont Ã©tÃ© traduits en anglais, en
-  franÃ§ais et en allemand. Ã‰vitez de lancer 'cleanmenu' si vous utilisez une
+  /!\ Le script remplace une bonne partie des fichiers '*.desktop' situés dans
+  '/usr/share/applications' et autres emplacements par des entrées de menu
+  "maison". Pour l'instant, ces fichiers ont été traduits en anglais, en
+  français et en allemand. Évitez de lancer 'cleanmenu' si vous utilisez une
   autre langue pour votre environnement de bureau.
 
 
 Terminer l'installation
 -----------------------
 
-Ã‰ventuellement, synchroniser le poste avec le serveur NTP local (NTP-HOWTO).
+Éventuellement, synchroniser le poste avec le serveur NTP local (NTP-HOWTO).
 
 Configurer le serveur graphique.
 
-DÃ©finir le ou les utilisateurs du systÃ¨me. Si l'on utilise l'authentification
-centralisÃ©e, c'est le moment de la configurer.
+Définir le ou les utilisateurs du système. Si l'on utilise l'authentification
+centralisée, c'est le moment de la configurer.
 
   # adduser
 
@@ -492,24 +492,24 @@ Passer en init 4.
 Nettoyer une installation existante
 -----------------------------------
 
-S'il ne s'agit pas d'une installation fraÃ®che de Slackware 14.0, mais d'un
-systÃ¨me existant, ce n'est pas la peine de tout rÃ©installer. Il suffit de
-nettoyer le systÃ¨me existant pour partir du bon pied.
+S'il ne s'agit pas d'une installation fraîche de Slackware 14.0, mais d'un
+système existant, ce n'est pas la peine de tout réinstaller. Il suffit de
+nettoyer le système existant pour partir du bon pied.
 
 Passer en init 3.
 
 Nettoyer '/tmp'.
 
-Sur un systÃ¨me Slackware64, supprimer les paquets multilib. Commenter la ligne
+Sur un système Slackware64, supprimer les paquets multilib. Commenter la ligne
 correspondante dans '/etc/slackpkg/blacklist' ou alors supprimer la
 configuration correspondante dans '/etc/slackpkg/slackpkgplus.conf'.
 
-Ensuite, "mettre Ã  jour" tous les paquets gcc-* et glibc-*, ce qui les remplace
+Ensuite, "mettre à jour" tous les paquets gcc-* et glibc-*, ce qui les remplace
 par les versions 64-bit pures.
 
   # slackpkg upgrade-all
 
-Supprimer tout ce qui reste Ã©ventuellement dans '/etc/slackpkg/blacklist'
+Supprimer tout ce qui reste éventuellement dans '/etc/slackpkg/blacklist'
 
 Supprimer les paquets multilib restants :
 
@@ -521,7 +521,7 @@ Supprimer tous les paquets tiers :
 
   # slackpkg clean-system
 
-Le cas Ã©chÃ©ant, supprimer les paquets qui remplacent des paquets officiels :
+Le cas échéant, supprimer les paquets qui remplacent des paquets officiels :
 
   # cd /var/log/packages
   # removepkg *microlinux*       
@@ -534,7 +534,7 @@ Installer les groupes de paquets requis :
 
   # slackpkg install a ap d f k l n t tcl x xfce y
 
-Peaufiner le profil du systÃ¨me de base :
+Peaufiner le profil du système de base :
 
   # cd tools/
   # ./trim-desktop-base.sh
@@ -542,3 +542,4 @@ Peaufiner le profil du systÃ¨me de base :
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

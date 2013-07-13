@@ -2,27 +2,27 @@
 Chicken Install HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 =====================
 
-DerniÃ¨re rÃ©vision : 8 janvier 2013
+Dernière révision : 8 janvier 2013
 
-Ce HOWTO dÃ©crit l'installation basique (en mode "poule") de Slackware 14.0.
+Ce HOWTO décrit l'installation basique (en mode "poule") de Slackware 14.0.
 
-  Â· Installation
-  Â· Configuration post-installation
+  * Installation
+  * Configuration post-installation
 
 
 Installation
 ------------
 
-Options de dÃ©marrage :
+Options de démarrage :
 
-  Â· 'hugesmp.s' -> 32bit
-  Â· 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
-  Â· 'vga=788'   -> Ã©cran normal
-  Â· 'vga=791'   -> grand Ã©cran
+  * 'hugesmp.s' -> 32bit
+  * 'huge.s'    -> 64bit ou vieux PC ne supportant pas 'hugesmp.s'
+  * 'vga=788'   -> écran normal
+  * 'vga=791'   -> grand écran
 
-Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY franÃ§ais.
+Choix du clavier : 'azerty/fr-latin1.map' pour un clavier AZERTY français.
 
-Ã‰ventuellement, supprimer la table de partitions existante :
+Éventuellement, supprimer la table de partitions existante :
 
   # dd if=/dev/zero of=/dev/sda bs=512 count=64
 
@@ -30,30 +30,30 @@ Partitionner le disque :
 
   # cfdisk /dev/sda
 
-SchÃ©ma de partitionnement le plus simple possible :
+Schéma de partitionnement le plus simple possible :
 
-  Â· une partition swap 
-  Â· une partition principale, formatÃ©e en ext4
+  * une partition swap 
+  * une partition principale, formatée en ext4
 
-SchÃ©ma de partitionnement alternatif A :
+Schéma de partitionnement alternatif A :
 
-  Â· une partition pour '/boot', de 100 Mo, formatÃ© en ext2
-  Â· une partition swap 
-  Â· une partition principale, formatÃ©e en ext4
+  * une partition pour '/boot', de 100 Mo, formaté en ext2
+  * une partition swap 
+  * une partition principale, formatée en ext4
   
-SchÃ©ma de partitionnement alternatif B :
+Schéma de partitionnement alternatif B :
 
-  Â· une partition pour '/boot', de 100 Mo, formatÃ© en ext2
-  Â· une partition swap 
-  Â· une partition principale, formatÃ©e en ext4
-  Â· une partition pour '/home', formatÃ©e en ext4
+  * une partition pour '/boot', de 100 Mo, formaté en ext2
+  * une partition swap 
+  * une partition principale, formatée en ext4
+  * une partition pour '/home', formatée en ext4
 
 Remarques :
 
-  > Si l'on dispose de moins de 512 Mo de RAM, la swap sera Ã©gale Ã  deux fois
-    la quantitÃ© de RAM.
+  > Si l'on dispose de moins de 512 Mo de RAM, la swap sera égale à deux fois
+    la quantité de RAM.
 
-  > Si l'on a au moins 512 Mo de RAM, la swap sera Ã©gale Ã  la quantitÃ© de RAM.
+  > Si l'on a au moins 512 Mo de RAM, la swap sera égale à la quantité de RAM.
 
   > La partition swap sera de type 'Linux swap' (code 82).
 
@@ -63,33 +63,33 @@ Lancer l'installation :
 
   # setup
 
-Toutes les opÃ©rations de formatage s'effectuent sans la recherche mÃ©ticuleuse
-de secteurs dÃ©fectueux.
+Toutes les opérations de formatage s'effectuent sans la recherche méticuleuse
+de secteurs défectueux.
 
   > Attention : l'installateur Slackware requiert de partitionner la partition
     principale '/' en premier !
 
 Consignes pour le formatage :
 
-  > systÃ¨me de fichiers ext2 pour '/boot'
+  > système de fichiers ext2 pour '/boot'
 
-  > systÃ¨me de fichiers ext4 pour les autres : '/', '/home', ...
+  > système de fichiers ext4 pour les autres : '/', '/home', ...
 
-Installer Ã  partir du CD-Rom ou du DVD Slackware.
+Installer à partir du CD-Rom ou du DVD Slackware.
 
 Rechercher le lecteur CD-Rom ou DVD.
 
-SÃ©lection des groupes de paquets :
+Sélection des groupes de paquets :
 
   a) sur un poste de travail
 
   [*] A 
   [*] AP
   [*] D
-  [ ] E -> dÃ©sÃ©lectionner
+  [ ] E -> désélectionner
   [*] F
   [*] K
-  [ ] KDE -> dÃ©sÃ©lectionner
+  [ ] KDE -> désélectionner
   [ ] KDEI
   [*] L 
   [*] N
@@ -105,22 +105,22 @@ SÃ©lection des groupes de paquets :
   [*] A 
   [*] AP
   [*] D
-  [ ] E -> dÃ©sÃ©lectionner
+  [ ] E -> désélectionner
   [*] F
   [*] K
-  [ ] KDE -> dÃ©sÃ©lectionner
+  [ ] KDE -> désélectionner
   [ ] KDEI
   [*] L 
   [*] N
-  [ ] T -> dÃ©sÃ©lectionner
+  [ ] T -> désélectionner
   [*] TCL
   [*] X
-  [ ] XAP -> dÃ©sÃ©lectionner
-  [ ] XFCE -> dÃ©sÃ©lectionner
+  [ ] XAP -> désélectionner
+  [ ] XFCE -> désélectionner
   [*] Y
 
 SELECT PROMPTING MODE : 'full'. Alternativement, le mode 'terse' offre un
-rÃ©sultat identique mais avec une prÃ©sentation plus compacte. 
+résultat identique mais avec une présentation plus compacte. 
 
 MAKE USB FLASH BOOT : 'Skip making a USB boot stick'
 
@@ -129,65 +129,65 @@ INSTALL LILO : 'Try to install LILO automatically'
 CONFIGURE LILO TO USE FRAME BUFFER CONSOLE : 'standard - Use the standard Linux
 console (the safe choice). 
 
-  > Pour la rÃ©solution de la console et les paramÃ¨tres Ã  passer au kernel
-    (prochain Ã©cran), on peut trÃ¨s bien ne rien mettre et peaufiner le tout en
-    Ã©ditant '/etc/lilo.conf' plus tard.
+  > Pour la résolution de la console et les paramètres à passer au kernel
+    (prochain écran), on peut très bien ne rien mettre et peaufiner le tout en
+    éditant '/etc/lilo.conf' plus tard.
 
 OPTIONAL LILO append="<kernel parameters>" LINE : ne rien indiquer pour
-l'instant, voir la prÃ©cÃ©dente remarque.
+l'instant, voir la précédente remarque.
 
-USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problÃ¨mes
+USE UTF-8 TEXT CONSOLE : 'Yes' - UTF8 a beau avoir quelques petits problèmes
 avec certains utilitaires en mode console, notamment avec des pages man en
-langue Ã©trangÃ¨re qui s'affichent mal, il n'empÃªche qu'il est dorÃ©navant Ã©tabli
-comme standard un peu partout. Le choix par dÃ©faut 'No' s'explique uniquement
-par un excÃ¨s de prudence de la part du distributeur.
+langue étrangère qui s'affichent mal, il n'empêche qu'il est dorénavant établi
+comme standard un peu partout. Le choix par défaut 'No' s'explique uniquement
+par un excès de prudence de la part du distributeur.
 
 SELECT LILO DESTINATION : 'MBR - Install to Master Boot Record'
 
 MOUSE CONFIGURATION : 'imps2- Microsoft PS/2 Intellimouse'
 
   > La configuration de la souris ne concerne que son utilisation en mode
-    console, avec GPM. On peut simplement accepter le choix par dÃ©faut, qui
-    correspond Ã  toutes les souris modernes.
+    console, avec GPM. On peut simplement accepter le choix par défaut, qui
+    correspond à toutes les souris modernes.
 
 GPM CONFIGURATION : 'No'. Le service GPM permet de copier/coller du texte avec
-la souris en mode console. Ã‰tant donnÃ© que nous nous servons de Vim pour cela,
-nous dÃ©cidons de ne pas le dÃ©marrer.
+la souris en mode console. Étant donné que nous nous servons de Vim pour cela,
+nous décidons de ne pas le démarrer.
 
 CONFIGURE NETWORK: 'Yes'
 
-ENTER HOSTNAME : il s'agit de choisir un nom d'hÃ´te pour la machine.
-Choisissez-en un Ã  votre convenance et Ã©crivez-le en minuscules, comme ceci :
+ENTER HOSTNAME : il s'agit de choisir un nom d'hôte pour la machine.
+Choisissez-en un à votre convenance et écrivez-le en minuscules, comme ceci :
   
-  Â· 'slackbox'
-  Â· 'alphamule'
-  Â· 'grossebertha'
-  Â· 'raymonde'
-  Â· 'poste10'
-  Â·  etc.
+  * 'slackbox'
+  * 'alphamule'
+  * 'grossebertha'
+  * 'raymonde'
+  * 'poste10'
+  *  etc.
 
 ENTER DOMAINNAME FOR '<machine>' : choisissez un nom de domaine pour la
 machine, comme par exemple :
 
-  Â· 'local'
-  Â· 'microlinux.montpezat'
-  Â· 'crpconsulting.montpellier'
-  Â·  etc.
+  * 'local'
+  * 'microlinux.montpezat'
+  * 'crpconsulting.montpellier'
+  *  etc.
 
 CONFIGURATION TYPE FOR '<machine.domaine>' : selon le contexte, on choisira
-'static IP' ou 'DHCP' pour une connexion cablÃ©e sur un serveur ou un poste de
+'static IP' ou 'DHCP' pour une connexion cablée sur un serveur ou un poste de
 travail. Sur un ordinateur portable qui fonctionne alternativement avec une
-connexion wifi ou cablÃ©e ou en mode "nomade", on prÃ©fÃ©rera 'NetworkManager',
-une application qui gÃ¨re la connexion "automagique" du rÃ©seau. 
+connexion wifi ou cablée ou en mode "nomade", on préférera 'NetworkManager',
+une application qui gère la connexion "automagique" du réseau. 
 
-SET DHCP HOSTNAME : nom d'hÃ´te DHCP Ã  envoyer au FAI pour une connexion.
+SET DHCP HOSTNAME : nom d'hôte DHCP à envoyer au FAI pour une connexion.
 Laisser vide tout simplement.
 
 CONFIRM STARTUP SERVICES TO RUN :
 
   a) sur un poste de travail 
 
-  [*] rc.fuse       -> laisser la sÃ©lection telle quelle
+  [*] rc.fuse       -> laisser la sélection telle quelle
   [*] rc.inetd
   [*] rc.messagebus
   [*] rc.syslog
@@ -195,9 +195,9 @@ CONFIRM STARTUP SERVICES TO RUN :
 
   b) sur un serveur 
 
-  [ ] rc.fuse       -> dÃ©sÃ©lectionner
-  [ ] rc.inetd      -> dÃ©sÃ©lectionner
-  [ ] rc.messagebus -> dÃ©sÃ©lectionner
+  [ ] rc.fuse       -> désélectionner
+  [ ] rc.inetd      -> désélectionner
+  [ ] rc.messagebus -> désélectionner
   [*] rc.syslog
   [*] rc.sshd
 
@@ -205,22 +205,22 @@ CONSOLE FONT CONFIGURATION : 'No'
 
 HARDWARE CLOCK SET TO UTC ? 'YES - Hardware clock is set to UTC'
 
-  > Le seul cas de figure oÃ¹ l'on optera pour 'local time', c'est dans un
-    scÃ©nario de double boot avec Windows, pour Ã©viter que ce dernier ne dÃ©rÃ¨gle
-    l'horloge Ã  chaque redÃ©marrage.
+  > Le seul cas de figure où l'on optera pour 'local time', c'est dans un
+    scénario de double boot avec Windows, pour éviter que ce dernier ne dérègle
+    l'horloge à chaque redémarrage.
 
 TIMEZONE CONFIGURATION : 'Europe/Paris'
 
 SELECT DEFAULT WINDOW MANAGER FOR X : 'xinitrc.fluxbox'
 
-  > MÃªme si l'on compte utiliser l'environnement de bureau Xfce, Fluxbox est un
-    bon choix prÃ©alable pour configurer le serveur graphique.
+  > Même si l'on compte utiliser l'environnement de bureau Xfce, Fluxbox est un
+    bon choix préalable pour configurer le serveur graphique.
 
-DÃ©finir un mot de passe pour root. On ne le verra pas apparaÃ®tre Ã  l'Ã©cran.
+Définir un mot de passe pour root. On ne le verra pas apparaître à l'écran.
 
 Quitter l'installateur Slackware : 'EXIT'
 
-RedÃ©marrer avec la combinaison de touches [Ctrl]+[Alt]+[Suppr] ou alors :
+Redémarrer avec la combinaison de touches [Ctrl]+[Alt]+[Suppr] ou alors :
 
   # reboot
 
@@ -228,21 +228,21 @@ RedÃ©marrer avec la combinaison de touches [Ctrl]+[Alt]+[Suppr] ou alors :
 Configuration post-installation
 -------------------------------
 
-CrÃ©er un utilisateur :
+Créer un utilisateur :
 
   # adduser
 
-  > Attention Ã  bien ajouter l'utilisateur aux groupes supplÃ©mentaires :
+  > Attention à bien ajouter l'utilisateur aux groupes supplémentaires :
     'audio', 'video', 'cdrom' , etc.
 
-Pour vÃ©rifier les groupes auxquels appartient l'utilisateur, on utilise la
+Pour vérifier les groupes auxquels appartient l'utilisateur, on utilise la
 commande 'groups'. Exemple :
 
   # groups kikinovak
   kikinovak : users lp floppy audio video cdrom plugdev power netdev scanner
 
-Franciser le systÃ¨me. Dans un premier temps, il faudra dÃ©finir les paramÃ¨tres
-'LANG' et 'LC_COLLATE' au niveau du systÃ¨me :
+Franciser le système. Dans un premier temps, il faudra définir les paramètres
+'LANG' et 'LC_COLLATE' au niveau du système :
 
 --8<---------- /etc/profile.d/lang.sh ----------------------------------------
 ...
@@ -266,15 +266,15 @@ timeout = 50
 ...
 --8<--------------------------------------------------------------------------
 
-  > "Lorsque le paramÃ¨tre 'quiet' est passÃ© au kernel, Ã§a lui permet de fermer
-    sa gueule et plus qu'y spamme au dÃ©but." (c) Kevin F. 
+  > "Lorsque le paramètre 'quiet' est passé au kernel, ça lui permet de fermer
+    sa gueule et plus qu'y spamme au début." (c) Kevin F. 
   
-  > "Et Ã§a Ã©vite qu'il floode la console." (c) Valia V.
+  > "Et ça évite qu'il floode la console." (c) Valia V.
 
-  > Certaines cartes graphiques permettent l'utilisation du paramÃ¨tre
-    'video=XXXxYYY' pour modifier la rÃ©solution de la console.
+  > Certaines cartes graphiques permettent l'utilisation du paramètre
+    'video=XXXxYYY' pour modifier la résolution de la console.
 
-  > 'timeout' spÃ©cifie un temps d'attente exprimÃ© en 1/10Ã¨mes de secondes.
+  > 'timeout' spécifie un temps d'attente exprimé en 1/10èmes de secondes.
 
 Prendre en compte les modifications dans la configuration de LILO :
 
@@ -282,26 +282,26 @@ Prendre en compte les modifications dans la configuration de LILO :
 
 Configurer le serveur graphique.
 
-En tant que root, choisir un gestionnaire de fenÃªtres basique, par exemple
+En tant que root, choisir un gestionnaire de fenêtres basique, par exemple
 Fluxbox :
 
   # xwmconfig
 
-Tenter un premier dÃ©marrage du serveur graphique :
+Tenter un premier démarrage du serveur graphique :
 
   # startx
 
-Pour l'instant, on ne dispose que d'un clavier QWERTY amÃ©ricain. On va donc
+Pour l'instant, on ne dispose que d'un clavier QWERTY américain. On va donc
 changer la disposition du clavier dans l'environnement graphique.
 
-Le rÃ©pertoire '/usr/share/X11/xorg.conf.d' contient une panoplie de fichiers
-modÃ¨les pour la configuration. Copier le fichier '90-keyboard-layout.conf' vers
-l'endroit appropriÃ© du systÃ¨me :
+Le répertoire '/usr/share/X11/xorg.conf.d' contient une panoplie de fichiers
+modèles pour la configuration. Copier le fichier '90-keyboard-layout.conf' vers
+l'endroit approprié du système :
 
   # cd /usr/share/X11/xorg.conf.d
   # cp 90-keyboard-layout.conf /etc/X11/xorg.conf.d/
 
-Ã‰diter ce fichier :
+Éditer ce fichier :
 
 --8<---------- /etc/X11/xorg.conf.d ------------------------------------------
 Section "InputClass"
@@ -316,10 +316,10 @@ EndSection
 ...
 --8<--------------------------------------------------------------------------
 
-Relancer X et vÃ©rifier la disposition correcte du clavier dans un terminal
+Relancer X et vérifier la disposition correcte du clavier dans un terminal
 graphique.
 
-Dans XTerm, faire un premier test pour l'accÃ©lÃ©ration graphique :
+Dans XTerm, faire un premier test pour l'accélération graphique :
 
   # glxgears
 
@@ -330,14 +330,14 @@ Puis :
   display: :0  screen: 0
   direct rendering: Yes
 
-Maintenant que le serveur graphique est correctement configurÃ©, on peut choisir
-l'environnement Xfce par dÃ©faut pour l'utilisateur normal :
+Maintenant que le serveur graphique est correctement configuré, on peut choisir
+l'environnement Xfce par défaut pour l'utilisateur normal :
 
   $ xwmconfig
 
-Par dÃ©faut, Slackware dÃ©marre en niveau d'exÃ©cution (runlevel) 3. On va passer
-en runlevel 4 pour dÃ©marrer directement en mode graphique. Ã‰diter
-'/etc/inittab' et changer la valeur de 'initdefault' de 3 Ã  4 :
+Par défaut, Slackware démarre en niveau d'exécution (runlevel) 3. On va passer
+en runlevel 4 pour démarrer directement en mode graphique. Éditer
+'/etc/inittab' et changer la valeur de 'initdefault' de 3 à 4 :
 
 --8<---------- /etc/inittab --------------------------------------------------
 ...
@@ -345,14 +345,15 @@ en runlevel 4 pour dÃ©marrer directement en mode graphique. Ã‰diter
 id:4:initdefault:
 --8<--------------------------------------------------------------------------
 
-Ã€ partir de lÃ , on peut redÃ©marrer, ou alors passer directement en niveau
-d'exÃ©cution 4 :
+À partir de là, on peut redémarrer, ou alors passer directement en niveau
+d'exécution 4 :
 
   # init 4
  
 Si tout se passe bien, c'est XDM qui s'affiche, le gestionnaire de connexion le
-plus moche de la planÃ¨te.
+plus moche de la planète.
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

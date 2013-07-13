@@ -2,15 +2,15 @@
 Compiz HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ============
 
-DerniÃ¨re rÃ©vision : 7 janvier 2013
+Dernière révision : 7 janvier 2013
 
-Ce HOWTO dÃ©crit l'installation et la configuration de Compiz sur un poste de
+Ce HOWTO décrit l'installation et la configuration de Compiz sur un poste de
 travail Slackware.
 
-  Â· Installation
-  Â· Configuration de base
-  Â· Gestion des bureaux virtuels
-  Â· Gestion des fenÃªtres
+  * Installation
+  * Configuration de base
+  * Gestion des bureaux virtuels
+  * Gestion des fenêtres
 
 
 Installation
@@ -33,16 +33,16 @@ Construire et installer dans l'ordre :
 Configuration de base
 ---------------------
 
-Pour que Compiz fonctionne sous Xfce, il faut impÃ©rativement activer les trois
+Pour que Compiz fonctionne sous Xfce, il faut impérativement activer les trois
 plug-ins suivants :
 
-  [X] DÃ©coration de la fenÃªtre
-  [X] DÃ©placer la fenÃªtre
-  [X] Redimensionner la fenÃªtre
+  [X] Décoration de la fenêtre
+  [X] Déplacer la fenêtre
+  [X] Redimensionner la fenêtre
   
-Gestionnaire de paramÃ¨tres Xfce > Session et dÃ©marrage :
+Gestionnaire de paramètres Xfce > Session et démarrage :
 
-  Dans l'onglet 'DÃ©marrage automatique', cliquer sur 'Ajouter' :
+  Dans l'onglet 'Démarrage automatique', cliquer sur 'Ajouter' :
 
   Nom         : Compiz Fusion Icon
   Description : Configurer et lancer le bureau 3D
@@ -52,72 +52,73 @@ Gestionnaire de paramÃ¨tres Xfce > Session et dÃ©marrage :
 Gestion des bureaux virtuels
 ----------------------------
 
-Options GÃ©nÃ©rales > Onglet 'Taille du bureau' : dÃ©finir la taille virtuelle
+Options Générales > Onglet 'Taille du bureau' : définir la taille virtuelle
 horizontale et verticale du bureau.
 
-Bureaux "Ã  plat" :
+Bureaux "à plat" :
 
-  [X] Bureaux sur un Plan (version amÃ©liorÃ©e)
+  [X] Bureaux sur un Plan (version améliorée)
 
 Essayer avec 2x1, 3x1, 4x1 et 2x2 bureaux virtuels.
 
-Passer d'un bureau Ã  l'autre en utilisant [Ctrl]+[Alt] et les touches flÃ©chÃ©es.
+Passer d'un bureau à l'autre en utilisant [Ctrl]+[Alt] et les touches fléchées.
 
 Bureaux "en cube" :
 
-  [ ] Bureaux sur un Plan (version amÃ©liorÃ©e) -> dÃ©sactiver
+  [ ] Bureaux sur un Plan (version améliorée) -> désactiver
   [X] Cube du Bureau
   [X] Rotation du Cube
 
 Essayer avec 2x1, 3x1 et 4x1 bureaux virtuels.
 
-ExposÃ© des bureaux :
+Exposé des bureaux :
 
-  [X] ExposÃ©
+  [X] Exposé
 
-Pour activer l'exposÃ©, dÃ©placer le pointeur de la souris dans le coin supÃ©rieur
-gauche du bureau. Ensuite, double-cliquer sur un bureau pour le sÃ©lectionner.
+Pour activer l'exposé, déplacer le pointeur de la souris dans le coin supérieur
+gauche du bureau. Ensuite, double-cliquer sur un bureau pour le sélectionner.
 
 Combinaison sympathique avec 2 ou 4 bureaux virtuels en horizontale :
 
-  [X] Bureaux sur un Plan (version amÃ©liorÃ©e)
-  [X] ExposÃ©
+  [X] Bureaux sur un Plan (version améliorée)
+  [X] Exposé
   
 
-Gestion des fenÃªtres
+Gestion des fenêtres
 --------------------
 
-Animations diverses et variÃ©es :
+Animations diverses et variées :
 
   [X] Animations
 
-FenÃªtres "Ã©lastiques" lors du dÃ©placement :
+Fenêtres "élastiques" lors du déplacement :
 
-  [X] DÃ©former les fenÃªtres
+  [X] Déformer les fenêtres
 
 Basculer entre les applications :
 
-  [X] SÃ©lecteur d'Application
+  [X] Sélecteur d'Application
 
 Utiliser les touches [Alt]+[Tab] et [Maj]+[Alt]+[Tab] pour basculer entre les
 applications.
 
 Alternativement :
 
-  [ ] SÃ©lecteur d'Application
-  [X] SÃ©lecteur en Anneau
+  [ ] Sélecteur d'Application
+  [X] Sélecteur en Anneau
 
-Ici, il faut rÃ©assigner les touches [Alt]+[Tab] et [Maj]+[Alt]+[Tab].
+Ici, il faut réassigner les touches [Alt]+[Tab] et [Maj]+[Alt]+[Tab].
 
 
-DÃ©sactiver l'ombre portÃ©e de Conky
+Désactiver l'ombre portée de Conky
 ----------------------------------
 
-Le moniteur systÃ¨me Conky prÃ©sente une bordure ombrÃ©e avec Compiz. On peut s'en
-dÃ©barrasser de la faÃ§on suivante :
+Le moniteur système Conky présente une bordure ombrée avec Compiz. On peut s'en
+débarrasser de la façon suivante :
 
-DÃ©coration de la fenÃªtre > Ombrer les fenÃªtres : 'any -conky'
+Décoration de la fenêtre > Ombrer les fenêtres : 'any -conky'
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1

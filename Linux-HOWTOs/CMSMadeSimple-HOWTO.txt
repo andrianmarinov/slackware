@@ -2,27 +2,27 @@
 CMSMadeSimple HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ===================
 
-DerniÃ¨re rÃ©vision : 21 mars 2013
+Dernière révision : 21 mars 2013
 
-Ce HOWTO dÃ©crit l'installation et la configuration de CMSMadeSimple (CMSMS) sur
+Ce HOWTO décrit l'installation et la configuration de CMSMadeSimple (CMSMS) sur
 un serveur LAMP Slackware.
 
 
-  Â· Installation
-  Â· Sauvegarder les gabarits par dÃ©faut
-  Â· Rendre le site plus lisible
-  Â· Menus dÃ©tails typographiques
-  Â· Supprimer les Ã©lÃ©ments inutiles
-  Â· Personnaliser l'image de fond
-  Â· Personnaliser le logo
-  Â· Franciser l'interface de recherche
-  Â· Simplifier la colonne des News
+  * Installation
+  * Sauvegarder les gabarits par défaut
+  * Rendre le site plus lisible
+  * Menus détails typographiques
+  * Supprimer les éléments inutiles
+  * Personnaliser l'image de fond
+  * Personnaliser le logo
+  * Franciser l'interface de recherche
+  * Simplifier la colonne des News
  
 
 Installation
 ------------
 
-CrÃ©er un emplacement pour ranger les archives compressÃ©es :
+Créer un emplacement pour ranger les archives compressées :
 
   # cd
   # mkdir cmsms
@@ -32,51 +32,51 @@ Aller sur le site de CMSMS :
 
   # links http://www.cmsmadesimple.fr
 
-TÃ©lÃ©charger les deux archives de CMSMS :
+Télécharger les deux archives de CMSMS :
 
-  Â· la version avec la langue US
-  Â· les fichiers de la langue FR
+  * la version avec la langue US
+  * les fichiers de la langue FR
 
-ConcrÃ¨tement :
+Concrètement :
 
-  Â· cmsmadesimple-1.11.4-english.tar.gz
-  Â· cmsmadesimple-1.11.4-langpack-fr_FR.tar.gz
+  * cmsmadesimple-1.11.4-english.tar.gz
+  * cmsmadesimple-1.11.4-langpack-fr_FR.tar.gz
 
-DÃ©compresser les archives Ã  l'endroit appropriÃ© :
+Décompresser les archives à l'endroit approprié :
 
   # cd /var/www/vhosts
   # mkdir -pv cmsms/htdocs
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â cmsmsÂ Â»
-  mkdir: crÃ©ation du rÃ©pertoire Â«Â cmsms/htdocsÂ Â»
+  mkdir: création du répertoire « cmsms »
+  mkdir: création du répertoire « cmsms/htdocs »
   # cd cmsms/htdocs
   # tar xvzf /root/cmsms/cmsmadesimple-1.11.4-english.tar.gz
   # tar xvzf /root/cmsms/cmsmadesimple-1.11.4-langpack-fr_FR.tar.gz 
 
-RÃ©sultat :
+Résultat :
 
   # ls -l
   total 72
-  drwxr-xr-x  5 root root  4096 dÃ©c.  16 17:21 admin
-  drwxr-xr-x  2 root root  4096 dÃ©c.  16 17:21 doc
+  drwxr-xr-x  5 root root  4096 déc.  16 17:21 admin
+  drwxr-xr-x  2 root root  4096 déc.  16 17:21 doc
   -rw-r--r--  1 root root  1150 sept. 30  2010 favicon_cms.ico
   -rw-r--r--  1 root root   330 juil. 12  2006 fileloc.php
-  -rw-r--r--  1 root root  8489 dÃ©c.   9 23:41 include.php
-  -rw-r--r--  1 root root 11127 dÃ©c.  15 17:23 index.php
-  drwxr-xr-x  8 root root  4096 dÃ©c.  16 17:21 install
-  drwxr-xr-x 11 root root  4096 dÃ©c.  16 17:21 lib
+  -rw-r--r--  1 root root  8489 déc.   9 23:41 include.php
+  -rw-r--r--  1 root root 11127 déc.  15 17:23 index.php
+  drwxr-xr-x  8 root root  4096 déc.  16 17:21 install
+  drwxr-xr-x 11 root root  4096 déc.  16 17:21 lib
   -rw-r--r--  1 root root   955 sept. 15  2011 moduleinterface.php
-  drwxr-xr-x 11 root root  4096 dÃ©c.  16 17:21 modules
-  drwxr-xr-x  2 root root  4096 dÃ©c.  16 17:21 plugins
-  drwxr-xr-x  5 root root  4096 dÃ©c.  16 17:21 tmp
-  drwxr-xr-x  6 root root  4096 dÃ©c.  16 17:21 uploads
+  drwxr-xr-x 11 root root  4096 déc.  16 17:21 modules
+  drwxr-xr-x  2 root root  4096 déc.  16 17:21 plugins
+  drwxr-xr-x  5 root root  4096 déc.  16 17:21 tmp
+  drwxr-xr-x  6 root root  4096 déc.  16 17:21 uploads
   -rw-r--r--  1 root root  1133 nov.  24 17:10 version.php
 
-RÃ©gler les permissions :
+Régler les permissions :
 
   # cd /var/www/vhosts
   # chown -R apache:apache cmsms/
 
-CrÃ©er la base de donnÃ©es :
+Créer la base de données :
 
   # mysql -u root -p
 
@@ -90,7 +90,7 @@ CrÃ©er la base de donnÃ©es :
   mysql> exit
   Bye
 
-Ajouter un hÃ´te virtuel dans la configuration d'Apache :
+Ajouter un hôte virtuel dans la configuration d'Apache :
 
 --8<---------- /etc/httpd/extra/httpd-vhosts.conf ----------------------------
 # cmsms.microlinux.montpezat
@@ -113,26 +113,26 @@ cmsms.nestor     IN A 192.168.2.1
 ...
 --8<--------------------------------------------------------------------------
 
-RedÃ©marrer Bind et Apache pour prendre en compte les modifications.
+Redémarrer Bind et Apache pour prendre en compte les modifications.
 
-Lancer l'installation avec Firefox, en l'ouvrant Ã  l'adresse configurÃ©e.
+Lancer l'installation avec Firefox, en l'ouvrant à l'adresse configurée.
 
 Langue de l'installation : fr_FR.
 
 
-Ã‰tape nÂ° 1 - Test de contrÃ´le (checksum)
+Étape n° 1 - Test de contrôle (checksum)
 
 Passer.
 
 
-Ã‰tape nÂ° 2 - Configuration de PHP.
+Étape n° 2 - Configuration de PHP.
 
 Faire une sauvegarde du fichier de configuration initial :
 
   # cd /etc/httpd
   # cp php.ini php.ini.orig
 
-Ajuster la configuration de PHP en Ã©ditant '/etc/httpd/php.ini'.
+Ajuster la configuration de PHP en éditant '/etc/httpd/php.ini'.
 
 --8<---------- /etc/httpd/php.ini' -------------------------------------------
 ; Maximum execution time of each script, in seconds
@@ -152,65 +152,65 @@ upload_max_filesize = 10M                                 --> ligne 800
 ...
 --8<--------------------------------------------------------------------------
 
-VÃ©rifier la configuration correcte de tous les paramÃ¨tres avant de continuer.
+Vérifier la configuration correcte de tous les paramètres avant de continuer.
 
 
-Ã‰tape nÂ° 3 - Test de masque de crÃ©ation de fichier 
+Étape n° 3 - Test de masque de création de fichier 
 
-Les valeurs par dÃ©faut sont OK.
+Les valeurs par défaut sont OK.
 
 
-Ã‰tape nÂ° 4 - Informations sur le compte administrateur
+Étape n° 4 - Informations sur le compte administrateur
 
   Nom d'utilisateur                   : 'kikinovak' ou autre
 
   Adresse email                       : adresse mail de l'admin
 
-  Mot de passe Admin sÃ©curisÃ©s        : [X]
+  Mot de passe Admin sécurisés        : [X]
 
   Mot de passe                        : ********
 
   Email pour le compte administrateur : selon configuration
 
 
-Ã‰tape nÂ° 5 - Nom du site, fuseau horaire et informations sur la base de donnÃ©es
+Étape n° 5 - Nom du site, fuseau horaire et informations sur la base de données
 
   Nom du site                         : CMS local
 
   Fuseau horaire                      : Europe/Paris.
 
-  Type de base de donnÃ©es             : MySQLi (4.1+)
+  Type de base de données             : MySQLi (4.1+)
 
   Adresse du serveur de BD            : localhost
 
-  Nom de la base de donnÃ©es           : cmsms
+  Nom de la base de données           : cmsms
 
   Nom d'utilisateur                   : cmsmsuser 
 
   Mot de passe                        : *******
 
-  Port de base de donnÃ©es             : laisser vide
+  Port de base de données             : laisser vide
 
-  PrÃ©fixe des tables                  : cms_
+  Préfixe des tables                  : cms_
 
-  CrÃ©ation des tables                 : [X]
+  Création des tables                 : [X]
 
   Installer les exemples de contenus  : [ ]
 
 
-Ã‰tape nÂ° 6 - Installation du systÃ¨me
+Étape n° 6 - Installation du système
 
-  Racine du CMS : vÃ©rifier la valeur par dÃ©faut.
+  Racine du CMS : vérifier la valeur par défaut.
 
   Chemin de la racine du CMS          : idem
 
-  Symbole aprÃ¨s "index.php"           : page
+  Symbole après "index.php"           : page
 
-  Langue par dÃ©faut pour l'interface  : fr_FR
+  Langue par défaut pour l'interface  : fr_FR
 
 
-Afficher le site dans un navigateur. Si tout a l'air OK, on peut protÃ©ger le
-fichier de configuration 'config.php' et supprimer le rÃ©pertoire 'install/' :
+Afficher le site dans un navigateur. Si tout a l'air OK, on peut protéger le
+fichier de configuration 'config.php' et supprimer le répertoire 'install/' :
 
   # chmod 0444 config.php 
   # rm -rf install/
@@ -219,38 +219,38 @@ Afficher l'interface d'administration du site :
 
   * http://<site_cmsms>/admin/
 
-Afficher la liste de toutes les pages prÃ©installÃ©es : Contenu > Pages.
+Afficher la liste de toutes les pages préinstallées : Contenu > Pages.
 
-SÃ©lectionner toutes les pages sauf la page d'accueil (Home), puis : 
+Sélectionner toutes les pages sauf la page d'accueil (Home), puis : 
 
-  Objects sÃ©lectionnÃ©s > Supprimer.
+  Objects sélectionnés > Supprimer.
 
 
-Sauvegarder les gabarits par dÃ©faut
+Sauvegarder les gabarits par défaut
 -----------------------------------
 
 Disposition > Gabarits > NCleanBlue : cliquer dessus pour afficher le gabarit.
-Copier l'intÃ©gralitÃ© de son contenu vers le presse-papier. CrÃ©er un nouveau
+Copier l'intégralité de son contenu vers le presse-papier. Créer un nouveau
 gabarit 'NCleanBlueOrig' vers lequel on collera le contenu du presse-papier.
 
-ProcÃ©der de mÃªme pour le gabarit des News :
+Procéder de même pour le gabarit des News :
 
   Contenu > Articles > Gabarit du sommaire article
 
-Sauvegarder le gabarit par dÃ©faut 'Sample' vers une copie 'SampleOrig'.
+Sauvegarder le gabarit par défaut 'Sample' vers une copie 'SampleOrig'.
 
-Et de mÃªme pour la feuille de style.
+Et de même pour la feuille de style.
 
 
 Rendre le site plus lisible
 ---------------------------
 
-La police de caractÃ¨res dÃ©finie par dÃ©faut n'est pas trÃ¨s grande. Pour
-l'agrandir un peu, Ã©diter la feuille de style :
+La police de caractères définie par défaut n'est pas très grande. Pour
+l'agrandir un peu, éditer la feuille de style :
 
   Disposition > Feuilles de style > Layout: NCleanBlue
 
-RepÃ©rer la dÃ©finition de la police de caractÃ¨res :
+Repérer la définition de la police de caractères :
 
   body {
   /* default text for entire site */
@@ -266,45 +266,45 @@ Remplacer par ceci, par exemple :
     ...
   }
 
-En augmentant la taille de la police, on dÃ©cale Ã©galement les boutons de
-navigation du menu principal vers le bas. On peut les relever Ã  la bonne
-hauteur en jouant sur le paramÃ¨tre 'height' de la classe 'logo' :
+En augmentant la taille de la police, on décale également les boutons de
+navigation du menu principal vers le bas. On peut les relever à la bonne
+hauteur en jouant sur le paramètre 'height' de la classe 'logo' :
 
   logo a {
   /* adjust according your image size */
-    height: 75px; --> rÃ©duire Ã  69px
+    height: 75px; --> réduire à 69px
     width: 215px;
   }
 
-Pour augmenter l'espacement entre les lignes, ajouter le paramÃ¨tre
+Pour augmenter l'espacement entre les lignes, ajouter le paramètre
 'line-height' dans le corps de la feuille de style :
 
   body {
   /* default text for entire site */
     font: normal 1.0em Arial, Helvetica, sans-serif;
     color: #3A3A36;
-    line-height: 1.3em; --> dÃ©finit l'espacement entre les lignes
+    line-height: 1.3em; --> définit l'espacement entre les lignes
     ...
   }
 
-Il faudra Ã©galement dÃ©finir l'espacement pour les listes Ã  puces :
+Il faudra également définir l'espacement pour les listes à puces :
 
-  /* espacement des listes Ã  puces */
+  /* espacement des listes à puces */
   div#main ul li,
   div#main ol li {
           list-style: square;
           line-height: 1.3em;
   }
 
-  /!\ On pourra rajouter ce bloc en-dessous des dÃ©finitions de listes Ã  puces
-  div#main ul, div#main ol, etc. MÃªme si certaines dÃ©finitions semblent en
-  contradiction, c'est toujours la derniÃ¨re qui l'emporte.
+  /!\ On pourra rajouter ce bloc en-dessous des définitions de listes à puces
+  div#main ul, div#main ol, etc. Même si certaines définitions semblent en
+  contradiction, c'est toujours la dernière qui l'emporte.
 
 
-Menus dÃ©tails typographiques
+Menus détails typographiques
 ----------------------------
 
-Pour restituer les apostrophes, il faut Ã©diter la
+Pour restituer les apostrophes, il faut éditer la
 feuille de style 'ncleanblueutils' et supprimer toutes les occurrences
 concernant la balise <q> :
 
@@ -318,8 +318,8 @@ concernant la balise <q> :
     content: none;
   }
 
-Quant au soulignement en pointillÃ©s pour les abbrÃ©viations, on peut les
-restituer en supprimant l'Ã©lÃ©ment <abbr> de la liste au dÃ©but de la mÃªme
+Quant au soulignement en pointillés pour les abbréviations, on peut les
+restituer en supprimant l'élément <abbr> de la liste au début de la même
 feuille de style :
 
   html, body, div, span, applet, object, iframe,
@@ -341,21 +341,21 @@ feuille de style :
   }
 
 
-Supprimer les Ã©lÃ©ments inutiles
+Supprimer les éléments inutiles
 -------------------------------
 
-Pour se dÃ©barrasser de certains Ã©lÃ©ments superflus, il faut Ã©diter le gabarit
+Pour se débarrasser de certains éléments superflus, il faut éditer le gabarit
 'NCleanBlue'.
 
 Supprimer le fil d'Ariane : 
 
   {* Start Breadcrumbs *} ...  {* End Breadcrumbs *}
 
-Supprimer l'Ã©toile orange avec le numÃ©ro de version du CMS :
+Supprimer l'étoile orange avec le numéro de version du CMS :
 
   {* Start Optional tag *} ... {* End Optional tag  *}
 
-Garder la barre de navigation infÃ©rieure vide en supprimant les liens vers le
+Garder la barre de navigation inférieure vide en supprimant les liens vers le
 haut de page et les autres pages :
 
   {* Start main bottom and relational links *}
@@ -367,7 +367,7 @@ haut de page et les autres pages :
   <p>&nbsp;</p>
 
 Supprimer le plan du site en pied de page. Il faudra remplacer le contenu des
-menus par un paragraphe vide, sous peine de dÃ©caler le pied de page :
+menus par un paragraphe vide, sous peine de décaler le pied de page :
 
 {* first foot menu *}
           <div class="block core-float-left">
@@ -379,9 +379,9 @@ menus par un paragraphe vide, sous peine de dÃ©caler le pied de page :
           <p>&nbsp;</p>
           </div>
 
-Ã‰ventuellement, supprimer le bouton d'impression. Ne pas enlever tout le bloc,
+Éventuellement, supprimer le bouton d'impression. Ne pas enlever tout le bloc,
 mais laisser le container vide, sous peine de perdre l'arrondi en haut du bloc
-principal supÃ©rieur :
+principal supérieur :
 
 {* main top, holds top image and print image *}
             <div class="main-top">
@@ -394,7 +394,7 @@ compris entre '{* Start Footer *}' et '{* End Footer *}'.
 Personnaliser l'image de fond
 -----------------------------
 
-PrÃ©parer une image de 110 pixels de haut, et la charger dans le gestionnaire
+Préparer une image de 110 pixels de haut, et la charger dans le gestionnaire
 d'images.
 
 Dans la feuille de style, indiquer le chemin vers l'image ainsi que la couleur
@@ -403,27 +403,27 @@ du fond, comme ceci :
 /* you can set your own image and background color here */
   background: #E8E8E8 url([[root_url]]/uploads/images/fond-perso.jpg) repeat-x;
 
-  /!\ Si l'on utilise un fond uni, il faut Ã©ventuellement ajuster la barre de
-  navigation en diminuant la hauteur de la classe 'logo' d'un pixel, de 69 Ã  68
+  /!\ Si l'on utilise un fond uni, il faut éventuellement ajuster la barre de
+  navigation en diminuant la hauteur de la classe 'logo' d'un pixel, de 69 à 68
   pixels.
 
-  /!\ DÃ¨s le moment qu'on remplace le fond bleu original par une autre image,
-  il faut Ã©galement remplacer 'search.png' et 'tabs.gif' dans le rÃ©pertoire
-  'uploads/NCleanBlue' par une version modifiÃ©e qui respecte la transparence
+  /!\ Dès le moment qu'on remplace le fond bleu original par une autre image,
+  il faut également remplacer 'search.png' et 'tabs.gif' dans le répertoire
+  'uploads/NCleanBlue' par une version modifiée qui respecte la transparence
   des bords.
 
 
 Personnaliser le logo
 ---------------------
 
-La configuration par dÃ©faut contient un fichier 'logo.png' d'une taille de
-215x75 pixels, dans le rÃ©pertoire 'uploads/NCleanBlue'. Renommer ce fichier en
-'logo.png.orig' pour le remplacer par un logo personnalisÃ©.
+La configuration par défaut contient un fichier 'logo.png' d'une taille de
+215x75 pixels, dans le répertoire 'uploads/NCleanBlue'. Renommer ce fichier en
+'logo.png.orig' pour le remplacer par un logo personnalisé.
 
-On peut Ã©galement confectionner un logo pour la colonne des News. Appeler ce
+On peut également confectionner un logo pour la colonne des News. Appeler ce
 logo 'logo-lateral.png', par exemple.
 
-Ã‰diter le gabarit NCleanBlue et repÃ©rer l'affichage du logo par dÃ©faut dans la
+Éditer le gabarit NCleanBlue et repérer l'affichage du logo par défaut dans la
 section News. Indiquer le chemin vers le nouveau logo.
 
 
@@ -432,7 +432,7 @@ Franciser l'interface de recherche
 
 Ouvrir le gabarit de recherche : Extensions > Recherche > Gabarit de recherche
 
-RepÃ©rer la ligne qui contient ceci :
+Repérer la ligne qui contient ceci :
 
   value="{$searchtext}"
 
@@ -444,16 +444,16 @@ Remplacer par :
 Simplifier la colonne des News
 ------------------------------
 
-L'affichage des News est gÃ©rÃ© par le gabarit du sommaire article, que l'on
+L'affichage des News est géré par le gabarit du sommaire article, que l'on
 trouve ici :
 
   Contenu > Articles > Gabarit du sommaire article
 
-Cliquer sur le gabarit 'Sample' par dÃ©faut, copier l'intÃ©gralitÃ© de son
-contenu, crÃ©er un nouveau gabarit 'SampleOrig' et coller le contenu du
-presse-papier. Ensuite, Ã©diter le gabarit 'Sample'.
+Cliquer sur le gabarit 'Sample' par défaut, copier l'intégralité de son
+contenu, créer un nouveau gabarit 'SampleOrig' et coller le contenu du
+presse-papier. Ensuite, éditer le gabarit 'Sample'.
 
-Supprimer la liste cliquable des catÃ©gories :
+Supprimer la liste cliquable des catégories :
 
   {* This section shows a clickable list of your News categories. *}
   <ul class="list1">
@@ -485,13 +485,13 @@ affichera en gras :
   <strong>{$entry->title|cms_escape}</strong>
   </div>
 
-Supprimer l'affichage de la catÃ©gorie de l'article :
+Supprimer l'affichage de la catégorie de l'article :
 
   <div class="NewsSummaryCategory">
     {$category_label} {$entry->category}
   </div>
 
-De mÃªme pour l'auteur de l'article :
+De même pour l'auteur de l'article :
 
   {if $entry->author}
     <div class="NewsSummaryAuthor">
@@ -499,14 +499,15 @@ De mÃªme pour l'auteur de l'article :
     </div>
   {/if}
 
-L'interface d'Ã©dition des articles propose deux champs :
+L'interface d'édition des articles propose deux champs :
 
-  Â· Sommaire
-  Â· Contenu
+  * Sommaire
+  * Contenu
 
 Pour un affichage correct des News, il faut laisser vide le champ 'Sommaire' et
-Ã©diter uniquement le champ 'Contenu'.
+éditer uniquement le champ 'Contenu'.
 
 
 ------------------------------------------------------------------------------
 # vim: syntax=txt
+# vim: set encoding=latin1
