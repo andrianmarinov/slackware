@@ -1,0 +1,51 @@
+=============
+Risotto HOWTO  (c) Nicolas Kovacs <info@microlinux.fr>
+=============
+
+Dernière révision : 13 juillet 2013
+
+Ce HOWTO décrit la confection d'un risotto pour quatre personnes.
+
+
+Ingrédients
+-----------
+
+  * 500 grammes de riz spécial risotto
+  * 1 litre de bouillon de légumes
+  * 2 oignons
+  * 1 barquette de champignons
+  * 20 cl de crème fraîche
+  * parmesan râpé
+  * huile d'olive
+  * safran
+  * 1 verre de vin blanc
+  * un peu de persil
+
+
+Préparation
+-----------
+
+  - Préparer le bouillon et ajouter une pincée de safran. 
+
+  - Couper les champignons.
+
+  - Faire revenir les champignons dans une poële.
+
+  - Ajouter du sel, du poivre, de la crème liquide et du persil.
+
+  - Émincer les oignons et les faire revenir dans l'huile d'olive.
+
+  - Ajouter le riz et le faire revenir jusqu'à ce qu'il soit translucide.
+
+  - À feu moyen, incorporer le bouillon petit à petit.
+
+  - Continuer jusqu'à ce que le riz soit crémeux.
+
+  - Ajouter le vin blanc, les champignons et le parmesan.
+
+  - Avant de réchauffer le plat, ajouter un peu de vin blanc.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1

@@ -1,0 +1,54 @@
+=======================
+Gratin Dauphinois HOWTO  (c) Nicolas Kovacs <info@microlinux.fr>
+=======================
+
+Dernière révision : 13 juillet 2013
+
+Ce HOWTO décrit la confection d'un gratin dauphinois pour quatre personnes.
+
+
+Ingrédients
+-----------
+
+  * 800 g de pommes de terre
+  * 75 g de gruyère râpé
+  * 1/4 l de lait
+  * 1 oeuf
+  * 1 petite gousse d'ail
+  * un peu de beurre ou de margarine
+  * sel, poivre, muscade
+
+
+Préparation
+-----------
+
+  - Éplucher les pommes de terre et les couper en lamelles fines.
+
+  - Peler la gousse d'ail.
+
+  - Frotter le plat à gratin avec l'ail et répartir le beurre uniformément. 
+
+  - Préchauffer le four à 180 °C (thermostat 6).
+
+  - Disposer une couche de lamelles de pommes de terres au fond du plat.
+
+  - Saler, poivrer, ajouter la muscade et une couche de gruyère.
+
+  - Renouveler l'opération jusqu'à épuisement des ingrédients.
+
+  - Mélanger le lait et l'oeuf et verser le mélange sur les pommes de terre.
+
+  - Ajouter quelques noix de beurre.
+
+  - Mettre à cuire pendant 1h30 environ
+
+
+Variante
+--------
+
+Ajouter une couche de champignons sautés au beurre au milieu du gratin.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1
