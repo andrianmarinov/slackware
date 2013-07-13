@@ -1,0 +1,59 @@
+========================
+Blanquette de Veau HOWTO  (c) Nicolas Kovacs <info@microlinux.fr>
+========================
+
+Dernière révision : 13 juillet 2013
+
+Ce HOWTO décrit la confection d'une blanquette de veau pour quatre personnes.
+
+Un grand merci à Agnès Maillebouis pour la recette.
+
+
+Ingrédients
+-----------
+
+  * 600 grammes de sauté de veau
+  * 2 carottes
+  * 1 gros oignon ou 2 oignons
+  * 1 bouquet garni
+  * 200 grammes de champignons de Paris frais
+  * 100 grammes de beurre
+  * 2 cuillères à soupe de farine
+  * 1 jaune d'oeuf
+  * 20 centilitres de crème liquide
+  * jus d'un citron ou d'un demi-citron
+
+
+Préparation
+-----------
+
+  - Couper la viande en morceaux d'environ 3 centimètres.
+
+  - Faire fondre 50 grammes de beurre dans une cocotte. Mettre la viande, saler
+    et poivrer, ajouter le bouquet garni. Laisser exsuder la viande à feu moyen
+    environ 10 minutes.
+
+  - Ajouter les oignons et les carottes et laisser cuire 10 minutes de plus.
+
+  - Mettre de l'eau à fleur de la viande et mijoter une heure à feu doux.
+
+  - Faire un roux avec 50 grammes de beurre et 2 cuillères à soupe de farine.
+
+  - Sortir deux louches de jus et l'incorporer au roux. Mélanger avec le fouet
+    jusqu'à obtention d'une sauce un peu épaisse, puis verser le tout dans la
+    cocotte.
+
+  - Poêler les champignons avec un peu de beurre, 10 minutes à feu moyen.
+
+  - 10 minutes avant la fin de la cuisson, mettre les champignons dans la
+    cocotte, incorporer le roux et laisser cuire.
+
+  - Dans un bol, mélanger le jaune d'oeuf, la crème et le citron, incorporer au
+    tout et éteindre le feu.
+
+  - Servir avec du riz.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1
