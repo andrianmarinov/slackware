@@ -1,0 +1,85 @@
+============
+Quiche HOWTO  (c) Nicolas Kovacs <info@microlinux.fr>
+============
+
+Dernière révision : 15 juillet 2013
+
+Ce HOWTO décrit la confection de deux variantes de quiches : 
+
+  * la traditionnelle Quiche Lorraine 
+  * la quiche au chèvre et aux épinards
+
+Un grand merci à Agnès Maillebouis pour ses recettes.
+
+
+Pâte brisée
+-----------
+
+  * 250 grammes de farine
+  * 125 grammes de beurre ramolli
+  * 1 oeuf
+  * une demi-cuillère à café de sel
+  * 1/4 de verre d'eau tiède
+
+Pétrir le plus rapidement possible jusqu'à obtention d'une pâte homogène.
+
+Laisser reposer au moins une demi-heure.
+
+Étaler la pâte avec un rouleau et transférer dans un moule à tartes.
+
+Passer au frigo un quart d'heure pour la figer.
+
+
+Quiche Lorraine
+---------------
+
+  * 4 oeufs entiers
+  * 25 cl de crème liquide
+  * 15 cl de lait
+  * sel, poivre, muscade râpée
+  * 100 grammes de gruyère râpé
+  * dés de jambon
+
+Préchauffer le four à 170°C (thermostat 6).
+
+Mélanger les oeufs, la crème liquide, le lait, les épices et une partie du
+gruyère râpé. Battre le mélange avec un fouet. 
+
+Tapisser le fond de tarte avec les dés de jambon et y verser l'appareil. 
+
+Saupoudrer du reste de gruyère.
+
+Mettre à cuire environ 25 minutes.
+
+
+Quiche aux épinards
+-------------------
+
+  * 500 grammes d'épinards en branches
+  * 30 grammes de beurre
+  * 2 gousses d'ail écrasées
+  * 1 verre d'eau
+  * 2 fromages de chèvre ou 1 Pélardon 
+
+Faire fondre le beurre dans une cocotte.
+
+Ajouter les deux gousses d'ail écrasées.
+
+Mettre les épinards en branches.
+
+Ajouter un verre d'eau, couvrir et cuire à feu doux pendant 20 minutes.
+
+Bien égoutter les épinards.
+
+Préchauffer le four à 170°C (thermostat 6).
+
+Répartir les épinards sur le fond de tarte.
+
+Ajouter l'appareil et les fromages coupés en morceaux.
+
+Mettre à cuire environ 25 minutes.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1
