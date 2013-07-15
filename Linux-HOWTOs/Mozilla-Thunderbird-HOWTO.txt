@@ -1,0 +1,153 @@
+=========================
+Mozilla Thunderbird HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=========================
+
+Dernière révision : 15 juillet 2013
+
+Ce document décrit la configuration d'un compte mail Microlinux avec le client
+mail Mozilla Thunderbird.
+
+
+Mozilla Thunderbird
+-------------------
+
+Microlinux recommande l'utilisation du client mail Mozilla Thunderbird
+("Thunderbird" pour les intimes)  pour une gestion efficace du courrier
+électronique. Une petite précision en passant : un "client mail", c'est tout
+simplement un logiciel qui vous permet de gérer votre courrier électronique. 
+
+Si vous avec un ordinateur sous Microsoft Windows ou Mac OS X, vous pouvez
+télécharger Thunderbird pour votre plateforme à l'adresse suivante :
+
+  * http://www.mozilla.org/fr/thunderbird/
+
+Si votre station de travail, poste de travail ou ordinateur portable a été
+installé par Microlinux, Thunderbird est déjà installé sur votre système. Pour
+y accéder, faites tout simplement ceci :
+
+  Menu des applications > Internet > Courrier électronique
+
+Alternativement, cliquez sur l'icône de Thunderbird dans la barre de lancement
+rapide sur le bord inférieur de l'écran.
+
+
+Lancement initial
+-----------------
+
+Au premier lancement, Thunderbird vous demande si vous voulez une nouvelle
+adresse électronique. Cliquez sur "Passer cette étape et utiliser mon adresse
+existante".
+
+
+Création d'un compte courrier
+-----------------------------
+
+La fenêtre "Création d'un compte courrier" vous demande de fournir quelques
+renseignements. 
+
+  * Vos nom et prénom    : Kiki Novak
+  * Adresse électronique : dj@radionovak.com
+  * Mot de passe         : **********
+
+  [X] Retenir le mot de passe
+
+Cliquez sur 'Continuer'. Thunderbird tente une configuration automatique, qui
+échouera très probablement. Éventuellement, cliquez directement sur
+'Configuration manuelle'.
+
+Vous devez maintenant fournir tous les paramètres de votre compte mail sur
+trois lignes nommées respectivement 'Serveur entrant', 'Serveur sortant' et
+'Identifiant'. 
+
+  Serveur entrant       : IMAP
+  Nom d'hôte du serveur : mail.radionovak.com
+  Port                  : 993
+  SSL                   : SSL/TLS
+  Authentification      : Mot de passe normal
+
+  Serveur sortant       : SMTP
+  Nom d'hôte du serveur : mail.radionovak.com
+  Port                  : 25
+  SSL                   : STARTTLS
+  Authentification      : Mot de passe normal
+
+  Identifiant           : kikinovak
+
+Une fois que vous avez fourni tous ces renseignements, cliquez sur 'Terminé'.
+Thunderbird vous affichera très probablement un avertissement concernant
+l'ajout d'une exception de sécurité. Cliquez simplement sur 'Confirmer
+l'exception de sécurité'.
+
+Petite explication pour les curieux. L'authentification de votre messagerie
+s'effectue de manière cryptée, de façon à ce que des personnes malintentionnées
+ne parviennent à intercepter vos identifiants et/ou mots de passe. Cette
+sécurité passe par le biais d'un certificat auto-signé sur le serveur de
+Microlinux. En confirmant l'exception de sécurité, vous reconnaissez simplement
+que le serveur de Microlinux est bien le serveur de Microlinux. C'est tout.
+
+Si tout s'est bien passé, la fenêtre principale de Thunderbird affiche votre
+compte. Cliquez sur 'Courrier entrant' et affichez le mail de bienvenue.
+
+
+Composer un premier message
+---------------------------
+
+Cliquez sur 'Écrire' et composez un premier message de test, que vous enverrez
+à une de vos adresses mail. La première fois que vous enverrez votre message,
+Thunderbird vous gratifiera sans doute du même avertissement concernant l'ajout
+d'une exception de sécurité. 
+
+Là aussi, cliquez sur 'Confirmer l'exception de sécurité'. C'est la dernière
+fois que vous aurez eu à faire cette manipulation.  Dorénavant, vous pouvez
+envoyer vos mails en toute sérénité.
+
+  /!\ Si vous ne voyez pas cet avertissement, c'est que la fenêtre
+  correspondante est peut-être dissimulée sous la fenêtre de votre message.
+  Dans ce cas, il suffit de la basculer au premier plan. 
+
+
+Envoyer les messages au format texte simple
+-------------------------------------------
+
+Il existe grosso modo deux façons de formater le courrier électronique : 
+
+  1. en texte simple (mise en forme "brute")
+
+  2. en HTML (mises en forme élaborées)
+
+Le bon usage veut que le courrier électronique soit envoyé au format texte
+simple. L'envoi de mails au format HTML est actuellement considéré comme étant
+contraire à la netiquette. 
+
+  /!\ Si cela vous semble un peu rabat-joie et que vous tenez absolument à
+  utiliser une police de caractères Comic Sans rouge avec un fond d'écran
+  Microsoft et des images animées, sachez que vous avez à peu près neuf chances
+  sur dix pour que votre message s'affiche n'importe comment voire pas du tout
+  dans le client mail de votre destinataire. Non content de cela, les messages
+  HTML constituent un risque de sécurité considérable, étant donné qu'il est
+  très facile d'y glisser du code malveillant capable de se connecter sur
+  Internet sans votre autorisation. Enfin, le formatage en HTML est très lourd
+  et gaspille joyeusement de la bande passante. Conclusion : évitez le HTML
+  dans vos mails.
+
+Pour une raison inconnue, Thunderbird est paramétré par défaut pour envoyer les
+messages au format HTML. Nous allons donc corriger ce comportement déplacé. 
+
+  1. Ouvrez les 'Options' de Thunderbird :
+
+     Outils > Options (Microsoft Windows)
+
+     Édition > Préférences (Linux)
+
+  2. De là, allez dans 'Paramètres des comptes'.
+
+  3. Repérez l'onglet 'Rédaction et adressage' et cliquez dessus.
+
+  4. Décochez la case 'Rédiger les messages en HTML'.
+
+  5. Cliquez sur 'OK' pour confirmer.
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1
