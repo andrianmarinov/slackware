@@ -25,6 +25,7 @@
 CWD=$(pwd)
 TMP=${TMP:-/tmp/microlinux}
 PKG=$TMP/package-java
+OUTPUT=${OUTPUT:-/tmp}
 TAG=${TAG:-_microlinux}
 rm -rf $PKG
 mkdir -p $TMP $PKG
