@@ -25,11 +25,11 @@
 # Modified by Niki Kovacs <info@microlinux.fr>
 
 PRGNAM=smplayer
-VERSION=${VERSION:-0.8.4}
+VERSION=${VERSION:-0.8.5}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_microlinux}
 
-NUMJOBS=${NUMJOBS:--j2}
+NUMJOBS=${NUMJOBS:--j5}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
