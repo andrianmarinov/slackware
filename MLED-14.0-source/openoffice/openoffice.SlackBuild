@@ -49,7 +49,7 @@ PKG_LANG=${OOLANG//-/_} # Leave this alone
 MIRROR=sourceforge.net/projects/openofficeorg.mirror/files
 
 # Change source package name
-if [ "$ARCH" = "x86-64" ]; then
+if [ "$ARCH" = "x86_64" ]; then
   SRCARCH="x86-64"
   PKGARCH="$ARCH"
 elif [ "$ARCH" = "arm" ]; then
