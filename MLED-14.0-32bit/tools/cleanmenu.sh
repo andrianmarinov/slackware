@@ -9,7 +9,7 @@ ENTRIES=`ls $ENTRIESDIR`
 MENUDIRS="  /usr/share/applications \
 				    /usr/share/gdm/applications \
             /usr/share/distcc \
-						/opt/openoffice.org3/share/xdg"
+						/opt/openoffice4/share/xdg"
 
 for MENUDIR in $MENUDIRS; do
 	for ENTRY in $ENTRIES; do
