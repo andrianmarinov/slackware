@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-Icon=openofficeorg3-printeradmin
+Icon=openofficeorg-printeradmin
 Type=Application
 Categories=X-XFCE;Settings;DesktopSettings;X-XfceSettingsDialog;
-Exec=openoffice.org3-printeradmin
+Exec=openoffice4-printeradmin
 Name=Open Office Printer Administration
 Name[de]=Open Office Druckerverwaltung
 Name[fr]=Gestion de l'imprimante Open Office
