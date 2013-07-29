@@ -25,7 +25,7 @@
 
 PRGNAM=openoffice
 VERSION=${VERSION:-3.4.1}	 
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_microlinux}		
 
 # These variables seem to change with (almost) every release...
@@ -120,11 +120,18 @@ cd -
 # Remove DejaVu fonts - these are included in other packages
 rm -f opt/openoffice.org/basis3.4/share/fonts/truetype/D*.ttf
 
-# Fix Exec commands in the desktop files
-# See http://bugzilla.xfce.org/show_bug.cgi?id=2430
+# Better menu integration
 cd $PKG/opt/openoffice.org3/share/xdg/
-  for APP in base calc draw impress math writer; do
-    sed -i 's%Exec=openoffice.org3 -%Exec=s%' $APP.desktop ;
+  for APP in base calc draw impress math printeradmin writer; do
+    cat $CWD/desktop/$APP.desktop > $PKG/opt/openoffice.org3/share/xdg/$APP.desktop
+    rm -f $PKG/opt/openoffice.org3/share/xdg/{startcenter,qstart}.desktop
+  done
+cd -
+
+cd $PKG/usr/share/applications
+rm -f *.desktop
+  for APP in base calc draw impress math printeradmin writer; do
+    ln -s ../../../opt/openoffice.org3/share/xdg/$APP.desktop $APP.desktop
   done
 cd -
 
