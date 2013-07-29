@@ -1,6 +1,3 @@
-
-openoffice-4.0.0_en_US-x86_64-1_microlinux.txz: Upgraded.
-+--------------------------+
 Wed Jul 24 17:38:56 CEST 2013
 smplayer-0.8.5-x86_64-1_microlinux.txz: Upgraded.
 flash-player-plugin-11.2.202.297-x86_64-1_microlinux.txz: Upgraded.
