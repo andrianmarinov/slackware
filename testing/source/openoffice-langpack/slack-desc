@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':'.
+
+                   |-----handy-ruler------------------------------------------------------|
+openoffice-langpack: openoffice-langpack (language pack for Open Office)
+openoffice-langpack: 
+openoffice-langpack: Open Office is a full-featured open-source office suite that is
+openoffice-langpack: compatible with all other major office software.
+openoffice-langpack: 
+openoffice-langpack: This package installs menus and help documentation for Open Office
+openoffice-langpack: in a language different from en_US.
+openoffice-langpack: 
+openoffice-langpack: 
+openoffice-langpack: 
+openoffice-langpack: Package created by Niki Kovacs <info@microlinux.fr> 
