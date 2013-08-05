@@ -1,3 +1,11 @@
+Mon Aug  5 19:41:56 CEST 2013
+testing/openoffice-4.0.0_en_US-i586-2_microlinux.txz: Added.
+testing/openoffice-langpack-4.0.0_fr-i486-2_microlinux.txz: Added.
+  These packages work fine on Slackware 14.0. I put them in testing/ outside
+	the main repository to avoid a forced upgrade.
+	Special thanks to users lopuh and sardinha on LQ for their precious help with
+	the language pack.
++--------------------------+
 Mon Jul 29 14:59:52 CEST 2013
 openoffice-3.4.1_en_US-i586-2_microlinux.txz: Rebuilt.
   Fixed menu entries for better Xfce integration.
