@@ -348,6 +348,9 @@ Tester la connexion à Internet :
 
   # ping -c 3 www.google.fr
 
+Éventuellement, utiliser Lynx pour télécharger et installer le paquet
+'user-settings-console' sur le dépôt de Microlinux.
+
 Si l'on n'a pas accès au réseau au premier redémarrage, on peut éventuellement
 permuter l'affectation des interfaces réseau 'eth0' et 'eth1', en éditant
 '/etc/udev/rules.d/70-persistent-net.rules'. 
@@ -359,7 +362,7 @@ Procéder à un réglage initial de l'horloge système :
 Récupérer mes scripts et mes fichiers de configuration :
 
   # cd 
-  # git clone https://github.com/kikinovak/server
+  # git clone https://github.com/kikinovak/slackware
 
   /!\ Au cas où l'on obtiendrait une erreur SSL, réessayer avec le simple
   protocole HTTP.
