@@ -179,9 +179,9 @@ Créer un utilisateur public 'smbguest' pour Samba :
 
   > Le mot de passe du compte Linux est verrouillé par 'passwd -l' ("lock").
 
-  > L´option '-a' ("add") indique à 'smbpasswd' d'ajouter un utilisateur.
+  > L'option '-a' ("add") indique à 'smbpasswd' d'ajouter un utilisateur.
 
-  > Celui-ci sera immédiatement désactivé par l´option '-d' ("disabled").
+  > Celui-ci sera immédiatement désactivé par l'option '-d' ("disabled").
 
 Créer un ou plusieurs utilisateurs Samba normaux. Deux cas de figure se
 présentent ici. Si l'utilisateur a déjà un compte système :
