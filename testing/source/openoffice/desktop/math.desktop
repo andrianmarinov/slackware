@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=ooo-math
+Type=Application
+Categories=Office;
+Exec=openoffice4 -math %U
+MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.stardivision.math;
+Name=Formula Editor
+Name[de]=Formeleditor
+Name[fr]=Éditeur de formules
+Comment=Open Office Math
+InitialPreference=5
+StartupNotify=true
