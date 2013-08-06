@@ -175,7 +175,7 @@ Créer un utilisateur public 'smbguest' pour Samba :
   # passwd -l smbguest
   # smbpasswd -a smbguest -d
 
-  > L´utilisateur ne dispose pas de shell de connexion ('-s /bin/false').
+  > L'utilisateur ne dispose pas de shell de connexion ('-s /bin/false').
 
   > Le mot de passe du compte Linux est verrouillé par 'passwd -l' ("lock").
 
