@@ -24,7 +24,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=user-settings-firefox
-VERSION=${VERSION:-17.0.7}	 
+VERSION=${VERSION:-17.0.8}	 
 BUILD=${BUILD:-1}
 TAG=${TAG:-_microlinux}		
 
