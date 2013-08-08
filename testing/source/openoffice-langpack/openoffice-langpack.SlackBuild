@@ -24,28 +24,31 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=openoffice-langpack
-VERSION=${VERSION:-4.0.0}	 
-BUILD=${BUILD:-1}
-TAG=${TAG:-_microlinux}		
+VERSION=${VERSION:-4.0.0}
+BUILD=${BUILD:-2}
+TAG=${TAG:-_microlinux}
+
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
     i?86) ARCH=i486 ;;
     arm*) ARCH=arm ;;
-    # Unless $ARCH is already set, use uname -m for all other archs:
-       *) ARCH=$( uname -m ) ;;
+    # Unless $ARCH is already set, use uname -m for all other
+    # archs:
+    *) ARCH=$( uname -m ) ;;
   esac
 fi
 
 CWD=$(pwd)
-TMP=${TMP:-/tmp/microlinux}	
+TMP=${TMP:-/tmp/microlinux}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}	
+OUTPUT=${OUTPUT:-/tmp}
 
 # To build another language pack (like german for example) pass the according
 # locale to the script: OOLANG=de ./openoffice-langpack.SlackBuild
 OOLANG=${OOLANG:-fr}
+
 PKG_LANG=${OOLANG//-/_} # Leave this alone
 MIRROR=sourceforge.net/projects/openofficeorg.mirror/files
 
@@ -96,23 +99,24 @@ for FILE in *.rpm ; do rpm2cpio < $FILE | cpio -imdv ; done
 mv opt $PKG/
 cd $PKG
 
+chown -R root:root .
+find . -type d -exec chmod 755 {} \;
+chmod -R u+rw,go+r-w,a-s .
+
 # Move docs to their correct locations
 mkdir -p $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}
-for i in readmes share ; do
-  mv $PKG/opt/openoffice4/$i \
-    $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}/$i ;
+for i in readmes ; do
+    mv $PKG/opt/openoffice4/$i \
+      $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}/$i ;
 done
+
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
-chown -R root:root .
-find . -type d -exec chmod 755 {} \;
-chmod -R u+rw,go+r-w,a-s .
 /sbin/makepkg -c n -l y $OUTPUT/$PRGNAM-${VERSION}_${PKG_LANG}-$ARCH-$BUILD$TAG.txz
 
 # Cleanup
 cd $TMP
 rm -rf $OOLANG $PKG
-
