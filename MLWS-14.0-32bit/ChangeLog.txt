@@ -1,0 +1,8 @@
+Fri Aug  9 18:47:52 CEST 2013
+	Started to work on the Microlinux Enterprise Workstation. The idea behind
+	MLWS is to build a no-nonsense, one-app-per-task KDE desktop with sensible
+	default settings and a minimum of cruft. Ideally, some of KDE's Rube Goldberg
+	apps like KMail, Amarok and KTorrent will be replaced by some more
+	lightweight stuff.
+user-settings-console-1.0-noarch-1_microlinux.txz: Added.
++--------------------------+
