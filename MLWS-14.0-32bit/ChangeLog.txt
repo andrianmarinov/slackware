@@ -1,3 +1,7 @@
+Fri Aug  9 21:15:20 CEST 2013
+jdk-7u25-i586-1_microlinux.txz: Added.
+soprano-2.9.0-i486-1_microlinux.txz: Upgraded.
++--------------------------+
 Fri Aug  9 18:47:52 CEST 2013
 	Started to work on the Microlinux Enterprise Workstation. The idea behind
 	MLWS is to build a no-nonsense, one-app-per-task KDE desktop with sensible
