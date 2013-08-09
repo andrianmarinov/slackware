@@ -46,6 +46,7 @@ AddDefaultCharset uft-8
   AddDescription "Linux documentation" Linux-HOWTOs -HOWTO.txt
   AddDescription "Microlinux Enterprise Desktop 14.0"   MLED-14.0
   AddDescription "Microlinux Enterprise Server 14.0"    MLES-14.0
+  AddDescription "Microlinux Enterprise Workstation 14.0"    MLWS-14.0
   AddDescription "Plain text file" .txt README
   AddDescription "Slackware build script" .SlackBuild
   AddDescription "Slackware package" .txz
