@@ -1,3 +1,6 @@
+
+qt-4.8.4-i486-1_microlinux.txz: Upgraded.
++--------------------------+
 Sun Aug 11 10:09:03 CEST 2013
 akonadi-1.9.0-i486-1_microlinux.txz: Upgraded.
 attica-0.4.1-i486-1_microlinux.txz: Upgraded.
