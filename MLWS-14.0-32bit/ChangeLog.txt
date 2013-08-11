@@ -2,6 +2,7 @@
 akonadi-1.9.0-i486-1_microlinux.txz: Upgraded.
 attica-0.4.1-i486-1_microlinux.txz: Upgraded.
 shared-desktop-ontologies-0.10.0-i486-1_microlinux.txz: Upgraded.
+virtuoso-ose-6.1.6-i486-1_microlinux.txz: Upgraded.
 +--------------------------+
 Fri Aug  9 21:15:20 CEST 2013
 jdk-7u25-i586-1_microlinux.txz: Added.
