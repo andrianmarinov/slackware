@@ -1,5 +1,9 @@
 
 qt-4.8.4-i486-1_microlinux.txz: Upgraded.
+qjson-0.8.1-i486-1_microlinux.txz: Added.
+sip-4.14.2-i486-1_microlinux.txz: Upgraded.
+PyQt-4.9.6-i486-1_microlinux.txz: Upgraded.
+phonon-gstreamer-4.6.3-i486-1.txz: Upgraded.
 +--------------------------+
 Sun Aug 11 10:09:03 CEST 2013
 akonadi-1.9.0-i486-1_microlinux.txz: Upgraded.
