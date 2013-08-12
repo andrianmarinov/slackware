@@ -1,3 +1,33 @@
+Mon Aug 12 15:04:18 CEST 2013
+cdlabelgen-4.3.0-noarch-1_microlinux.txz: Added.
+p7zip-9.20.1-i486-1_microlinux.txz: Added.
+recode-3.6-i486-2_microlinux.txz: Added.
+sbopkg-0.36.0-noarch-1_microlinux.txz: Added.
+unrar-4.0.7-i486-1_microlinux.txz: Added.
+enca-1.14-i486-1_microlinux.txz: Added.
+lame-3.99.5-i486-1_microlinux.txz: Added.
+x264-20120804-i486-1_microlinux.txz: Added.
+libass-0.10.1-i486-1_microlinux.txz: Added.
+libbluray-0.2.3-i486-1_microlinux.txz: Added.
+celt-0.11.3-i486-1_microlinux.txz: Added.
+libdc1394-2.2.0-i486-1_microlinux.txz: Added.
+libmp4v2-2.0.0-i486-1_microlinux.txz: Added.
+faac-1.28-i486-2_microlinux.txz: Added.
+frei0r-1.3-i486-1_microlinux.txz: Added.
+gsm-1.0.13-i486-1_microlinux.txz: Added.
+openjpeg-1.5.1-i486-1_microlinux.txz: Added.
+OpenAL-1.13-i486-1_microlinux.txz: Added.
+opencore-amr-0.1.2-i486-1_microlinux.txz: Added.
+rtmpdump-20120308_7340f6d-i486-1_microlinux.txz: Added.
+orc-0.4.16-i486-1_microlinux.txz: Added.
+schroedinger-1.0.11-i486-1_microlinux.txz: Added.
+speex-1.2rc1-i486-1_microlinux.txz: Added.
+libvpx-1.1.0-i486-1_microlinux.txz: Added.
+xvidcore-1.3.2-i486-1_microlinux.txz: Added.
+ffmpeg-0.11.1-i486-2_microlinux.txz: Added.
+nepomuk-core-4.10.5-i486-1_microlinux.txz: Added.
+kactivities-4.10.5-i486-1_microlinux.txz: Added.
++--------------------------+
 Mon Aug 12 11:01:41 CEST 2013
 qt-4.8.4-i486-1_microlinux.txz: Upgraded.
 qjson-0.8.1-i486-1_microlinux.txz: Added.

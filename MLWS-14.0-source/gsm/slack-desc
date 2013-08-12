@@ -1,0 +1,12 @@
+   |-----handy-ruler-------------------------------------------------------|
+gsm: gsm (lossy speech compression library and tool)
+gsm:
+gsm: gsm contains command line utilities for libgsm, an implementation
+gsm: of the European GSM 06.10 provisional standard for full-rate speech
+gsm: transcoding, prI-ETS 300 036, which uses RPE/LTP (residual pulse
+gsm: excitation/long term prediction) coding at 13 kbit/s.
+gsm:
+gsm: 
+gsm:
+gsm:
+gsm: Package created by Niki Kovacs <info@microlinux.fr>

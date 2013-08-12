@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+sbopkg: sbopkg (tool to synchronize with the SlackBuilds.org repository)
+sbopkg:
+sbopkg: Sbopkg is a command-line and dialog-based tool to synchronize with the
+sbopkg: SlackBuilds.org ("SBo") repository, a collection of third-party 
+sbopkg: SlackBuild scripts to build Slackware packages. 
+sbopkg: 
+sbopkg: 
+sbopkg: 
+sbopkg: 
+sbopkg: 
+sbopkg: Package created by Niki Kovacs <info@microlinux.fr>
