@@ -1,3 +1,10 @@
+
+kdepimlibs-4.10.5-i486-1_microlinux.txz: Added.
+kde-runtime-4.10.5-i486-1_microlinux.txz: Added.
+kde-workspace-4.10.5-i486-1_microlinux.txz: Added.
+kde-baseapps-4.10.5-i486-1_microlinux.txz: Added.
+oxygen-icons-4.10.5-i486-1_microlinux.txz: Added.
++--------------------------+
 Mon Aug 12 15:04:18 CEST 2013
 cdlabelgen-4.3.0-noarch-1_microlinux.txz: Added.
 p7zip-9.20.1-i486-1_microlinux.txz: Added.
