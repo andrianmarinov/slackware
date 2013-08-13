@@ -1,4 +1,4 @@
-
+Tue Aug 13 21:16:35 CEST 2013
 kde-l10n-de-4.10.5-noarch-1_microlinux.txz: Added.
 kde-l10n-fr-4.10.5-noarch-1_microlinux.txz: Added.
 konsole-4.10.5-i486-1_microlinux.txz: Added.
