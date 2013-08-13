@@ -1,0 +1,81 @@
+Microlinux Enterprise Workstation
+---------------------------------
+
+  * kde-l10n-fr
+  * kde-l10n-de
+  * clean menus for minimal KDE
+  * ark
+  * audiocd-kio
+  * bluedevil
+  * digikam
+  * ffmpegthumbs
+  * filelight
+  * gwenview
+  * juk
+  * k3b
+  * kamera
+  * kate
+  * kaudiocreator or asunder
+  * kcalc
+  * kcharselect
+  * kcolorchooser
+  * kde-base-artwork
+  * kde-wallpapers
+  * kdeadmin ?
+  * kdeartwork
+  * kdegraphics-mobipocket
+  * kdegraphics-strigi-analyzer
+  * kdegraphics-thumbnailers
+  * kdemultimedia
+  * kdenetwork
+  * kdeutils
+  * kdf
+  * kipi-plugins
+  * kmix
+  * konsole
+  * kpat
+  * kplayer vs. smplayer
+  * kruler
+  * ksaneplugin
+  * kscd
+  * ksnapshot
+  * libkcddb
+  * libkcompactdisc
+  * libkdcraw
+  * libkexiv2
+  * libkipi
+  * libksane
+  * mplayerthumbs
+  * networkmanagement
+  * okular
+  * oxygen-gtk2
+  * oxygen-gtk3
+  * polkit-kde-agent-1
+  * polkit-kde-kcmodules-1
+  * polkit-qt-1
+  * print-manager
+  * skanlite
+  * svgpart
+  * sweeper
+  * wicd-kde ?
+  * Calendar
+  * Gnote
+  * Apache Open Office 
+  * OO language packs
+  * poedit
+  * Geany
+  * Inkscape
+  * Gtkcdlabel
+  * Pidgin
+  * Transmission
+  * Amule
+  * Audacious / Exaile ?
+  * Audacity 
+  * Openshot
+  * Gtkpod
+  * VirtualBox
+  * Amarok ?
+  * True Type fonts
+  * KDE default user profile
+
+
