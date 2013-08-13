@@ -1,8 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * kde-l10n-fr
-  * kde-l10n-de
   * clean menus for minimal KDE
   * ark
   * audiocd-kio
