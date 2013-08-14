@@ -1,7 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * clean menus for minimal KDE
   * ark
   * audiocd-kio
   * bluedevil
@@ -45,7 +44,6 @@ Microlinux Enterprise Workstation
   * mplayerthumbs
   * networkmanagement
   * okular
-  * oxygen-gtk2
   * oxygen-gtk3
   * polkit-kde-agent-1
   * polkit-kde-kcmodules-1
@@ -57,13 +55,10 @@ Microlinux Enterprise Workstation
   * wicd-kde ?
   * Calendar
   * Gnote
-  * Apache Open Office 
-  * OO language packs
   * poedit
   * Geany
   * Inkscape
   * Gtkcdlabel
-  * Pidgin
   * Transmission
   * Amule
   * Audacious / Exaile ?
@@ -72,7 +67,6 @@ Microlinux Enterprise Workstation
   * Gtkpod
   * VirtualBox
   * Amarok ?
-  * True Type fonts
   * KDE default user profile
   * Screen saver ?
 

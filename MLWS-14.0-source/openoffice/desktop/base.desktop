@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=application-vnd.ms-access
+Type=Application
+Categories=Office;
+Exec=openoffice4 -base %U
+MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
+GenericName=Database
+GenericName[de]=Datenbanken
+GenericName[fr]=Bases de données
+Name=Open Office Base
+InitialPreference=5
+StartupNotify=true

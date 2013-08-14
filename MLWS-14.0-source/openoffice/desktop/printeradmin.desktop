@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=printer
+Type=Application
+Categories=Settings;DesktopSettings;
+Exec=openoffice4-printeradmin
+GenericName=Open Office Printer Administration
+GenericName[de]=Open Office Druckerverwaltung
+GenericName[fr]=Gestion de l'imprimante Open Office
+Name=Open Office Printeradmin
+StartupNotify=true

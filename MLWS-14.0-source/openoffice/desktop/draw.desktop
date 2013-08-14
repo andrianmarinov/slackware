@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=application-vnd.sun.xml.draw
+Type=Application
+Categories=Graphics;
+Exec=openoffice4 -draw %U
+MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw;
+GenericName=Drawing Program
+GenericName[de]=Zeichenprogramm
+GenericName[fr]=Logiciel de dessin
+Name=Open Office Draw
+InitialPreference=5
+StartupNotify=true

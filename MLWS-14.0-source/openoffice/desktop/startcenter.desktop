@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=openoffice4-startcenter
+Type=Application
+Categories=Office;
+Exec=openoffice4 %U
+MimeType=application/vnd.openofficeorg.extension;
+GenericName=Office Suite
+GenericName[de]=Bürosuite
+GenericName[fr]=Suite bureautique
+Name=Open Office
+StartupNotify=true

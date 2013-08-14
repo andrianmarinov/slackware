@@ -1,0 +1,122 @@
+#!/bin/sh
+
+# Slackware build script for openoffice-langpack
+
+# Written by Niki Kovacs <info@microlinux.fr)
+#
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+PRGNAM=openoffice-langpack
+VERSION=${VERSION:-4.0.0}
+BUILD=${BUILD:-2}
+TAG=${TAG:-_microlinux}
+
+
+# Automatically determine the architecture we're building on:
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i486 ;;
+    arm*) ARCH=arm ;;
+    # Unless $ARCH is already set, use uname -m for all other
+    # archs:
+    *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/microlinux}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+# To build another language pack (like german for example) pass the according
+# locale to the script: OOLANG=de ./openoffice-langpack.SlackBuild
+OOLANG=${OOLANG:-fr}
+
+PKG_LANG=${OOLANG//-/_} # Leave this alone
+MIRROR=sourceforge.net/projects/openofficeorg.mirror/files
+
+# Change source package name
+if [ "$ARCH" = "x86_64" ]; then
+  SRCARCH="x86-64"
+  PKGARCH="$ARCH"
+elif [ "$ARCH" = "arm" ]; then
+  printf "\n$ARCH is unsupported for OOo...\n\n"
+  exit 1
+else
+  SRCARCH="x86"
+  PKGARCH="i586"
+fi
+
+set -e
+
+# Building the final name.
+TARNAME="Apache_OpenOffice_${VERSION}_Linux_${SRCARCH}_langpack-rpm_${OOLANG}.tar.gz"
+
+echo $TARNAME
+
+if [ ! -r $TARNAME ] ; then
+  wget -c http://$MIRROR/$VERSION/binaries/$OOLANG/$TARNAME
+fi
+
+md5sum -c $TARNAME.md5
+
+# Ignore this - it's just to get the toplevel directory name of the
+# extracted tarball archive
+SOURCEDIR=$(tar tzf $CWD/$TARNAME 2>/dev/null | head -n 1 | tr -d \/)
+# If the above operation failed for some reason, unset SOURCEDIR so that
+# the "set -eu" below will cause us to bail out with an error
+# Normally SOURCEDIR=en-US
+[ -z $SOURCEDIR ] && unset SOURCEDIR
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+rm -rf $TMP/$SOURCEDIR
+
+# Extract tarball
+tar xvf $CWD/$TARNAME -C $TMP
+
+cd $TMP/$SOURCEDIR/RPMS
+
+# Extract the files from the *.rpm
+for FILE in *.rpm ; do rpm2cpio < $FILE | cpio -imdv ; done
+mv opt $PKG/
+cd $PKG
+
+chown -R root:root .
+find . -type d -exec chmod 755 {} \;
+chmod -R u+rw,go+r-w,a-s .
+
+# Move docs to their correct locations
+mkdir -p $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}
+for i in readmes ; do
+    mv $PKG/opt/openoffice4/$i \
+      $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}/$i ;
+done
+
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-${VERSION}_${PKG_LANG}/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+/sbin/makepkg -c n -l y $OUTPUT/$PRGNAM-${VERSION}_${PKG_LANG}-$ARCH-$BUILD$TAG.txz
+
+# Cleanup
+cd $TMP
+rm -rf $OOLANG $PKG
