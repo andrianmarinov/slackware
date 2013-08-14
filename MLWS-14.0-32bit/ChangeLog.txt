@@ -12,6 +12,8 @@ okular-4.10.5-i486-1_microlinux.txz: Added.
 libkexiv2-4.10.5-i486-1_microlinux.txz: Added.
 libkipi-4.10.5-i486-1_microlinux.txz: Added.
 gwenview-4.10.5-i486-1_microlinux.txz: Added.
+pykde4-4.10.5-i486-1_microlinux.txz: Added.
+kate-4.10.5-i486-1_microlinux.txz: Added.
 +--------------------------+
 Tue Aug 13 21:16:35 CEST 2013
 kde-l10n-de-4.10.5-noarch-1_microlinux.txz: Added.

@@ -10,7 +10,6 @@ Microlinux Enterprise Workstation
   * juk
   * k3b
   * kamera
-  * kate
   * kaudiocreator or asunder
   * kcalc
   * kcharselect
@@ -40,9 +39,6 @@ Microlinux Enterprise Workstation
   * mplayerthumbs
   * networkmanagement
   * oxygen-gtk3
-  * polkit-kde-agent-1
-  * polkit-kde-kcmodules-1
-  * polkit-qt-1
   * print-manager
   * skanlite
   * svgpart

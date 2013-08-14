@@ -1,0 +1,9 @@
+PyKDE4 complains about a missing PolkitQt package : 
+
+  -- The following OPTIONAL packages have not been found:
+
+   * PolkitQt , Qt wrapper around Polkit
+     Required to build Python Polkit bindings
+
+According to the BLFS mailing list, this warning can be ignored, as the
+corresponding version is deprecated, and nothing ever uses it anyway.
