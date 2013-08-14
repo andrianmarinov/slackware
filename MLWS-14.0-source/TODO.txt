@@ -1,13 +1,9 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * ark
-  * audiocd-kio
-  * bluedevil
-  * digikam
-  * ffmpegthumbs
-  * filelight
-  * juk
+Important
+---------
+
   * k3b
   * kamera
   * kaudiocreator or asunder
@@ -22,16 +18,13 @@ Microlinux Enterprise Workstation
   * kdegraphics-thumbnailers
   * kdemultimedia
   * kdenetwork
-  * kdeutils
   * kdf
-  * kipi-plugins ?
   * kmix
   * kpat
   * kplayer vs. smplayer
   * kruler
   * ksaneplugin
   * kscd
-  * ksnapshot
   * libkcddb
   * libkcompactdisc
   * libkdcraw
@@ -52,13 +45,18 @@ Microlinux Enterprise Workstation
   * Gtkcdlabel
   * Transmission
   * Amule
-  * Audacious / Exaile ?
   * Audacity 
   * Openshot
   * Gtkpod
   * VirtualBox
-  * Amarok ?
   * KDE default user profile
+
+Moins important
+---------------
+
+  * audiocd-kio
   * Screen saver ?
-
-
+  * bluedevil
+  * digikam
+  * ffmpegthumbs
+  * filelight

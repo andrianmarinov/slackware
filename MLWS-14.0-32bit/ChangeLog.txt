@@ -14,6 +14,16 @@ libkipi-4.10.5-i486-1_microlinux.txz: Added.
 gwenview-4.10.5-i486-1_microlinux.txz: Added.
 pykde4-4.10.5-i486-1_microlinux.txz: Added.
 kate-4.10.5-i486-1_microlinux.txz: Added.
+ark-4.10.5-i486-1_microlinux.txz: Added.
+ksnapshot-4.10.5-i486-1_microlinux.txz: Added.
+faad2-2.7-i486-1_microlinux.txz: Added.
+libmodplug-0.8.8.4-i486-1_microlinux.txz: Added.
+libcuefile-r453-i486-1_microlinux.txz: Added.
+libreplaygain-r453-i486-1_microlinux.txz: Added.
+musepack-tools-r435-i486-1_microlinux.txz: Added.
+libmms-0.6.2-i486-1_microlinux.txz: Added.
+audacious-3.2.4-i486-1_microlinux.txz: Added.
+audacious-plugins-3.2.4-i486-1_microlinux.txz: Added.
 +--------------------------+
 Tue Aug 13 21:16:35 CEST 2013
 kde-l10n-de-4.10.5-noarch-1_microlinux.txz: Added.

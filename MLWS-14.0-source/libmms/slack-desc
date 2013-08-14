@@ -1,0 +1,12 @@
+      |-----handy-ruler------------------------------------------------------|
+libmms: libmms (mms/mmsh network stream library)
+libmms:
+libmms: LibMMS is common library for parsing mms:// and mmsh:// type network
+libmms: streams. These are commonly used to stream Windows Media Video
+libmms: content over the web. LibMMS itself is only for receiving MMS stream,
+libmms: it doesn't handle sending at all. If you need streaming
+libmms: functionality, look for other protocol, such as RT(S)P. MMS is legacy
+libmms: thing, being closed with no specs and abandoned even by its creator,
+libmms: the Microsoft Corp.
+libmms:
+libmms: Package created by Niki Kovacs <info@microlinux.fr>
