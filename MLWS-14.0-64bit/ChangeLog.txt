@@ -1,4 +1,4 @@
-
+Wed Aug 14 18:51:46 CEST 2013
 oxygen-gtk2-1.3.4-x86_64-1_microlinux.txz: Added.
 mozilla-firefox-l10n-17.0.8-x86_64-1_microlinux.txz: Added.
 mozilla-thunderbird-l10n-17.0.8-x86_64-1_microlinux.txz: Added.
@@ -14,6 +14,25 @@ libkipi-4.10.5-x86_64-1_microlinux.txz: Added.
 gwenview-4.10.5-x86_64-1_microlinux.txz: Added.
 pykde4-4.10.5-x86_64-1_microlinux.txz: Added.
 kate-4.10.5-x86_64-1_microlinux.txz: Added.
+ark-4.10.5-x86_64-1_microlinux.txz: Added.
+ksnapshot-4.10.5-x86_64-1_microlinux.txz: Added.
+faad2-2.7-x86_64-1_microlinux.txz: Added.
+libmodplug-0.8.8.4-x86_64-1_microlinux.txz: Added.
+libcuefile-r453-x86_64-1_microlinux.txz: Added.
+libreplaygain-r453-x86_64-1_microlinux.txz: Added.
+musepack-tools-r435-x86_64-1_microlinux.txz: Added.
+libmms-0.6.2-x86_64-1_microlinux.txz: Added.
+audacious-3.2.4-x86_64-1_microlinux.txz: Added.
+audacious-plugins-3.2.4-x86_64-1_microlinux.txz: Added.
+mplayer-codecs-20071007-x86_64-3_microlinux.txz: Added.
+a52dec-0.7.4-x86_64-1_microlinux.txz: Added.
+live555-2011.12.23-x86_64-1_microlinux.txz: Added.
+libdca-0.0.5-x86_64-1_microlinux.txz: Added.
+dirac-1.0.2-x86_64-1_microlinux.txz: Added.
+twolame-0.3.13-x86_64-1_microlinux.txz: Added.
+libdv-1.0.0-x86_64-1_microlinux.txz: Added.
+MPlayer-1.1-x86_64-1_microlinux.txz: Added.
+smplayer-0.8.5-x86_64-1_microlinux.txz: Added.
 +--------------------------+
 Tue Aug 13 21:16:35 CEST 2013
 kde-l10n-de-4.10.5-noarch-1_microlinux.txz: Added.
