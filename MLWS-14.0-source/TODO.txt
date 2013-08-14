@@ -7,7 +7,6 @@ Microlinux Enterprise Workstation
   * digikam
   * ffmpegthumbs
   * filelight
-  * gwenview
   * juk
   * k3b
   * kamera
@@ -16,7 +15,6 @@ Microlinux Enterprise Workstation
   * kcalc
   * kcharselect
   * kcolorchooser
-  * kde-base-artwork
   * kde-wallpapers
   * kdeadmin ?
   * kdeartwork
@@ -27,7 +25,7 @@ Microlinux Enterprise Workstation
   * kdenetwork
   * kdeutils
   * kdf
-  * kipi-plugins
+  * kipi-plugins ?
   * kmix
   * kpat
   * kplayer vs. smplayer
@@ -38,12 +36,9 @@ Microlinux Enterprise Workstation
   * libkcddb
   * libkcompactdisc
   * libkdcraw
-  * libkexiv2
-  * libkipi
   * libksane
   * mplayerthumbs
   * networkmanagement
-  * okular
   * oxygen-gtk3
   * polkit-kde-agent-1
   * polkit-kde-kcmodules-1

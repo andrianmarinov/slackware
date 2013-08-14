@@ -8,6 +8,10 @@ eurostile-fonts-1.0-noarch-1_microlinux.txz: Added.
 google-droid-fonts-20100409-noarch-1_microlinux.txz: Added.
 webcore-fonts-3.0-noarch-3_microlinux.txz: Added.
 kde-base-artwork-4.10.5-i486-1_microlinux.txz: Added.
+okular-4.10.5-i486-1_microlinux.txz: Added.
+libkexiv2-4.10.5-i486-1_microlinux.txz: Added.
+libkipi-4.10.5-i486-1_microlinux.txz: Added.
+gwenview-4.10.5-i486-1_microlinux.txz: Added.
 +--------------------------+
 Tue Aug 13 21:16:35 CEST 2013
 kde-l10n-de-4.10.5-noarch-1_microlinux.txz: Added.
