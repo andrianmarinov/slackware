@@ -30,7 +30,6 @@ Microlinux Enterprise Workstation
   * kdf
   * kipi-plugins
   * kmix
-  * konsole
   * kpat
   * kplayer vs. smplayer
   * kruler
@@ -75,5 +74,6 @@ Microlinux Enterprise Workstation
   * Amarok ?
   * True Type fonts
   * KDE default user profile
+  * Screen saver ?
 
 

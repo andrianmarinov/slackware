@@ -1,0 +1,11 @@
+[Desktop Entry]
+GenericName=Internet Messenger
+GenericName[de]=Sofortnachrichtendienst
+GenericName[fr]=Messagerie instantanée
+Name=Pidgin
+Exec=pidgin
+Icon=pidgin
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Network;InstantMessaging;
