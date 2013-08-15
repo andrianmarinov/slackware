@@ -4,15 +4,9 @@ Microlinux Enterprise Workstation
 Important
 ---------
 
-  * k3b
-  * kamera
-  * kaudiocreator or asunder
-  * kcalc
   * kcharselect
   * kcolorchooser
-  * kde-wallpapers
   * kdeadmin ?
-  * kdeartwork
   * kdegraphics-mobipocket
   * kdegraphics-strigi-analyzer
   * kdegraphics-thumbnailers
@@ -21,11 +15,9 @@ Important
   * kdf
   * kmix
   * kpat
-  * kplayer vs. smplayer
   * kruler
   * ksaneplugin
   * kscd
-  * libkcddb
   * libkcompactdisc
   * libkdcraw
   * libksane
@@ -37,15 +29,12 @@ Important
   * svgpart
   * sweeper
   * wicd-kde ?
-  * Calendar
   * Gnote
   * poedit
   * Geany
   * Inkscape
   * Gtkcdlabel
-  * Transmission
   * Amule
-  * Audacity 
   * Openshot
   * Gtkpod
   * VirtualBox
@@ -55,7 +44,6 @@ Moins important
 ---------------
 
   * audiocd-kio
-  * Screen saver ?
   * bluedevil
   * digikam
   * ffmpegthumbs

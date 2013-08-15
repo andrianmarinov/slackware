@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=xscreensaver-demo
+Icon=xscreensaver
+Terminal=false
+Name=XScreenSaver
+GenericName=Screensaver
+GenericName[de]=Bildschirmschoner
+GenericName[fr]=Économiseur d'écran
+Type=Application
+Categories=Settings;DesktopSettings;Security;X-XFCE;
+StartupNotify=true
