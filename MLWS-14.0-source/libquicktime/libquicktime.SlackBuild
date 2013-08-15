@@ -77,6 +77,7 @@ chmod -R u+w,go+r-w,a-s .
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
+LDFLAGS="-L/usr/lib${LIBDIRSUFFIX}" \
 ./configure \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \

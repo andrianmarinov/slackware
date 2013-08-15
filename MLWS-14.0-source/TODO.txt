@@ -23,7 +23,6 @@ Important
   * libksane
   * mplayerthumbs
   * networkmanagement
-  * oxygen-gtk3
   * print-manager
   * skanlite
   * svgpart
@@ -35,7 +34,6 @@ Important
   * Inkscape
   * Gtkcdlabel
   * Amule
-  * Openshot
   * Gtkpod
   * VirtualBox
   * KDE default user profile
