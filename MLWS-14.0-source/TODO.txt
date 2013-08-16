@@ -1,6 +1,7 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
+  * hplip
   * kcharselect
   * kcolorchooser
   * kdeadmin ?
