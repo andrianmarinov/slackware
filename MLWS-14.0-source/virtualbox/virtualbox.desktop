@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+GenericName=Virtualization Software
+GenericName[de]=Virtualisierungssoftware
+GenericName[fr]=Logiciel de virtualisation
+Name=VirtualBox
+Type=Application
+Exec=VirtualBox %U
+TryExec=VirtualBox
+MimeType=application/x-virtualbox-vbox;application/x-virtualbox-vbox-extpack;application/x-virtualbox-ovf;application/x-virtualbox-ova;
+DocPath=file:///usr/share/virtualbox/UserManual.pdf
+Icon=virtualbox
+Categories=System;
+StartupNotify=true
