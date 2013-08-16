@@ -1,7 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * hplip
   * kcharselect
   * kcolorchooser
   * kdeadmin ?
@@ -11,18 +10,13 @@ Microlinux Enterprise Workstation
   * kdemultimedia
   * kdenetwork
   * kdf
-  * kmix
   * kpat
   * kruler
-  * ksaneplugin
   * kscd
   * libkcompactdisc
   * libkdcraw
-  * libksane
   * mplayerthumbs
   * networkmanagement
-  * print-manager
-  * skanlite
   * svgpart
   * sweeper
   * wicd-kde ?
