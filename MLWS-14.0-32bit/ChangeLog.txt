@@ -1,5 +1,7 @@
 
 flash-player-plugin-11.2.202.297-i386-1_microlinux.txz: Added.
+hplip-3.12.11-i486-1_microlinux.txz: Upgraded.
+  Fix for broken 'hp-toolbox' utility.
 +--------------------------+
 Fri Aug 16 08:25:25 CEST 2013
 acpica-20130214-i486-1_microlinux.txz: Added.
