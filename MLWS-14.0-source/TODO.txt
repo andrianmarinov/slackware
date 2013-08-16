@@ -1,9 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-Important
----------
-
   * kcharselect
   * kcolorchooser
   * kdeadmin ?
@@ -35,12 +32,7 @@ Important
   * Gtkcdlabel
   * Amule
   * Gtkpod
-  * VirtualBox
   * KDE default user profile
-
-Moins important
----------------
-
   * audiocd-kio
   * bluedevil
   * digikam
