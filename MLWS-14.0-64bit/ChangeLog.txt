@@ -1,5 +1,12 @@
-
-flash-player-plugin-11.2.202.297-x86_64-1_microlinux.txz
+Fri Aug 16 19:11:56 CEST 2013
+flash-player-plugin-11.2.202.297-x86_64-1_microlinux.txz: Added.
+hplip-3.12.11-x86_64-1_microlinux.txz: Upgraded.
+  Fix for broken 'hp-toolbox' utility.
+kmix-4.10.5-x86_64-1_microlinux.txz: Added.
+print-manager-4.10.5-x86_64-1_microlinux.txz: Added.
+libksane-4.10.5-x86_64-1_microlinux.txz: Added.
+ksaneplugin-4.10.5-x86_64-1_microlinux.txz: Added.
+skanlite-1.0-x86_64-1_microlinux.txz: Added.
 +--------------------------+
 Fri Aug 16 08:25:25 CEST 2013
 acpica-20130214-x86_64-1_microlinux.txz: Added.
