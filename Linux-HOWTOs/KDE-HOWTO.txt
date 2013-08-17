@@ -1,0 +1,105 @@
+=========
+KDE HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+=========
+
+Dernière révision : 17 août 2013
+
+Ce HOWTO décrit la configuration du bureau Xfce sous Slackware Linux.
+
+
+  * Configuration initiale de KDE
+  * Création du profil
+
+
+Configuration initiale de KDE
+-----------------------------
+
+Créer un utilisateur 'template' pour le modèle de configuration.
+
+En haut à droite, pousser l'icône 'Desktop' vers le bord de l'écran.
+
+Agrandir le tableau de bord.
+
+Supprimer les lanceurs prédéfinis : Activités, Dolphin et Firefox.
+
+Définir les Favoris : 
+
+  * Firefox
+  * Thunderbird
+  * Open Office
+  * Dolphin
+
+Définir les lanceurs du tableau de bord : 
+
+  * Répertoire personnel
+  * Firefox
+  * Thunderbird
+  * Open Office
+
+Ajouter un bouton de déconnexion à droite du tableau de bord et supprimer la
+fonction Verrouillage.
+
+Désactiver les effets graphiques.
+
+Désactiver le bureau sémantique et les outils d'indexation.
+
+Remplacer le simple clic de la souris par un double clic et définir le thème de
+curseur Whiteglass.
+
+Définir Firefox comme navigateur par défaut et Thunderbird comme client de
+courrier électronique par défaut.
+
+Remplacer la disposition 'Bureau' par 'Vue de dossier'.
+
+Définir le fond d'écran : openSUSE-1600x1200.jpg
+
+Ouvrir un terminal et supprimer ces deux fichiers :
+
+  * ~/Desktop/Home.desktop
+  * ~/Desktop/trash.desktop
+
+Verrouiller les composants graphiques.
+
+Bouton du lanceur : slackware-start-here.png (non inclus par défaut)
+
+
+Création du profil
+------------------
+
+  # cp -Rv /home/template/.config /etc/skel/
+  # cd /etc/skel/.config
+
+Garder les répertoires suivants :
+
+  * Thunar
+  * xfce4
+
+Supprimer tout le reste.
+
+Empaqueter la configuration :
+
+  # cd ..
+  # tar cvjf config.tar.bz2 .config/
+
+
+Supprimer les partitions du bureau
+----------------------------------
+
+Si le bureau affiche les partitions système comme points de montage sur une
+installation multiboot, on peut s'en débarrasser en éditant '/etc/fstab' comme
+ceci :
+
+--8<---------- /etc/fstab ----------------------------------------------------
+...
+/dev/sda5        /mnt/sda5        ext4        defaults,noauto  0   0
+/dev/sda6        /mnt/sda6        ext4        defaults,noauto  0   0
+/dev/sda7        /mnt/sda7        ext4        defaults,noauto  0   0
+/dev/sda8        /mnt/sda8        ext4        defaults,noauto  0   0
+/dev/sda9        /mnt/sda9        ext4        defaults,noauto  0   0
+/dev/sda10       /mnt/sda10       ext4        defaults,noauto  0   0
+--8<--------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1
