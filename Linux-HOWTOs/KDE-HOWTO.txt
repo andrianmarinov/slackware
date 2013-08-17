@@ -51,7 +51,7 @@ courrier électronique par défaut.
 
 Remplacer la disposition 'Bureau' par 'Vue de dossier'.
 
-Définir le fond d'écran : openSUSE-1600x1200.jpg
+Choisir un fond d'écran.
 
 Ouvrir un terminal et supprimer ces deux fichiers :
 
@@ -60,7 +60,9 @@ Ouvrir un terminal et supprimer ces deux fichiers :
 
 Verrouiller les composants graphiques.
 
-Bouton du lanceur : slackware-start-here.png (non inclus par défaut)
+Éventuellement, choisir un bouton pour le lanceur du menu Démarrer.
+
+Effacer les applications récentes et les documents récents.
 
 
 Création du profil
