@@ -2,10 +2,14 @@ loadTemplate("org.kde.plasma-desktop.defaultPanel")
 
 for (var i = 0; i < screenCount; ++i) {
     var desktop = new Activity
-    desktop.name = i18n("Desktop")
+    desktop.name = i18n("Workstation")
     desktop.screen = i
     desktop.wallpaperPlugin = 'image'
     desktop.wallpaperMode = 'SingleImage'
+    var wallpaper = "/usr/share/wallpapers/opensuse-1600x1200.jpg"
+    desktop.currentConfigGroup = new Array("Wallpaper", "image");
+    desktop.writeConfig("wallpaper", wallpaper);
+    desktop.writeConfig("userswallpaper", wallpaper);
 
     //Create more panels for other screens
     if (i > 0){

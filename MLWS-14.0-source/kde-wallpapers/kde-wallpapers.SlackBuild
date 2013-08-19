@@ -25,7 +25,7 @@
 
 PRGNAM=kde-wallpapers
 VERSION=${VERSION:-4.10.5}  
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_microlinux}   
 
 NUMJOBS=${NUMJOBS:--j5}
@@ -117,6 +117,18 @@ cd build
 make install DESTDIR=$PKG || exit 1
 
 cd -
+
+# Replace the default Elarun wallpaper by the more "corporate" Ethais. This
+# dirty hack is needed in order to have a consistent background for the login
+# manager, the splash screen and the KDE background.
+mv $PKG/usr/share/wallpapers/Elarun/metadata.desktop $TMP/
+rm -rf $PKG/usr/share/wallpapers/Elarun/contents/*
+mkdir -p $PKG/usr/share/wallpapers/Ethais/contents/images
+cd $PKG/usr/share/wallpapers/Elarun/contents
+  ln -s ../../Ethais/contents/images .
+  ln -s ../../Ethais/contents/screenshot.png .
+cd -
+mv $TMP/metadata.desktop $PKG/usr/share/wallpapers/Elarun/
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a LICENSE $PKG/usr/doc/$PRGNAM-$VERSION

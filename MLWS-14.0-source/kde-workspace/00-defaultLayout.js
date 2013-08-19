@@ -2,10 +2,18 @@ loadTemplate("org.kde.plasma-desktop.defaultPanel")
 
 for (var i = 0; i < screenCount; ++i) {
     var desktop = new Activity
-    desktop.name = i18n("Desktop")
+    desktop.name = i18n("Workstation")
+
+    folderview = desktop.addWidget("folderview");
+    folderview.writeConfig("url", "desktop:/");
+
     desktop.screen = i
     desktop.wallpaperPlugin = 'image'
     desktop.wallpaperMode = 'SingleImage'
+    var wallpaper = "Ethais"
+    desktop.currentConfigGroup = new Array("Wallpaper", "image")
+    desktop.writeConfig("wallpaper", wallpaper)
+    desktop.writeConfig("userswallpaper", wallpaper)
 
     //Create more panels for other screens
     if (i > 0){
@@ -17,3 +25,5 @@ for (var i = 0; i < screenCount; ++i) {
         tasks.writeConfig("showOnlyCurrentScreen", true);
     }
 }
+
+locked = true;

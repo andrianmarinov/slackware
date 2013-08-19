@@ -4,19 +4,15 @@ if (panelIds.length == 1) {
     panel.location = 'bottom'
 }
 
-panel.height = screenGeometry(panel.screen).height > 1024 ? 70 : 54
+panel.height = screenGeometry(panel.screen).height > 1024 ? 35 : 27
 panel.addWidget("launcher")
-var widget = panel.addWidget("icon")
-widget.writeConfig("Url", "file:///usr/share/applications/kde4/dolphin.desktop")
-var widget = panel.addWidget("icon")
-widget.writeConfig("Url", "file:///usr/share/applications/mozilla-firefox.desktop")
-var widget = panel.addWidget("icon")
-widget.writeConfig("Url", "file:///usr/share/applications/mozilla-thunderbird.desktop")
-var widget = panel.addWidget("icon")
-widget.writeConfig("Url", "file:///opt/openoffice4/share/xdg/startcenter.desktop")
+panel.addWidget("org.kde.showActivityManager")
+pager = panel.addWidget("pager")
+pager.writeConfig("hideWhenSingleDesktop", "true")
 tasks = panel.addWidget("tasks")
 panel.addWidget("systemtray")
 panel.addWidget("digital-clock")
-panel.addWidget("lockout")
 
 tasks.currentConfigGroup = new Array("Launchers")
+tasks.writeConfig("browser", "preferred://browser, , , ")
+tasks.writeConfig("filemanager", "preferred://filemanager, , , ")

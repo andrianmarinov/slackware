@@ -25,7 +25,7 @@
 
 PRGNAM=kde-workspace      
 VERSION=${VERSION:-4.10.5}  
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_microlinux}   
 
 NUMJOBS=${NUMJOBS:--j5}
@@ -128,6 +128,16 @@ make $NUMJOBS || make || exit 1
 make install DESTDIR=$PKG || exit 1
 
 cd -
+
+# We don't need the activities launcher in the panel
+mv $PKG/usr/share/apps/plasma-desktop/updates/addShowActivitiesManagerPlasmoid.js \
+  $PKG/usr/share/apps/plasma-desktop/updates/addShowActivitiesManagerPlasmoid.js.deactivated
+
+# Our own custom profile
+cat $CWD/00-defaultLayout.js > \
+  $PKG/usr/share/apps/plasma-desktop/init/00-defaultLayout.js
+cat $CWD/layout.js > \
+  $PKG/usr/share/apps/plasma/layout-templates/org.kde.plasma-desktop.defaultPanel/contents/layout.js
 
 # Use ck-launch-session in runlevel 3,
 # to start and attach a ConsoleKit session to the X session:

@@ -1,0 +1,6 @@
+[Basic Settings]
+Start Nepomuk=false
+
+[Service-nepomukfileindexer]
+autostart=false
+

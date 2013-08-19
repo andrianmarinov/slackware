@@ -1,5 +1,13 @@
 
 microlinux-wallpapers-1.0-noarch-1_microlinux.txz: Added.
+kde-wallpapers-4.10.5-i486-2_microlinux.txz: Rebuilt.
+kde-base-artwork-4.10.5-i486-2_microlinux.txz: Rebuilt.
+	Added a dirty hack to both packages which allows a consistent background
+	image for the login manager, the splash screen and the main desktop.
+kde-workspace-4.10.5-i486-2_microlinux.txz: Rebuilt.
+  Added the system-wide part of a custom Joe-Sixpack-friendly user profile.
+user-settings-kde-4.10.5-noarch-1_microlinux.txz: Added.
+  The userspace part of our custom user profile.
 +--------------------------+
 Fri Aug 16 19:11:56 CEST 2013
 flash-player-plugin-11.2.202.297-i386-1_microlinux.txz: Added.
