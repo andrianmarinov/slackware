@@ -2,7 +2,7 @@
 Mail HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
 ==========
 
-Dernière révision : 11 février 2013
+Dernière révision : 20 août 2013
 
 Ce HOWTO décrit la mise en place d'un serveur mail IMAP avec Postfix et Dovecot
 sous Slackware Linux.
@@ -24,6 +24,7 @@ sous Slackware Linux.
   * Générer le certificat
   * Configuration initiale de Dovecot
   * Ajouter l'authentification SMTP à Postfix
+  * Utiliser le port 587 pour l'envoi
   * Filtre anti-spam avec Postgrey
   * Supprimer Dovecot
   * Supprimer Postfix
@@ -784,6 +785,30 @@ Exemple de configuration SMTP de Thunderbird :
   Sécurité de la connexion   : STARTTLS
   Méthode d'authentification : Mot de passe normal
   Nom d'utilisateur          : kikinovak
+
+
+Utiliser le port 587 pour l'envoi
+---------------------------------
+
+Certains FAI bloquent l'accès au port 25. Dans ce cas, il faut configurer
+Postfix pour passer par le port 587 pour l'envoi de messages.
+
+Éditer '/etc/postfix/master.cf' et décommenter la ligne suivante :
+
+--8<---------- /etc/postfix/master.cf ----------------------------------------
+smtp       inet  n    -    n    -    -    smtpd
+#smtp      inet  n    -    n    -    1    postscreen
+#smtpd     pass  -    -    n    -    -    smtpd
+#dnsblog   unix  -    -    n    -    0    dnsblog
+#tlsproxy  unix  -    -    n    -    0    tlsproxy
+submission inet  n    -    n    -    -    smtpd  --> décommenter
+--8<--------------------------------------------------------------------------
+
+Relancer Postfix :
+
+  # /etc/rc.d/rc.postfix reload
+
+Configurer Thunderbird pour utiliser le port 587 pour l'envoi de mails.
 
 
 Filtre anti-spam avec Postgrey
