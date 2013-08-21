@@ -1,7 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * kdegraphics-thumbnailers
   * kdenetwork
   * kdf
   * kpat
