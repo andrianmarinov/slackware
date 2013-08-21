@@ -1,8 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * kcharselect
-  * kcolorchooser
   * kdeadmin ?
   * kdegraphics-mobipocket
   * kdegraphics-strigi-analyzer
@@ -27,7 +25,6 @@ Microlinux Enterprise Workstation
   * Gtkcdlabel
   * Amule
   * Gtkpod
-  * KDE default user profile
   * audiocd-kio
   * bluedevil
   * digikam
