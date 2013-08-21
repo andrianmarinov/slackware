@@ -1,11 +1,8 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * kdeadmin ?
-  * kdegraphics-mobipocket
   * kdegraphics-strigi-analyzer
   * kdegraphics-thumbnailers
-  * kdemultimedia
   * kdenetwork
   * kdf
   * kpat
