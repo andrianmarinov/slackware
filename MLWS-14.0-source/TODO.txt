@@ -1,7 +1,6 @@
 Microlinux Enterprise Workstation
 ---------------------------------
 
-  * kdegraphics-strigi-analyzer
   * kdegraphics-thumbnailers
   * kdenetwork
   * kdf
@@ -9,7 +8,6 @@ Microlinux Enterprise Workstation
   * kruler
   * kscd
   * libkcompactdisc
-  * libkdcraw
   * mplayerthumbs
   * networkmanagement
   * svgpart
