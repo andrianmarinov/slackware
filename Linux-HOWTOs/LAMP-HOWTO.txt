@@ -289,8 +289,8 @@ Enfin, on va rétablir l'ancienne page 'index.html' à un endroit approprié :
   # mkdir -pv default/htdocs
   mkdir: création du répertoire « default »
   mkdir: création du répertoire « default/htdocs »
-  # mv -v /root/htdocs_backup/index.html default/
-  « /root/htdocs_backup/index.html » -> « default/index.html »
+  # mv -v /root/htdocs_backup/index.html default/htdocs/
+  « /root/htdocs_backup/index.html » -> « default/htdocs/index.html »
 
 Au total, on a donc :
 
@@ -520,6 +520,104 @@ Utiliser MySQL à partir de PHP
 Voir le MySQL-HOWTO et le SQL-HOWTO pour le serveur de bases de données. Si
 MySQL est installé sur la machine, il est utilisable à partir de PHP sans autre
 configuration.
+
+
+HTTPS
+-----
+
+# openssl genrsa -des3 -out server.key 1024
+Generating RSA private key, 1024 bit long modulus
+...........++++++
+.......................++++++
+e is 65537 (0x10001)
+Enter pass phrase for server.key:
+Verifying - Enter pass phrase for server.key:
+
+# openssl rsa -in server.key -out server.pem
+Enter pass phrase for server.key:
+writing RSA key
+
+# chmod 0400 server.pem 
+
+# openssl req -new -key server.key -out server.csr
+Enter pass phrase for server.key:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:FR
+State or Province Name (full name) [Some-State]:Gard
+Locality Name (eg, city) []:Montpezat
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Microlinux
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:nestor.microlinux.montpezat
+Email Address []:info@microlinux.fr
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+
+# openssl x509 -req -days 1900 -in server.csr -signkey server.key -out
+# server.crt
+Signature ok
+subject=/C=FR/ST=Gard/L=Montpezat/O=Microlinux/CN=gepi.nestor.microlinux.montpezat/emailAddress=info@microlinux.fr
+Getting Private key
+Enter pass phrase for server.key:
+
+# ls -l server.*
+-rw-r--r-- 1 root root 969 août  22 08:45 server.crt
+-rw-r--r-- 1 root root 712 août  22 08:43 server.csr
+-rw-r--r-- 1 root root 963 août  22 08:39 server.key
+-r-------- 1 root root 887 août  22 08:40 server.pem
+
+
+# cat server.crt 
+-----BEGIN CERTIFICATE-----
+MIICnzCCAggCCQCjGniK5MUkZjANBgkqhkiG9w0BAQUFADCBkzELMAkGA1UEBhMC
+RlIxDTALBgNVBAgMBEdhcmQxEjAQBgNVBAcMCU1vbnRwZXphdDETMBEGA1UECgwK
+TWljcm9saW51eDEpMCcGA1UEAwwgZ2VwaS5uZXN0b3IubWljcm9saW51eC5tb250
+cGV6YXQxITAfBgkqhkiG9w0BCQEWEmluZm9AbWljcm9saW51eC5mcjAeFw0xMzA4
+MjIwNjQ1MDlaFw0xODExMDQwNjQ1MDlaMIGTMQswCQYDVQQGEwJGUjENMAsGA1UE
+CAwER2FyZDESMBAGA1UEBwwJTW9udHBlemF0MRMwEQYDVQQKDApNaWNyb2xpbnV4
+MSkwJwYDVQQDDCBnZXBpLm5lc3Rvci5taWNyb2xpbnV4Lm1vbnRwZXphdDEhMB8G
+CSqGSIb3DQEJARYSaW5mb0BtaWNyb2xpbnV4LmZyMIGfMA0GCSqGSIb3DQEBAQUA
+A4GNADCBiQKBgQDfR1usWufqoxqq0NXHiBMjmWTWw95G/o9SA0w1i1DVYX0wQIMK
+cFaMnf4lpgLWeQRYk9JBSFr6t0+Ugz1BurHRaQ1f1siem/e+UondE7ftfoqh4F+e
+12UI3knJHcye123v09h248MLJOMYzlyO4K4iv1yEWygcVZ0wZ6yc/aljkwIDAQAB
+MA0GCSqGSIb3DQEBBQUAA4GBAEZD2cCZggoDGlGEYkGjSZ7Z9gcq6srYDi+/lYbe
+4CW3DQJ+SEifGmgAliZAnRBPNCt9eZ8f0T02LLp1Cfw2Lr6VDKy3dyXcUfST4XUn
+Q84ZO7iGGunEQb6/5wle0EIL/4tnQ7Oypg33NbCpvP7zgYMqEVJNywtHA8tzx2AJ
+x9se
+-----END CERTIFICATE-----
+
+
+# openssl x509 -text -in server.crt 
+Certificate:
+    Data:
+        Version: 1 (0x0)
+        Serial Number: 11752838715515675750 (0xa31a788ae4c52466)
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=FR, ST=Gard, L=Montpezat, O=Microlinux,
+CN=gepi.nestor.microlinux.montpezat/emailAddress=info@microlinux.fr
+        Validity
+            Not Before: Aug 22 06:45:09 2013 GMT
+            Not After : Nov  4 06:45:09 2018 GMT
+
+
+# cp -v server.* /etc/httpd/
+« server.crt » -> « /etc/httpd/server.crt »
+« server.csr » -> « /etc/httpd/server.csr »
+« server.key » -> « /etc/httpd/server.key »
+« server.pem » -> « /etc/httpd/server.pem »
+
+
+
+
+
 
 
 
