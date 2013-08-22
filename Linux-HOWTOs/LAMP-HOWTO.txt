@@ -522,17 +522,102 @@ MySQL est installé sur la machine, il est utilisable à partir de PHP sans autre
 configuration.
 
 
-HTTPS
------
+Configurer une connexion sécurisée
+----------------------------------
 
-# openssl genrsa -des3 -out server.key 1024
-Generating RSA private key, 1024 bit long modulus
-...........++++++
-.......................++++++
-e is 65537 (0x10001)
-Enter pass phrase for server.key:
-Verifying - Enter pass phrase for server.key:
+Pare-feu port 443.
 
+Générer une clé privée :
+
+  # openssl genrsa -des3 -out server.key 1024
+  Generating RSA private key, 1024 bit long modulus
+  ...............++++++
+  ..............................................++++++
+  e is 65537 (0x10001)
+  Enter pass phrase for server.key: ********
+  Verifying - Enter pass phrase for server.key: ********
+
+Générer un fichier CSR (Certificate Signing Request) :
+
+  # openssl req -new -key server.key -out server.csr
+  Enter pass phrase for server.key:
+  You are about to be asked to enter information that will be incorporated
+  into your certificate request.
+  What you are about to enter is what is called a Distinguished Name or a DN.
+  There are quite a few fields but you can leave some blank
+  For some fields there will be a default value,
+  If you enter '.', the field will be left blank.
+  -----
+  Country Name (2 letter code) [AU]:FR
+  State or Province Name (full name) [Some-State]:Gard
+  Locality Name (eg, city) []:Montpezat
+  Organization Name (eg, company) [Internet Widgits Pty Ltd]:Microlinux
+  Organizational Unit Name (eg, section) []:
+  Common Name (e.g. server FQDN or YOUR name) []:raymonde.microlinux.montpezat
+  Email Address []:info@microlinux.fr
+
+  Please enter the following 'extra' attributes
+  to be sent with your certificate request
+  A challenge password []:
+  An optional company name []:
+
+
+Supprimer le mot de passe de la clé :
+
+# cp server.key server.key.orig
+# openssl rsa -in server.key.orig -out server.key
+Enter pass phrase for server.key.orig:
+writing RSA key
+
+
+Générer un certificat auto-signé :
+
+# openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
+Signature ok
+subject=/C=FR/ST=Gard/L=Montpezat/O=Microlinux/CN=raymonde.microlinux.montpezat/emailAddress=info@microlinux.fr
+Getting Private key
+
+Installer la clé privée et le certificat : (chmod +++)
+
+# cp -v server.{crt,key} /etc/httpd/
+« server.crt » -> « /etc/httpd/server.crt »
+« server.key » -> « /etc/httpd/server.key »
+
+
+Configurer SSL :
+
+--8<---------- /etc/httpd/extra/httpd-ssl.conf -------------------------------
+
+--8<--------------------------------------------------------------------------
+
+Activer SSL dans la configuration d'Apache :
+
+--8<---------- /etc/httpd/httpd.conf -----------------------------------------
+...
+LoadModule socache_shmcb_module lib64/httpd/modules/mod_socache_shmcb.so
+...
+LoadModule ssl_module lib64/httpd/modules/mod_ssl.so
+...
+# Secure (SSL/TLS) connections
+Include /etc/httpd/extra/httpd-ssl.conf
+...
+--8<--------------------------------------------------------------------------
+
+  > Faire une recherche sur la chaîne de caractères "ssl" pour éditer le
+    fichier.
+
+
+
+  # openssl genrsa -des3 -out server.key 1024
+  Generating RSA private key, 1024 bit long modulus
+  ...........++++++
+  .......................++++++
+  Enter pass phrase for server.key:
+  Verifying - Enter pass phrase for server.key:
+
+Générer un fichier CSR (Certificate Signing Request) :
+
+  
 # openssl rsa -in server.key -out server.pem
 Enter pass phrase for server.key:
 writing RSA key
