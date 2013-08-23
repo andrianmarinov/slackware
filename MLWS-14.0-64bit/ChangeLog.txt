@@ -1,3 +1,10 @@
+Fri Aug 23 19:40:03 CEST 2013
+scons-2.2.0-x86_64-1_microlinux.txz: Added.
+lua-5.1.5-x86_64-1_microlinux.txz: Added.
+tolua++-1.0.93-x86_64-1_microlinux.txz: Added.
+imlib2-1.4.5-x86_64-1_microlinux.txz: Added.
+conky-1.9.0-x86_64-2_microlinux.txz: Added.
++--------------------------+
 Fri Aug 23 06:33:23 CEST 2013
 MLWS 14.0 beta released! 
 Check out README.txt for complete step-by-step installation instructions.
