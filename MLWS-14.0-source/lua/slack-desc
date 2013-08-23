@@ -1,0 +1,12 @@
+   |-----handy-ruler------------------------------------------------------|
+lua: Lua (a powerful, fast, light-weight, embeddable scripting language)
+lua:
+lua: Lua combines simple procedural syntax with powerful data description 
+lua: constructs based on associative arrays and extensible semantics.
+lua: Lua is dynamically typed, runs by interpreting bytecode for a 
+lua: register-based virtual machine, and has automatic memory management
+lua: with incremental garbage collection, making it ideal for
+lua: configuration, scripting, and rapid prototyping.
+lua:
+lua:
+lua: Package created by Niki Kovacs <info@microlinux.fr>

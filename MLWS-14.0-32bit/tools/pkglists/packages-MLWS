@@ -10,6 +10,7 @@ audacity
 cdlabelgen
 celt
 cmake
+conky
 dirac
 enca
 eurostile-fonts
@@ -23,6 +24,7 @@ google-droid-fonts
 gsm
 gwenview
 hplip
+imlib2
 jdk
 k3b
 kactivities
@@ -70,6 +72,7 @@ libquicktime
 libreplaygain
 libvpx
 live555
+lua
 microlinux-wallpapers
 mjpegtools
 mlt
@@ -103,6 +106,7 @@ recode
 rtmpdump
 sbopkg
 schroedinger
+scons
 shared-desktop-ontologies
 sip
 skanlite
@@ -110,7 +114,7 @@ smplayer
 soprano
 soundtouch
 speex
-TODO.txt
+tolua++
 transcode
 transmission
 twolame

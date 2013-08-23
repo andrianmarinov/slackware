@@ -1,3 +1,10 @@
+Fri Aug 23 19:40:03 CEST 2013
+scons-2.2.0-i486-1_microlinux.txz
+lua-5.1.5-i486-1_microlinux.txz
+tolua++-1.0.93-i486-1_microlinux.txz
+imlib2-1.4.5-i486-1_microlinux.txz
+conky-1.9.0-i486-2_microlinux.txz
++--------------------------+
 Fri Aug 23 06:33:23 CEST 2013
 MLWS 14.0 beta released! 
 Check out README.txt for complete step-by-step installation instructions.
