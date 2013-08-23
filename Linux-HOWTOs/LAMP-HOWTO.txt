@@ -17,6 +17,9 @@ une machine tournant sous Slackware.
   * Utiliser les scripts CGI avec les hôtes virtuels
   * Héberger des sites dynamiques avec PHP
   * Utiliser MySQL à partir de PHP
+  * Le protocole HTTPS
+  * Générer un certificat auto-signé
+  * Configurer Apache et SSL
 
 
 Introduction
@@ -522,10 +525,50 @@ MySQL est installé sur la machine, il est utilisable à partir de PHP sans autre
 configuration.
 
 
-Configurer une connexion sécurisée
-----------------------------------
+Le protocole HTTPS
+------------------
 
-Pare-feu port 443.
+Le protocole HTTP (Hypertext Transfer Protocol) transmet les données entre le
+serveur et le navigateur "en clair". Les données personnelles, mots de passe et
+autres numéros de Carte Bleue sont donc interceptables.
+
+Pour résoudre ce problème, on utilisera le protocole HTTPS, qui ajoute une
+couche de cryptage SSL (Secure Sockets Layer) au protocole HTTP.
+
+Le transfert crypté des données ne constitue qu'un aspect dans l'établissement
+d'une connexion sécurisé. L'autre aspect tout aussi important, c'est que
+l'utilisateur doit être sûr de communiquer avec la bonne personne. Autrement
+dit, votre numéro de Carte Bleue a beau être transmis de façon sécurisée,
+encore faut-il que la plateforme de paiement ne soit pas située sur un serveur
+géré par la mafia albanaise. 
+
+Pour savoir si l'on a bien affaire au bon interlocuteur, on utilisera un
+certificat. Cette véritable carte d'identité électronique contient non
+seulement la clé publique du serveur pour crypter les transmissions, mais
+également des renseignements sur le site ainsi que la signature de l'autorité
+de certification. Malheureusement, les certificats de serveurs sont assez
+chers, et la procédure pour les obtenir n'est pas tout à fait triviale.
+
+La bonne nouvelle, c'est que rien ne nous empêche de fabriquer nous-mêmes notre
+certificat auto-signé. Cette astuce nous permettra de mettre en place
+gratuitement notre propre hébergement HTTPS. 
+
+Le hic, c'est que les navigateurs courants comme Firefox ou Internet Explorer
+n'acceptent que les certificats émanant d'autorités reconnues comme Verisign.
+L'utilisateur qui se connectera à notre site HTTPS auto-certifié se retrouvera
+confronté à un avertissement concernant l'identité du site, et c'est à lui de
+décider s'il veut "confirmer une exception de sécurité". 
+
+Enfin, le protocole HTTPS utilise le port 443. Il faut donc songer avant toute
+chose à ouvrir ce port dans le pare-feu.
+
+Dans l'exemple ci-dessous, nous allons configurer un hébergement HTTPS local :
+
+  * https://secure.bernadette.microlinux.montpezat
+
+
+Générer un certificat auto-signé
+--------------------------------
 
 Générer une clé privée :
 
@@ -537,10 +580,15 @@ Générer une clé privée :
   Enter pass phrase for server.key: ********
   Verifying - Enter pass phrase for server.key: ********
 
-Générer un fichier CSR (Certificate Signing Request) :
+Générer un fichier CSR ("Certificate Signing Request"). Faites très attention
+ici. Contrairement à ce que le dialogue de saisie peut laisser entendre,
+l'entrée "Common Name" doit correspondre EXACTEMENT à l'URL du site sécurisé.
+Si vous comptez héberger un site d'entreprise dont la partie sécurisée se situe
+à l'adresse http://gestion.mon-entreprise.com, l'entrée "Common Name" sera donc
+'gestion.mon-entreprise.com'.
 
   # openssl req -new -key server.key -out server.csr
-  Enter pass phrase for server.key:
+  Enter pass phrase for server.key: ********
   You are about to be asked to enter information that will be incorporated
   into your certificate request.
   What you are about to enter is what is called a Distinguished Name or a DN.
@@ -552,42 +600,89 @@ Générer un fichier CSR (Certificate Signing Request) :
   State or Province Name (full name) [Some-State]:Gard
   Locality Name (eg, city) []:Montpezat
   Organization Name (eg, company) [Internet Widgits Pty Ltd]:Microlinux
-  Organizational Unit Name (eg, section) []:
-  Common Name (e.g. server FQDN or YOUR name) []:raymonde.microlinux.montpezat
+  Organizational Unit Name (eg, section) []: [Entrée]
+  Common Name (e.g. server FQDN or YOUR name) []:secure.bernadette.microlinux.montpezat
   Email Address []:info@microlinux.fr
 
   Please enter the following 'extra' attributes
   to be sent with your certificate request
-  A challenge password []:
-  An optional company name []:
+  A challenge password []: [Entrée]
+  An optional company name []: [Entrée]
+
+Chaque fois que vous comptez utiliser votre clé, vous devez saisir le mot de
+passe ("passphrase") de la clé. Ce n'est pas très commode de répéter cette
+opération à chaque démarrage d'Apache. On va donc supprimer le mot de passe de
+la clé :
+
+  # cp server.key server.key.orig
+  # openssl rsa -in server.key.orig -out server.key
+  Enter pass phrase for server.key.orig:
+  writing RSA key
+
+Signons nous-mêmes notre certificat :
+
+  # openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
+  Signature ok
+  subject=/C=FR/ST=Gard/L=Montpezat/O=Microlinux
+          /CN=bernadette.microlinux.montpezat
+          /emailAddress=info@microlinux.fr
+  Getting Private key
+
+  /!\ La durée par défaut d'un certificat n'est que de 30 jours. Puisque nous
+  sommes maîtres à bord, profitons-en allègrement et établissons un certificat
+  d'une durée de dix ans en utilisant l'option '-days 3650'.
+
+Installer la clé privée et le certificat : 
+
+  # cp -v server.{crt,key} /etc/httpd/
+  « server.crt » -> « /etc/httpd/server.crt »
+  « server.key » -> « /etc/httpd/server.key »
+
+La clé privée ne doit pas être lue par n'importe qui :
+
+  # chown apache:apache /etc/httpd/server.key 
+  # chmod 0400 /etc/httpd/server.key
+  # ls -l /etc/httpd/server.*
+  -rw-r--r-- 1 root   root   981 août  23 10:04 /etc/httpd/server.crt
+  -r-------- 1 apache apache 887 août  23 10:04 /etc/httpd/server.key
 
 
-Supprimer le mot de passe de la clé :
+Configurer Apache et SSL
+------------------------
 
-# cp server.key server.key.orig
-# openssl rsa -in server.key.orig -out server.key
-Enter pass phrase for server.key.orig:
-writing RSA key
+Notre hébergement HTTPS sera rangé en-dessous de
+'/var/www/vhosts/secure/htdocs'. Il faut donc créer cette arborescence pour
+avoir quelque chose qui ressemble à ceci :
 
+  # tree /var/www/vhosts/secure/
+  /var/www/vhosts/secure/
+  `-- htdocs
+      `-- index.html
 
-Générer un certificat auto-signé :
+  1 directory, 1 file
 
-# openssl x509 -req -days 3650 -in server.csr -signkey server.key -out server.crt
-Signature ok
-subject=/C=FR/ST=Gard/L=Montpezat/O=Microlinux/CN=raymonde.microlinux.montpezat/emailAddress=info@microlinux.fr
-Getting Private key
+  # cat /var/www/vhosts/secure/htdocs/index.html 
+  <html><body><h1>HTTPS works!</h1></body></html>
 
-Installer la clé privée et le certificat : (chmod +++)
-
-# cp -v server.{crt,key} /etc/httpd/
-« server.crt » -> « /etc/httpd/server.crt »
-« server.key » -> « /etc/httpd/server.key »
-
-
-Configurer SSL :
+Éditer le fichier '/etc/httpd/extra/httpd-ssl.conf' :
 
 --8<---------- /etc/httpd/extra/httpd-ssl.conf -------------------------------
+...
+<VirtualHost 192.168.2.4:443>
 
+#   General setup for the virtual host
+DocumentRoot "/srv/httpd/vhosts/secure/htdocs"
+ServerName secure.bernadette.microlinux.montpezat
+ServerAlias secure.bernadette
+ServerAdmin info@microlinux.fr
+ErrorLog "/var/log/httpd/secure-error_log"
+TransferLog "/var/log/httpd/secure-access_log"
+
+#   SSL Engine Switch:
+#   Enable/Disable SSL for this virtual host.
+SSLEngine on
+...
+</VirtualHost>
 --8<--------------------------------------------------------------------------
 
 Activer SSL dans la configuration d'Apache :
@@ -606,103 +701,13 @@ Include /etc/httpd/extra/httpd-ssl.conf
   > Faire une recherche sur la chaîne de caractères "ssl" pour éditer le
     fichier.
 
+Redémarrer Apache :
 
+  # /etc/rc.d/rc.httpd restart
 
-  # openssl genrsa -des3 -out server.key 1024
-  Generating RSA private key, 1024 bit long modulus
-  ...........++++++
-  .......................++++++
-  Enter pass phrase for server.key:
-  Verifying - Enter pass phrase for server.key:
+Ouvrir notre site sécurisé :
 
-Générer un fichier CSR (Certificate Signing Request) :
-
-  
-# openssl rsa -in server.key -out server.pem
-Enter pass phrase for server.key:
-writing RSA key
-
-# chmod 0400 server.pem 
-
-# openssl req -new -key server.key -out server.csr
-Enter pass phrase for server.key:
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [AU]:FR
-State or Province Name (full name) [Some-State]:Gard
-Locality Name (eg, city) []:Montpezat
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:Microlinux
-Organizational Unit Name (eg, section) []:
-Common Name (e.g. server FQDN or YOUR name) []:nestor.microlinux.montpezat
-Email Address []:info@microlinux.fr
-
-Please enter the following 'extra' attributes
-to be sent with your certificate request
-A challenge password []:
-An optional company name []:
-
-# openssl x509 -req -days 1900 -in server.csr -signkey server.key -out
-# server.crt
-Signature ok
-subject=/C=FR/ST=Gard/L=Montpezat/O=Microlinux/CN=gepi.nestor.microlinux.montpezat/emailAddress=info@microlinux.fr
-Getting Private key
-Enter pass phrase for server.key:
-
-# ls -l server.*
--rw-r--r-- 1 root root 969 août  22 08:45 server.crt
--rw-r--r-- 1 root root 712 août  22 08:43 server.csr
--rw-r--r-- 1 root root 963 août  22 08:39 server.key
--r-------- 1 root root 887 août  22 08:40 server.pem
-
-
-# cat server.crt 
------BEGIN CERTIFICATE-----
-MIICnzCCAggCCQCjGniK5MUkZjANBgkqhkiG9w0BAQUFADCBkzELMAkGA1UEBhMC
-RlIxDTALBgNVBAgMBEdhcmQxEjAQBgNVBAcMCU1vbnRwZXphdDETMBEGA1UECgwK
-TWljcm9saW51eDEpMCcGA1UEAwwgZ2VwaS5uZXN0b3IubWljcm9saW51eC5tb250
-cGV6YXQxITAfBgkqhkiG9w0BCQEWEmluZm9AbWljcm9saW51eC5mcjAeFw0xMzA4
-MjIwNjQ1MDlaFw0xODExMDQwNjQ1MDlaMIGTMQswCQYDVQQGEwJGUjENMAsGA1UE
-MSkwJwYDVQQDDCBnZXBpLm5lc3Rvci5taWNyb2xpbnV4Lm1vbnRwZXphdDEhMB8G
-CSqGSIb3DQEJARYSaW5mb0BtaWNyb2xpbnV4LmZyMIGfMA0GCSqGSIb3DQEBAQUA
-A4GNADCBiQKBgQDfR1usWufqoxqq0NXHiBMjmWTWw95G/o9SA0w1i1DVYX0wQIMK
-cFaMnf4lpgLWeQRYk9JBSFr6t0+Ugz1BurHRaQ1f1siem/e+UondE7ftfoqh4F+e
-12UI3knJHcye123v09h248MLJOMYzlyO4K4iv1yEWygcVZ0wZ6yc/aljkwIDAQAB
-MA0GCSqGSIb3DQEBBQUAA4GBAEZD2cCZggoDGlGEYkGjSZ7Z9gcq6srYDi+/lYbe
-4CW3DQJ+SEifGmgAliZAnRBPNCt9eZ8f0T02LLp1Cfw2Lr6VDKy3dyXcUfST4XUn
-Q84ZO7iGGunEQb6/5wle0EIL/4tnQ7Oypg33NbCpvP7zgYMqEVJNywtHA8tzx2AJ
-x9se
------END CERTIFICATE-----
-
-
-# openssl x509 -text -in server.crt 
-Certificate:
-    Data:
-        Version: 1 (0x0)
-        Serial Number: 11752838715515675750 (0xa31a788ae4c52466)
-    Signature Algorithm: sha1WithRSAEncryption
-        Issuer: C=FR, ST=Gard, L=Montpezat, O=Microlinux,
-CN=gepi.nestor.microlinux.montpezat/emailAddress=info@microlinux.fr
-        Validity
-            Not Before: Aug 22 06:45:09 2013 GMT
-            Not After : Nov  4 06:45:09 2018 GMT
-
-
-# cp -v server.* /etc/httpd/
-« server.crt » -> « /etc/httpd/server.crt »
-« server.csr » -> « /etc/httpd/server.csr »
-« server.key » -> « /etc/httpd/server.key »
-« server.pem » -> « /etc/httpd/server.pem »
-
-
-
-
-
-
+  # links https://secure.bernadette
 
 
 ------------------------------------------------------------------------------
