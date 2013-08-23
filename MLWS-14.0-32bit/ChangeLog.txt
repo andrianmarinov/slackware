@@ -1,3 +1,7 @@
+Fri Aug 23 06:33:23 CEST 2013
+MLWS 14.0 beta released! 
+Check out README.txt for complete step-by-step installation instructions.
++--------------------------+
 Wed Aug 21 12:07:44 CEST 2013
 kcharselect-4.10.5-i486-1_microlinux.txz: Added.
 kcolorchooser-4.10.5-i486-1_microlinux.txz: Added.
