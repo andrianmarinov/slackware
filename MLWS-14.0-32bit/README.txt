@@ -6,28 +6,23 @@ This repository contains a complete collection of extra software for the
 Slackware-based Microlinux Enterprise Workstation (MLWS).
 
 
-  · Introduction
-  · Installation
-  · Download the Microlinux scripts
-  · Configure 'slackpkg'
-  · Trim and upgrade
-  · Install the MLWS package collection
-  · Set locales
-  · Multilib stuff 
-  · Clean up the applications menu
-  · Finishing up
-
-  · Build MLED from source
-  · A word about NVidia cards
-  · Java Development Kit
-  · Start the build
+  * Introduction
+  * Installation
+  * Download the Microlinux scripts
+  * Configure 'slackpkg'
+  * Trim and upgrade
+  * Install the MLWS package collection
+  * Set locales
+  * Multilib stuff 
+  * Clean up the applications menu
+  * Finishing up
 
 
 Introduction
 ------------
 
-The Microlinux Enterprise Desktop is a full-blown production desktop based on
-the latest stable Slackware Linux and a trimmed-down KDE desktop.  
+The Microlinux Enterprise Workstation is a full-blown production desktop based
+on the latest stable Slackware Linux and a trimmed-down KDE desktop.  
 
 MLWS is *not* some derivative distribution. It consists of a collection of
 roughly 150 custom packages installed on top of an unaltered Slackware base

@@ -6,21 +6,16 @@ This repository contains a complete collection of extra software for the
 Slackware-based Microlinux Enterprise Desktop (MLED).
 
 
-  · Introduction
-  · Installation
-  · Download the Microlinux scripts
-  · Configure 'slackpkg'
-  · Trim and upgrade
-  · Install the MLED package collection
-  · Set locales
-  · Multilib stuff 
-  · Clean up the applications menu
-  · Finishing up
-
-  · Build MLED from source
-  · A word about NVidia cards
-  · Java Development Kit
-  · Start the build
+  * Introduction
+  * Installation
+  * Download the Microlinux scripts
+  * Configure 'slackpkg'
+  * Trim and upgrade
+  * Install the MLED package collection
+  * Set locales
+  * Multilib stuff 
+  * Clean up the applications menu
+  * Finishing up
 
 
 Introduction
