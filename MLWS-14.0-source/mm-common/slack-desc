@@ -1,0 +1,12 @@
+         |-----handy-ruler------------------------------------------------------|
+mm-common: mm-common (build infrastructure and utilities for GNOME C++ bindings)
+mm-common:
+mm-common: The mm-common module provides the build infrastructure and utilities
+mm-common: shared among the GNOME C++ binding libraries. It is only a required
+mm-common: dependency for building the C++ bindings from the gnome.org version
+mm-common: control repository. An installation of mm-common is not required for
+mm-common: building tarball releases, unless configured to use maintainer-mode.
+mm-common:
+mm-common: 
+mm-common:
+mm-common: Package created by Niki Kovacs <info@microlinux.fr>

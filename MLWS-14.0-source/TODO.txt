@@ -8,10 +8,8 @@ Microlinux Enterprise Workstation
   * kscd
   * libkcompactdisc
   * mplayerthumbs
-  * networkmanagement
   * svgpart
   * sweeper
-  * wicd-kde ?
   * Gnote
   * poedit
   * Geany
