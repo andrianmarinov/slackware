@@ -16,6 +16,7 @@ Slackware-based Microlinux Enterprise Workstation (MLWS).
   * Multilib stuff 
   * Clean up the applications menu
   * Finishing up
+  * Using the NetworkManager
 
 
 Introduction
