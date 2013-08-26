@@ -316,6 +316,54 @@ We're almost there. Here's what's left to be done.
 Reboot and enjoy your shiny new Microlinux Enterprise Workstation.
 
 
+Using the NetworkManager
+------------------------
+
+MLWS doesn't make use of KDE's network management applet and relies instead on
+GNOME's corresponding applet, which already ships with Slackware in the
+'network-management-applet' package. In its default configuration, the applet
+is not supposed to appear in a KDE session:
+
+  $ grep KDE /etc/xdg/autostart/nm-applet.desktop 
+  NotShowIn=KDE;
+
+As root, clean up any remaining configuration in '/etc/rc.d/rc.inet1.conf':
+
+--8<---------- /etc/rc.d/rc.inet1.conf ---------------------------------------
+...
+# Config information for eth0:
+IPADDR[0]=""
+NETMASK[0]=""
+USE_DHCP[0]="yes"
+DHCP_HOSTNAME[0]=""
+
+# Config information for eth1:
+IPADDR[1]=""
+NETMASK[1]=""
+USE_DHCP[1]=""
+DHCP_HOSTNAME[1]=""
+...
+# Default gateway IP address:
+GATEWAY=""
+...
+--8<--------------------------------------------------------------------------
+
+Activate the NetworkManager:
+
+  # chmod +x /etc/rc.d/rc.networkmanager
+
+As a normal user, enable the corresponding applet:
+
+  $ mkdir ~/.config/autostart
+  $ grep -v NotShowIn /etc/xdg/autostart/nm-applet.desktop > \
+      ~/.config/autostart/nm-applet.desktop
+
+Reboot, and you're ready. 
+
+  /!\ If you're dubious about this setup, I got the idea by looking at a Red
+  Hat Enterprise Linux 6.x workstation running KDE. 
+
+
                                     Niki Kovacs, Fri Aug 23 06:26:42 CEST 2013
 
 ------------------------------------------------------------------------------
