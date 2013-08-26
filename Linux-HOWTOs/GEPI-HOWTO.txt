@@ -1,0 +1,58 @@
+==========
+GEPI HOWTO (c) Nicolas Kovacs <info@microlinux.fr>
+==========
+
+Dernière révision : 26 août 2013
+
+Ce HOWTO décrit l'installation de GEPI sur un serveur Slackware.
+
+
+Introduction
+------------
+
+GEPI est une solution de gestion et de suivi des résultats scolaires. Le
+logiciel tourne sur un serveur LAMP sécurisé (HTTPS). 
+
+
+Installation
+------------
+
+Créer une base de données pour GEPI :
+
+  # mysql -u root -p
+
+  mysql> create database gepi;
+  Query OK, 1 row affected (0.00 sec)
+
+  mysql> grant all on gepi.* to gepiuser@localhost
+      -> identified by '********';
+  Query OK, 0 rows affected (0.00 sec)
+
+Télécharger GEPI :
+
+  # links http://gepi.mutualibre.org
+
+Décompresser l'archive :
+
+  # tar xvzf gepi-1.6.3-72a8085.tar.gz
+
+Ranger les fichiers au bon endroit :
+
+  # cd gepi-1.6.3
+  # mv * /var/www/vhosts/gepi/htdocs/
+  # mv .htaccess /var/www/vhosts/gepi/htdocs/
+
+Régler les permissions :
+
+  # chown -R apache:apache /var/www/vhosts/gepi/
+
+Ouvrir l'URL de l'installation GEPI dans un navigateur.
+
+Configurer l'accès à la base de données MySQL.
+
+Première connexion à GEPI : admin/azerty 
+
+
+------------------------------------------------------------------------------
+# vim: syntax=txt
+# vim: set encoding=latin1
