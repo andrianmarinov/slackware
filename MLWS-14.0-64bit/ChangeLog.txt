@@ -1,3 +1,19 @@
+Mon Aug 26 17:42:39 CEST 2013
+  Added a section in the README.txt file on using the network manager applet.
+BeautifulSoup-3.2.0-x86_64-1_microlinux.txz: Added.
+lxml-3.1.1-x86_64-1_microlinux.txz: Added.
+gc-7.2d-x86_64-1_microlinux.txz: Added.
+numpy-1.6.2-x86_64-1_microlinux.txz: Added.
+gsl-1.15-x86_64-1_microlinux.txz: Added.
+libsigc++-2.2.10-x86_64-1_microlinux.txz: Added.
+mm-common-0.9.5-noarch-1_microlinux.txz: Added.
+glibmm-2.32.1-x86_64-1_microlinux.txz: Added.
+cairomm-1.10.0-x86_64-1_microlinux.txz: Added.
+pangomm-2.28.4-x86_64-1_microlinux.txz: Added.
+atkmm-2.22.6-x86_64-1_microlinux.txz: Added.
+gtkmm-2.24.2-x86_64-1_microlinux.txz: Added.
+inkscape-0.48.4-x86_64-1_microlinux.txz: Added.
++--------------------------+
 Fri Aug 23 19:40:03 CEST 2013
 scons-2.2.0-x86_64-1_microlinux.txz: Added.
 lua-5.1.5-x86_64-1_microlinux.txz: Added.
