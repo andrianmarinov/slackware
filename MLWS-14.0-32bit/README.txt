@@ -358,7 +358,8 @@ As a normal user, enable the corresponding applet:
   $ grep -v NotShowIn /etc/xdg/autostart/nm-applet.desktop > \
       ~/.config/autostart/nm-applet.desktop
 
-Reboot, and you're ready. 
+Reboot, and you're ready. Notice the applet makes use of Oxygen GTK and
+integrates nicely.
 
   /!\ If you're dubious about this setup, I got the idea by looking at a Red
   Hat Enterprise Linux 6.x workstation running KDE. 
